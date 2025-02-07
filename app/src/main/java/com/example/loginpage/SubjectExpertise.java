@@ -1,7 +1,9 @@
 package com.example.loginpage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +26,17 @@ public class SubjectExpertise extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_subject_expertise);
+
+
+        Button saveButton = findViewById(R.id.button15);
+
+        // Set Click Listener
+        saveButton.setOnClickListener(v -> {
+            // Create Intent to move to TeachersEducation.java
+            Intent intent = new Intent(SubjectExpertise.this, TeachersEducation.class);
+            startActivity(intent); // Start the new activity
+            finish(); // Optional: Finish current activity so user can't go back
+        });
 
         FlexboxLayout selectedContainer = findViewById(R.id.selectedSubjectContainer);
         TextView selectedCount = findViewById(R.id.tvSelectedCount);
