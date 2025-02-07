@@ -43,5 +43,6 @@ dependencies {
     implementation(libs.pinview)
     implementation(libs.okhttp)
     implementation(libs.volley)
+    implementation(libs.androidx.viewpager2)
 
 }
