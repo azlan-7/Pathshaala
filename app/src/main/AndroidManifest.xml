@@ -23,29 +23,49 @@
         android:theme="@style/Theme.MyApp.Light"
         tools:targetApi="31">
         <activity
+            android:name=".SubjectExpertise"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersAddSubject"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersAddress"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersBasicInfo"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".UserOnboarding"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
             android:name=".Welcome"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SuccessActivity"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".OTPmobile"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".GoogleLogin"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".OutlookLogin"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".FacebookLogin"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -57,12 +77,12 @@
         </activity>
         <activity
             android:name=".NextLoginPage"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->

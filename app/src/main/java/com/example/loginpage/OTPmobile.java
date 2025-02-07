@@ -37,6 +37,9 @@ public class OTPmobile extends AppCompatActivity {
             String enteredOTP = otpView.getText().toString().trim();
             Log.d("OTPmobile", "Entered OTP: " + enteredOTP);  // Log entered OTP
 
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("phoneNumber", phoneNumber);
+            editor.apply();
 
             if (enteredOTP.equals(correctOTP)) {
                 Log.d("OTPmobile", "OTP Matched!");

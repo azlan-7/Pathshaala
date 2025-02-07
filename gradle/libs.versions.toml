@@ -12,6 +12,7 @@ wormdotsindicator = "4.2.0"
 
 
 [libraries]
+flexbox = { module = "com.google.android.flexbox:flexbox", version = "3.0.0" }
 worm-dots-indicator = { module = "com.tbuonomo.andrui:viewpagerdotsindicator", version.ref = "wormdotsindicator" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 pinview = { module = "io.github.chaosleung:pinview", version = "1.4.4" }

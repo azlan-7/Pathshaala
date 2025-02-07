@@ -30,4 +30,10 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
+    <style name="ChipTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/work_sans_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
 </resources>

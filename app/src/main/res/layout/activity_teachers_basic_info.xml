@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TeachersBasicInfo">
+
+    <EditText
+        android:id="@+id/editTextText10"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Contact No."
+        android:inputType="phone"
+        android:enabled="false"
+        android:textColorHint="#1674AE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText9" />
+
+    <ImageView
+        android:id="@+id/imageView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button12"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/detailonboardingbottom" />
+
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/work_sans"
+        android:text="Tell us about yourself"
+        android:textColor="#757575"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.463"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView31"
+        app:layout_constraintVertical_bias="0.033" />
+
+    <EditText
+        android:id="@+id/editTextText9"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="First Name"
+        android:inputType="textCapWords"
+        android:textColorHint="#1674AE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView31" />
+
+    <EditText
+        android:id="@+id/editTextText11"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Last Name"
+        android:inputType="text"
+        android:textColorHint="#1674AE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText10" />
+
+    <EditText
+        android:id="@+id/editTextText12"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Email Address"
+        android:inputType="text"
+        android:textColorHint="#1674AE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText11" />
+
+    <EditText
+        android:id="@+id/editTextText13"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableRight="@drawable/calendaricon"
+        android:ems="10"
+        android:focusable="false"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Date of Birth"
+        android:inputType="date"
+        android:textColorHint="#1674AE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText12" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button12"
+        android:layout_width="125dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/cornered_button"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Save"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText13"
+        app:layout_constraintVertical_bias="0.072" />
+</androidx.constraintlayout.widget.ConstraintLayout>

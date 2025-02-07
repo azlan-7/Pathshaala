@@ -44,5 +44,6 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.volley)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.flexbox)
 
 }
