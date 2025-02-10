@@ -23,13 +23,29 @@
         android:theme="@style/Theme.MyApp.Light"
         tools:targetApi="31">
         <activity
-            android:name=".ProfessionalDetails"
+            android:name=".StudentsInfo"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".TeachersInfo"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".ShowUniqueID"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
-            android:name=".TeachersEducation"
+            android:name=".UserOnboardingRadio"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".ProfessionalDetails"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersEducation"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SubjectExpertise"
             android:exported="false"

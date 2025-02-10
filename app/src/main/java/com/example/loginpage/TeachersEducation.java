@@ -29,7 +29,7 @@ public class TeachersEducation extends AppCompatActivity {
         // Set Click Listener
         saveButton.setOnClickListener(v -> {
             // Create Intent to move to ProfessionalDetails.java
-            Intent intent = new Intent(TeachersEducation.this, ProfessionalDetails.class);
+            Intent intent = new Intent(TeachersEducation.this, TeachersInfo.class);
             startActivity(intent); // Start the new activity
             finish(); // Optional: Close TeachersEducation so user can't go back
         });

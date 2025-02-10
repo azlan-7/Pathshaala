@@ -29,7 +29,7 @@ public class SuccessActivity extends AppCompatActivity {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SuccessActivity.this, UserOnboarding.class);
+                Intent intent = new Intent(SuccessActivity.this, UserOnboardingRadio.class);
                 intent.putExtra("phoneNumber", savedPhoneNumber);
                 startActivity(intent);
                 finish();  // This prevents users from going back to SuccessActivity

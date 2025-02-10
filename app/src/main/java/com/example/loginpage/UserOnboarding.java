@@ -22,11 +22,11 @@ public class UserOnboarding extends AppCompatActivity {
         String phoneNumber = getIntent().getStringExtra("phoneNumber");
         Button teacherButton = findViewById(R.id.button10);
 
-        teacherButton.setOnClickListener(v -> {
-                    Intent intent = new Intent(UserOnboarding.this, TeachersBasicInfo.class);
-                    intent.putExtra("phoneNumber", phoneNumber); // Pass phone number
-                    startActivity(intent);
-                });
+//        teacherButton.setOnClickListener(v -> {
+//                    Intent intent = new Intent(UserOnboarding.this, TeachersBasicInfo.class);
+//                    intent.putExtra("phoneNumber", phoneNumber); // Pass phone number
+//                    startActivity(intent);
+//                });
 
 //        // Pass it to TeachersBasicInfo activity
 //        Intent intent = new Intent(UserOnboarding.this, TeachersBasicInfo.class);

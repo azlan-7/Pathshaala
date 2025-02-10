@@ -40,6 +40,7 @@ public class OTPmobile extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("phoneNumber", phoneNumber);
             editor.apply();
+            Log.d("OTPmobile", "Saved Phone Number: " + phoneNumber);
 
             if (enteredOTP.equals(correctOTP)) {
                 Log.d("OTPmobile", "OTP Matched!");

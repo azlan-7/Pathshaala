@@ -33,7 +33,7 @@ public class SubjectExpertise extends AppCompatActivity {
         // Set Click Listener
         saveButton.setOnClickListener(v -> {
             // Create Intent to move to TeachersEducation.java
-            Intent intent = new Intent(SubjectExpertise.this, TeachersEducation.class);
+            Intent intent = new Intent(SubjectExpertise.this, TeachersInfo.class);
             startActivity(intent); // Start the new activity
             finish(); // Optional: Finish current activity so user can't go back
         });

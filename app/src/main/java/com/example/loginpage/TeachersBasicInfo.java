@@ -2,6 +2,7 @@ package com.example.loginpage;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +29,8 @@ public class TeachersBasicInfo extends AppCompatActivity {
         setContentView(R.layout.activity_teachers_basic_info);
 
 
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
         EditText etContact = findViewById(R.id.editTextText10);
@@ -36,7 +39,7 @@ public class TeachersBasicInfo extends AppCompatActivity {
         } else {
             etContact.setHint("Contact No.");
         }
-        etContact.setEnabled(false);
+        etContact.setEnabled(true);
 
         etDOB = findViewById(R.id.editTextText13);
         etDOB.setOnClickListener(v -> showDatePicker());
@@ -62,7 +65,7 @@ public class TeachersBasicInfo extends AppCompatActivity {
         Button btnSave = findViewById(R.id.button12);
 
         btnSave.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersBasicInfo.this, TeachersAddress.class);
+            Intent intent = new Intent(TeachersBasicInfo.this, TeachersInfo.class);
             startActivity(intent);
         });
 

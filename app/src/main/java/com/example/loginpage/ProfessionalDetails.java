@@ -1,7 +1,9 @@
 package com.example.loginpage;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,6 +25,7 @@ public class ProfessionalDetails extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton radioYes, radioNo;
     private Calendar startCalendar, endCalendar;
+    private Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,16 @@ public class ProfessionalDetails extends AppCompatActivity {
                 radioNo.setTextColor(ContextCompat.getColor(this, R.color.blue));
             }
         });
+
+        Button saveButton = findViewById(R.id.button17); // Replace with your actual Save button ID
+        saveButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfessionalDetails.this, TeachersInfo.class);
+            startActivity(intent);
+            finish(); // Finish the current activity so the user doesn’t come back to it on pressing back
+        });
+
+
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

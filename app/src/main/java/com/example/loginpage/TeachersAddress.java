@@ -23,7 +23,7 @@ public class TeachersAddress extends AppCompatActivity {
         Button saveButton = findViewById(R.id.button13);
 
         saveButton.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersAddress.this, TeachersAddSubject.class);
+            Intent intent = new Intent(TeachersAddress.this, TeachersInfo.class);
             startActivity(intent);
             finish();  // Optional: Closes the location page so user can't go back
         });
