@@ -18,9 +18,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.UUID;
 import android.app.DatePickerDialog;
+import java.util.Calendar;
+
 
 public class UserOnboardingRadio extends AppCompatActivity {
 
@@ -107,7 +110,8 @@ public class UserOnboardingRadio extends AppCompatActivity {
             editor.putString("USER_TYPE", userType);
             editor.apply();
 
-            String uniqueID = UUID.randomUUID().toString().substring(0, 8).toUpperCase(); // Generate 8-character ID
+            String uniqueID = userType.substring(1,1) + UUID.randomUUID().toString().substring(0, 8).toUpperCase() + String.valueOf(Calendar.getInstance().get(Calendar.YEAR)); // Generate 8-character ID
+            Log.d("UserOnboardingRadio", "User Type " + userType.substring(1,5) + "-"  + userType);
             Toast.makeText(this, "ID: " + uniqueID, Toast.LENGTH_SHORT).show();
 
             // Pass userType and uniqueID to next screen

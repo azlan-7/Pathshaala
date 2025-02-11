@@ -3,7 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#0F4D73</color>
-    <color name="light_blue">#BBE5FF</color>
+    <color name="light_blue">#D7EDF6</color>
+    <color name="radio_selected">#1674AE</color>
+    <color name="gray">#757575</color>
     <color name="line_selected">#FF0000</color>  <!-- Red for selected line -->
     <color name="line_focused">#00FF00</color>   <!-- Green for focused line -->
     <color name="line_default">#0000FF</color>    <!-- Blue for default line -->

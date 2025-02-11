@@ -31,7 +31,7 @@ public class ShowUniqueID extends AppCompatActivity {
         String userType = getIntent().getStringExtra("USER_TYPE");
         String uniqueId = getIntent().getStringExtra("UNIQUE_ID");
 
-        userTypeText.setText("You selected: " + userType);
+        userTypeText.setText("You Selected: " + userType);
         uniqueIdText.setText("Your ID: " + uniqueId);
 
 

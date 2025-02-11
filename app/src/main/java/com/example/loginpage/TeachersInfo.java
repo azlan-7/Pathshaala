@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,6 +20,19 @@ public class TeachersInfo extends AppCompatActivity {
     private TextView tvFirstName,tvFullName, tvLastName, tvContact, tvEmail, tvDOB;
     private TextView accountInfo, subjectExpertise, education, professionalDetails, location;
 
+    private TextView tvAboutYourself;
+
+    private final ActivityResultLauncher<Intent> aboutActivityLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                            String updatedAbout = result.getData().getStringExtra("ABOUT_YOURSELF");
+                            if (updatedAbout != null) {
+                                tvAboutYourself.setText(updatedAbout);  // Update UI instantly
+                            }
+                        }
+                    });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +40,20 @@ public class TeachersInfo extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_teachers_info);
 
+
         accountInfo = findViewById(R.id.textView43);
         subjectExpertise = findViewById(R.id.textView44);
         education = findViewById(R.id.textView45);
         professionalDetails = findViewById(R.id.textView46);
         location = findViewById(R.id.textView48);
+        ImageView editAbout = findViewById(R.id.imageView44);
+        tvAboutYourself = findViewById(R.id.textView41);
+
+
+        editAbout.setOnClickListener(v -> {
+            Intent intent = new Intent(TeachersInfo.this, AboutTeacher.class);
+            aboutActivityLauncher.launch(intent);
+        });
 
 
         accountInfo.setOnClickListener(v ->{
@@ -69,6 +94,12 @@ public class TeachersInfo extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String contactNumber = sharedPreferences.getString("phoneNumber", "Not Available"); // Default value if not found
+        String aboutYourself = sharedPreferences.getString("ABOUT_YOURSELF", "Write about yourself...");
+
+
+        TextView tvAboutYourself = findViewById(R.id.textView41);
+        tvAboutYourself.setText(aboutYourself);
+
 
         TextView contactTextView = findViewById(R.id.tvContact); // Replace with actual TextView ID
         contactTextView.setText(contactNumber);
