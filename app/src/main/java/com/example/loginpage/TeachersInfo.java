@@ -21,6 +21,7 @@ public class TeachersInfo extends AppCompatActivity {
     private TextView accountInfo, subjectExpertise, education, professionalDetails, location;
 
     private TextView tvAboutYourself;
+    private TextView uniqueIdTextView;
 
     private final ActivityResultLauncher<Intent> aboutActivityLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -48,6 +49,17 @@ public class TeachersInfo extends AppCompatActivity {
         location = findViewById(R.id.textView48);
         ImageView editAbout = findViewById(R.id.imageView44);
         tvAboutYourself = findViewById(R.id.textView41);
+        uniqueIdTextView = findViewById(R.id.uniqueIdTextView);
+
+
+        String uniqueID = getIntent().getStringExtra("UNIQUE_ID");
+
+
+        if (uniqueID != null) {
+            uniqueIdTextView.setText("Your Unique ID: " + uniqueID);
+        } else {
+            uniqueIdTextView.setText("Unique ID not available");
+        }
 
 
         editAbout.setOnClickListener(v -> {

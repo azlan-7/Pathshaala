@@ -35,14 +35,18 @@ public class ShowUniqueID extends AppCompatActivity {
         uniqueIdText.setText("Your ID: " + uniqueId);
 
 
+
+
         buttonContinue.setOnClickListener(v -> {
             if ("Teacher".equals(userType)) {
                 // Redirect to TeachersInfo.java
                 Intent intent = new Intent(ShowUniqueID.this, TeachersInfo.class);
+                intent.putExtra("UNIQUE_ID", uniqueId);
                 startActivity(intent);
             } else {
                 // Redirect to StudentsInfo.java (if you have a different screen for students)
                 Intent intent = new Intent(ShowUniqueID.this, StudentsInfo.class);
+                intent.putExtra("UNIQUE_ID", uniqueId);
                 startActivity(intent);
             }
             finish();

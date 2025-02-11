@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -22,9 +24,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/applogo"
+        android:icon="@mipmap/logopathshaala"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/applogo_round"
+        android:roundIcon="@mipmap/logopathshaala_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.Light"
         tools:targetApi="31">

@@ -58,12 +58,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:text="My Profile"
         android:fontFamily="@font/work_sans_extrabold"
+        android:text="My Profile"
         android:textColor="#0F4D73"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/tvFullName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -72,8 +73,8 @@
         android:id="@+id/textView43"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="288dp"
-        android:layout_marginEnd="216dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="212dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/work_sans_bold"
@@ -81,7 +82,7 @@
         android:textColor="#0F4D73"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView47" />
 
     <TextView
         android:id="@+id/textView44"
@@ -305,6 +306,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textView41"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/full_width" />
+
+    <TextView
+        android:id="@+id/uniqueIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Unique ID will appear here"
+        android:fontFamily="@font/work_sans"
+        android:textColor="#0F4D73"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView42" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
