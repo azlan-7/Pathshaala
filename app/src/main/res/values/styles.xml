@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base Theme -->
+    <style name="Theme.MyApp.Light" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Customize colors here -->
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryVariant">#3700B3</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="android:windowBackground">#FFFFFF</item> <!-- Background color -->
+        <item name="android:textColorPrimary">#000000</item> <!-- Text color -->
+    </style>
+
+    <style name="Theme.MyApp.Dark" parent="Theme.Material3.Light">
+        <item name="android:windowBackground">#121212</item> <!-- Dark background -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- White text -->
+    </style>
+
+
+    <style name="Theme.MyApp.FullScreen" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="Theme.MyApp.FullScreenLight" parent="Theme.MyApp.Light">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+</resources>
