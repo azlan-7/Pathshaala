@@ -10,10 +10,12 @@ constraintlayout = "2.2.0"
 viewpager2 = "1.0.0"
 wormdotsindicator = "4.2.0"
 gmsLocation = "21.0.1"
+gson = "2.10.1"  # Use the latest version
 
 
 
 [libraries]
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 gms-location = { module = "com.google.android.gms:play-services-location", version.ref = "gmsLocation" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version = "3.0.0" }
 worm-dots-indicator = { module = "com.tbuonomo.andrui:viewpagerdotsindicator", version.ref = "wormdotsindicator" }

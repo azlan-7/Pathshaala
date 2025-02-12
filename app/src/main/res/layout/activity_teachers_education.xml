@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".TeachersEducation">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/educationRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText15"
+        app:layout_constraintVertical_bias="0.098" />
+
     <ImageView
         android:id="@+id/imageView38"
         android:layout_width="wrap_content"
@@ -75,13 +86,13 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/yearDropdown"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.795" />
 
     <AutoCompleteTextView
         android:id="@+id/textView38"
-        android:layout_width="214dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="176dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/cornered_rectangle"
         android:drawableEnd="@drawable/dropdownicon"
         android:ems="10"
@@ -91,15 +102,15 @@
         android:inputType="none"
         android:textColorHint="#1674AE"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintEnd_toStartOf="@+id/yearDropdown"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView37" />
 
     <AutoCompleteTextView
         android:id="@+id/yearDropdown"
-        android:layout_width="212dp"
-        android:layout_height="47dp"
+        android:layout_width="197dp"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/cornered_rectangle"
         android:drawableEnd="@drawable/dropdownicon"
@@ -111,9 +122,9 @@
         android:textColorHint="#1674AE"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.925"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText15" />
+        app:layout_constraintTop_toBottomOf="@+id/textView37" />
 
     <EditText
         android:id="@+id/editTextText15"
@@ -128,8 +139,19 @@
         android:textColorHint="#1674AE"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintHorizontal_bias="0.442"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView38" />
+
+    <ImageView
+        android:id="@+id/imageView73"
+        android:layout_width="41dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="144dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.19"
+        app:layout_constraintStart_toEndOf="@+id/textView36"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

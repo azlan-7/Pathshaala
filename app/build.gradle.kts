@@ -46,5 +46,6 @@ dependencies {
     implementation(libs.androidx.viewpager2)
     implementation(libs.flexbox)
     implementation(libs.gms.location)
+    implementation(libs.gson)
 
 }

@@ -3,6 +3,7 @@ package com.example.loginpage;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -39,6 +40,7 @@ public class ProfessionalDetails extends AppCompatActivity {
         radioGroup = findViewById(R.id.radioGroup);
         radioYes = findViewById(R.id.radioYes);
         radioNo = findViewById(R.id.radioNo);
+
 
         // Default: Yes is selected, End Date is disabled
         radioYes.setChecked(true);
@@ -128,4 +130,7 @@ public class ProfessionalDetails extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         editText.setText(dateFormat.format(calendar.getTime()));
     }
+
+
+
 }

@@ -75,7 +75,7 @@ public class TeachersInfo extends AppCompatActivity {
 
 
         subjectExpertise.setOnClickListener(v ->{
-            Intent intent = new Intent(TeachersInfo.this, TeachersAddSubject.class);
+            Intent intent = new Intent(TeachersInfo.this, SubjectExpertiseNew.class);
             startActivity(intent);
         });
 

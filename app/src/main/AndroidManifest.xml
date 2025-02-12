@@ -31,13 +31,25 @@
         android:theme="@style/Theme.MyApp.Light"
         tools:targetApi="31">
         <activity
-            android:name=".SubjectExpertiseNewEdit"
+            android:name=".WorkExperienceView"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
+            android:name=".WorkExperience"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersEducationView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SubjectExpertiseNewEdit"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
             android:name=".SubjectExpertiseNew"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".AboutTeacherDialog"
             android:exported="false" />

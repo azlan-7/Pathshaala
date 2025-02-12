@@ -3,6 +3,7 @@ package com.example.loginpage;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -32,7 +33,7 @@ public class SubjectExpertiseNew extends AppCompatActivity {
 
         majorSubjectContainer = findViewById(R.id.majorsubjectContainer);
         minorSubjectContainer = findViewById(R.id.minorSubjectContainer);
-        ImageView editSubjects = findViewById(R.id.imageView45);
+        Button editSubjects = findViewById(R.id.button22);
 
 
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);

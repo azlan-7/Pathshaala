@@ -3,6 +3,7 @@ package com.example.loginpage;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class ShowUniqueID extends AppCompatActivity {
 
         TextView userTypeText = findViewById(R.id.textViewUserType);
         TextView uniqueIdText = findViewById(R.id.textViewUniqueId);
+        TextView encryptedEmailText = findViewById(R.id.textView74);
         Button buttonContinue = findViewById(R.id.button18);
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -30,6 +32,14 @@ public class ShowUniqueID extends AppCompatActivity {
 
         String userType = getIntent().getStringExtra("USER_TYPE");
         String uniqueId = getIntent().getStringExtra("UNIQUE_ID");
+        String encryptedEmail = getIntent().getStringExtra("ENCRYPTED_EMAIL");
+        encryptedEmailText.setText("Encrypted Key: " + encryptedEmail);
+
+
+        // Log for Debugging
+        Log.d("ShowUniqueID", "User Type: " + userType);
+        Log.d("ShowUniqueID", "Unique ID: " + uniqueId);
+        Log.d("ShowUniqueID", "Encrypted Email: " + encryptedEmail);
 
         userTypeText.setText("You Selected: " + userType);
         uniqueIdText.setText("Your ID: " + uniqueId);

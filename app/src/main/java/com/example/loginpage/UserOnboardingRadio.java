@@ -1,5 +1,7 @@
 package com.example.loginpage;
 
+import com.example.loginpage.EncryptionHelper;
+
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -34,7 +36,18 @@ import java.util.Calendar;
 import java.util.UUID;
 import android.app.DatePickerDialog;
 import java.util.Calendar;
-
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import android.util.Log;
 
 public class UserOnboardingRadio extends AppCompatActivity {
 
@@ -139,6 +152,43 @@ public class UserOnboardingRadio extends AppCompatActivity {
             TextView contactTextView = findViewById(R.id.editTextText10);
             contactTextView.setText(savedPhoneNumber);
 
+
+
+
+            try {
+                String EncryptEmail = etEmail.getText().toString().trim();
+                Log.d("EncryptionHelper", "Original Data: " + EncryptEmail);
+
+                // Generate AES Key
+                byte[] aesKey = EncryptionHelper.generateAESKey();
+                Log.d("EncryptionHelper", "Generated AES Key: " + android.util.Base64.encodeToString(aesKey, android.util.Base64.DEFAULT));
+
+                // Encrypt Data
+                String encryptedData = EncryptionHelper.encryptData(EncryptEmail, aesKey);
+                Log.d("EncryptionHelper", "Encrypted Data: " + encryptedData);
+
+                // Save encrypted email in SharedPreferences (optional)
+                editor.putString("ENCRYPTED_EMAIL", encryptedData);
+                editor.apply();
+
+                // Decrypt Data
+                String decryptedData = EncryptionHelper.decryptData(encryptedData, aesKey);
+                Log.d("EncryptionHelper", "Decrypted Data: " + decryptedData);
+
+                // Encrypt AES Key
+                String encryptedAESKey = EncryptionHelper.encryptAESKey(aesKey);
+                Log.d("EncryptionHelper", "Encrypted AES Key: " + encryptedAESKey);
+
+                // Decrypt AES Key
+                byte[] decryptedAESKey = EncryptionHelper.decryptAESKey(encryptedAESKey);
+                Log.d("EncryptionHelper", "Decrypted AES Key Matches Original: " + java.util.Arrays.equals(aesKey, decryptedAESKey));
+
+            } catch (Exception e) {
+                Log.e("EncryptionHelper", "Error during encryption/decryption", e);
+            }
+
+
+
             editor.putString("FIRST_NAME", etFirstName.getText().toString().trim());
             editor.putString("LAST_NAME", etLastName.getText().toString().trim());
             editor.putString("CONTACT", etContact.getText().toString().trim());
@@ -158,6 +208,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
             Intent intent = new Intent(UserOnboardingRadio.this, ShowUniqueID.class);
             intent.putExtra("USER_TYPE", userType);
             intent.putExtra("UNIQUE_ID", uniqueID);
+            intent.putExtra("ENCRYPTED_EMAIL", sharedPreferences.getString("ENCRYPTED_EMAIL", "No Data"));
             startActivity(intent);
         });
 

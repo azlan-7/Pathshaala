@@ -23,19 +23,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.077" />
 
-    <ImageView
-        android:id="@+id/imageView45"
-        android:layout_width="28dp"
-        android:layout_height="26dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView73"
-        app:srcCompat="@drawable/pencilvector" />
-
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/majorsubjectContainer"
         android:layout_width="344dp"
@@ -53,14 +40,14 @@
         android:id="@+id/textView68"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="56dp"
         android:fontFamily="@font/work_sans"
         android:text="Major Subjects"
         android:textColor="#0F4d73"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView45" />
+        app:layout_constraintTop_toBottomOf="@+id/textView73" />
 
     <TextView
         android:id="@+id/textView69"
@@ -103,6 +90,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView56" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button22"
+        android:layout_width="156dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/cornered_button"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Add More"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/minorSubjectContainer"
+        app:layout_constraintVertical_bias="0.301" />
+
+    <ImageView
+        android:id="@+id/imageView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView70"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/detailonboardingbottom" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
