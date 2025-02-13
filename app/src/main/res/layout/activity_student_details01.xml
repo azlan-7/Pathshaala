@@ -282,20 +282,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="20dp" />
-
-        <ScrollView
-            android:layout_width="391dp"
-            android:layout_height="11dp"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="721dp">
-
-        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
