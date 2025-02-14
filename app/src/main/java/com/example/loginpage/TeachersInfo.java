@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class TeachersInfo extends AppCompatActivity {
 
     private TextView tvFirstName,tvFullName, tvLastName, tvContact, tvEmail, tvDOB;
-    private TextView accountInfo, subjectExpertise, education, professionalDetails, location;
+    private TextView accountInfo, subjectExpertise, education, workExperience,certifications,awards,promotionalActivities, location;
 
     private TextView tvAboutYourself;
     private TextView uniqueIdTextView;
@@ -45,7 +45,10 @@ public class TeachersInfo extends AppCompatActivity {
         accountInfo = findViewById(R.id.textView43);
         subjectExpertise = findViewById(R.id.textView44);
         education = findViewById(R.id.textView45);
-        professionalDetails = findViewById(R.id.textView46);
+        workExperience = findViewById(R.id.textView46);
+        certifications = findViewById(R.id.textView57);
+        awards = findViewById(R.id.textView59);
+        promotionalActivities = findViewById(R.id.textView60);
         location = findViewById(R.id.textView48);
         ImageView editAbout = findViewById(R.id.imageView44);
         tvAboutYourself = findViewById(R.id.textView41);
@@ -85,9 +88,23 @@ public class TeachersInfo extends AppCompatActivity {
             startActivity(intent);
         });
 
-        professionalDetails.setOnClickListener(v ->{
-            Intent intent = new Intent(TeachersInfo.this, ProfessionalDetails.class);
+        workExperience.setOnClickListener(v ->{
+            Intent intent = new Intent(TeachersInfo.this, WorkExperience.class);
             startActivity(intent);
+        });
+
+        certifications.setOnClickListener(v ->{
+            Intent intent = new Intent(TeachersInfo.this,CertificationsView.class);
+            startActivity(intent);
+        });
+        awards.setOnClickListener(v ->{
+            Intent intent = new Intent(TeachersInfo.this,Awards.class);
+            startActivity(intent);
+        });
+        promotionalActivities.setOnClickListener(v ->{
+            Intent intent = new Intent(TeachersInfo.this, AddPromotionalMedia.class);
+            startActivity(intent);
+
         });
 
         location.setOnClickListener(v ->{

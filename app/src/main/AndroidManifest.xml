@@ -31,9 +31,29 @@
         android:theme="@style/Theme.MyApp.Light"
         tools:targetApi="31">
         <activity
-            android:name=".WorkExperienceView"
+            android:name=".AddPromotionalMedia"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".CertificationsAdd"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".CertificationsView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AddAwards"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".Awards"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".WorkExperienceView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".WorkExperience"
             android:exported="true"

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Profession -->
+        <TextView
+            android:id="@+id/tvProfession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profession"
+            android:fontFamily="@font/work_sans_bold"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Institution -->
+        <TextView
+            android:id="@+id/tvInstitution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
+            android:text="Institution Name"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvProfession"/>
+
+        <!-- Designation -->
+        <TextView
+            android:id="@+id/tvDesignation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans_light"
+            android:text="Designation"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvInstitution"/>
+
+        <!-- Years of Experience -->
+        <TextView
+            android:id="@+id/tvExperience"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans_extrabold"
+            android:text="Experience: 5 years"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDesignation"/>
+
+        <ImageView
+            android:id="@+id/btnDelete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/delete_24dp_0f4d73_fill0_wght400_grad0_opsz24"
+            android:contentDescription="Delete Experience"
+            android:padding="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
