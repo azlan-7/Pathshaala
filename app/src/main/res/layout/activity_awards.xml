@@ -1,49 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="#f8f9fa"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f8f9fa"
     tools:context=".Awards">
 
+    <!-- Back Button -->
+
+    <!-- Title -->
+
+    <!-- Subtitle -->
+
+    <!-- RecyclerView for Award List -->
+
+    <!-- Floating Action Button for Adding Awards -->
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="29dp"
+        android:contentDescription="Back"
+        android:src="@drawable/back_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.047" />
+
     <TextView
-        android:id="@+id/textView52"
+        android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans_bold"
+        android:textColor="@color/black"
         android:text="Awards"
         android:textSize="11pt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.142"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.036" />
-
-    <TextView
-        android:id="@+id/textView53"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/work_sans"
-        android:text="Showcase your Awards"
-        android:textSize="07pt"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.201"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.081" />
+        app:layout_constraintVertical_bias="0.041" />
 
     <TextView
-        android:id="@+id/textView54"
+        android:id="@+id/subTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        tools:layout_editor_absoluteX="134dp"
-        tools:layout_editor_absoluteY="217dp" />
+        android:text="Showcase your awards"
+        android:textColor="#666666"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.245"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.086" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/awardsRecyclerView"
+        android:layout_width="398dp"
+        android:layout_height="598dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@id/addAwardButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subTitleText"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/item_award" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addAwardButton"
+        android:layout_width="144dp"
+        android:layout_height="49dp"
+        android:background="@drawable/cornered_rectangle"
+        android:backgroundTint="#52b788"
+        android:text="Add Award"
+        android:textColor="@color/white"
+        android:fontFamily="@font/work_sans_semibold"
+        android:textSize="08pt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.894" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

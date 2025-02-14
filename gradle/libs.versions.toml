@@ -9,6 +9,8 @@ activity = "1.10.0"
 constraintlayout = "2.2.0"
 viewpager2 = "1.0.0"
 wormdotsindicator = "4.2.0"
+navigationFragment = "2.6.0"
+navigationUi = "2.6.0"
 
 
 [libraries]
@@ -24,6 +26,8 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
+androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
