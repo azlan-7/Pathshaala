@@ -31,9 +31,37 @@
         android:theme="@style/Theme.MyApp.Light"
         tools:targetApi="31">
         <activity
-            android:name=".AddPromotionalMedia"
+            android:name=".StudentsBasicInfo"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".AboutStudent"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".GradesTaughtView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".GradesTaught"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".StudentParentDetails"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".StudentDetails"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeacherOrStudent"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AddPromotionalMedia"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".CertificationsAdd"
             android:exported="true"

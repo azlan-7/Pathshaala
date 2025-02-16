@@ -198,7 +198,9 @@ public class UserOnboardingRadio extends AppCompatActivity {
             editor.putString("USER_TYPE", userType);
             editor.apply();
 
-            String uniqueID = userType.substring(0,1).toUpperCase() + UUID.randomUUID().toString().substring(0, 8).toUpperCase() + String.valueOf(Calendar.getInstance().get(Calendar.YEAR)); // Generate 8-character ID
+
+            String prefix = userType.equals("Teacher") ? "T" : "S";
+            String uniqueID = prefix + UUID.randomUUID().toString().substring(0, 8).toUpperCase() + Calendar.getInstance().get(Calendar.YEAR);
             Log.d("UserOnboardingRadio", "User Type " + userType.substring(1,5) + "-"  + userType);
             Toast.makeText(this, "ID: " + uniqueID, Toast.LENGTH_SHORT).show();
 

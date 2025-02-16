@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class TeachersInfo extends AppCompatActivity {
 
     private TextView tvFirstName,tvFullName, tvLastName, tvContact, tvEmail, tvDOB;
-    private TextView accountInfo, subjectExpertise, education, workExperience,certifications,awards,promotionalActivities, location;
+    private TextView accountInfo, subjectExpertise, education, workExperience,gradesTaught,certifications,awards,promotionalActivities, location;
 
     private TextView tvAboutYourself;
     private TextView uniqueIdTextView;
@@ -50,6 +50,7 @@ public class TeachersInfo extends AppCompatActivity {
         awards = findViewById(R.id.textView59);
         promotionalActivities = findViewById(R.id.textView60);
         location = findViewById(R.id.textView48);
+        gradesTaught = findViewById(R.id.textView58);
         ImageView editAbout = findViewById(R.id.imageView44);
         tvAboutYourself = findViewById(R.id.textView41);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView);
@@ -90,6 +91,11 @@ public class TeachersInfo extends AppCompatActivity {
 
         workExperience.setOnClickListener(v ->{
             Intent intent = new Intent(TeachersInfo.this, WorkExperience.class);
+            startActivity(intent);
+        });
+
+        gradesTaught.setOnClickListener(v ->{
+            Intent intent = new Intent(TeachersInfo.this, GradesTaught.class);
             startActivity(intent);
         });
 
