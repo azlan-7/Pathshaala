@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SubjectExpertiseNewOne">
+
+    <!-- Title TextView -->
+
+    <!-- ScrollView for Flexbox Layout to make it scrollable when subjects are many -->
+
+    <!-- CardView for RecyclerView (Subjects List) -->
+
+    <TextView
+        android:id="@+id/textView56"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Subject Expertise"
+        android:textColor="#0F4D73"
+        android:textSize="22sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:fillViewport="true"
+        android:overScrollMode="always"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.199">
+
+        <!-- Flexbox Layout for Subject Chips -->
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/subjectContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cornered_rectangle"
+            android:paddingTop="10dp"
+            app:flexWrap="wrap"
+            app:justifyContent="flex_start" />
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardSubjects"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView56"> <!-- This fixes its bottom position-->
+
+        <!-- RecyclerView for Subjects -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subjectsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:nestedScrollingEnabled="true"
+            android:overScrollMode="always"
+            android:padding="8dp" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Save Button -->
+
+    <!-- Decorative Image Views -->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button21"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/cornered_button"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Save"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardSubjects" />
+
+    <ImageView
+        android:id="@+id/imageView71"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView72"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/detailonboardingbottom" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

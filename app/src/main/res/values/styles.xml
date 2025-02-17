@@ -36,4 +36,10 @@
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
+    <style name="CustomCheckboxStyle">
+        <item name="colorControlNormal">@color/light_blue</item>  <!-- Color for unchecked state -->
+        <item name="colorControlActivated">@color/blue</item>  <!-- Color for checked state -->
+        <item name="android:buttonTint">@color/blue</item> <!-- Change the checkbox color itself when checked -->
+    </style>
+
 </resources>

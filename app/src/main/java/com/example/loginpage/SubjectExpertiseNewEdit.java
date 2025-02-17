@@ -35,8 +35,8 @@ public class SubjectExpertiseNewEdit extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_subject_expertise_new_edit);
 
-        List<String> majorSubjects = Arrays.asList("Mathematics", "Physics", "Chemistry", "Biology");
-        List<String> minorSubjects = Arrays.asList("Music", "Art", "Drama", "Dance");
+        List<String> majorSubjects = Arrays.asList("Mathematics", "Physics", "Chemistry", "Biology","Science","Social Science","Hindi","English");
+        List<String> minorSubjects = Arrays.asList("Music", "Art", "Drama", "Dance","Commerce","Business Studies","Economics","Literature","History","Geography");
 
         Log.d("SubjectsDebug", "Major Subjects: " + majorSubjects.toString());
         Log.d("SubjectsDebug", "Minor Subjects: " + minorSubjects.toString());
@@ -59,8 +59,13 @@ public class SubjectExpertiseNewEdit extends AppCompatActivity {
         minorAdapter = new SubjectAdapter(this, minorSubjects, selectedMinorSubjects, "MINOR_SUBJECTS");
 
         // Set RecyclerViews
-        majorSubjectsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        minorSubjectsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        majorSubjectsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        majorSubjectsRecyclerView.setNestedScrollingEnabled(true);
+        majorSubjectsRecyclerView.setHasFixedSize(true);
+
+        minorSubjectsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        minorSubjectsRecyclerView.setNestedScrollingEnabled(true);
+        minorSubjectsRecyclerView.setHasFixedSize(true);
 
         majorSubjectsRecyclerView.setAdapter(majorAdapter);
         minorSubjectsRecyclerView.setAdapter(minorAdapter);

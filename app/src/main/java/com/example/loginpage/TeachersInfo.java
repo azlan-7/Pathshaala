@@ -60,7 +60,7 @@ public class TeachersInfo extends AppCompatActivity {
 
 
         if (uniqueID != null) {
-            uniqueIdTextView.setText("Your Unique ID: " + uniqueID);
+            uniqueIdTextView.setText("["+uniqueID+"]");
         } else {
             uniqueIdTextView.setText("Unique ID not available");
         }

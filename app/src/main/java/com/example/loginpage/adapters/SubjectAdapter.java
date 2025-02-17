@@ -41,8 +41,8 @@ public class SubjectAdapter  extends RecyclerView.Adapter<SubjectAdapter.Subject
         holder.checkBox.setOnCheckedChangeListener(null); // Prevents unwanted triggering
         holder.checkBox.setChecked(selectedSubjects.contains(subject));
 
-        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) holder.itemView.getLayoutParams();
+        layoutParams.setMargins(8, 1, 8, 1);  // Adjust margins (Left, Top, Right, Bottom)
         holder.itemView.setLayoutParams(layoutParams);
 
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
