@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LearningPreferences">
+    tools:context=".Extracurriculars">
 
     <ImageView
-        android:id="@+id/imageView124"
+        android:id="@+id/imageView121"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/detailonboardingtop" />
 
     <ImageView
-        android:id="@+id/imageView126"
+        android:id="@+id/imageView122"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,53 +28,51 @@
         app:srcCompat="@drawable/detailonboardingbottom" />
 
     <TextView
-        android:id="@+id/textView95"
+        android:id="@+id/textView96"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans_bold"
-        android:text="Learning Preference"
+        android:text="Extracurriculars"
         android:textColor="#0F4D73"
         android:textSize="22sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView124" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView121" />
 
-
-    <CheckBox
-        android:id="@+id/checkBoxVisual"
+    <TextView
+        android:id="@+id/textView97"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Visual"
+        android:layout_marginTop="56dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Hobbies/Interests"
         android:textColor="#0F4D73"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/button34"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintHorizontal_bias="0.186"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView95"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintTop_toBottomOf="@+id/textView96" />
 
-    <CheckBox
-        android:id="@+id/checkBoxAuditory"
+    <TextView
+        android:id="@+id/textView98"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Auditory"
+        android:layout_marginTop="124dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Extracurricular Activities"
         android:textColor="#0F4D73"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/button34"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.299"
+        app:layout_constraintHorizontal_bias="0.251"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView95"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintTop_toBottomOf="@+id/textView97" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button34"
-        android:layout_width="164dp"
+        android:id="@+id/button35"
+        android:layout_width="159dp"
         android:layout_height="59dp"
+        android:layout_marginTop="192dp"
         android:layout_weight="1"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
@@ -83,9 +81,8 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.543"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.743" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/textView98"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -90,6 +90,16 @@ public class StudentsInfo extends AppCompatActivity {
             aboutActivityLauncher.launch(intent);
         });
 
+        commPref.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentsInfo.this, CommunicationPreferences.class);
+            aboutActivityLauncher.launch(intent);
+        });
+
+        learningPreferences.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentsInfo.this, LearningPreferences.class);
+            aboutActivityLauncher.launch(intent);
+        });
+
 
 
         // Initialize TextViews

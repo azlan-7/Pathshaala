@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class TeachersInfo extends AppCompatActivity {
 
     private TextView tvFirstName,tvFullName, tvLastName, tvContact, tvEmail, tvDOB;
-    private TextView accountInfo, subjectExpertise, education, workExperience,gradesTaught,certifications,awards,promotionalActivities, location;
+    private TextView accountInfo, subjectExpertise, education, workExperience,gradesTaught,certifications,awards,promotionalActivities,location;
 
     private TextView tvAboutYourself;
     private TextView uniqueIdTextView;
@@ -57,6 +57,7 @@ public class TeachersInfo extends AppCompatActivity {
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView);
 
 
+
         String uniqueID = getIntent().getStringExtra("UNIQUE_ID");
 
 
@@ -85,7 +86,7 @@ public class TeachersInfo extends AppCompatActivity {
 
 
         subjectExpertise.setOnClickListener(v ->{
-            Intent intent = new Intent(TeachersInfo.this, SubjectExpertiseNew.class);
+            Intent intent = new Intent(TeachersInfo.this, SubjectExpertiseNewOne.class);
             startActivity(intent);
         });
 
