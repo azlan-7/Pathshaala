@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans_bold"
-        android:text="Work Experience"
+        android:text="Add Work Experience"
         android:textColor="#0F4D73"
         android:textSize="22sp"
         android:textStyle="normal"
@@ -143,9 +143,9 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button24"
-        android:layout_width="111dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="532dp"
+        android:layout_width="175dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="512dp"
         android:layout_weight="1"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
@@ -153,6 +153,7 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

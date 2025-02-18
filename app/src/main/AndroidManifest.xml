@@ -31,18 +31,43 @@
         android:theme="@style/Theme.MyApp.Light"
         tools:targetApi="31">
         <activity
+            android:name=".TeachersDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".StudentsParentInfo"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AcademicDetailsAdd"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SkillsandExtracurriculars"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".CommunicationPreferences"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".LearningPreferences"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".QRCode"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
             android:name=".SubjectExpertiseNewOne"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".StudentsBasicInfo"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".AboutStudent"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".GradesTaughtView"
@@ -117,7 +142,7 @@
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".StudentsInfo"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".TeachersInfo"

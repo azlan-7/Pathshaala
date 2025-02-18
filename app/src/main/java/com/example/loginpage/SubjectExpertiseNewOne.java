@@ -1,4 +1,5 @@
 package com.example.loginpage;
+import com.example.loginpage.R;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

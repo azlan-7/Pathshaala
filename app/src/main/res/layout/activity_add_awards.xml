@@ -37,7 +37,6 @@
         android:textColorHint="#1674AE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.26"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.229" />
@@ -54,65 +53,49 @@
         android:textColorHint="#1674AE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.26"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323" />
+        app:layout_constraintVertical_bias="0.328" />
 
     <EditText
         android:id="@+id/editTextText19"
-        android:layout_width="176dp"
-        android:layout_height="46dp"
+        android:layout_width="265dp"
+        android:layout_height="50dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
         android:hint="Year Awarded"
         android:inputType="number"
         android:textColorHint="#1674AE"
-        android:textSize="15sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.157"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.416" />
-
-    <TextView
-        android:id="@+id/textView50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/work_sans_light"
-        android:text="(Upload Certificate)"
-        android:textColor="#0F4D73"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.142"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.554" />
+        app:layout_constraintVertical_bias="0.431" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button16"
-        android:layout_width="128dp"
-        android:layout_height="47dp"
-        android:background="@drawable/cornered_button"
-        android:fontFamily="@font/work_sans_semibold"
-        android:text="Upload"
+        android:layout_width="265dp"
+        android:layout_height="50dp"
+        android:background="@drawable/cornered_button_gray"
         android:drawableLeft="@drawable/upload_24dp_ffffff_fill0_wght400_grad0_opsz24"
         android:drawablePadding="8dp"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Upload"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.504" />
+        app:layout_constraintVertical_bias="0.53" />
 
     <EditText
         android:id="@+id/editTextTextMultiLine2"
-        android:layout_width="336dp"
-        android:layout_height="171dp"
+        android:layout_width="265dp"
+        android:layout_height="110dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -125,23 +108,22 @@
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.758" />
+        app:layout_constraintVertical_bias="0.7" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button17"
-        android:layout_width="144dp"
+        android:layout_width="265dp"
         android:layout_height="49dp"
-        android:text="Submit"
         android:background="@drawable/cornered_button"
-        android:textColor="@color/white"
         android:fontFamily="@font/work_sans_semibold"
+        android:text="Submit"
+        android:textColor="@color/white"
         android:textSize="08pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.894" />
+        app:layout_constraintVertical_bias="0.85" />
 
     <ImageView
         android:id="@+id/imageView79"

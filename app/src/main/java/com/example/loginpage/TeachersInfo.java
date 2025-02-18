@@ -52,6 +52,7 @@ public class TeachersInfo extends AppCompatActivity {
         location = findViewById(R.id.textView48);
         gradesTaught = findViewById(R.id.textView58);
         ImageView editAbout = findViewById(R.id.imageView44);
+        ImageView qrCode = findViewById(R.id.imageView107);
         tvAboutYourself = findViewById(R.id.textView41);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView);
 
@@ -71,6 +72,11 @@ public class TeachersInfo extends AppCompatActivity {
             aboutActivityLauncher.launch(intent);
         });
 
+
+        qrCode.setOnClickListener(v -> {
+            Intent intent = new Intent(TeachersInfo.this, QRCode.class);
+            aboutActivityLauncher.launch(intent);
+        });
 
         accountInfo.setOnClickListener(v ->{
             Intent intent = new Intent(TeachersInfo.this, TeachersBasicInfo.class);

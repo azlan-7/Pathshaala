@@ -21,6 +21,8 @@ public class StudentsInfo extends AppCompatActivity {
     private TextView tvAboutYourself;
     private TextView uniqueIdTextView;
 
+
+
     private final ActivityResultLauncher<Intent> aboutActivityLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     result -> {
@@ -44,6 +46,7 @@ public class StudentsInfo extends AppCompatActivity {
         skillExtraCurr = findViewById(R.id.textViewActivities);
         parentGuardian = findViewById(R.id.textViewLocation);
         ImageView editAbout = findViewById(R.id.imageView44);
+        ImageView qrCode = findViewById(R.id.imageView113);
         progress = findViewById(R.id.textView84);
         attendance = findViewById(R.id.textView85);
         commPref = findViewById(R.id.textView86);
@@ -58,11 +61,16 @@ public class StudentsInfo extends AppCompatActivity {
             uniqueID = sharedPreferences.getString("UNIQUE_ID", "Unique ID not available");
         }
 
-        uniqueIdTextView.setText("Your Unique ID: " + uniqueID);
+        uniqueIdTextView.setText("[" + uniqueID + "]");
 
         // Open About Student Page
         editAbout.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, AboutStudent.class);
+            aboutActivityLauncher.launch(intent);
+        });
+
+        qrCode.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentsInfo.this, QRCode.class);
             aboutActivityLauncher.launch(intent);
         });
 
@@ -72,14 +80,17 @@ public class StudentsInfo extends AppCompatActivity {
         });
 
         academicDetails.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, StudentDetails.class);
+            Intent intent = new Intent(StudentsInfo.this, AcademicDetailsAdd.class);
             aboutActivityLauncher.launch(intent);
         });
 
+
         parentGuardian.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, StudentParentDetails.class);
+            Intent intent = new Intent(StudentsInfo.this, StudentsParentInfo.class);
             aboutActivityLauncher.launch(intent);
         });
+
+
 
         // Initialize TextViews
         tvContact = findViewById(R.id.tvContact);

@@ -47,5 +47,7 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.gms.location)
     implementation(libs.gson)
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.embedded)
 
 }

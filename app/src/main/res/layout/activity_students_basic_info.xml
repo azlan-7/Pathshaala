@@ -129,7 +129,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonSave"
-        android:layout_width="125dp"
+        android:layout_width="342dp"
         android:layout_height="51dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/cornered_button"
@@ -159,7 +159,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:fontFamily="@font/work_sans_bold"
-        android:text="Basic Info"
+        android:text="Student's Info"
         android:textColor="#0F4D73"
         android:textSize="30sp"
         android:textStyle="bold"

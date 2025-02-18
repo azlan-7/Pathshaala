@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StudentsParentInfo">
+
+    <ImageView
+        android:id="@+id/imageView116"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView117"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/detailonboardingbottom" />
+
+    <TextView
+        android:id="@+id/textView89"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Parent/Guardin Info"
+        android:textColor="#0F4D73"
+        android:textSize="22sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView116" />
+
+    <EditText
+        android:id="@+id/editTextText40"
+        android:layout_width="273dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Father's Name"
+        android:inputType="text"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView89" />
+
+    <EditText
+        android:id="@+id/editTextText41"
+        android:layout_width="273dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Father's Contact No."
+        android:inputType="phone"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText40" />
+
+    <EditText
+        android:id="@+id/editTextText42"
+        android:layout_width="273dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Mother's Name"
+        android:inputType="text"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText41" />
+
+    <EditText
+        android:id="@+id/editTextText43"
+        android:layout_width="273dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Mother's Contact No."
+        android:inputType="phone"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText42" />
+
+
+    <EditText
+        android:id="@+id/editTextText44"
+        android:layout_width="273dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Guardian's Name"
+        android:inputType="text"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText43" />
+
+    <EditText
+        android:id="@+id/editTextText45"
+        android:layout_width="273dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Guardian's Contact No."
+        android:inputType="phone"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText46" />
+
+    <EditText
+        android:id="@+id/editTextText46"
+        android:layout_width="273dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Relationship with Guardian"
+        android:inputType="text"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText44" />
+
+    <ImageView
+        android:id="@+id/imageView118"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextText44"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText43"
+        app:layout_constraintVertical_bias="0.083"
+        app:srcCompat="@drawable/full_width" />
+
+    <TextView
+        android:id="@+id/textView90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans"
+        android:text="Or"
+        android:textColor="#757575"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView118"
+        app:layout_constraintEnd_toEndOf="@+id/imageView118"
+        app:layout_constraintStart_toStartOf="@+id/imageView118" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button32"
+        android:layout_width="274dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="28dp"
+        android:layout_weight="1"
+        android:background="@drawable/cornered_button"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Save"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText45"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

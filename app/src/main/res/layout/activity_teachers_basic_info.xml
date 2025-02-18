@@ -12,11 +12,13 @@
         android:id="@+id/genderRadioGroup"
         android:layout_width="280dp"
         android:layout_height="41dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView52">
+        app:layout_constraintTop_toBottomOf="@+id/textView51">
 
         <RadioButton
             android:id="@+id/radioMale"
@@ -83,22 +85,6 @@
         app:layout_constraintTop_toBottomOf="@+id/button12"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/detailonboardingbottom" />
-
-    <TextView
-        android:id="@+id/textView31"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/work_sans_semibold"
-        android:text="About"
-        android:textColor="#757575"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView31"
-        app:layout_constraintVertical_bias="0.113" />
 
     <EditText
         android:id="@+id/editTextText9"
@@ -198,7 +184,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:fontFamily="@font/work_sans_bold"
-        android:text="Basic Info"
+        android:text="Teacher's Info"
         android:textColor="#0F4D73"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -215,30 +201,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView50" />
-
-    <ImageView
-        android:id="@+id/imageView52"
-        android:layout_width="18dp"
-        android:layout_height="21dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.036"
-        app:layout_constraintStart_toEndOf="@+id/textView31"
-        app:layout_constraintTop_toTopOf="@+id/textView31"
-        app:srcCompat="@drawable/pencilvector" />
-
-    <TextView
-        android:id="@+id/textView52"
-        android:layout_width="363dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/work_sans_light"
-        android:text="Please add your teaching philosophy"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.645"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView31" />
 
     <ImageView
         android:id="@+id/imageView54"

@@ -41,15 +41,6 @@ public class TeachersBasicInfo extends AppCompatActivity {
         setContentView(R.layout.activity_teachers_basic_info);
 
 
-        TextView philosophyTextView = findViewById(R.id.textView52);
-
-        ImageView editPhilosophy = findViewById(R.id.imageView52);
-
-        editPhilosophy.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersBasicInfo.this, TeachingPhilosophy.class);
-            startActivity(intent);
-        });
-
         profileImageView = findViewById(R.id.imageView50);
         cameraIcon = findViewById(R.id.imageView54);
 
@@ -59,15 +50,6 @@ public class TeachersBasicInfo extends AppCompatActivity {
         String fullPhilosophy = sharedPreferences.getString("PHILOSOPHY", "Not set");
 
         // Show only first 15 characters followed by "..." if longer
-        String previewText = fullPhilosophy.length() > 45 ? fullPhilosophy.substring(0, 45) + "..." : fullPhilosophy;
-        philosophyTextView.setText(previewText);
-
-
-        if (!fullPhilosophy.equals("Not Set")) {
-            String shortPhilosophy = fullPhilosophy.length() > 45 ? fullPhilosophy.substring(0, 45) + "..." : fullPhilosophy;
-            philosophyTextView.setText(shortPhilosophy);
-        }
-
 
 
 
