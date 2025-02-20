@@ -87,5 +87,29 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.743" />
 
+    <AutoCompleteTextView
+        android:id="@+id/editTextText47"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cornered_rectangle"
+        android:clickable="true"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:ems="10"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Select Subject"
+        android:inputType="none"
+        android:padding="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/button34"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxAuditory"
+        app:layout_constraintVertical_bias="0.121" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

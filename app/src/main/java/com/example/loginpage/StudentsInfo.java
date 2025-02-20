@@ -53,6 +53,7 @@ public class StudentsInfo extends AppCompatActivity {
         feedback = findViewById(R.id.textView87);
         tvAboutYourself = findViewById(R.id.textViewAboutYourself);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView2);
+        skillExtraCurr = findViewById(R.id.textViewActivities);
 
         // Get Unique ID
         String uniqueID = getIntent().getStringExtra("UNIQUE_ID");
@@ -67,37 +68,50 @@ public class StudentsInfo extends AppCompatActivity {
         editAbout.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, AboutStudent.class);
             aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
         qrCode.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, QRCode.class);
             aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
         accountInfo.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, StudentsBasicInfo.class);
             aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
         academicDetails.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, AcademicDetailsAdd.class);
             aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
 
         parentGuardian.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, StudentsParentInfo.class);
             aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
         commPref.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, CommunicationPreferences.class);
             aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
         learningPreferences.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, LearningPreferences.class);
             aboutActivityLauncher.launch(intent);
+            startActivity(intent);
+        });
+
+        skillExtraCurr.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentsInfo.this, AddExtracurriculars.class);
+            aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
 

@@ -2,6 +2,8 @@ package com.example.loginpage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class LearningPreferences extends AppCompatActivity {
 
+    private AutoCompleteTextView subjectDropdown;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,12 +23,28 @@ public class LearningPreferences extends AppCompatActivity {
         setContentView(R.layout.activity_learning_preferences);
 
         Button btnSave = findViewById(R.id.button34);
+        subjectDropdown = findViewById(R.id.editTextText47);
 
-        // Set Click Listener to Navigate to TeachersInfo
+        // List of subjects
+        String[] subjects = {
+                "Mathematics", "Physics", "Chemistry", "Biology",
+                "History", "Geography", "English", "Computer Science",
+                "Economics", "Psychology", "Political Science", "Business Studies",
+                "Art", "Music", "Environmental Science", "Philosophy"
+        };
+
+        // Set up ArrayAdapter for AutoCompleteTextView
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects);
+        subjectDropdown.setAdapter(adapter);
+
+        // Show dropdown when clicked
+        subjectDropdown.setOnClickListener(v -> subjectDropdown.showDropDown());
+
+        // Save button click -> Navigate to StudentsInfo
         btnSave.setOnClickListener(v -> {
             Intent intent = new Intent(LearningPreferences.this, StudentsInfo.class);
             startActivity(intent);
-            finish(); // Optional: Close current activity
+            finish();
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

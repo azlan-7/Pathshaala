@@ -31,9 +31,17 @@
         android:theme="@style/Theme.MyApp.Light"
         tools:targetApi="31">
         <activity
-            android:name=".SearchTeachersDashboard"
+            android:name=".ViewExtracurriculars"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".AddExtracurriculars"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".SearchTeachersDashboard"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".TeachersDashboard"
             android:exported="true"

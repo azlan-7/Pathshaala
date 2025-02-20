@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class TeachersInfo extends AppCompatActivity {
 
     private TextView tvFirstName,tvFullName, tvLastName, tvContact, tvEmail, tvDOB;
-    private TextView accountInfo, subjectExpertise, education, workExperience,gradesTaught,certifications,awards,promotionalActivities,location;
+    private TextView accountInfo, subjectExpertise, education, workExperience,gradesTaught,certifications,awards,promotionalActivities,location,dashboard;
 
     private TextView tvAboutYourself;
     private TextView uniqueIdTextView;
@@ -55,6 +55,7 @@ public class TeachersInfo extends AppCompatActivity {
         ImageView qrCode = findViewById(R.id.imageView107);
         tvAboutYourself = findViewById(R.id.textView41);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView);
+        dashboard = findViewById(R.id.textView48);
 
 
 
@@ -124,6 +125,14 @@ public class TeachersInfo extends AppCompatActivity {
             Intent intent = new Intent(TeachersInfo.this,TeachersAddress.class);
             startActivity(intent);
         });
+
+        dashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(TeachersInfo.this, TeachersDashboard.class);
+            aboutActivityLauncher.launch(intent);
+            startActivity(intent);
+        });
+
+
 
         // Initialize TextViews
 //        tvFirstName = findViewById(R.id.tvFirstName);

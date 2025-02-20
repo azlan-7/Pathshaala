@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Hobby Section -->
+        <TextView
+            android:id="@+id/tvHobbyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hobby"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvHobby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hobby Name"
+            android:fontFamily="@font/work_sans"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHobbyTitle" />
+
+        <!-- Extracurricular Section -->
+        <TextView
+            android:id="@+id/tvExtracurricularTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Extracurricular"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHobby" />
+
+        <TextView
+            android:id="@+id/tvExtracurricular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Activity Name"
+            android:fontFamily="@font/work_sans"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvExtracurricularTitle" />
+
+        <!-- Delete Button -->
+        <ImageView
+            android:id="@+id/btnDelete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/delete_24dp_0f4d73_fill0_wght400_grad0_opsz24"
+            android:contentDescription="Delete Activity"
+            android:padding="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

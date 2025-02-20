@@ -29,28 +29,20 @@ public class TeachersDashboard extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_teachers_dashboard);
 
-
         ImageView searchButton = findViewById(R.id.imageView120);
-
-        // Set OnClickListener
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start SearchTeachersDashboard activity
-                Intent intent = new Intent(TeachersDashboard.this, SearchTeachersDashboard.class);
-                startActivity(intent);
-            }
+        searchButton.setOnClickListener(v -> {
+            Intent intent = new Intent(TeachersDashboard.this, SearchTeachersDashboard.class);
+            startActivity(intent);
         });
-
 
         welcomeText = findViewById(R.id.textView91); // Reference to "Hello" TextView
         profileIcon = findViewById(R.id.imageView119);
         TextView totalStudents = findViewById(R.id.textView99);
         TextView classesLive = findViewById(R.id.textView100);
-
-        // Define SpannableString for both TextViews
-        SpannableString spannable = new SpannableString("Total Enrolled Students: 100,000");
-        SpannableString spannable1 = new SpannableString("Classes Live: 1000");
+        TextView totalTaught = findViewById(R.id.textView104);
+        TextView classesTaught = findViewById(R.id.textView105);
+        TextView durationTaught = findViewById(R.id.textView106);
+        TextView nextLecture = findViewById(R.id.textView107);
 
         // Load fonts
         Typeface lightFont = ResourcesCompat.getFont(this, R.font.work_sans);
@@ -59,33 +51,22 @@ public class TeachersDashboard extends AppCompatActivity {
         // Apply light font to the entire text
         totalStudents.setTypeface(lightFont);
         classesLive.setTypeface(lightFont);
+        totalTaught.setTypeface(lightFont);
+        classesTaught.setTypeface(lightFont);
+        durationTaught.setTypeface(lightFont);
+        nextLecture.setTypeface(lightFont);
 
-        // Find start and end positions of numbers
-        int start = spannable.toString().indexOf("100,000");
-        int end = start + "100,000".length();
-
-        int start1 = spannable1.toString().indexOf("1000");
-        int end1 = start1 + "1000".length(); // FIXED: Should be start1, not start
-
-        // Apply bold font and color to "100,000"
-        spannable.setSpan(new CustomTypefaceSpan("", boldFont), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannable.setSpan(new ForegroundColorSpan(Color.parseColor("#0F4D73")), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // Apply bold font and red color (#D16D6A) to "1000"
-        spannable1.setSpan(new CustomTypefaceSpan("", boldFont), start1, end1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannable1.setSpan(new ForegroundColorSpan(Color.parseColor("#D16D6A")), start1, end1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // Set formatted text to TextViews
-        totalStudents.setText(spannable);
-        classesLive.setText(spannable1);
-
-
+        // Format TextViews
+        formatTextView(totalStudents, "Total Enrolled Students: ", "100,000", "#0F4D73", boldFont);
+        formatTextView(classesLive, "Classes Live: ", "1000", "#D16D6A", boldFont);
+        formatTextView(totalTaught, "Total Students Taught: ", "49", "#0F4D73", boldFont);
+        formatTextView(classesTaught, "Total Classes Taught: ", "11", "#0F4D73", boldFont);
+        formatTextView(durationTaught, "Total Duration Taught: ", "22Hrs50Mins", "#0F4D73", boldFont);
+        formatTextView(nextLecture, "History @ ", "18:30, 22nd June", "#0F4D73", boldFont);
 
         // Retrieve the first name from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String firstName = sharedPreferences.getString("FIRST_NAME", "User"); // Default "User" if no name saved
-
-        // Update the TextView with the user's name
         welcomeText.setText("Hello, " + firstName);
 
         profileIcon.setOnClickListener(v -> {
@@ -99,5 +80,18 @@ public class TeachersDashboard extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    // Helper method to format TextViews (Apply bold font & color to numbers)
+    private void formatTextView(TextView textView, String prefix, String number, String color, Typeface boldFont) {
+        SpannableString spannable = new SpannableString(prefix + number);
+        int start = prefix.length();
+        int end = start + number.length();
+
+        // Apply bold font and color to the number
+        spannable.setSpan(new CustomTypefaceSpan("", boldFont), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(Color.parseColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        textView.setText(spannable);
     }
 }
