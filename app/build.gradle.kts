@@ -50,5 +50,7 @@ dependencies {
     implementation(libs.zxing.core)
     implementation(libs.zxing.embedded)
     implementation(libs.jtds)
+    implementation(libs.eazegraph)
+
 
 }

@@ -2,6 +2,10 @@ package com.example.loginpage;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
 import com.example.loginpage.OTPService;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+
 import android.os.AsyncTask;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -43,6 +47,8 @@ public class NextLoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_next_login_page);
+
+        fetchCityData();
 
         if(savedInstanceState == null){ //Prevent re-running on rotation /config change
             executeDatabaseQuery();
@@ -124,11 +130,16 @@ public class NextLoginPage extends AppCompatActivity {
             return insets;
         });
     }
+
+
+
     private String generateOTP () {
         Random random = new Random();
         int otp = random.nextInt(900000) + 100000;
         return String.valueOf(otp);
     }
+
+
 
 
     private void executeDatabaseQuery() {
@@ -180,6 +191,32 @@ public class NextLoginPage extends AppCompatActivity {
                 Toast.makeText(NextLoginPage.this, result, Toast.LENGTH_SHORT).show();
             }
         }.execute();
+    }
+
+    private void fetchCityData() {
+        Connection connection = DatabaseHelper.getConnection();
+        if (connection != null) {
+            try {
+                String query = "SELECT cityid, city_nm FROM city";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    int cityId = resultSet.getInt("cityid");
+                    String cityName = resultSet.getString("city_nm");
+                    Log.d("CityData", "ID: " + cityId + ", Name: " + cityName);
+                }
+
+                resultSet.close();
+                preparedStatement.close();
+                connection.close();
+
+            } catch (SQLException e) {
+                Log.e("DatabaseError", "SQL Exception: " + e.getMessage());
+            }
+        } else {
+            Log.e("DatabaseError", "Connection is NULL");
+        }
     }
 
 

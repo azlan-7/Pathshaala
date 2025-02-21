@@ -127,7 +127,7 @@ public class TeachersInfo extends AppCompatActivity {
         });
 
         dashboard.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersInfo.this, TeachersDashboard.class);
+            Intent intent = new Intent(TeachersInfo.this, TeachersDashboardNew.class);
             aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });

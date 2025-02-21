@@ -451,7 +451,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans_light"
-        android:text="First Name Last Name"
+        android:text="View/Edit your account"
         android:textColor="#0F4D73"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/textView43"

@@ -1,68 +1,38 @@
 package com.example.loginpage.MySqliteDatabase;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.os.StrictMode;
+import android.util.Log;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper {
+    private static final String IP = "199.79.62.22"; // Your SQL Server IP
+    private static final String DB_NAME = "pathshaala";
+    private static final String USERNAME = "pathshaala";
+    private static final String PASSWORD = "Darshi@2025#";
+    private static final String PORT = "1433"; // Default SQL Server Port
 
-    private static final String DATABASE_NAME = "UserDatabase.db";
-    private static final int DATABASE_VERSION = 1;
+    public static Connection getConnection() {
+        Connection connection = null;
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
-    // Table Name
-    private static final String TABLE_NAME = "users";
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
 
-    // Column Names
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_EMAIL = "email";
-    private static final String COLUMN_PHONE = "phone";
+            String connectionURL = "jdbc:jtds:sqlserver://" + IP + ":" + PORT + ";databaseName=" + DB_NAME + ";user=" + USERNAME + ";password=" + PASSWORD + ";";
 
-    // SQL Query to Create Table
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_NAME + " TEXT, " +
-            COLUMN_EMAIL + " TEXT, " +
-            COLUMN_PHONE + " TEXT)";
+            connection = DriverManager.getConnection(connectionURL);
+            Log.d("DatabaseHelper", "Connected to SQL Server successfully!");
 
-    public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
-    }
-
-    // Insert User Data
-    public boolean insertUser(String name, String email, String phone) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, name);
-        values.put(COLUMN_EMAIL, email);
-        values.put(COLUMN_PHONE, phone);
-
-        long result = db.insert(TABLE_NAME, null, values);
-        return result != -1;  // Returns true if insert is successful
-    }
-
-    // Retrieve User Data
-    public Cursor getUserData() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-    }
-
-    // Delete User Data
-    public void deleteUser(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
+        } catch (SQLException se) {
+            Log.e("DatabaseHelper", "SQL Exception: " + se.getMessage());
+        } catch (ClassNotFoundException e) {
+            Log.e("DatabaseHelper", "JDBC Driver Not Found: " + e.getMessage());
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Unknown Error: " + e.getMessage());
+        }
+        return connection;
     }
 }
