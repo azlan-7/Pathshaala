@@ -51,6 +51,10 @@ dependencies {
     implementation(libs.zxing.embedded)
     implementation(libs.jtds)
     implementation(libs.eazegraph)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+
 
 
 }

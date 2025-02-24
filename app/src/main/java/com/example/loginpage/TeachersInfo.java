@@ -2,7 +2,11 @@ package com.example.loginpage;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.io.IOException;
 
 public class TeachersInfo extends AppCompatActivity {
 
@@ -59,6 +65,7 @@ public class TeachersInfo extends AppCompatActivity {
 
 
 
+
         String uniqueID = getIntent().getStringExtra("UNIQUE_ID");
 
 
@@ -71,13 +78,13 @@ public class TeachersInfo extends AppCompatActivity {
 
         editAbout.setOnClickListener(v -> {
             Intent intent = new Intent(TeachersInfo.this, AboutTeacher.class);
-            aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
 
         qrCode.setOnClickListener(v -> {
             Intent intent = new Intent(TeachersInfo.this, QRCode.class);
-            aboutActivityLauncher.launch(intent);
+            startActivity(intent);
         });
 
         accountInfo.setOnClickListener(v ->{
@@ -108,11 +115,11 @@ public class TeachersInfo extends AppCompatActivity {
         });
 
         certifications.setOnClickListener(v ->{
-            Intent intent = new Intent(TeachersInfo.this,CertificationsView.class);
+            Intent intent = new Intent(TeachersInfo.this,CertificationsAdd.class);
             startActivity(intent);
         });
         awards.setOnClickListener(v ->{
-            Intent intent = new Intent(TeachersInfo.this,Awards.class);
+            Intent intent = new Intent(TeachersInfo.this,AddAwards.class);
             startActivity(intent);
         });
         promotionalActivities.setOnClickListener(v ->{
@@ -128,7 +135,6 @@ public class TeachersInfo extends AppCompatActivity {
 
         dashboard.setOnClickListener(v -> {
             Intent intent = new Intent(TeachersInfo.this, TeachersDashboardNew.class);
-            aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });
 
@@ -142,10 +148,12 @@ public class TeachersInfo extends AppCompatActivity {
 //        tvDOB = findViewById(R.id.tvDOB);
         tvFullName = findViewById((R.id.tvFullName));
 
-
+        // Retrieve SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String contactNumber = sharedPreferences.getString("phoneNumber", "Not Available"); // Default value if not found
         String aboutYourself = sharedPreferences.getString("ABOUT_YOURSELF", "Write about yourself...");
+
+
 
 
         TextView tvAboutYourself = findViewById(R.id.textView41);

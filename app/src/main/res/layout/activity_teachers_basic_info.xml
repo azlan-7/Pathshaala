@@ -12,7 +12,7 @@
         android:id="@+id/genderRadioGroup"
         android:layout_width="280dp"
         android:layout_height="41dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -134,11 +134,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextText10" />
 
+
     <EditText
         android:id="@+id/editTextText13"
         android:layout_width="344dp"
         android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/cornered_rectangle"
         android:drawableRight="@drawable/calendaricon"
         android:ems="10"
@@ -148,15 +149,36 @@
         android:inputType="date"
         android:textColorHint="#1674AE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextText12" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteCity"
+        android:layout_width="344dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/cornered_rectangle"
+        android:clickable="true"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:dropDownHeight="200dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Select City"
+        android:inputType="none"
+        android:padding="12dp"
+        android:textColor="#000000"
+        android:textColorHint="#1674AE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText13" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button12"
         android:layout_width="125dp"
         android:layout_height="51dp"
-        android:layout_marginTop="28dp"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
         android:text="Save"
@@ -165,8 +187,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText13"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteCity" />
 
     <ImageView
         android:id="@+id/imageView50"

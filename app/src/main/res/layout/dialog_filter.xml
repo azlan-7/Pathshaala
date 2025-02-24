@@ -38,19 +38,35 @@
         android:padding="8dp"
         android:layout_marginBottom="10dp"/>
 
-    <!-- Location Input (Optional) -->
-    <EditText
+<!--    &lt;!&ndash; Location Input (Optional) &ndash;&gt;-->
+<!--    <EditText-->
+<!--        android:id="@+id/autoCompleteLocation"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="46dp"-->
+<!--        android:background="@drawable/cornered_rectangle"-->
+<!--        android:fontFamily="@font/work_sans_light"-->
+<!--        android:hint="Select Location (Optional)"-->
+<!--        android:inputType="text"-->
+<!--        android:textColorHint="#1674AE"-->
+<!--        android:textSize="18sp"-->
+<!--        android:padding="8dp"-->
+<!--        android:layout_marginBottom="10dp"/>-->
+
+    <AutoCompleteTextView
         android:id="@+id/autoCompleteLocation"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:focusable="false"
         android:fontFamily="@font/work_sans_light"
-        android:hint="Select Location (Optional)"
-        android:inputType="text"
+        android:hint="Select Location"
+        android:inputType="none"
         android:textColorHint="#1674AE"
         android:textSize="18sp"
         android:padding="8dp"
         android:layout_marginBottom="10dp"/>
+
 
     <!-- Save Button -->
     <androidx.appcompat.widget.AppCompatButton

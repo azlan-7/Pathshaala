@@ -50,15 +50,42 @@ public class TeachersEducation extends AppCompatActivity {
         textViewDegree = findViewById(R.id.textView38);
         textViewYear = findViewById(R.id.yearDropdown);
         etInstitution = findViewById(R.id.editTextText15);
-        ImageView addEducation = findViewById(R.id.imageView73);
+//        ImageView addEducation = findViewById(R.id.imageView73);
 
 
         educationList = loadEducationData(this);
         educationAdapter = new EducationAdapter(this,educationList);
         educationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         educationRecyclerView.setAdapter(educationAdapter);
+//
+//        addEducation.setOnClickListener(v -> {
+//            String institution = etInstitution.getText().toString().trim();
+//            String degree = textViewDegree.getText().toString().trim();
+//            String year = textViewYear.getText().toString().trim();
+//
+//            if (institution.isEmpty() || degree.isEmpty() || year.isEmpty()) {
+//                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            educationList.add(new Education(institution, degree, year));
+//            educationAdapter.notifyDataSetChanged();
+//            saveEducationData(); // Save the list in SharedPreferences
+//            Toast.makeText(TeachersEducation.this, "Education saved successfully!", Toast.LENGTH_SHORT).show();
+//            etInstitution.setText("");
+//            textViewDegree.setText("");
+//            textViewYear.setText("");
+//        });
 
-        addEducation.setOnClickListener(v -> {
+
+
+
+
+        Button saveButton = findViewById(R.id.button16);
+
+        // Set Click Listener
+        saveButton.setOnClickListener(v -> {
+
             String institution = etInstitution.getText().toString().trim();
             String degree = textViewDegree.getText().toString().trim();
             String year = textViewYear.getText().toString().trim();
@@ -75,16 +102,6 @@ public class TeachersEducation extends AppCompatActivity {
             etInstitution.setText("");
             textViewDegree.setText("");
             textViewYear.setText("");
-        });
-
-
-
-
-
-        Button saveButton = findViewById(R.id.button16);
-
-        // Set Click Listener
-        saveButton.setOnClickListener(v -> {
             // Create Intent to move to ProfessionalDetails.java
             Toast.makeText(TeachersEducation.this, "Education saved successfully!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(TeachersEducation.this, TeachersEducationView.class);

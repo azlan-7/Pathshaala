@@ -354,7 +354,9 @@ public class NextLoginPage extends AppCompatActivity {
 
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("phoneNumber", String.valueOf(PhoneNumber));  // Save phone number
+            editor.putString("phoneNumber", PhoneNumber.getText().toString().trim());
+
+//            editor.putString("phoneNumber", String.valueOf(PhoneNumber));  // Save phone number
             editor.apply();
 
 

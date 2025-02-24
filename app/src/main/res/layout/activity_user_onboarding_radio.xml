@@ -162,6 +162,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextText12" />
 
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteCity"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/cornered_rectangle"
+        android:clickable="true"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:dropDownHeight="200dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Select City"
+        android:inputType="none"
+        android:padding="12dp"
+        android:textColorHint="#1674AE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText10" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/generateUID"
         android:layout_width="194dp"
@@ -176,6 +198,6 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextText10"
-        app:layout_constraintVertical_bias="0.147" />
+        app:layout_constraintVertical_bias="0.441" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

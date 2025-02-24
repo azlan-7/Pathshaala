@@ -5,20 +5,25 @@ import com.example.loginpage.EncryptionHelper;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.example.loginpage.MySqliteDatabase.Connection_Class;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -31,8 +36,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 import android.app.DatePickerDialog;
 import java.util.Calendar;
@@ -48,6 +60,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import android.util.Log;
+import android.widget.AutoCompleteTextView;
 
 public class UserOnboardingRadio extends AppCompatActivity {
 
@@ -60,10 +73,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
     private RadioGroup radioGroup;
     private Button buttonSave;
     private String userType = "Teacher"; // Default selection
-
-
-
-
+    private AutoCompleteTextView autoCompleteCity;
 
 
 
@@ -78,7 +88,10 @@ public class UserOnboardingRadio extends AppCompatActivity {
         etEmail = findViewById(R.id.editTextText12);
         etDOB = findViewById(R.id.editTextText13);
         etDOB.setOnClickListener(v -> showDatePicker());
+        autoCompleteCity = findViewById(R.id.autoCompleteCity);
 
+
+        loadCitiesFromDatabase();
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -121,7 +134,12 @@ public class UserOnboardingRadio extends AppCompatActivity {
         buttonSave = findViewById(R.id.generateUID);
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String savedPhoneNumber = sharedPreferences.getString("phoneNumber", "");
+        String savedPhoneNumber = getIntent().getStringExtra("phoneNumber"); // Get from Intent first
+
+        if (savedPhoneNumber == null || savedPhoneNumber.isEmpty()) {
+            savedPhoneNumber = sharedPreferences.getString("phoneNumber", ""); // Fallback to SharedPreferences
+        }
+
         Log.d("UserOnboardingRadio", "Stored Phone Number: " + savedPhoneNumber);
 
         // Set the phone number in the contact field
@@ -145,15 +163,21 @@ public class UserOnboardingRadio extends AppCompatActivity {
 
         String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
+        final String phoneNumberFinal = savedPhoneNumber;
+
+
+        String savedCity = sharedPreferences.getString("CITY", "");
+        if (!savedCity.isEmpty()) {
+            autoCompleteCity.setText(savedCity);
+        }
+
+
         buttonSave.setOnClickListener(v -> {
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
             TextView contactTextView = findViewById(R.id.editTextText10);
-            contactTextView.setText(savedPhoneNumber);
-
-
-
+            contactTextView.setText(phoneNumberFinal);
 
             try {
                 String EncryptEmail = etEmail.getText().toString().trim();
@@ -194,10 +218,11 @@ public class UserOnboardingRadio extends AppCompatActivity {
             editor.putString("CONTACT", etContact.getText().toString().trim());
             editor.putString("EMAIL", etEmail.getText().toString().trim());
             editor.putString("DOB", etDOB.getText().toString().trim());
-            editor.apply();
             editor.putString("USER_TYPE", userType);
+            editor.putString("CITY", autoCompleteCity.getText().toString().trim());
             editor.apply();
 
+            Log.d("UserOnboarding", "Data Saved: " + etFirstName.getText().toString());
 
             String prefix = userType.equals("Teacher") ? "T" : "S";
             String uniqueID = prefix + UUID.randomUUID().toString().substring(0, 8).toUpperCase() + Calendar.getInstance().get(Calendar.YEAR);
@@ -226,6 +251,44 @@ public class UserOnboardingRadio extends AppCompatActivity {
     }
 
 
+    private void loadCitiesFromDatabase() {
+        new AsyncTask<Void, Void, List<String>>() {
+            @Override
+            protected List<String> doInBackground(Void... voids) {
+                List<String> cityList = new ArrayList<>();
+                try {
+                    Connection_Class connectionClass = new Connection_Class();
+                    Connection connection = connectionClass.CONN();
+                    if (connection != null) {
+                        String query = "SELECT city_nm FROM city";
+                        Statement stmt = connection.createStatement();
+                        ResultSet rs = stmt.executeQuery(query);
+
+                        while (rs.next()) {
+                            cityList.add(rs.getString("city_nm"));
+                        }
+                        rs.close();
+                        stmt.close();
+                        connection.close();
+                    }
+                } catch (Exception e) {
+                    Log.e("UserOnboardingRadio", "Error fetching city data: " + e.getMessage());
+                }
+                return cityList;
+            }
+
+            @Override
+            protected void onPostExecute(List<String> cities) {
+                if (!cities.isEmpty()) {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(UserOnboardingRadio.this, android.R.layout.simple_dropdown_item_1line, cities);
+                    autoCompleteCity.setAdapter(adapter);
+                    autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown()); // Show dropdown when clicked
+                }
+            }
+        }.execute();
+    }
+
+
 
 
     private void showDatePicker() {
@@ -234,11 +297,24 @@ public class UserOnboardingRadio extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        // Create DatePickerDialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     String formattedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
                     etDOB.setText(formattedDate);
                 }, year, month, day);
+
+        // Set maximum selectable date (User should be at least 18 years old)
+        Calendar minAdultAge = Calendar.getInstance();
+        minAdultAge.add(Calendar.YEAR, -18);  // Subtract 18 years (youngest age)
+
+        // Set minimum selectable date (User should not be older than 90 years)
+        Calendar maxAgeLimit = Calendar.getInstance();
+        maxAgeLimit.add(Calendar.YEAR, -90);  // Subtract 90 years (oldest age)
+
+        // Apply the min and max limits to the date picker
+        datePickerDialog.getDatePicker().setMaxDate(minAdultAge.getTimeInMillis());
+        datePickerDialog.getDatePicker().setMinDate(maxAgeLimit.getTimeInMillis());
 
         datePickerDialog.show();
     }
