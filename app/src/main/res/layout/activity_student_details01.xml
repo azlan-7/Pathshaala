@@ -5,15 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"> <!-- Remove this if needed -->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="#f8f9fa"
+        app:layoutDescription="@xml/activity_student_details01_xml_main_scene"
         tools:context=".StudentDetails_01">
 
+        <!-- Your existing UI components here -->
         <TextView
             android:id="@+id/textView29"
             android:layout_width="wrap_content"
@@ -282,6 +284,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+    </ScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+
+

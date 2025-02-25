@@ -6,6 +6,10 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="back_btn">Go Back</string>
+    <string name="skills_extra">Skills and Extracurriculars</string>
+    <string name="add_hobbies">Hobbies and Interests</string>
+    <string name="add_extracurriculars">Extracurricular Activities</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -43,4 +47,5 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="skills_acquired">Skills Acquired</string>
 </resources>

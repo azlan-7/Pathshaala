@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <!-- Background Color -->
-    <solid android:color="#ffffff" /> <!-- Purple Button (Change as needed) -->
+    <solid android:color="#1674AE" /> <!-- Purple Button (Change as needed) -->
 
     <!-- Border -->
   <stroke

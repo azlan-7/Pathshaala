@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8f9fa"
+    tools:context=".SkillAndExtracurriculars">
+
+    <!-- Add ScrollView -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Linear Layout for the heading of the page -->
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="39dp"
+                    android:layout_height="48dp"
+                    android:background="#f8f9fa">
+
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:background="#f8f9fa"
+                        android:contentDescription="@string/back_btn"
+                        android:padding="2dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/back_button" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textView56"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:paddingTop="3pt"
+                    android:text="@string/skills_extra"
+                    android:textSize="10pt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView60"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:text="@string/add_hobbies"
+                    android:textSize="8pt" />
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="37dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/add_hobbies"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/plus_image" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/editTextText21"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:autofillHints="name"
+                        android:background="@drawable/edittext_border"
+                        android:ems="10"
+                        android:fontFamily="@font/work_sans"
+                        android:hint="eg. Football"
+                        android:inputType="text"
+                        android:textSize="07pt" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="remove_hobby"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/minus_image" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView61"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:text="@string/add_extracurriculars"
+                    android:textSize="8pt" />
+
+                <ImageButton
+                    android:id="@+id/imageButton4"
+                    android:layout_width="37dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/add_hobbies"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/plus_image" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/editTextText22"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/edittext_border"
+                        android:ems="10"
+                        android:fontFamily="@font/work_sans"
+                        android:hint="eg. Winner of Chess Tournament"
+                        android:inputType="text"
+                        android:textSize="08pt" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton5"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/minus_image" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/textView57"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/work_sans_semibold"
+                    android:text="@string/skills_acquired"
+                    android:textSize="08pt" />
+
+                <ImageButton
+                    android:paddingTop="5dp"
+                    android:id="@+id/imageButton6"
+                    android:layout_width="67dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/plus_image" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
