@@ -1,11 +1,8 @@
 package com.example.loginpage;
 
-import com.example.loginpage.EncryptionHelper;
-
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
@@ -37,30 +34,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import android.app.DatePickerDialog;
-import java.util.Calendar;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
-import java.util.Base64;
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import android.util.Log;
 import android.widget.AutoCompleteTextView;
+
+
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+
 
 public class UserOnboardingRadio extends AppCompatActivity {
 
@@ -69,6 +54,8 @@ public class UserOnboardingRadio extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
 
     private EditText etFirstName, etLastName, etContact, etEmail, etDOB;
+
+    private TextView textViewID;
 
     private RadioGroup radioGroup;
     private Button buttonSave;
@@ -89,9 +76,11 @@ public class UserOnboardingRadio extends AppCompatActivity {
         etDOB = findViewById(R.id.editTextText13);
         etDOB.setOnClickListener(v -> showDatePicker());
         autoCompleteCity = findViewById(R.id.autoCompleteCity);
+        textViewID = findViewById(R.id.textView110);
 
 
-        loadCitiesFromDatabase();
+        String cityQuery = "SELECT cityid,city_nm FROM city";
+        DatabaseHelper.loadDataFromDatabase(this, cityQuery, autoCompleteCity,textViewID);
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -106,10 +95,6 @@ public class UserOnboardingRadio extends AppCompatActivity {
             // Permission already granted, get location
             getUserLocation();
         }
-
-
-
-
 
 
         etDOB.setOnTouchListener(new View.OnTouchListener() {
@@ -168,7 +153,8 @@ public class UserOnboardingRadio extends AppCompatActivity {
 
         String savedCity = sharedPreferences.getString("CITY", "");
         if (!savedCity.isEmpty()) {
-            autoCompleteCity.setText(savedCity);
+            autoCompleteCity.setText("");  // Ensure no default city is selected
+            autoCompleteCity.setHint("Select City"); // Show hint instead
         }
 
 
@@ -249,46 +235,6 @@ public class UserOnboardingRadio extends AppCompatActivity {
             return insets;
         });
     }
-
-
-    private void loadCitiesFromDatabase() {
-        new AsyncTask<Void, Void, List<String>>() {
-            @Override
-            protected List<String> doInBackground(Void... voids) {
-                List<String> cityList = new ArrayList<>();
-                try {
-                    Connection_Class connectionClass = new Connection_Class();
-                    Connection connection = connectionClass.CONN();
-                    if (connection != null) {
-                        String query = "SELECT city_nm FROM city";
-                        Statement stmt = connection.createStatement();
-                        ResultSet rs = stmt.executeQuery(query);
-
-                        while (rs.next()) {
-                            cityList.add(rs.getString("city_nm"));
-                        }
-                        rs.close();
-                        stmt.close();
-                        connection.close();
-                    }
-                } catch (Exception e) {
-                    Log.e("UserOnboardingRadio", "Error fetching city data: " + e.getMessage());
-                }
-                return cityList;
-            }
-
-            @Override
-            protected void onPostExecute(List<String> cities) {
-                if (!cities.isEmpty()) {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(UserOnboardingRadio.this, android.R.layout.simple_dropdown_item_1line, cities);
-                    autoCompleteCity.setAdapter(adapter);
-                    autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown()); // Show dropdown when clicked
-                }
-            }
-        }.execute();
-    }
-
-
 
 
     private void showDatePicker() {

@@ -4,12 +4,14 @@ public class Education {
     private String institution;
     private String degree;
     private String year;
+    private String degreeId;
 
     // Constructor
     public Education(String institution, String degree, String year) {
         this.institution = institution;
         this.degree = degree;
         this.year = year;
+        this.degreeId = degreeId;
     }
 
     // Getters
@@ -25,6 +27,11 @@ public class Education {
         return year;
     }
 
+
+    public String getDegreeId() {
+        return degreeId;
+    }
+
     // Setters (optional)
     public void setInstitution(String institution) {
         this.institution = institution;
@@ -36,5 +43,9 @@ public class Education {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public void setDegreeId(String degreeId) {
+        this.degreeId = degreeId;
     }
 }
