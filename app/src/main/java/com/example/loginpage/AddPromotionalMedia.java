@@ -39,6 +39,7 @@ public class AddPromotionalMedia extends AppCompatActivity {
         // Find views
         mediaImageView = findViewById(R.id.image_select_vid);
         videoView = findViewById(R.id.videoView);
+        Button saveButton = findViewById(R.id.button15);
 
         // Set click listener to open video picker
         mediaImageView.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +47,13 @@ public class AddPromotionalMedia extends AppCompatActivity {
             public void onClick(View v) {
                 openVideoPicker();
             }
+        });
+
+        saveButton.setOnClickListener(v -> {
+            Toast.makeText(AddPromotionalMedia.this, "Saved Successfully!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AddPromotionalMedia.this, TeachersInfo.class);
+            startActivity(intent);
+            finish(); // Close current activity
         });
     }
 

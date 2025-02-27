@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Extracurriculars">
+
+    <TextView
+        android:id="@+id/textView96"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Extracurriculars"
+        android:textColor="#0F4D73"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Hobbies Section -->
+    <!-- Added more space -->
+
+    <TextView
+        android:id="@+id/textView97"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Hobbies/Interests"
+        android:textColor="#0F4D73"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView96" />
+
+    <ImageView
+        android:id="@+id/imageView133"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/add_24dp_0f4d73_fill0_wght400_grad0_opsz24"
+        app:layout_constraintStart_toEndOf="@+id/textView97"
+        app:layout_constraintTop_toTopOf="@+id/textView97"
+        android:layout_marginStart="8dp" />
+
+    <LinearLayout
+        android:id="@+id/hobbiesContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView97">
+
+        <!-- Default Hobby EditText -->
+        <EditText
+            android:id="@+id/editTextHobby1"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:gravity="center"
+            android:hint="Enter Hobby"
+            android:padding="12dp"
+            android:background="@drawable/cornered_rectangle"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Extracurricular Section -->
+    <!-- Added more space -->
+
+    <TextView
+        android:id="@+id/textView98"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Extracurricular Activities"
+        android:textColor="#0F4D73"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hobbiesContainer" />
+
+    <ImageView
+        android:id="@+id/imageView134"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/add_24dp_0f4d73_fill0_wght400_grad0_opsz24"
+        app:layout_constraintStart_toEndOf="@+id/textView98"
+        app:layout_constraintTop_toTopOf="@+id/textView98"
+        android:layout_marginStart="8dp" />
+
+    <LinearLayout
+        android:id="@+id/activitiesContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView98">
+
+        <!-- Default Activity EditText -->
+        <EditText
+            android:id="@+id/editTextActivity1"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:gravity="center"
+            android:hint="Enter Activity"
+            android:padding="12dp"
+            android:background="@drawable/cornered_rectangle"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

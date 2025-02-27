@@ -29,9 +29,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
@@ -40,8 +37,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -49,5 +44,17 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.volley)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.flexbox)
+    implementation(libs.gms.location)
+    implementation(libs.gson)
+    implementation(libs.zxing.core)
+    implementation(libs.zxing.embedded)
+    implementation(libs.jtds)
+    implementation(libs.eazegraph)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+
+
 
 }

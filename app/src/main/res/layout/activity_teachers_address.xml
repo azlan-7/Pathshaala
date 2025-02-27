@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TeachersAddress">
+
+    <AutoCompleteTextView
+        android:id="@+id/et_state"
+        android:layout_width="254dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:ems="10"
+        android:focusable="false"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Select State"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_city" />
+
+    <AutoCompleteTextView
+        android:id="@+id/et_city"
+        android:layout_width="254dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:ems="10"
+        android:focusable="false"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Select City"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText17" />
+
+    <ImageView
+        android:id="@+id/imageView33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView34"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_state"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/detailonboardingbottom" />
+
+    <TextView
+        android:id="@+id/textView32"
+        android:layout_width="334dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:focusable="false"
+        android:fontFamily="@font/work_sans"
+        android:text="Where are you joining us from?"
+        android:textColor="#757575"
+        android:textColorHint="#1674AE"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView33" />
+
+    <EditText
+        android:id="@+id/editTextText14"
+        android:layout_width="306dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Address"
+        android:inputType="text"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+    <EditText
+        android:id="@+id/editTextText17"
+        android:layout_width="254dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/cornered_rectangle"
+        android:digits="0123456789"
+        android:ems="10"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="6 Digit Pincode"
+        android:inputType="number"
+        android:maxLength="6"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText14" />
+
+    <ImageView
+        android:id="@+id/imageView35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.951"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView32"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/locationicon" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button13"
+        android:layout_width="153dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/cornered_button"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Save"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_state"
+        app:layout_constraintVertical_bias="0.067" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

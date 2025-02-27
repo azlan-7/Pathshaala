@@ -1,8 +1,20 @@
 package com.example.loginpage;
+import com.example.loginpage.MySqliteDatabase.Connection_Class;
 import com.example.loginpage.OTPService;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+
+import android.os.AsyncTask;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Objects;
+import java.util.Random;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +48,11 @@ public class NextLoginPage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_next_login_page);
 
+        fetchCityData();
 
+        if(savedInstanceState == null){ //Prevent re-running on rotation /config change
+            executeDatabaseQuery();
+        }
 
 
         PhoneNumber = findViewById(R.id.editTextText4);
@@ -44,6 +60,7 @@ public class NextLoginPage extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> {
             // Retrieve mobile number entered by the user
+//            doInBackground();
             String mobileNumber = PhoneNumber.getText().toString().trim();
 
             if (mobileNumber.isEmpty() || mobileNumber.length() < 10) {
@@ -55,6 +72,7 @@ public class NextLoginPage extends AppCompatActivity {
 //                Log.d("NextLoginPage", "Generated OTP: " + otp);
                 // Send OTP directly to the entered mobile number
                 OTPService.sendOTP(mobileNumber, NextLoginPage.this);
+
 
                 Toast.makeText(NextLoginPage.this, "OTP has been sent to: " + mobileNumber, Toast.LENGTH_SHORT).show();
 
@@ -112,11 +130,209 @@ public class NextLoginPage extends AppCompatActivity {
             return insets;
         });
     }
+
+
+
     private String generateOTP () {
         Random random = new Random();
         int otp = random.nextInt(900000) + 100000;
         return String.valueOf(otp);
     }
+
+
+
+
+    private void executeDatabaseQuery() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                Log.d("NextLoginPage", "SqlTest1");
+                String s = "";
+                Connection con = null;
+                PreparedStatement ps = null;
+                ResultSet count = null;
+
+                try {
+                    Connection_Class connect = new Connection_Class();
+                    con = connect.CONN();
+                    if (con == null) {
+                        s = "There is no Internet Connection";
+                        Log.d("NextLoginPage", "Value of s1 =" + s);
+                    } else {
+                        String query = "SELECT countvalue FROM visitorcounter";
+                        ps = con.prepareStatement(query);
+                        count = ps.executeQuery();
+
+                        if (count.next()) {
+                            int visitorCount = count.getInt("countvalue");
+                            Log.d("NextLoginPage", "Value of count = " + visitorCount);
+                            s = "Visitor Count: " + visitorCount;
+                        } else {
+                            Log.d("NextLoginPage", "No data found in visitorcounter table.");
+                        }
+                    }
+                } catch (Exception e) {
+                    s = "Error retrieving data from table: " + e.getMessage();
+                    Log.d("NextLoginPage", "SQL Error: " + s);
+                } finally {
+                    try {
+                        if (count != null) count.close();
+                        if (ps != null) ps.close();
+                        if (con != null) con.close();
+                    } catch (Exception e) {
+                        Log.e("NextLoginPage", "Error closing database resources: " + e.getMessage());
+                    }
+                }
+                return s;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                Toast.makeText(NextLoginPage.this, result, Toast.LENGTH_SHORT).show();
+            }
+        }.execute();
+    }
+
+    private void fetchCityData() {
+        Connection connection = DatabaseHelper.getConnection();
+        if (connection != null) {
+            try {
+                String query = "SELECT cityid, city_nm FROM city";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    int cityId = resultSet.getInt("cityid");
+                    String cityName = resultSet.getString("city_nm");
+                    Log.d("CityData", "ID: " + cityId + ", Name: " + cityName);
+                }
+
+                resultSet.close();
+                preparedStatement.close();
+                connection.close();
+
+            } catch (SQLException e) {
+                Log.e("DatabaseError", "SQL Exception: " + e.getMessage());
+            }
+        } else {
+            Log.e("DatabaseError", "Connection is NULL");
+        }
+    }
+
+
+
+
+
+//    private void executeDatabaseQuery() {
+//        new AsyncTask<Void, Void, String>() {
+//            @Override
+//            protected String doInBackground(Void... voids) {
+//                Log.d("NextLoginPage", "SqlTest1");
+//                String s = "";
+//                try {
+//                    Connection_Class connect = new Connection_Class();
+//                    Connection con = connect.CONN();
+//                    if (con == null) {
+//                        s = "There is no Internet Connection";
+//                        Log.d("NextLoginPage", "Value of s1 =" + s);
+//                    } else {
+//                        String query = "SELECT countvalue FROM visitorcounter";
+//                        PreparedStatement ps = con.prepareStatement(query);
+//                        ResultSet count = ps.executeQuery();
+//
+//                        if (count.next()) {  // Move to first row
+//                            int visitorCount = count.getInt("countvalue");
+//                            Log.d("NextLoginPage", "Value of count = " + visitorCount);
+//                            s = "Visitor Count: " + visitorCount;
+//                        } else {
+//                            Log.d("NextLoginPage", "No data found in visitorcounter table.");
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    s = "Error retrieving data from table: " + e.getMessage();
+//                    Log.d("NextLoginPage", "SQL Error: " + s);
+//                }
+//                return s;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(String result) {
+//                // Runs on UI Thread, update UI here if needed
+//                Toast.makeText(NextLoginPage.this, result, Toast.LENGTH_SHORT).show();
+//            }
+//        }.execute();
+//    }
+
+
+
+
+
+//    protected String doInBackground() {
+//        Log.d("NextLoginPage", "SqlTest1");
+//
+//        String s = "";
+//        try {
+//            Connection_Class connect = new Connection_Class();
+//            Connection con = connect.CONN();
+//            if (con == null) {
+//                s = "There is no Internet Connection";
+//                Log.d("NextLoginPage", "Value of s1 =" + s);
+//            } else {
+//                String query = "SELECT countvalue FROM visitorcounter";
+//                PreparedStatement ps = con.prepareStatement(query);
+//                ResultSet count = ps.executeQuery();
+//
+//                if (count.next()) {  // Move to the first row
+//                    int visitorCount = count.getInt("countvalue");  // Retrieve the integer value
+//                    Log.d("NextLoginPage", "Value of count = " + visitorCount);
+//                } else {
+//                    Log.d("NextLoginPage", "No data found in visitorcounter table.");
+//                }
+//
+//                Toast.makeText(NextLoginPage.this, "SQLTEST ", Toast.LENGTH_SHORT).show();
+//            }
+//        } catch (final Exception e) {
+//            s = "Error retrieving data from table: " + e.getMessage();
+//            Log.d("NextLoginPage", "SQL Error: " + s);
+//        }
+//
+//        return s;
+//    }
+
+
+
+//    protected String doInBackground(String... strings) {
+//        Log.d("NextLoginPage", "SqlTest1");
+//
+//        String s = "";
+//        try {
+//            Connection_Class connect = new Connection_Class();
+//            Connection con = connect.CONN();
+//            if (con == null) {
+//                s = "There is no Internet Connection";
+//                Log.d("NextLoginPage", "Value of" + "  s1 ="+s);
+//
+//            } else {
+//                String query = "select countvalue from visitorcounter";
+//                PreparedStatement ps = con.prepareStatement(query);
+//                ResultSet count = ps.executeQuery();
+//                Log.d("NextLoginPage", "Value of" + count + "  s2 ="+s);
+//
+//                Toast.makeText(NextLoginPage.this, "SQLTEST ", Toast.LENGTH_SHORT).show();
+//
+//                Integer i = 1;
+//            }
+//
+//        } catch (final Exception e) {
+//
+//            s = "Error retrieving data from table";
+//            Log.d("NextLoginPage", "Value of Count"  + "  s3 ="+s);
+//
+//        }
+//        Log.d("NextLoginPage", "Value of Count"  + "  s4 ="+s);
+//
+//        return s;
+//    }
 
     private void onClick(View v) {
         // Retrieve the phone number entered in the EditText
@@ -136,16 +352,12 @@ public class NextLoginPage extends AppCompatActivity {
             OTPService.sendOTP(phoneNumber, NextLoginPage.this);
 
 
-
-
-
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("phoneNumber", String.valueOf(PhoneNumber));  // Save phone number
+            editor.putString("phoneNumber", PhoneNumber.getText().toString().trim());
+
+//            editor.putString("phoneNumber", String.valueOf(PhoneNumber));  // Save phone number
             editor.apply();
-
-
-
 
 
         }

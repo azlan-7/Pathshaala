@@ -30,4 +30,22 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
+    <style name="ChipTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/work_sans_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="CustomCheckboxStyle">
+        <item name="colorControlNormal">@color/light_blue</item>  <!-- Color for unchecked state -->
+        <item name="colorControlActivated">@color/blue</item>  <!-- Color for checked state -->
+        <item name="android:buttonTint">@color/blue</item> <!-- Change the checkbox color itself when checked -->
+    </style>
+
+    <style name="ToolbarTitleStyle">
+        <item name="android:textSize">24sp</item> <!-- Change text size -->
+        <item name="android:textColor">#FFFFFF</item> <!-- Change text color -->
+        <item name="android:fontFamily">@font/work_sans_bold</item> <!-- Change font -->
+    </style>
+
 </resources>

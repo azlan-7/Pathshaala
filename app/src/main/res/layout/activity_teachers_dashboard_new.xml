@@ -1,0 +1,595 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".TeachersDashboardNew">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar1"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/toolbar_background"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Pathshaala"
+            app:titleTextAppearance="@style/ToolbarTitleStyle"
+            app:titleTextColor="@android:color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Profile Icon -->
+        <ImageView
+            android:id="@+id/imageView151"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="@+id/toolbar1"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/account_circle_24dp_ffffff_fill0_wght400_grad0_opsz24" />
+
+        <!-- Hello Text -->
+        <TextView
+            android:id="@+id/textViewHello"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/work_sans_extrabold"
+            android:text="Hello"
+            android:textColor="#0F4D73"
+            android:textSize="30sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar1" />
+
+        <!-- Two Boxes Below Hello Text -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewTotalStudents"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#AAC1F0"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            app:layout_constraintEnd_toStartOf="@+id/cardViewLiveStudents"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewHello">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/work_sans_bold"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Total Students
+                1075"
+                android:textColor="#4B77D1"
+                android:textSize="17sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewLiveStudents"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:cardBackgroundColor="#EECECD"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewHello">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/work_sans_bold"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Live Students\n75"
+                android:textColor="#D16D6A"
+                android:textSize="18sp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Graph Image -->
+        <ImageView
+            android:id="@+id/imageView148"
+            android:layout_width="479dp"
+            android:layout_height="363dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewTotalStudents"
+            app:srcCompat="@drawable/students_enrolled" />
+
+        <!-- Additional Chart -->
+        <ImageView
+            android:id="@+id/imageView149"
+            android:layout_width="479dp"
+            android:layout_height="363dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView148"
+            app:srcCompat="@drawable/students_enrolled_one" />
+
+        <!-- Dropdowns -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dropdownContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView149"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Grade Dropdown -->
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteGrade"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/cornered_rectangle"
+                android:drawableEnd="@drawable/dropdownicon"
+                android:focusable="false"
+                android:fontFamily="@font/work_sans_light"
+                android:hint="Grade"
+                android:inputType="none"
+                android:padding="10dp"
+                android:textColorHint="#1674AE"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Subject Dropdown -->
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteSubject"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/cornered_rectangle"
+                android:drawableEnd="@drawable/dropdownicon"
+                android:focusable="false"
+                android:fontFamily="@font/work_sans_light"
+                android:hint="Subject"
+                android:inputType="none"
+                android:padding="10dp"
+                android:textColorHint="#1674AE"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/autoCompleteGrade" />
+
+            <!-- Location Dropdown -->
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteLocation"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="80dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/cornered_rectangle"
+                android:drawableEnd="@drawable/dropdownicon"
+                android:focusable="false"
+                android:fontFamily="@font/work_sans_light"
+                android:hint="Location"
+                android:inputType="none"
+                android:padding="10dp"
+                android:textColorHint="#1674AE"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView146"
+                app:layout_constraintTop_toBottomOf="@+id/autoCompleteSubject" />
+
+            <!-- Search Button (Right of Location Dropdown) -->
+            <ImageView
+                android:id="@+id/imageView146"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintTop_toTopOf="@+id/autoCompleteLocation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/search_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+
+
+
+
+
+
+
+
+    <!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:fillViewport="true">-->
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/main"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        tools:context=".TeachersDashboardNew">-->
+
+<!--        &lt;!&ndash; Toolbar &ndash;&gt;-->
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="@drawable/toolbar_background"-->
+<!--            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+<!--            app:title="Pathshaala"-->
+<!--            app:titleTextAppearance="@style/ToolbarTitleStyle"-->
+<!--            app:titleTextColor="@android:color/white"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--        &lt;!&ndash; Profile Icon Inside Toolbar &ndash;&gt;-->
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView151"-->
+<!--            android:layout_width="42dp"-->
+<!--            android:layout_height="42dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/toolbar1"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/toolbar1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:srcCompat="@drawable/account_circle_24dp_ffffff_fill0_wght400_grad0_opsz24" />-->
+
+<!--        &lt;!&ndash; Hello Text &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:id="@+id/textViewHello"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:fontFamily="@font/work_sans_extrabold"-->
+<!--            android:text="Hello"-->
+<!--            android:textColor="#0F4D73"-->
+<!--            android:textSize="30sp"-->
+<!--            android:textStyle="normal"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.05"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/toolbar1" />-->
+
+<!--        &lt;!&ndash; Two Boxes Below Hello Text &ndash;&gt;-->
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/cardViewTotalStudents"-->
+<!--            android:layout_width="170dp"-->
+<!--            android:layout_height="94dp"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            app:cardBackgroundColor="#5084C1"-->
+<!--            app:cardCornerRadius="12dp"-->
+<!--            app:cardElevation="6dp"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/cardViewLiveStudents"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewHello"-->
+<!--            app:layout_constraintWidth_percent="0.48">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:fontFamily="@font/work_sans_bold"-->
+<!--                android:gravity="center"-->
+<!--                android:padding="16dp"-->
+<!--                android:text="Total Students\n1075"-->
+<!--                android:textColor="@android:color/white"-->
+<!--                android:textSize="18sp" />-->
+<!--        </androidx.cardview.widget.CardView>-->
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/cardViewLiveStudents"-->
+<!--            android:layout_width="170dp"-->
+<!--            android:layout_height="90dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            app:cardBackgroundColor="#D16D6A"-->
+<!--            app:cardCornerRadius="12dp"-->
+<!--            app:cardElevation="6dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewHello"-->
+<!--            app:layout_constraintWidth_percent="0.48">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:fontFamily="@font/work_sans_bold"-->
+<!--                android:gravity="center"-->
+<!--                android:padding="16dp"-->
+<!--                android:text="Live Students\n75"-->
+<!--                android:textColor="@android:color/white"-->
+<!--                android:textSize="18sp" />-->
+<!--        </androidx.cardview.widget.CardView>-->
+
+<!--        &lt;!&ndash; Graph Image &ndash;&gt;-->
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView148"-->
+<!--            android:layout_width="472dp"-->
+<!--            android:layout_height="362dp"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/cardViewTotalStudents"-->
+<!--            app:srcCompat="@drawable/students_enrolled" />-->
+
+<!--        &lt;!&ndash; Additional Chart &ndash;&gt;-->
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView149"-->
+<!--            android:layout_width="480dp"-->
+<!--            android:layout_height="409dp"-->
+<!--            android:layout_marginTop="32dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/imageView148"-->
+<!--            app:srcCompat="@drawable/students_enrolled_one" />-->
+
+<!--        &lt;!&ndash; Dropdown Container &ndash;&gt;-->
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/dropdownContainer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/imageView149"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent">-->
+
+<!--            &lt;!&ndash; Grade Dropdown &ndash;&gt;-->
+<!--            <AutoCompleteTextView-->
+<!--                android:id="@+id/autoCompleteGrade"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:background="@drawable/cornered_rectangle"-->
+<!--                android:drawableEnd="@drawable/dropdownicon"-->
+<!--                android:focusable="false"-->
+<!--                android:fontFamily="@font/work_sans_light"-->
+<!--                android:hint="Grade"-->
+<!--                android:inputType="none"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColorHint="#1674AE"-->
+<!--                android:textSize="18sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintWidth_percent="0.3" />-->
+
+<!--            &lt;!&ndash; Subject Dropdown &ndash;&gt;-->
+<!--            <AutoCompleteTextView-->
+<!--                android:id="@+id/autoCompleteSubject"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:background="@drawable/cornered_rectangle"-->
+<!--                android:drawableEnd="@drawable/dropdownicon"-->
+<!--                android:focusable="false"-->
+<!--                android:fontFamily="@font/work_sans_light"-->
+<!--                android:hint="Subject"-->
+<!--                android:inputType="none"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColorHint="#1674AE"-->
+<!--                android:textSize="18sp"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/autoCompleteGrade"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintWidth_percent="0.3" />-->
+
+<!--            &lt;!&ndash; Location Dropdown &ndash;&gt;-->
+<!--            <AutoCompleteTextView-->
+<!--                android:id="@+id/autoCompleteLocation"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="47dp"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:background="@drawable/cornered_rectangle"-->
+<!--                android:drawableEnd="@drawable/dropdownicon"-->
+<!--                android:focusable="false"-->
+<!--                android:fontFamily="@font/work_sans_light"-->
+<!--                android:hint="Location"-->
+<!--                android:inputType="none"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColorHint="#1674AE"-->
+<!--                android:textSize="18sp"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/autoCompleteSubject"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintWidth_percent="0.3" />-->
+
+<!--            &lt;!&ndash; Search Button (Below Location Dropdown) &ndash;&gt;-->
+<!--            <ImageView-->
+<!--                android:id="@+id/imageView146"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_marginTop="12dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/autoCompleteSubject"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/autoCompleteSubject"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/autoCompleteSubject"-->
+<!--                app:layout_constraintHorizontal_bias="0.5"-->
+<!--                app:srcCompat="@drawable/search_24dp_0f4d73_fill0_wght400_grad0_opsz24" />-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--</ScrollView>-->
+
+
+
+
+
+<!--    &lt;!&ndash;<?xml version="1.0" encoding="utf-8"?>&ndash;&gt;-->
+<!--&lt;!&ndash;<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"&ndash;&gt;-->
+<!--&lt;!&ndash;    android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;    android:layout_height="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;    xmlns:app="http://schemas.android.com/apk/res-auto"&ndash;&gt;-->
+<!--&lt;!&ndash;    xmlns:tools="http://schemas.android.com/tools"&ndash;&gt;-->
+<!--&lt;!&ndash;    android:fillViewport="true">&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <androidx.constraintlayout.widget.ConstraintLayout&ndash;&gt;-->
+<!--&lt;!&ndash;        android:id="@+id/main"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;        tools:context=".TeachersDashboardNew">&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Toolbar &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <androidx.appcompat.widget.Toolbar&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/toolbar1"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="?attr/actionBarSize"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:background="@drawable/toolbar_background"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:title="Pathshaala"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:titleTextAppearance="@style/ToolbarTitleStyle"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:titleTextColor="@android:color/white"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Profile Icon Inside Toolbar &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/imageView151"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="42dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="42dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginEnd="16dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toTopOf="@+id/toolbar1"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintBottom_toBottomOf="@+id/toolbar1"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:srcCompat="@drawable/account_circle_24dp_ffffff_fill0_wght400_grad0_opsz24" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Hello Text &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/textViewHello"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="16dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:fontFamily="@font/work_sans_extrabold"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:text="Hello"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:textColor="#0F4D73"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:textSize="30sp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:textStyle="normal"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintHorizontal_bias="0.05"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toBottomOf="@+id/toolbar1" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Graph Image &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/imageView148"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="365dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="301dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="24dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toBottomOf="@+id/textViewHello"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:srcCompat="@drawable/students_enrolled" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Additional Chart &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/imageView149"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="371dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="336dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="32dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toBottomOf="@+id/imageView148"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:srcCompat="@drawable/students_enrolled_one" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        &lt;!&ndash; Dropdown Container &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <androidx.constraintlayout.widget.ConstraintLayout&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/dropdownContainer"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="24dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintTop_toBottomOf="@+id/imageView149"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent">&ndash;&gt;-->
+
+<!--&lt;!&ndash;            &lt;!&ndash; Grade Dropdown &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <AutoCompleteTextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/autoCompleteGrade"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="47dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginStart="16dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:background="@drawable/cornered_rectangle"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:drawableEnd="@drawable/dropdownicon"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:focusable="false"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:fontFamily="@font/work_sans_light"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:hint="Grade"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:inputType="none"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:padding="8dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textColorHint="#1674AE"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textSize="18sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintWidth_percent="0.3" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;            &lt;!&ndash; Subject Dropdown &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <AutoCompleteTextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/autoCompleteSubject"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="47dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginStart="8dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:background="@drawable/cornered_rectangle"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:drawableEnd="@drawable/dropdownicon"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:focusable="false"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:fontFamily="@font/work_sans_light"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:hint="Subject"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:inputType="none"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:padding="8dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textColorHint="#1674AE"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textSize="18sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintStart_toEndOf="@+id/autoCompleteGrade"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintWidth_percent="0.3" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;            &lt;!&ndash; Location Dropdown (Populates from Database) &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <AutoCompleteTextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/autoCompleteLocation"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="47dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginStart="8dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:background="@drawable/cornered_rectangle"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:drawableEnd="@drawable/dropdownicon"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:focusable="false"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:fontFamily="@font/work_sans_light"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:hint="Location"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:inputType="none"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:padding="8dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textColorHint="#1674AE"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textSize="18sp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintStart_toEndOf="@+id/autoCompleteSubject"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintWidth_percent="0.3" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;            &lt;!&ndash; Search Button (Below Subject Dropdown) &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/imageView146"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="60dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="60dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginTop="12dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/autoCompleteSubject"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintStart_toStartOf="@+id/autoCompleteSubject"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintEnd_toEndOf="@+id/autoCompleteSubject"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:srcCompat="@drawable/search_24dp_0f4d73_fill0_wght400_grad0_opsz24" />&ndash;&gt;-->
+<!--&lt;!&ndash;        </androidx.constraintlayout.widget.ConstraintLayout>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    </androidx.constraintlayout.widget.ConstraintLayout>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</ScrollView>&ndash;&gt;-->

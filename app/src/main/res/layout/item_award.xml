@@ -1,78 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <!-- Star Icon -->
-
-    <!-- Award Name -->
-
-    <!-- Awarding Organization & Year -->
-
-    <!-- Description -->
-
-    <!-- Delete Icon -->
-
-    <ImageView
-        android:id="@+id/awardIcon"
-        android:layout_width="39dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:contentDescription="Award Icon"
-        android:src="@drawable/star_png"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/awardName"
-        android:layout_width="242dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="48dp"
-        android:fontFamily="@font/work_sans_semibold"
-        android:text="Best Teacher Award"
-        android:textColor="@android:color/black"
-        android:textSize="09pt"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/deleteIcon"
-        app:layout_constraintHorizontal_bias="0.521"
-        app:layout_constraintStart_toEndOf="@id/awardIcon"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/organization"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="Delhi Public School, 2017"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="07pt"
-        app:layout_constraintStart_toStartOf="@id/awardName"
-        app:layout_constraintTop_toBottomOf="@id/awardName" />
+        android:padding="12dp">
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="PCM"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="07pt"
-        app:layout_constraintStart_toStartOf="@id/awardName"
-        app:layout_constraintTop_toBottomOf="@id/organization" />
+        <!-- Award Title -->
+        <TextView
+            android:id="@+id/tvAwardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Award Title"
+            android:fontFamily="@font/work_sans_bold"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <ImageView
-        android:id="@+id/deleteIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="12dp"
-        android:contentDescription="Delete Icon"
-        android:src="@drawable/ic_delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <!-- Organisation -->
+        <TextView
+            android:id="@+id/tvOrganisation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Organisation Name"
+            android:fontFamily="@font/work_sans"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAwardTitle"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Year -->
+        <TextView
+            android:id="@+id/tvYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Year"
+            android:textSize="16sp"
+            android:fontFamily="@font/work_sans_extrabold"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvOrganisation"/>
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:fontFamily="@font/work_sans_light"
+            android:textSize="14sp"
+            android:textColor="#0F4D73"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvYear"/>
+
+        <ImageView
+            android:id="@+id/btnDeleteAward"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/delete_24dp_0f4d73_fill0_wght400_grad0_opsz24"
+            android:contentDescription="Delete Award"
+            android:padding="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/cornered_rectangle">
+
+    <!-- Grade Dropdown -->
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteGrade"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:focusable="false"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Select Grade"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Subject Dropdown -->
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteSubject"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:focusable="false"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Select Subject"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:layout_marginBottom="10dp"/>
+
+<!--    &lt;!&ndash; Location Input (Optional) &ndash;&gt;-->
+<!--    <EditText-->
+<!--        android:id="@+id/autoCompleteLocation"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="46dp"-->
+<!--        android:background="@drawable/cornered_rectangle"-->
+<!--        android:fontFamily="@font/work_sans_light"-->
+<!--        android:hint="Select Location (Optional)"-->
+<!--        android:inputType="text"-->
+<!--        android:textColorHint="#1674AE"-->
+<!--        android:textSize="18sp"-->
+<!--        android:padding="8dp"-->
+<!--        android:layout_marginBottom="10dp"/>-->
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteLocation"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:focusable="false"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Select Location"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:layout_marginBottom="10dp"/>
+
+
+    <!-- Save Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSaveFilters"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/cornered_button"
+        android:text="Save Filters"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:fontFamily="@font/work_sans_bold"
+        android:padding="8dp"/>
+
+</LinearLayout>

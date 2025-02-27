@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SubjectExpertiseNew">
+
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/textView56"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Subject Expertise"
+        android:textColor="#0F4D73"
+        android:textSize="22sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.077" />
+
+    <!-- Flexbox Layout for Major Subjects -->
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/majorsubjectContainer"
+        android:layout_width="344dp"
+        android:layout_height="127dp"
+        android:layout_marginTop="20dp"
+        android:paddingTop="20dp"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView68" />
+
+    <!-- Text for Major Subjects -->
+    <TextView
+        android:id="@+id/textView68"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:fontFamily="@font/work_sans"
+        android:text="Major Subjects"
+        android:textColor="#0F4d73"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView73" />
+
+    <!-- Text for Minor Subjects -->
+    <TextView
+        android:id="@+id/textView69"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:fontFamily="@font/work_sans"
+        android:text="Minor Subjects"
+        android:textColor="#0F4d73"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/majorsubjectContainer" />
+
+    <!-- Flexbox Layout for Minor Subjects -->
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/minorSubjectContainer"
+        android:layout_width="360dp"
+        android:layout_height="145dp"
+        android:layout_marginTop="12dp"
+        android:padding="10dp"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.589"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView69"
+        app:layout_constraintVertical_bias="0.049" />
+
+    <!-- Text for Showcase -->
+    <TextView
+        android:id="@+id/textView73"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/work_sans"
+        android:text="Showcase your top 3 subjects"
+        android:textColor="#757575"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView56" />
+
+    <!-- Add More Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button22"
+        android:layout_width="156dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/cornered_button"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Add More"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/minorSubjectContainer"
+        app:layout_constraintVertical_bias="0.301" />
+
+    <ImageView
+        android:id="@+id/imageView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView70"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.988"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/detailonboardingbottom" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:id="@+id/main"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".SubjectExpertiseNew">-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView56"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fontFamily="@font/work_sans_bold"-->
+<!--        android:text="Subject Expertise"-->
+<!--        android:textColor="#0F4D73"-->
+<!--        android:textSize="22sp"-->
+<!--        android:textStyle="normal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.497"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.077" />-->
+
+<!--    <com.google.android.flexbox.FlexboxLayout-->
+<!--        android:id="@+id/majorsubjectContainer"-->
+<!--        android:layout_width="344dp"-->
+<!--        android:layout_height="127dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:paddingTop="20dp"-->
+<!--        app:flexWrap="wrap"-->
+<!--        app:justifyContent="flex_start"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.428"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView68" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView68"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="56dp"-->
+<!--        android:fontFamily="@font/work_sans"-->
+<!--        android:text="Major Subjects"-->
+<!--        android:textColor="#0F4d73"-->
+<!--        android:textStyle="normal"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView73" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView69"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="56dp"-->
+<!--        android:fontFamily="@font/work_sans"-->
+<!--        android:text="Minor Subjects"-->
+<!--        android:textColor="#0F4d73"-->
+<!--        android:textStyle="normal"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.501"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/majorsubjectContainer" />-->
+
+<!--    <com.google.android.flexbox.FlexboxLayout-->
+<!--        android:id="@+id/minorSubjectContainer"-->
+<!--        android:layout_width="360dp"-->
+<!--        android:layout_height="145dp"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:padding="10dp"-->
+<!--        app:flexWrap="wrap"-->
+<!--        app:justifyContent="flex_start"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.589"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView69"-->
+<!--        app:layout_constraintVertical_bias="0.049" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView73"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:fontFamily="@font/work_sans"-->
+<!--        android:text="Showcase your top 3 subjects"-->
+<!--        android:textColor="#757575"-->
+<!--        android:textSize="15sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView56" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/button22"-->
+<!--        android:layout_width="156dp"-->
+<!--        android:layout_height="55dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:background="@drawable/cornered_button"-->
+<!--        android:fontFamily="@font/work_sans_semibold"-->
+<!--        android:text="Add More"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.498"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/minorSubjectContainer"-->
+<!--        app:layout_constraintVertical_bias="0.301" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView45"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/detailonboardingtop" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView70"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:srcCompat="@drawable/detailonboardingbottom" />-->
+
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

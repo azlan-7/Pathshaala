@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -11,42 +11,236 @@
     <uses-permission android:name="android.permission.READ_SMS" /> <!-- Required to read SMS, if needed -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" /> <!-- Required to receive SMS, if needed -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/applogo"
+        android:icon="@mipmap/logopathshaala"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/applogo_round"
+        android:roundIcon="@mipmap/logopathshaala_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.Light"
-        tools:targetApi="31" >
+        tools:targetApi="31">
         <activity
-            android:name=".AddSkillSection"
-            android:exported="false" />
+            android:name=".YearDropDown"
+            android:exported="true" />
         <activity
-            android:name=".SkillAndExtracurriculars"
-            android:exported="false" />
+            android:name=".AwardsDropDown"
+            android:exported="true" />
         <activity
-            android:name=".AddPromotionalMedia"
-            android:exported="false"
-            android:theme="@style/Theme.MyApp.Light" />
+            android:name=".ProfessionDropDown"
+            android:exported="true" />
         <activity
-            android:name=".Awards"
-            android:exported="false" />
+            android:name=".DesignationDropDown"
+            android:exported="true" />
         <activity
-            android:name=".AddAwards"
-            android:exported="false" />
+            android:name=".WorkExperienceDropdown"
+            android:exported="true" />
         <activity
-            android:name=".Student_Parent_Details"
-            android:exported="false" />
+            android:name=".SubjectGradeTopic"
+            android:exported="true" />
         <activity
-            android:name=".StudentDetails_01"
-            android:exported="false" />
+            android:name=".CourseSelectionSample"
+            android:exported="true" />
+        <activity
+            android:name=".SelectEducationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SelectCityActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersDashboardNew"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SearchStudentsDashboard"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".StudentsDashboard"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".ViewExtracurriculars"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AddExtracurriculars"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SearchTeachersDashboard"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersDashboard"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".StudentsParentInfo"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AcademicDetailsAdd"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".Extracurriculars"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".CommunicationPreferences"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".LearningPreferences"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".QRCode"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SubjectExpertiseNewOne"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".StudentsBasicInfo"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AboutStudent"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".GradesTaughtView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".GradesTaught"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".StudentParentDetails"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".StudentDetails"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".TeacherOrStudent"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AddPromotionalMedia"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".CertificationsAdd"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".CertificationsView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AddAwards"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".Awards"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".WorkExperienceView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".WorkExperience"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersEducationView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SubjectExpertiseNewEdit"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SubjectExpertiseNew"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".AboutTeacherDialog"
             android:exported="false" />
+        <activity
+            android:name=".AboutTeacher"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachingPhilosophy"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".StudentsInfo"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersInfo"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".ShowUniqueID"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".UserOnboardingRadio"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".ProfessionalDetails"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersEducation"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SubjectExpertise"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersAddSubject"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersAddress"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".TeachersBasicInfo"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".UserOnboarding"
+            android:exported="false"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".Welcome"
             android:exported="false"
@@ -73,7 +267,7 @@
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,12 +276,12 @@
         </activity>
         <activity
             android:name=".NextLoginPage"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight" >
+            android:theme="@style/Theme.MyApp.FullScreenLight">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
