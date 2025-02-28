@@ -27,11 +27,19 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WorkExperience extends AppCompatActivity {
 
+    private static final String TAG = "WorkExperience";
+    private Map<String, String> workExperienceMap = new HashMap<>(); // WorkExperience -> WorkExperienceID
+    private Map<String, String> designationMap = new HashMap<>(); // DesignationName -> DesignationID
+    private Map<String, String> professionMap = new HashMap<>(); // ProfessionName -> ProfessionID
     private EditText etProfession, etInstitution, etDesignation;
-    private AutoCompleteTextView experienceDropdown;
+    private AutoCompleteTextView experienceDropdown,designationDropdown,professionDropdown;
     private Button btnSave;
     private RadioGroup radioGroupWork;
     private RadioButton radioCurrent, radioPrevious;
@@ -49,10 +57,17 @@ public class WorkExperience extends AppCompatActivity {
         etInstitution = findViewById(R.id.editTextText24);
         etDesignation = findViewById(R.id.editTextText25);
         experienceDropdown = findViewById(R.id.experienceDropdown);
+        designationDropdown = findViewById(R.id.editTextText25);
+        professionDropdown = findViewById(R.id.editTextText23);
         btnSave = findViewById(R.id.button24);
         radioPrevious = findViewById(R.id.radioPrevious);
         radioCurrent = findViewById(R.id.radioCurrent);
         radioGroupWork = findViewById(R.id.radioGroupWork);
+
+        loadWorkExperience();
+        loadDesignations();
+        loadProfessions();
+
 
         radioCurrent.setChecked(true);
         etProfession.setHint("Current Profession");
@@ -64,7 +79,7 @@ public class WorkExperience extends AppCompatActivity {
                 radioCurrent.setTextColor(ContextCompat.getColor(this, R.color.blue));
                 radioPrevious.setTextColor(ContextCompat.getColor(this, R.color.black));
             } else if (checkedId == R.id.radioPrevious) {
-                etProfession.setHint("Previous Profession"); // ✅ Hint now updates properly!
+                etProfession.setHint("Previous Profession");
                 radioPrevious.setTextColor(ContextCompat.getColor(this, R.color.blue));
                 radioCurrent.setTextColor(ContextCompat.getColor(this, R.color.black));
             }
@@ -124,6 +139,135 @@ public class WorkExperience extends AppCompatActivity {
         Gson gson = new Gson();
         Type type = new TypeToken<List<WorkExperienceModel>>() {}.getType();
         return gson.fromJson(json, type);
+    }
+
+    private void loadWorkExperience() {
+        String query = "SELECT WorkExperienceID, WorkExperience FROM WorkExperience WHERE active = 'true' ORDER BY WorkExperience";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, new DatabaseHelper.QueryResultListener() {
+            @Override
+            public void onQueryResult(List<Map<String, String>> result) {
+                if (result == null || result.isEmpty()) {
+                    Log.e(TAG, "No Work Experience records found!");
+                    Toast.makeText(WorkExperience.this, "No Work Experience Found!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                List<String> workExperiences = new ArrayList<>();
+                workExperienceMap.clear();
+
+                for (Map<String, String> row : result) {
+                    String id = row.get("WorkExperienceID");
+                    String name = row.get("WorkExperience");
+
+                    Log.d(TAG, "Work Experience Retrieved - ID: " + id + ", Name: " + name);
+                    workExperiences.add(name);
+                    workExperienceMap.put(name, id);
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, workExperiences);
+                experienceDropdown.setAdapter(adapter);
+                Log.d(TAG, "Adapter set with values: " + workExperiences);
+            }
+        });
+
+        experienceDropdown.setOnClickListener(v -> {
+            Log.d(TAG, "experienceDropdown clicked - Showing dropdown");
+            experienceDropdown.showDropDown();
+        });
+
+        experienceDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedExperience = (String) parent.getItemAtPosition(position);
+            String experienceID = workExperienceMap.get(selectedExperience);
+            Log.d(TAG, "Work Experience Selected: " + selectedExperience + " (ID: " + experienceID + ")");
+        });
+    }
+
+    private void loadDesignations() {
+        String query = "SELECT DesignationID, DesignationName FROM Designation WHERE active = 'true' ORDER BY DesignationName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, new DatabaseHelper.QueryResultListener() {
+            @Override
+            public void onQueryResult(List<Map<String, String>> result) {
+                if (result == null || result.isEmpty()) {
+                    Log.e(TAG, "No Designation records found!");
+                    Toast.makeText(WorkExperience.this, "No Designations Found!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                List<String> designations = new ArrayList<>();
+                designationMap.clear();
+
+                for (Map<String, String> row : result) {
+                    String id = row.get("DesignationID");
+                    String name = row.get("DesignationName");
+
+                    Log.d(TAG, "Designation Retrieved - ID: " + id + ", Name: " + name);
+                    designations.add(name);
+                    designationMap.put(name, id);
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, designations);
+                designationDropdown.setAdapter(adapter);
+                Log.d(TAG, "Adapter set with values: " + designations);
+            }
+        });
+
+        designationDropdown.setOnClickListener(v -> {
+            Log.d(TAG, "designationDropdown clicked - Showing dropdown");
+            designationDropdown.showDropDown();
+        });
+
+        designationDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedDesignation = (String) parent.getItemAtPosition(position);
+            String designationID = designationMap.get(selectedDesignation);
+            Log.d(TAG, "Designation Selected: " + selectedDesignation + " (ID: " + designationID + ")");
+        });
+    }
+
+    private void loadProfessions() {
+        String query = "SELECT ProfessionID, ProfessionName FROM Profession WHERE active = 'true' ORDER BY ProfessionName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, new DatabaseHelper.QueryResultListener() {
+            @Override
+            public void onQueryResult(List<Map<String, String>> result) {
+                if (result == null || result.isEmpty()) {
+                    Log.e(TAG, "No Profession records found!");
+                    Toast.makeText(WorkExperience.this, "No Professions Found!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                List<String> professions = new ArrayList<>();
+                professionMap.clear();
+
+                for (Map<String, String> row : result) {
+                    String id = row.get("ProfessionID");
+                    String name = row.get("ProfessionName");
+
+                    Log.d(TAG, "Profession Retrieved - ID: " + id + ", Name: " + name);
+                    professions.add(name);
+                    professionMap.put(name, id);
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, professions);
+                professionDropdown.setAdapter(adapter);
+                Log.d(TAG, "Adapter set with values: " + professions);
+            }
+        });
+
+        professionDropdown.setOnClickListener(v -> {
+            Log.d(TAG, "professionDropdown clicked - Showing dropdown");
+            professionDropdown.showDropDown();
+        });
+
+        professionDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedProfession = (String) parent.getItemAtPosition(position);
+            String professionID = professionMap.get(selectedProfession);
+            Log.d(TAG, "Profession Selected: " + selectedProfession + " (ID: " + professionID + ")");
+        });
     }
 }
 

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -28,16 +29,24 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class AddAwards extends AppCompatActivity {
 
     private static final int FILE_SELECT_CODE = 100; // Request code for file picker
     private Spinner spinner6;
+    private static final String TAG = "AddAwards";
     private Uri selectedFileUri; // Stores the selected file URI
     private SharedPreferences sharedPreferences;
 
     private EditText etAwardTitle, etOrganisation, etYear, etDescription;
+    private AutoCompleteTextView awardsDropdown,yearDropdown;
     private Button btnSubmit;
+    private Map<String, String> awardsMap = new HashMap<>(); // AwardTitleName -> AwardTitleID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +57,29 @@ public class AddAwards extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
 
         etAwardTitle = findViewById(R.id.editTextText14);
+        awardsDropdown = findViewById(R.id.editTextText14);
         etOrganisation = findViewById(R.id.editTextText18);
         etYear = findViewById(R.id.editTextText19);
+        AutoCompleteTextView yearDropdown = findViewById(R.id.editTextText19);
         etDescription = findViewById(R.id.editTextTextMultiLine2);
         btnSubmit = findViewById(R.id.button17);
 
+        List<String> years = new ArrayList<>();
+        for (int i = 2025; i >= 1960; i--) {
+            years.add(String.valueOf(i));
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, years);
+        yearDropdown.setAdapter(adapter);
+
+        yearDropdown.setOnClickListener(v -> yearDropdown.showDropDown());
+
+
+        loadAwards();
+
+
+
         btnSubmit.setOnClickListener(v -> saveAwardDetails());
+
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -134,6 +160,49 @@ public class AddAwards extends AppCompatActivity {
         Type type = new TypeToken<List<AwardModel>>() {}.getType();
         List<AwardModel> awardList = (json == null) ? new ArrayList<>() : gson.fromJson(json, type);
         return awardList;
+    }
+
+    private void loadAwards() {
+        String query = "SELECT AwardTitleID, AwardTitleName FROM AwardTitle WHERE active = 'true' ORDER BY AwardTitleName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, new DatabaseHelper.QueryResultListener() {
+            @Override
+            public void onQueryResult(List<Map<String, String>> result) {
+                if (result == null || result.isEmpty()) {
+                    Log.e(TAG, "No Awards records found!");
+                    Toast.makeText(AddAwards.this, "No Awards Found!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                List<String> awards = new ArrayList<>();
+                awardsMap.clear();
+
+                for (Map<String, String> row : result) {
+                    String id = row.get("AwardTitleID");
+                    String name = row.get("AwardTitleName");
+
+                    Log.d(TAG, "Award Retrieved - ID: " + id + ", Name: " + name);
+                    awards.add(name);
+                    awardsMap.put(name, id);
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(AddAwards.this, android.R.layout.simple_dropdown_item_1line, awards);
+                awardsDropdown.setAdapter(adapter);
+                Log.d(TAG, "Adapter set with values: " + awards);
+            }
+        });
+
+        awardsDropdown.setOnClickListener(v -> {
+            Log.d(TAG, "awardsDropdown clicked - Showing dropdown");
+            awardsDropdown.showDropDown();
+        });
+
+        awardsDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedAward = (String) parent.getItemAtPosition(position);
+            String awardID = awardsMap.get(selectedAward);
+            Log.d(TAG, "Award Selected: " + selectedAward + " (ID: " + awardID + ")");
+        });
     }
 
 }
