@@ -25,16 +25,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnDeleteGrade" />
 
-        <!-- Topic -->
-        <TextView
-            android:id="@+id/tvTopic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Topic: "
-            android:textColor="#0F4D73"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSubject" />
 
         <!-- Grade Level -->
         <TextView
@@ -45,18 +35,8 @@
             android:textColor="#0F4D73"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTopic" />
+            app:layout_constraintTop_toBottomOf="@id/tvSubject" />
 
-        <!-- Medium of Instruction -->
-        <TextView
-            android:id="@+id/tvMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Medium: "
-            android:textColor="#0F4D73"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvGradeLevel" />
 
         <!-- Delete Button -->
         <ImageView

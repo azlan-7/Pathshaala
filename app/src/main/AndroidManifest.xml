@@ -21,6 +21,8 @@
         android:required="false" />
 
     <application
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -223,7 +225,7 @@
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SubjectExpertise"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".TeachersAddSubject"
@@ -251,7 +253,7 @@
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".OTPmobile"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".GoogleLogin"

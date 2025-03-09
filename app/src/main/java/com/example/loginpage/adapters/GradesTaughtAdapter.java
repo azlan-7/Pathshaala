@@ -72,9 +72,7 @@ public class GradesTaughtAdapter extends RecyclerView.Adapter<GradesTaughtAdapte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSubject = itemView.findViewById(R.id.tvSubject);
-            tvTopic = itemView.findViewById(R.id.tvTopic);
             tvGradeLevel = itemView.findViewById(R.id.tvGradeLevel);
-            tvMedium = itemView.findViewById(R.id.tvMedium);
             btnDelete = itemView.findViewById(R.id.btnDeleteGrade);
         }
     }

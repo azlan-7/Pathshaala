@@ -2,8 +2,10 @@ package com.example.loginpage;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -64,6 +66,8 @@ public class AddAwards extends AppCompatActivity {
         etDescription = findViewById(R.id.editTextTextMultiLine2);
         btnSubmit = findViewById(R.id.button17);
 
+        retrieveAwards(); // ✅ Call this to fetch existing awards
+
         List<String> years = new ArrayList<>();
         for (int i = 2025; i >= 1960; i--) {
             years.add(String.valueOf(i));
@@ -76,11 +80,13 @@ public class AddAwards extends AppCompatActivity {
 
         loadAwards();
 
+        btnSubmit.setOnClickListener(v -> insertAwardIntoDB());
 
 
-        btnSubmit.setOnClickListener(v -> saveAwardDetails());
 
-
+        Button uploadButton = findViewById(R.id.button16); // Upload button
+        // Set up file picker when button is clicked
+        uploadButton.setOnClickListener(v -> openFilePicker());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -88,10 +94,6 @@ public class AddAwards extends AppCompatActivity {
             return insets;
         });
 
-
-        Button uploadButton = findViewById(R.id.button16); // Upload button
-        // Set up file picker when button is clicked
-        uploadButton.setOnClickListener(v -> openFilePicker());
     }
 
 
@@ -127,6 +129,165 @@ public class AddAwards extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void retrieveAwards() {
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+
+        if (userId == -1) {
+            Toast.makeText(this, "User not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Log.d("retrieveAwards", "🟢 Fetching awards for UserID: " + userId);
+
+        DatabaseHelper.UserWiseAwardSelect(this, userId, new DatabaseHelper.DatabaseCallback() {
+            @Override
+            public void onSuccess(List<Map<String, String>> result) {
+                if (!result.isEmpty()) {
+                    Map<String, String> awardData = result.get(0); // Get first award
+
+                    Log.d("retrieveAwards", "✅ Award Loaded: " + awardData.toString());
+
+                    etAwardTitle.setText(awardData.get("AwardTitleName"));
+                    etOrganisation.setText(awardData.get("AwardingOrganization"));
+                    etDescription.setText(awardData.get("Remarks"));
+                    etYear.setText(awardData.get("IssueYear"));
+
+                    Toast.makeText(AddAwards.this, "Award retrieved successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("retrieveAwards", "⚠️ No awards found for UserID: " + userId);
+                    Toast.makeText(AddAwards.this, "No awards found!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onMessage(String message) {
+                Log.d("retrieveAwards", "ℹ️ Message: " + message);
+                Toast.makeText(AddAwards.this, message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(AddAwards.this, "Database error: " + error, Toast.LENGTH_LONG).show();
+                Log.e("retrieveAwards", "Error: " + error);
+            }
+        });
+    }
+
+
+
+
+
+
+
+    public void insertAwardIntoDB() {
+        String title = etAwardTitle.getText().toString().trim();
+        String organisation = etOrganisation.getText().toString().trim();
+        String yearStr = etYear.getText().toString().trim();
+        String description = etDescription.getText().toString().trim();
+
+        if (title.isEmpty() || organisation.isEmpty() || yearStr.isEmpty()) {
+            Toast.makeText(this, "Please fill in all required fields!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int issueYear;
+        try {
+            issueYear = Integer.parseInt(yearStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid year format!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        if (userId == -1) {
+            Toast.makeText(this, "User not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String awardFileName = "No_File";
+        if (selectedFileUri != null) {
+            awardFileName = getFileNameFromUri(selectedFileUri);
+            Log.d("insertAwardIntoDB", "📂 Selected file URI: " + selectedFileUri.toString());
+            Log.d("insertAwardIntoDB", "📄 Extracted file name: " + awardFileName);
+        } else {
+            Log.d("insertAwardIntoDB", "⚠️ No file selected, using default file name: " + awardFileName);
+        }
+
+        String selfReferralCode = "";
+
+        Log.d("insertAwardIntoDB", "🟢 Inserting Award into DB");
+        Log.d("insertAwardIntoDB", "  - User ID: " + userId);
+        Log.d("insertAwardIntoDB", "  - Award Title: " + title);
+        Log.d("insertAwardIntoDB", "  - Organization: " + organisation);
+        Log.d("insertAwardIntoDB", "  - Issue Year: " + issueYear);
+        Log.d("insertAwardIntoDB", "  - Remarks: " + description);
+        Log.d("insertAwardIntoDB", "  - Final Award File Name: " + awardFileName);
+
+
+        DatabaseHelper.UserWiseAwardInsert(
+                this,
+                "1", // Insert operation
+                userId,
+                getAwardTitleID(title),
+                organisation,
+                issueYear,
+                description,
+                awardFileName,
+                selfReferralCode,
+                new DatabaseHelper.DatabaseCallback() {
+                    @Override
+                    public void onMessage(String message) {
+                        Log.d("DatabaseHelper", "📩 DB Message: " + message);
+                        Toast.makeText(AddAwards.this, message, Toast.LENGTH_SHORT).show();
+                        if (message.toLowerCase().contains("success")) {
+                            startActivity(new Intent(AddAwards.this, Awards.class));
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(List<Map<String, String>> result) {
+                        Log.d("DatabaseCallback", "✅ Award Insert successful!");
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e("DatabaseHelper", "❌ Insert failed: " + error);
+                        Toast.makeText(AddAwards.this, "Database error: " + error, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
+    // Helper method to extract the file name from the URI
+    private String getFileNameFromUri(Uri uri) {
+        String fileName = "No_File"; // Default file name
+
+        Log.d("getFileNameFromUri", "🔍 Checking file name for URI: " + uri.toString());
+
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            Log.d("getFileNameFromUri", "📌 Column index for DISPLAY_NAME: " + nameIndex);
+            if (nameIndex != -1) {
+                cursor.moveToFirst();
+                fileName = cursor.getString(nameIndex);
+                Log.d("getFileNameFromUri", "✅ Extracted file name: " + fileName);
+            }
+            cursor.close();
+        } else {
+            Log.e("getFileNameFromUri", "❌ Cursor is NULL. Could not extract file name.");
+        }
+
+        return fileName;
+    }
+
+    // Helper method to convert award title to awardTitleID
+    private int getAwardTitleID(String awardTitle) {
+        return awardsMap.containsKey(awardTitle) ? Integer.parseInt(awardsMap.get(awardTitle)) : 1;
+    }
+
 
     // Method to open the file picker
     private void openFilePicker() {

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginpage.adapters.EducationAdapter;
 import com.example.loginpage.models.Education;
+import com.example.loginpage.models.UserWiseEducation;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -70,12 +72,16 @@ public class TeachersEducation extends AppCompatActivity {
 //        ImageView addEducation = findViewById(R.id.imageView73);
 
 
-        educationList = loadEducationData(this);
+//        educationList = loadEducationData(this);
+        educationList = new ArrayList<>();
         educationAdapter = new EducationAdapter(this,educationList);
         educationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         educationRecyclerView.setAdapter(educationAdapter);
 
         Log.d(TAG, "onCreate: Activity Started");
+
+        fetchUserEducationDetails();
+
         loadEducationLevels();
 
         Button saveButton = findViewById(R.id.button16);
@@ -99,6 +105,8 @@ public class TeachersEducation extends AppCompatActivity {
             etInstitution.setText("");
             educationLevel.setText("");
             textViewYear.setText("");
+
+            insertUserEducation();
             // Create Intent to move to ProfessionalDetails.java
             Toast.makeText(TeachersEducation.this, "Education saved successfully!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(TeachersEducation.this, TeachersEducationView.class);
@@ -136,7 +144,83 @@ public class TeachersEducation extends AppCompatActivity {
 
     }
 
+    private void insertUserEducation() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1); // Fetch logged-in User ID
 
+        if (userId == -1) {
+            Log.e(TAG, "❌ User ID not found in SharedPreferences!");
+            return;
+        }
+
+        // Example Data (You can modify based on UI inputs)
+        int educationLevelId = 1; // Example: Bachelor's Degree
+//        String institutionName = etInstitution.getText().toString().trim();
+
+        String institutionName = "Example University"; // Replace with actual input
+        int passingYear = 2025; // Example: Graduation Year
+        String selfReferralCode = "ABC123"; // Example Referral Code
+
+        Log.d(TAG, "📌 Inserting Education for UserID: " + userId);
+
+        // ✅ Call `UserWiseEducationInsert` Method
+        DatabaseHelper.UserWiseEducationInsert(this, "1", userId, educationLevelId, institutionName, passingYear, selfReferralCode, new DatabaseHelper.DatabaseCallback() {
+            @Override
+            public void onMessage(String message) {
+                Log.d(TAG, "✅ Database Response: " + message);
+                runOnUiThread(() -> {
+                    Toast.makeText(TeachersEducation.this, message, Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onSuccess(List<Map<String, String>> result) {
+                // No need for success handling in this case, so leave it empty
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "❌ Database Error: " + error);
+            }
+        });
+
+    }
+
+    private void fetchUserEducationDetails() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1); // ✅ Fetch as Integer
+
+        if (userId == -1) {
+            Log.e(TAG, "❌ User ID not found in SharedPreferences!");
+            return;
+        }
+
+        Log.d(TAG, "📌 Fetching education data for user: " + userId);
+
+        DatabaseHelper.UserWiseEducationSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseEducationResultListener() {
+            @Override
+            public void onQueryResult(List<UserWiseEducation> userWiseEducationList) {
+                if (userWiseEducationList.isEmpty()) {
+                    Log.e(TAG, "⚠️ No education records found in DB!");
+                    return;
+                }
+
+                // Convert fetched data to Education model and update RecyclerView
+                educationList.clear();
+
+                for (UserWiseEducation edu : userWiseEducationList) {
+                    educationList.add(new Education(
+                            edu.getInstitutionName(),
+                            edu.getEducationLevelName(),
+                            edu.getPassingYear()
+                    ));
+                }
+
+                educationAdapter.notifyDataSetChanged(); // Update UI
+                Log.d(TAG, "✅ Education data updated in RecyclerView.");
+            }
+        });
+    }
 
     private void loadEducationLevels() {
         String query = "SELECT EducationLevelID, EducationLevelName FROM EducationLevel WHERE active = 'true' ORDER BY EducationLevelName";
@@ -185,6 +269,11 @@ public class TeachersEducation extends AppCompatActivity {
         });
 
     }
+
+
+
+
+
 
     private void loadCourses(String educationLevelID) {
         String query = "SELECT CourseID, CourseName FROM Courses WHERE EducationLevelID = '" + educationLevelID + "' AND active = 'true' ORDER BY CourseName";

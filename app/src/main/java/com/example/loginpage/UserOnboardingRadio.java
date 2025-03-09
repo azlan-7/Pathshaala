@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
+import com.example.loginpage.models.UserDetailsClass;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +46,8 @@ import android.widget.AutoCompleteTextView;
 
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.MySqliteDatabase.UserDatabaseHelper;
+import com.example.loginpage.models.UserDetailsClass;
 
 
 public class UserOnboardingRadio extends AppCompatActivity {
@@ -53,7 +56,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient fusedLocationClient;
 
-    private EditText etFirstName, etLastName, etContact, etEmail, etDOB;
+    public EditText etFirstName, etLastName, etContact, etEmail, etDOB, etUsername,etPassword,etConfirmPassword;
 
     private TextView textViewID;
 
@@ -63,37 +66,49 @@ public class UserOnboardingRadio extends AppCompatActivity {
     private AutoCompleteTextView autoCompleteCity;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_onboarding_radio);
 
+        // Initialize Views
         etFirstName = findViewById(R.id.editTextText9);
         etLastName = findViewById(R.id.editTextText11);
         etEmail = findViewById(R.id.editTextText12);
         etDOB = findViewById(R.id.editTextText13);
-        etDOB.setOnClickListener(v -> showDatePicker());
-        autoCompleteCity = findViewById(R.id.autoCompleteCity);
-        textViewID = findViewById(R.id.textView110);
+        etContact = findViewById(R.id.editTextText10);
+        autoCompleteCity = findViewById(R.id.autoCompleteCity);  // Ensure initialization here
+        etUsername = findViewById(R.id.userName);
+        etPassword = findViewById(R.id.password);
+        etConfirmPassword = findViewById(R.id.confirmPassword);
 
 
-        String cityQuery = "SELECT cityid,city_nm FROM city";
-        DatabaseHelper.loadDataFromDatabase(this, cityQuery, autoCompleteCity,textViewID);
+        fetchCityData(autoCompleteCity);
+
+        // ✅ Show dropdown when clicked
+        autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
+        autoCompleteCity.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) autoCompleteCity.showDropDown();
+        });
 
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        // Retrieve phone number from Intent
+        String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
-        // Check and Request Location Permissions
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            Log.d("UserOnboardingRadio", "Phone number received: " + phoneNumber);
+            etContact.setText(phoneNumber);
+            etContact.setEnabled(false);  // Disable editing
         } else {
-            // Permission already granted, get location
-            getUserLocation();
+            Log.e("UserOnboardingRadio", "Phone number NOT received in Intent!");
+            etContact.setHint("Enter your phone number");
+        }
+
+        // Ensure autoCompleteCity is not null before setting text
+        if (autoCompleteCity != null) {
+            autoCompleteCity.setHint("Select City"); // Show hint instead of default text
+        } else {
+            Log.e("UserOnboardingRadio", "autoCompleteCity is NULL!");
         }
 
 
@@ -146,7 +161,6 @@ public class UserOnboardingRadio extends AppCompatActivity {
             }
         });
 
-        String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
         final String phoneNumberFinal = savedPhoneNumber;
 
@@ -159,74 +173,38 @@ public class UserOnboardingRadio extends AppCompatActivity {
 
 
         buttonSave.setOnClickListener(v -> {
+            createUser();  // ✅ Ensure User is Created First
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            new android.os.Handler().postDelayed(() -> {  // ✅ Wait before fetching data
+                DatabaseHelper.UserDetailsSelect(UserOnboardingRadio.this, "4", etContact.getText().toString(), new DatabaseHelper.UserResultListener() {
+                    @Override
+                    public void onQueryResult(List<UserDetailsClass> userList) {
+                        if (!userList.isEmpty()) {
+                            UserDetailsClass user = userList.get(0);
 
-            TextView contactTextView = findViewById(R.id.editTextText10);
-            contactTextView.setText(phoneNumberFinal);
+                            // ✅ Save user details in SharedPreferences
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            try {
-                String EncryptEmail = etEmail.getText().toString().trim();
-                Log.d("EncryptionHelper", "Original Data: " + EncryptEmail);
+                            editor.putString("USER_NAME", user.getName() + " " + user.getLastName()); // ✅ Save full name
+                            editor.putString("USER_EMAIL", user.getEmailId());  // ✅ Save email
+                            editor.putString("USER_PHONE", user.getMobileNo()); // ✅ Save phone number
+                            editor.putInt("USER_ID", Integer.parseInt(user.getUserId())); // ✅ Save user ID
 
-                // Generate AES Key
-                byte[] aesKey = EncryptionHelper.generateAESKey();
-                Log.d("EncryptionHelper", "Generated AES Key: " + android.util.Base64.encodeToString(aesKey, android.util.Base64.DEFAULT));
+                            editor.apply(); // ✅ Save changes
+                            Log.d("UserOnboardingRadio", "✅ User Data Saved in SharedPreferences");
 
-                // Encrypt Data
-                String encryptedData = EncryptionHelper.encryptData(EncryptEmail, aesKey);
-                Log.d("EncryptionHelper", "Encrypted Data: " + encryptedData);
-
-                // Save encrypted email in SharedPreferences (optional)
-                editor.putString("ENCRYPTED_EMAIL", encryptedData);
-                editor.apply();
-
-                // Decrypt Data
-                String decryptedData = EncryptionHelper.decryptData(encryptedData, aesKey);
-                Log.d("EncryptionHelper", "Decrypted Data: " + decryptedData);
-
-                // Encrypt AES Key
-                String encryptedAESKey = EncryptionHelper.encryptAESKey(aesKey);
-                Log.d("EncryptionHelper", "Encrypted AES Key: " + encryptedAESKey);
-
-                // Decrypt AES Key
-                byte[] decryptedAESKey = EncryptionHelper.decryptAESKey(encryptedAESKey);
-                Log.d("EncryptionHelper", "Decrypted AES Key Matches Original: " + java.util.Arrays.equals(aesKey, decryptedAESKey));
-
-            } catch (Exception e) {
-                Log.e("EncryptionHelper", "Error during encryption/decryption", e);
-            }
-
-
-
-            editor.putString("FIRST_NAME", etFirstName.getText().toString().trim());
-            editor.putString("LAST_NAME", etLastName.getText().toString().trim());
-            editor.putString("CONTACT", etContact.getText().toString().trim());
-            editor.putString("EMAIL", etEmail.getText().toString().trim());
-            editor.putString("DOB", etDOB.getText().toString().trim());
-            editor.putString("USER_TYPE", userType);
-            editor.putString("CITY", autoCompleteCity.getText().toString().trim());
-            editor.apply();
-
-            Log.d("UserOnboarding", "Data Saved: " + etFirstName.getText().toString());
-
-            String prefix = userType.equals("Teacher") ? "T" : "S";
-            String uniqueID = prefix + UUID.randomUUID().toString().substring(0, 8).toUpperCase() + Calendar.getInstance().get(Calendar.YEAR);
-            Log.d("UserOnboardingRadio", "User Type " + userType.substring(1,5) + "-"  + userType);
-            Toast.makeText(this, "ID: " + uniqueID, Toast.LENGTH_SHORT).show();
-
-
-
-            // Pass userType and uniqueID to next screen
-            Intent intent = new Intent(UserOnboardingRadio.this, ShowUniqueID.class);
-            intent.putExtra("USER_TYPE", userType);
-            intent.putExtra("UNIQUE_ID", uniqueID);
-            intent.putExtra("ENCRYPTED_EMAIL", sharedPreferences.getString("ENCRYPTED_EMAIL", "No Data"));
-            startActivity(intent);
+                            // ✅ Navigate to `TeachersInfo` **AFTER** saving data
+                            Intent intent = new Intent(UserOnboardingRadio.this, TeachersInfo.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Log.e("UserOnboardingRadio", "❌ No user found to retrieve details.");
+                        }
+                    }
+                });
+            }, 2000);  // ✅ Wait for 2 seconds to allow DB to update
         });
-
-
-
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -299,4 +277,133 @@ public class UserOnboardingRadio extends AppCompatActivity {
             }
         }
     }
+
+    private void createUser() {
+        DatabaseHelper.UserResultListener listener = new DatabaseHelper.UserResultListener() {
+            @Override
+            public void onQueryResult(List<UserDetailsClass> userList) {
+                Log.d("UserInfo", "UserList received in createUser: " + userList.size());
+
+                if (!userList.isEmpty()) {
+                    UserDetailsClass user = userList.get(0);
+                    Log.d("UserInfo", "✅ User Created: " + user.getName() + ", Email: " + user.getEmailId());
+
+                    // ✅ Save user details in SharedPreferences for future retrieval
+                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    String firstName = user.getName();
+                    String lastName = user.getLastName();
+
+                    // Prevent "null" from appearing
+                    if (lastName == null || lastName.equalsIgnoreCase("null") || lastName.trim().isEmpty()) {
+                        lastName = "";  // Ensure it doesn't get stored as "null"
+                    }
+
+                    // If last name is empty, store only first name
+                    String fullName = lastName.isEmpty() ? firstName : firstName + " " + lastName;
+
+                    editor.putString("USER_NAME", fullName);
+                    Log.d("UserOnboardingRadio", "✅ Fixed Full Name Before Saving: " + fullName);
+
+
+
+//                  editor.putString("USER_NAME", user.getName() + " " + user.getLastName()); // ✅ Save full name
+                    editor.putString("USER_EMAIL", user.getEmailId());  // ✅ Save email
+                    editor.putString("USER_PHONE", user.getMobileNo()); // ✅ Save phone number
+                    editor.putInt("USER_ID", Integer.parseInt(user.getUserId())); // ✅ Save user ID
+
+                    editor.apply(); // ✅ Save changes
+                    Log.d("UserOnboardingRadio", "First Name: " + user.getName());
+                    Log.d("UserOnboardingRadio", "Last Name: " + user.getLastName());
+                    Log.d("UserInfo", "✅ User Data Saved in SharedPreferences");
+                    Log.d("UserOnboardingRadio", "Last Name Retrieved: " + user.getLastName());
+
+
+                } else {
+                    Log.d("UserInfo", "❌ User creation failed.");
+                }
+            }
+        };
+
+        // Get values from EditText fields
+        String firstName = etFirstName.getText().toString().trim();
+        String lastName = etLastName.getText().toString().trim();
+        String dob = etDOB.getText().toString().trim();
+        String contactNumber = etContact.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String userType = (radioGroup.getCheckedRadioButtonId() == R.id.radioTeacher) ? "T" : "S";
+        String password = etPassword.getText().toString().trim();
+        String username = etUsername.getText().toString().trim();
+        String confirmPassword = etConfirmPassword.getText().toString().trim();
+
+        // Validate input fields (Optional)
+        if (username.isEmpty() || contactNumber.isEmpty() || email.isEmpty()) {
+            Log.e("UserCreation", "❌ Required fields are missing!");
+            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a new UserDetailsClass object
+        UserDetailsClass user = new UserDetailsClass();
+        user.setUserId("0"); // Default ID
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setName(firstName);
+        user.setLastName(lastName);
+        user.setDateOfBirth(dob);
+        user.setUserType(userType);
+        user.setSignUpType("");
+        user.setCountryCode("+91");
+        user.setMobileNo(contactNumber);
+        user.setEmailId(email);
+        user.setSecurityKey("");
+        user.setSelfReferralCode("");
+        user.setCustReferralCode("");
+        user.setLatitude("");
+        user.setLongitude("");
+        user.setUserImageName("");
+
+        Log.d("UserOnboardingRadio", "First Name: " + user.getName());
+        Log.d("UserOnboardingRadio", "Last Name: " + user.getLastName());
+        Log.d("UserInfo", "🚀 Sending User Data to Database: " + user.getUsername());
+
+        // Call method to insert the user into the database
+        DatabaseHelper.UserDetailsInsert(this, "1", user, listener);
+    }
+
+
+    private void fetchCityData(AutoCompleteTextView autoCompleteLocation) {
+        new Thread(() -> {
+            List<String> cityList = new ArrayList<>();
+            try {
+                Connection_Class connectionClass = new Connection_Class();
+                Connection connection = connectionClass.CONN();
+                if (connection != null) {
+                    String query = "SELECT city_nm FROM city";
+                    Statement stmt = connection.createStatement();
+                    ResultSet rs = stmt.executeQuery(query);
+                    while (rs.next()) {
+                        cityList.add(rs.getString("city_nm"));
+                    }
+                    rs.close();
+                    stmt.close();
+                    connection.close();
+                }
+            } catch (Exception e) {
+                Log.e("UserOnboardingRadio", "❌ Error fetching city data: " + e.getMessage());
+            }
+
+            // ✅ Ensure UI is updated on the main thread
+            runOnUiThread(() -> {
+                if (!cityList.isEmpty()) {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(UserOnboardingRadio.this, android.R.layout.simple_dropdown_item_1line, cityList);
+                    autoCompleteLocation.setAdapter(adapter);
+                } else {
+                    Log.e("UserOnboardingRadio", "⚠️ No cities found in DB!");
+                }
+            });
+        }).start();
+    }
+
 }

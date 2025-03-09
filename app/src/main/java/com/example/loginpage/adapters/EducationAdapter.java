@@ -67,6 +67,12 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
         editor.apply();
     }
 
+    public void updateData(List<Education> newEducationList) {
+        this.educationList.clear();
+        this.educationList.addAll(newEducationList);
+        notifyDataSetChanged();
+    }
+
     static class EducationViewHolder extends RecyclerView.ViewHolder {
         TextView tvInstitution, tvDegree, tvYear;
         ImageView btnDelete;
