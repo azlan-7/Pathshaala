@@ -50,23 +50,26 @@ public class WorkExperienceAdapter extends RecyclerView.Adapter<WorkExperienceAd
     @Override
     public void onBindViewHolder(@NonNull WorkExperienceViewHolder holder, int position) {
         WorkExperienceModel experience = workExperienceList.get(position);
+
         if (experience == null) {
-            Log.e("Adapter", "Null WorkExperienceModel at position: " + position);
+            Log.e("Adapter", "❌ Null WorkExperienceModel at position: " + position);
             return;
         }
 
-        // Set TextView values with null checks
-        holder.tvProfession.setText(experience.getProfession() != null ? experience.getProfession() : "N/A");
-        holder.tvInstitution.setText(experience.getInstitution() != null ? experience.getInstitution() : "N/A");
-        holder.tvDesignation.setText(experience.getDesignation() != null ? experience.getDesignation() : "N/A");
-        holder.tvExperience.setText(experience.getExperience() != null ? experience.getExperience() : "N/A");
+        Log.d("Adapter", "📌 Binding data: " +
+                "Institution=" + experience.getInstitutionName() + ", " +
+                "Designation=" + experience.getDesignationName() + ", " +
+                "Experience=" + experience.getWorkExperience());
 
-        holder.btnDelete.setOnClickListener(v -> {
-            if (onDeleteClickListener != null) {
-                onDeleteClickListener.onDeleteClick(position);
-            }
-        });
+        holder.tvInstitution.setText(experience.getInstitutionName() != null ? experience.getInstitutionName() : "Unknown");
+        holder.tvDesignation.setText(experience.getDesignationName() != null ? experience.getDesignationName() : "Unknown");
+        holder.tvExperience.setText(experience.getWorkExperience() != null ? experience.getWorkExperience() : "Unknown");
     }
+
+
+
+
+
 
     public void updateData(List<WorkExperienceModel> newData) {
         this.workExperienceList.clear();

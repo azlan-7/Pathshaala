@@ -191,6 +191,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
                             editor.putString("USER_PHONE", user.getMobileNo()); // ✅ Save phone number
                             editor.putInt("USER_ID", Integer.parseInt(user.getUserId())); // ✅ Save user ID
 
+
                             editor.apply(); // ✅ Save changes
                             Log.d("UserOnboardingRadio", "✅ User Data Saved in SharedPreferences");
 

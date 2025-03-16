@@ -64,18 +64,18 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
         userId = sharedPreferences.getInt("USER_ID", -1);
         Log.d(TAG, "Retrieved User ID from SharedPreferences: " + userId);
 
-        if (userId == -1) {
-            Log.e(TAG, "USER_ID not found! Fetching from the database...");
-            DatabaseHelper.UserDetailsSelect(this, "3", "USER_PHONE_NUMBER", userList -> {
-                if (!userList.isEmpty()) {
-                    int storedUserId = getSharedPreferences("UserPrefs", MODE_PRIVATE).getInt("USER_ID", -1);
-                    Log.d(TAG, "✅ User details retrieved, User ID stored: " + storedUserId);
-                } else {
-                    Log.e(TAG, "⚠️ No user details found.");
-                }
-            });
-
-        }
+//        if (userId == -1) {
+//            Log.e(TAG, "USER_ID not found! Fetching from the database...");
+//            DatabaseHelper.UserDetailsSelect(this, "3", "USER_PHONE_NUMBER", userList -> {
+//                if (!userList.isEmpty()) {
+//                    int storedUserId = getSharedPreferences("UserPrefs", MODE_PRIVATE).getInt("USER_ID", -1);
+//                    Log.d(TAG, "✅ User details retrieved, User ID stored: " + storedUserId);
+//                } else {
+//                    Log.e(TAG, "⚠️ No user details found.");
+//                }
+//            });
+//
+//        }
 
         retrievedSubjectContainer = findViewById(R.id.retrievedSubjectContainer);
 
@@ -87,9 +87,7 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
 
         // Debug: Print all stored SharedPreferences values
         Log.d(TAG, "Retrieved SharedPreferences: " + sharedPreferences.getAll());
-
-        // Load subjects from the database
-        loadSubjects();
+        
 
         // Load selected subjects into the FlexboxLayout
         loadSelectedSubjects();
@@ -108,6 +106,7 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
 
 
     private void loadRetrievedSubjects() {
+        userId = sharedPreferences.getInt("USER_ID", -1);
         if (userId == -1) {
             Log.e(TAG, "Cannot load retrieved subjects: User ID not found.");
             return;
@@ -219,35 +218,6 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
     }
 
 
-
-
-
-    private void loadSubjects() {
-//        String query = "SELECT SubjectID, SubjectName FROM Subject WHERE active = 'true' ORDER BY SubjectName";
-        String query = "select * from subject where subjectid not in (select subjectid from userwisesubject where userid =10 and IsActive =1) and active = 'true'";
-        Log.d(TAG, "Executing query: " + query);
-
-        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
-            if (result == null || result.isEmpty()) {
-                Log.e(TAG, "No subjects found in the database.");
-                Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            List<String> subjects = new ArrayList<>();
-            subjectMap.clear();
-
-            for (Map<String, String> row : result) {
-                String id = row.get("SubjectID");
-                String name = row.get("SubjectName");
-                Log.d(TAG, "Subject Retrieved - ID: " + id + ", Name: " + name);
-                subjects.add(name);
-                subjectMap.put(name, id);
-            }
-
-            setupRecyclerView(subjects);
-        });
-    }
 
     public void loadSelectedSubjects() {
         subjectContainer.removeAllViews(); // Only remove views, not the data

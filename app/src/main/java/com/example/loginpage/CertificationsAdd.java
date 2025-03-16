@@ -157,7 +157,26 @@ public class CertificationsAdd extends AppCompatActivity {
 
         // ✅ Ensure `certificateFileName` is never NULL
         // ✅ Ensure `certificateFileName` is never NULL
-        String certificateFileName = (certificateImageUri != null) ? getFileNameFromUri(certificateImageUri) : "No_File";
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        if (userId == -1) {
+            Toast.makeText(this, "User not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Get the actual file from URI
+        File originalFile = getFileFromUri(certificateImageUri);
+        if (originalFile == null) {
+            Toast.makeText(this, "File error. Please try again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Rename the file using FileUploader's method
+        File renamedFile = FileUploader.renameFile(originalFile, userId,"C");
+        String certificateFileName = (renamedFile != null) ? renamedFile.getName() : "No_File";
+
+        Log.d("saveCertification", "✅ Final Stored Filename: " + certificateFileName);
+
+
 
 
 
@@ -177,7 +196,7 @@ public class CertificationsAdd extends AppCompatActivity {
             return;
         }
 
-        int userId = sharedPreferences.getInt("USER_ID", -1);
+//        int userId = sharedPreferences.getInt("USER_ID", -1);
         String selfReferralCode = sharedPreferences.getString("SELF_REFERRAL_CODE", "");
 
         if (userId == -1) {
@@ -283,7 +302,8 @@ public class CertificationsAdd extends AppCompatActivity {
                 Log.d("CertificationsAdd", "File Path: " + file.getAbsolutePath());
 
                 new Thread(() -> {
-                    boolean success = FileUploader.uploadImage(file, CertificationsAdd.this);
+                    boolean success = FileUploader.uploadImage(file, CertificationsAdd.this,"C");
+
                     runOnUiThread(() -> {
                         if (success) {
                             Toast.makeText(this, "File uploaded successfully", Toast.LENGTH_SHORT).show();

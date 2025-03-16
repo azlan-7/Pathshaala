@@ -29,8 +29,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.models.UserDetailsClass;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -41,8 +45,10 @@ import java.util.List;
 
 public class TeachersBasicInfo extends AppCompatActivity {
 
+    private static final String TAG = "TeachersBasicInfo";
 
-    private EditText etDOB;
+    private EditText etDOB,etFirstName,etLastName,etContact,etEmail;
+    private UserDetailsClass user;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView profileImageView;
     private ImageView cameraIcon;
@@ -56,49 +62,30 @@ public class TeachersBasicInfo extends AppCompatActivity {
         setContentView(R.layout.activity_teachers_basic_info);
 
         autoCompleteCity = findViewById(R.id.autoCompleteCity);
-
-
+        etFirstName = findViewById(R.id.editTextText9);
+        etLastName = findViewById(R.id.editTextText11);
+        etContact = findViewById(R.id.editTextText10);
+        etEmail = findViewById(R.id.editTextText12);
+        etDOB = findViewById(R.id.editTextText13);
         profileImageView = findViewById(R.id.imageView50);
-        cameraIcon = findViewById(R.id.imageView54);
 
-        cameraIcon.setOnClickListener(v -> openGallery());
-        loadCitiesFromDatabase();
+        Log.d("TeachersBasicInfo", "📌 onCreate() Started!"); // Debug ✅
+
+        // ✅ Get data from Intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            int userId = intent.getIntExtra("USER_ID", -1);
+            String phoneNumber = intent.getStringExtra("USER_CONTACT");
 
 
+            Log.d("TeachersBasicInfo", "📌 Received Data -> UserID: 11"
+                    + " | Phone: " + phoneNumber);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            fetchUserDetails12(phoneNumber);
 
-
-        // Retrieve stored user data
-        String firstName = sharedPreferences.getString("FIRST_NAME", "");
-        String lastName = sharedPreferences.getString("LAST_NAME", "");
-        String contact = sharedPreferences.getString("CONTACT", "");
-        String email = sharedPreferences.getString("EMAIL", "");
-        String dob = sharedPreferences.getString("DOB", "");
-
-        String savedCity = sharedPreferences.getString("CITY", "");
-        if (!savedCity.isEmpty()) {
-            autoCompleteCity.setText(savedCity, false);
+        } else {
+            Log.e("TeachersBasicInfo", "❌ ERROR: Intent is null!");
         }
-
-        // Set values to EditText fields
-        EditText etFirstName = findViewById(R.id.editTextText9);
-        EditText etLastName = findViewById(R.id.editTextText11);
-        EditText etContact = findViewById(R.id.editTextText10);
-        EditText etEmail = findViewById(R.id.editTextText12);
-        EditText etDOB = findViewById(R.id.editTextText13);
-
-
-
-        // Populate fields if data exists
-        if (!firstName.isEmpty()) etFirstName.setText(firstName);
-        if (!lastName.isEmpty()) etLastName.setText(lastName);
-        if (!contact.isEmpty()) etContact.setText(contact);
-        if (!email.isEmpty()) etEmail.setText(email);
-        if (!dob.isEmpty()) etDOB.setText(dob);
-
-
-
 
         RadioButton radioMale = findViewById(R.id.radioMale);
         RadioButton radioFemale = findViewById(R.id.radioFemale);
@@ -111,16 +98,10 @@ public class TeachersBasicInfo extends AppCompatActivity {
         radioFemale.setButtonTintList(ColorStateList.valueOf(colorChecked));
         radioOther.setButtonTintList(ColorStateList.valueOf(colorChecked));
 
-        String phoneNumber = getIntent().getStringExtra("phoneNumber");
-
-        if (phoneNumber != null && !phoneNumber.isEmpty()) {
-            etContact.setText(phoneNumber);
-        } else {
-            etContact.setHint("Contact No.");
-        }
         etContact.setEnabled(true);
 
         etDOB.setOnClickListener(v -> showDatePicker());
+
 
 
 
@@ -141,21 +122,11 @@ public class TeachersBasicInfo extends AppCompatActivity {
         });
 
         Button btnSave = findViewById(R.id.button12);
-
         btnSave.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("FIRST_NAME", etFirstName.getText().toString().trim());
-            editor.putString("LAST_NAME", etLastName.getText().toString().trim());
-            editor.putString("CONTACT", etContact.getText().toString().trim());
-            editor.putString("EMAIL", etEmail.getText().toString().trim());
-            editor.putString("DOB", etDOB.getText().toString().trim());
-            editor.putString("CITY", autoCompleteCity.getText().toString().trim()); // Save city
-            editor.apply();
-            Intent intent = new Intent(TeachersBasicInfo.this, TeachersInfo.class);
+            // Reuse the existing intent by setting a new destination
+            intent.setClass(TeachersBasicInfo.this, TeachersInfo.class);
             startActivity(intent);
         });
-
-
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -167,7 +138,161 @@ public class TeachersBasicInfo extends AppCompatActivity {
         autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
     }
 
+//    private void fetchUserDetails12() {
+//
+//        Log.e("TeachersInfo", "phoneNumberFetched: 8899");
+//                Intent intent = getIntent();
+//        String phoneNumber = intent.getStringExtra("phoneNumber");  // Get phone number from Intent
+//
+//        Log.e("TeachersInfo", "phoneNumberFetched: " + phoneNumber);
+//        if (phoneNumber == null || phoneNumber.isEmpty()) {
+//            Log.e("TeachersInfo", "❌ ERROR: Phone number missing from Intent!");
+//            return;
+//        }
+//
+//        Log.d("TeachersInfo", "📌 Fetching user details for phone number: " + phoneNumber);
+//
+//        DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
+//            Log.d("TeachersInfo", "✅ Loaded Correct User: 34 " + user.getName() + " " + user.getLastName());
+//            if (!userList.isEmpty()) {
+//                user = userList.get(0);  // ✅ Store user object
+//                Log.d("TeachersInfo", "✅ Loaded Correct User: " + user.getName() + " " + user.getLastName());
+//
+//                runOnUiThread(() -> {
+//                    etFirstName.setText(user.getName());
+//                    etLastName.setText(user.getLastName());
+//                    etContact.setText(user.getMobileNo());
+//                    etEmail.setText(user.getEmailId());
+//
+//                    String imageName = user.getUserImageName();
+//                    String referralCode = user.getSelfReferralCode();
+//
+//                    if (imageName != null && !imageName.isEmpty()) {
+//                        String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+//                        Log.d(TAG, "✅ Profile image URL: " + imageUrl);
+//
+//                        runOnUiThread(() -> Glide.with(this)
+//                                .load(imageUrl)
+//                                .placeholder(R.drawable.generic_avatar) // Default profile image
+//                                .error(R.drawable.generic_avatar) // Show default if error
+//                                .into(profileImageView));
+//                    } else {
+//                        Log.e(TAG, "❌ No profile image found in DB or empty value.");
+//                    }
+//
+//                    // ✅ Enable navigation once data is loaded
+//                    Log.d("TeachersInfo", "📌 Calling enableNavigation() after user is loaded.");  // Debug log ✅
+//                });
+//
+//            }
+//        });
+//    }
 
+    private void fetchUserDetails12(String phoneNumber) {
+
+
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            Log.e("TeachersBasicInfo", "❌ ERROR: Phone number missing from Intent!");
+            return;
+        }
+
+        Log.d("TeachersBasicInfo", "📌 Fetching user details for phone number: 545" + phoneNumber);
+
+        DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
+            if (userList == null) {
+                Log.e("TeachersBasicInfo", "❌ ERROR: userList is NULL!");
+                return;
+            }
+
+            if (userList.isEmpty()) {
+                Log.e("TeachersBasicInfo", "❌ No user found in DB for phone: " + phoneNumber);
+                return;
+            }
+
+            user = userList.get(0);  // ✅ Store user object
+            Log.d("TeachersBasicInfo", "✅ Loaded Correct User: " + user.getName() + " " + user.getLastName());
+
+            runOnUiThread(() -> {
+                etFirstName.setText(user.getName() != null ? user.getName() : "N/A");
+                etLastName.setText(user.getLastName() != null ? user.getLastName() : "N/A");
+                etContact.setText(user.getMobileNo() != null ? user.getMobileNo() : "N/A");
+                etEmail.setText(user.getEmailId() != null ? user.getEmailId() : "N/A");
+                etDOB.setText(user.getDateOfBirth());
+
+
+                String imageName = user.getUserImageName();
+//                String referralCode = user.getSelfReferralCode();
+
+
+                if (imageName != null && !imageName.isEmpty()) {
+                    String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+                    Log.d(TAG, "✅ Profile image URL: " + imageUrl);
+
+                    runOnUiThread(() -> Glide.with(this)
+                            .load(imageUrl)
+                            .placeholder(R.drawable.generic_avatar) // Default profile image
+                            .error(R.drawable.generic_avatar) // Show default if error
+                            .into(profileImageView));
+                } else {
+                    Log.e(TAG, "❌ No profile image found in DB or empty value.");
+                }
+
+
+                Log.d("TeachersBasicInfo", "✅ UI Updated Successfully with User Details");
+            });
+        });
+    }
+
+
+
+
+
+
+
+    private Uri pendingImageUri = null; // Store image if self-referral code isn't available yet
+
+    private void insertProfileImageIntoDB(Uri imageUri) {
+        if (imageUri == null) {
+            Log.e("TeachersBasicInfo", "⚠️ No image selected.");
+            return;
+        }
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        String selfReferralCode = sharedPreferences.getString("SELF_REFERRAL_CODE", "");
+
+//        if (userId == -1) {
+        if (userId <= 0) {
+            Log.e("TeachersBasicInfo", "⚠️ User ID not found in SharedPreferences.");
+            return;
+        }
+
+        if (selfReferralCode.isEmpty()) {
+            Log.e("TeachersBasicInfo", "⚠️ Self Referral Code not available.");
+            return;
+        }
+
+        File imageFile = FileUploader.renameFileForTeachers(this, imageUri, userId, "U_T");
+        if (imageFile == null) {
+            Log.e("TeachersBasicInfo", "❌ Failed to copy and rename file.");
+            return;
+        }
+
+        // Upload image asynchronously
+        FileUploader.uploadImage(imageFile, this, "U_T", new FileUploader.UploadCallback() {
+            @Override
+            public void onUploadComplete(boolean success) {
+                if (success) {
+                    String uploadedFileName = imageFile.getName();
+                    DatabaseHelper.updateUserProfileImage(userId, uploadedFileName);
+                    Log.d("TeachersBasicInfo", "✅ Image uploaded and DB updated successfully.");
+                } else {
+                    Log.e("TeachersBasicInfo", "❌ Image upload failed.");
+                }
+            }
+        });
+
+    }
 
 
     private void openGallery() {
@@ -186,17 +311,14 @@ public class TeachersBasicInfo extends AppCompatActivity {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                 profileImageView.setImageBitmap(bitmap);  // Set the chosen image as profile picture
 
-                // Save image URI to SharedPreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("PROFILE_IMAGE_URI", imageUri.toString());
-                editor.apply();
+                // Upload and save image in DB
+                insertProfileImageIntoDB(imageUri);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
 
 
     private void loadCitiesFromDatabase() {

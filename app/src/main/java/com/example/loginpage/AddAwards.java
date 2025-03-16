@@ -27,6 +27,10 @@ import com.example.loginpage.models.AwardModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,7 +46,6 @@ public class AddAwards extends AppCompatActivity {
     private static final int FILE_SELECT_CODE = 100; // Request code for file picker
     private Spinner spinner6;
     private static final String TAG = "AddAwards";
-    private Uri selectedFileUri; // Stores the selected file URI
     private SharedPreferences sharedPreferences;
 
     private EditText etAwardTitle, etOrganisation, etYear, etDescription;
@@ -175,11 +178,6 @@ public class AddAwards extends AppCompatActivity {
     }
 
 
-
-
-
-
-
     public void insertAwardIntoDB() {
         String title = etAwardTitle.getText().toString().trim();
         String organisation = etOrganisation.getText().toString().trim();
@@ -207,34 +205,28 @@ public class AddAwards extends AppCompatActivity {
 
         String awardFileName = "No_File";
         if (selectedFileUri != null) {
-            awardFileName = getFileNameFromUri(selectedFileUri);
-            Log.d("insertAwardIntoDB", "📂 Selected file URI: " + selectedFileUri.toString());
-            Log.d("insertAwardIntoDB", "📄 Extracted file name: " + awardFileName);
-        } else {
-            Log.d("insertAwardIntoDB", "⚠️ No file selected, using default file name: " + awardFileName);
+            File originalFile = getFileFromUri(selectedFileUri);
+            if (originalFile != null) {
+                File renamedFile = FileUploader.renameFile(originalFile, userId, "A"); // Renaming with "A" prefix
+                awardFileName = (renamedFile != null) ? renamedFile.getName() : "No_File";
+            }
         }
 
-        String selfReferralCode = "";
+        Log.d("insertAwardIntoDB", "✅ Final Stored Filename: " + awardFileName);
 
-        Log.d("insertAwardIntoDB", "🟢 Inserting Award into DB");
-        Log.d("insertAwardIntoDB", "  - User ID: " + userId);
-        Log.d("insertAwardIntoDB", "  - Award Title: " + title);
-        Log.d("insertAwardIntoDB", "  - Organization: " + organisation);
-        Log.d("insertAwardIntoDB", "  - Issue Year: " + issueYear);
-        Log.d("insertAwardIntoDB", "  - Remarks: " + description);
-        Log.d("insertAwardIntoDB", "  - Final Award File Name: " + awardFileName);
-
+        int randomAwardId = (int) (Math.random() * 1000) + 10; // Generates a new Award ID
 
         DatabaseHelper.UserWiseAwardInsert(
                 this,
                 "1", // Insert operation
                 userId,
-                getAwardTitleID(title),
+                randomAwardId,   // remove this when done, using for randomAwardIDs(for when you've used all the awards)
+//                getAwardTitleID(title),
                 organisation,
                 issueYear,
                 description,
                 awardFileName,
-                selfReferralCode,
+                "", // No referral code
                 new DatabaseHelper.DatabaseCallback() {
                     @Override
                     public void onMessage(String message) {
@@ -260,28 +252,7 @@ public class AddAwards extends AppCompatActivity {
         );
     }
 
-    // Helper method to extract the file name from the URI
-    private String getFileNameFromUri(Uri uri) {
-        String fileName = "No_File"; // Default file name
 
-        Log.d("getFileNameFromUri", "🔍 Checking file name for URI: " + uri.toString());
-
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        if (cursor != null) {
-            int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            Log.d("getFileNameFromUri", "📌 Column index for DISPLAY_NAME: " + nameIndex);
-            if (nameIndex != -1) {
-                cursor.moveToFirst();
-                fileName = cursor.getString(nameIndex);
-                Log.d("getFileNameFromUri", "✅ Extracted file name: " + fileName);
-            }
-            cursor.close();
-        } else {
-            Log.e("getFileNameFromUri", "❌ Cursor is NULL. Could not extract file name.");
-        }
-
-        return fileName;
-    }
 
     // Helper method to convert award title to awardTitleID
     private int getAwardTitleID(String awardTitle) {
@@ -290,31 +261,98 @@ public class AddAwards extends AppCompatActivity {
 
 
     // Method to open the file picker
+    private static final int FILE_PICKER_REQUEST_CODE = 100;
+    private Uri selectedFileUri = null; // Store selected image URI
+
     private void openFilePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*"); // Accepts all file types
+        intent.setType("image/*");  // Accept only images
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        try {
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), FILE_SELECT_CODE);
-        } catch (Exception e) {
-            Toast.makeText(this, "No file manager installed!", Toast.LENGTH_SHORT).show();
-        }
+        startActivityForResult(Intent.createChooser(intent, "Select an image"), FILE_PICKER_REQUEST_CODE);
     }
 
-    // Handle file selection result
+    // Handle file selection
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == FILE_SELECT_CODE && resultCode == RESULT_OK && data != null) {
+        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             selectedFileUri = data.getData();
             if (selectedFileUri != null) {
-                Toast.makeText(this, "Selected File: " + selectedFileUri.getPath(), Toast.LENGTH_SHORT).show();
-                // Implement actual file upload logic here
+                Toast.makeText(this, "Image Selected: " + selectedFileUri.getPath(), Toast.LENGTH_SHORT).show();
+
+                File imageFile = getFileFromUri(selectedFileUri);
+                if (imageFile != null) {
+                    new Thread(() -> {
+                        boolean success = FileUploader.uploadImage(imageFile, AddAwards.this,"A");
+                        runOnUiThread(() -> {
+                            if (success) {
+                                Toast.makeText(this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }).start();
+                } else {
+                    Log.e("AddAwards", "Failed to get image file from URI");
+                }
             }
         }
     }
+
+
+    private File getFileFromUri(Uri uri) {
+        File file = null;
+        try {
+            String fileName = getFileNameFromUri(uri);
+            if (fileName == null || fileName.isEmpty()) {
+                fileName = "temp_image"; // Fallback name
+            }
+
+            File tempFile = new File(getCacheDir(), fileName);
+            try (InputStream inputStream = getContentResolver().openInputStream(uri);
+                 OutputStream outputStream = new FileOutputStream(tempFile)) {
+
+                if (inputStream == null) {
+                    Log.e("AddAwards", "Failed to open InputStream");
+                    return null;
+                }
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                file = tempFile;
+            }
+        } catch (Exception e) {
+            Log.e("AddAwards", "Error getting file from URI: " + e.getMessage());
+        }
+        return file;
+    }
+
+    private String getFileNameFromUri(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {
+                        result = cursor.getString(nameIndex);
+                    }
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
     private List<AwardModel> loadAwardData() {
         String json = sharedPreferences.getString("AWARD_LIST", null);
         Gson gson = new Gson();

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.CertificationsAdapter;
 import com.example.loginpage.models.CertificationModel;
 import com.google.gson.Gson;
@@ -23,6 +25,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CertificationsView extends AppCompatActivity {
 
@@ -44,6 +47,9 @@ public class CertificationsView extends AppCompatActivity {
         certificationsRecyclerView = findViewById(R.id.certificationRecyclerView);
         addCertification = findViewById(R.id.imageView91);
         buttonContinue = findViewById(R.id.button27);
+        TextView textView110 = findViewById(R.id.textView110);
+
+        textView110.setOnClickListener(v -> fetchCertificateFromDB());
 
         // Load certifications
         certificationList = loadCertifications();
@@ -65,6 +71,48 @@ public class CertificationsView extends AppCompatActivity {
             finish();
         });
     }
+
+    private void fetchCertificateFromDB() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+
+        if (userId == -1) {
+            Toast.makeText(this, "User not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DatabaseHelper.UserWiseCertificateSelect(this, userId, new DatabaseHelper.DatabaseCallback() {
+            @Override
+            public void onSuccess(List<Map<String, String>> result) {
+                if (!result.isEmpty()) {
+                    Map<String, String> certificateData = result.get(0);
+                    String fileName = certificateData.get("CertificateFileName");
+
+                    Log.d("fetchCertificate", "✅ Certificate Loaded: " + fileName);
+
+                    Intent intent = new Intent(CertificationsView.this, CertificateViewer.class);
+                    intent.putExtra("CERTIFICATE_FILE_NAME", fileName);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(CertificationsView.this, "No certificate found!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onMessage(String message) {
+                Log.d("fetchCertificate", "ℹ️ Message: " + message);
+                Toast.makeText(CertificationsView.this, message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(CertificationsView.this, "Database error: " + error, Toast.LENGTH_LONG).show();
+                Log.e("fetchCertificate", "Error: " + error);
+            }
+        });
+    }
+
+
 
     private List<CertificationModel> loadCertifications() {
         String json = sharedPreferences.getString("CERTIFICATIONS_LIST", null);

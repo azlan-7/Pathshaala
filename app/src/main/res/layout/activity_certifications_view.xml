@@ -58,7 +58,7 @@
         android:id="@+id/button27"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="72dp"
         android:layout_weight="1"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
@@ -81,4 +81,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.16"
         app:srcCompat="@drawable/add_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <TextView
+        android:id="@+id/textView110"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="View Certificate/s"
+        android:textColor="#0F4D73"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        android:fontFamily="@font/work_sans"
+        app:layout_constraintBottom_toTopOf="@+id/button27"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/certificationRecyclerView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

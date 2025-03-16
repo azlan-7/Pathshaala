@@ -144,7 +144,7 @@ public class WorkExperience extends AppCompatActivity {
 
     private void fetchUserWorkExperienceDetails() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("USER_ID", -1); // Get User ID
+        int userId = sharedPreferences.getInt("USER_ID", -1);
 
         if (userId == -1) {
             Log.e(TAG, "❌ User ID not found in SharedPreferences!");
@@ -152,34 +152,50 @@ public class WorkExperience extends AppCompatActivity {
         }
 
         String userIdString = String.valueOf(userId);
-
         Log.d(TAG, "📌 Fetching work experience data for user: " + userIdString);
 
         DatabaseHelper.UserWiseWorkExperienceSelect(this, "4", userIdString, new DatabaseHelper.UserWiseWorkExperienceResultListener() {
             @Override
             public void onQueryResult(List<UserWiseWorkExperience> userWiseWorkExperienceList) {
                 if (userWiseWorkExperienceList.isEmpty()) {
-                    Log.e(TAG, "⚠️ No work experience records found in DB!");
+                    Log.e(TAG, "⚠️ No work experience records found in DB for UserID: " + userIdString);
                     return;
-                }
-
-                for (UserWiseWorkExperience workExp : userWiseWorkExperienceList) {
-                    Log.d(TAG, "✅ Work Experience Retrieved: " + workExp.getInstitutionName() + " | UserID: " + workExp.getUserId());
                 }
 
                 workExperienceList.clear();
                 for (UserWiseWorkExperience workExp : userWiseWorkExperienceList) {
+                    Log.d(TAG, "✅ Mapping data: Institution=" + workExp.getInstitutionName() +
+                            ", Designation=" + workExp.getDesignationName() +
+                            ", Experience=" + workExp.getWorkExperience());
+
+                    // ✅ Ensure correct data type
                     workExperienceList.add(new WorkExperienceModel(
                             workExp.getInstitutionName(),
                             workExp.getDesignationName(),
-                            workExp.getWorkExperience(),
+                            workExp.getWorkExperience() != null ? workExp.getWorkExperience() : "Unknown",
                             workExp.getCurPreExperience(),
-                            "Current"
+                            workExp.getUserId()
                     ));
                 }
 
-                workExperienceAdapter.notifyDataSetChanged(); // ✅ Update UI
-                Log.d(TAG, "✅ Work experience data updated in RecyclerView.");
+                // ✅ Save to SharedPreferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Gson gson = new Gson();
+                String workExperienceJson = gson.toJson(workExperienceList);
+                editor.putString("WORK_EXPERIENCE_LIST_" + userId, workExperienceJson);
+                editor.apply();
+
+                // ✅ Refresh RecyclerView
+                runOnUiThread(() -> {
+                    workExperienceAdapter.notifyDataSetChanged();
+                    Log.d(TAG, "✅ Work experience data updated in RecyclerView.");
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "❌ Failed to fetch work experience records: " + error);
+                runOnUiThread(() -> Toast.makeText(WorkExperience.this, "Error fetching work experience details!", Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -188,29 +204,27 @@ public class WorkExperience extends AppCompatActivity {
 
 
 
-
-
-
     private void insertUserWorkExperience() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("USER_ID", -1); // Fetch logged-in User ID
+        int userId = sharedPreferences.getInt("USER_ID", -1);
 
         if (userId == -1) {
             Log.e(TAG, "❌ User ID not found in SharedPreferences!");
             return;
         }
 
-        // Example Data (Modify based on UI inputs)
-        int curPreExperience = 1; // 1 = Current, 0 = Previous
-        int designationId = 2; // Example Designation ID
-        String institutionName = "Example Company"; // Replace with actual input
-        int cityId = 3; // Example City ID
-        int workExperienceId = 4; // Example Work Experience ID
-        String selfReferralCode = "ABC123"; // Example Referral Code
+        // ✅ Ensure new WorkExperienceID is unique
+        int curPreExperience = radioCurrent.isChecked() ? 1 : 0;  // 1 = Current, 0 = Previous
+        int designationId = 2;  // Example Designation ID
+        String institutionName = etInstitution.getText().toString().trim();
+        int cityId = 3;  // Example City ID
+        int workExperienceId = (int) (Math.random() * 10000 + 100);  // ✅ Generate unique WorkExperienceID
+        String selfReferralCode = "ABC123";
 
-        Log.d(TAG, "📌 Inserting Work Experience for UserID: " + userId);
+        Log.d(TAG, "📌 Inserting Work Experience for UserID: " + userId +
+                " | WorkExperienceID: " + workExperienceId +
+                " | Type: " + (curPreExperience == 1 ? "Current" : "Previous"));
 
-        // ✅ Call `UserWiseWorkExperienceInsert` Method
         DatabaseHelper.UserWiseWorkExperienceInsert(this, "1", userId, curPreExperience, designationId, institutionName, cityId,
                 workExperienceId, selfReferralCode, new DatabaseHelper.DatabaseCallback() {
                     @Override
@@ -219,12 +233,13 @@ public class WorkExperience extends AppCompatActivity {
                         runOnUiThread(() -> {
                             Toast.makeText(WorkExperience.this, message, Toast.LENGTH_SHORT).show();
                         });
+
+                        // ✅ Refresh Data After Insert
+                        fetchUserWorkExperienceDetails();
                     }
 
                     @Override
-                    public void onSuccess(List<Map<String, String>> result) {
-                        // No need for success handling in this case, so leave it empty
-                    }
+                    public void onSuccess(List<Map<String, String>> result) {}
 
                     @Override
                     public void onError(String error) {
@@ -232,6 +247,8 @@ public class WorkExperience extends AppCompatActivity {
                     }
                 });
     }
+
+
 
 
     private List<WorkExperienceModel> loadWorkExperienceData() {
