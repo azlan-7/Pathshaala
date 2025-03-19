@@ -141,38 +141,37 @@ public class AddAwards extends AppCompatActivity {
             return;
         }
 
-        Log.d("retrieveAwards", "🟢 Fetching awards for UserID: " + userId);
+        Log.d(TAG, "🟢 Fetching awards from DB...");
 
-        DatabaseHelper.UserWiseAwardSelect(this, userId, new DatabaseHelper.DatabaseCallback() {
+        DatabaseHelper.FetchAllAwards(this, new DatabaseHelper.DatabaseCallback() {
             @Override
             public void onSuccess(List<Map<String, String>> result) {
-                if (!result.isEmpty()) {
-                    Map<String, String> awardData = result.get(0); // Get first award
+                List<String> awardNames = new ArrayList<>();
 
-                    Log.d("retrieveAwards", "✅ Award Loaded: " + awardData.toString());
+                for (Map<String, String> award : result) {
+                    String awardId = award.get("AwardTitleID");
+                    String awardName = award.get("AwardTitleName");
 
-                    etAwardTitle.setText(awardData.get("AwardTitleName"));
-                    etOrganisation.setText(awardData.get("AwardingOrganization"));
-                    etDescription.setText(awardData.get("Remarks"));
-                    etYear.setText(awardData.get("IssueYear"));
+                    awardsMap.put(awardName, awardId); // Store ID -> Name mapping
+                    awardNames.add(awardName);
 
-                    Toast.makeText(AddAwards.this, "Award retrieved successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.d("retrieveAwards", "⚠️ No awards found for UserID: " + userId);
-                    Toast.makeText(AddAwards.this, "No awards found!", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Award Retrieved - ID: " + awardId + ", Name: " + awardName);
                 }
+
+                ArrayAdapter<String> awardAdapter = new ArrayAdapter<>(AddAwards.this, android.R.layout.simple_dropdown_item_1line, awardNames);
+                awardsDropdown.setAdapter(awardAdapter);
             }
 
             @Override
             public void onMessage(String message) {
-                Log.d("retrieveAwards", "ℹ️ Message: " + message);
+                Log.d(TAG, "ℹ️ Message: " + message);
                 Toast.makeText(AddAwards.this, message, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(String error) {
-                Toast.makeText(AddAwards.this, "Database error: " + error, Toast.LENGTH_LONG).show();
-                Log.e("retrieveAwards", "Error: " + error);
+                Log.e(TAG, "❌ Error retrieving awards: " + error);
+                Toast.makeText(AddAwards.this, "Error fetching awards: " + error, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -214,14 +213,21 @@ public class AddAwards extends AppCompatActivity {
 
         Log.d("insertAwardIntoDB", "✅ Final Stored Filename: " + awardFileName);
 
-        int randomAwardId = (int) (Math.random() * 1000) + 10; // Generates a new Award ID
+//        int randomAwardId = (int) (Math.random() * 1000) + 10; // Generates a new Award ID
+
+        int awardTitleId = getAwardTitleID(title);
+        if (awardTitleId == -1) {
+            Toast.makeText(this, "Invalid Award Title! Please select from dropdown.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         DatabaseHelper.UserWiseAwardInsert(
                 this,
                 "1", // Insert operation
                 userId,
-                randomAwardId,   // remove this when done, using for randomAwardIDs(for when you've used all the awards)
-//                getAwardTitleID(title),
+//                randomAwardId,   // remove this when done, using for randomAwardIDs(for when you've used all the awards)
+                awardTitleId,
                 organisation,
                 issueYear,
                 description,
@@ -255,9 +261,15 @@ public class AddAwards extends AppCompatActivity {
 
 
     // Helper method to convert award title to awardTitleID
-    private int getAwardTitleID(String awardTitle) {
-        return awardsMap.containsKey(awardTitle) ? Integer.parseInt(awardsMap.get(awardTitle)) : 1;
+    private int getAwardTitleID(String awardName) {
+        if (awardsMap.containsKey(awardName)) {
+            return Integer.parseInt(awardsMap.get(awardName));
+        } else {
+            Log.e(TAG, "⚠️ Award ID not found for: " + awardName);
+            return -1; // Handle missing case properly
+        }
     }
+
 
 
     // Method to open the file picker

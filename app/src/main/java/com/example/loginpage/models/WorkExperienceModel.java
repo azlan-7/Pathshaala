@@ -6,21 +6,29 @@ public class WorkExperienceModel {
     private String designationName;
     private String workExperience;
     private String curPreExperience;
+    private String professionId;  // ✅ Added
+    private String professionName; // ✅ Added
 
     // ✅ Default Constructor (Fixes object creation issue)
     public WorkExperienceModel() {
     }
 
-    // ✅ Parameterized Constructor
-    public WorkExperienceModel(String institutionName, String designationName, String workExperience, String curPreExperience, String userId) {
+    // ✅ Parameterized Constructor (Updated)
+// ✅ Corrected Constructor to Include Profession Fields
+    public WorkExperienceModel(String professionName, String institutionName, String designationName, String workExperience, String curPreExperience, String professionId, String userId) {
+        this.professionName = professionName;
         this.institutionName = institutionName;
         this.designationName = designationName;
         this.workExperience = workExperience;
         this.curPreExperience = curPreExperience;
+        this.professionId = professionId;
         this.userId = userId;
     }
 
-    // ✅ Setter Methods (Fixes missing method issue)
+
+
+
+    // ✅ Setter Methods
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -39,6 +47,14 @@ public class WorkExperienceModel {
 
     public void setCurPreExperience(String curPreExperience) {
         this.curPreExperience = curPreExperience;
+    }
+
+    public void setProfessionId(String professionId) {
+        this.professionId = professionId;
+    }
+
+    public void setProfessionName(String professionName) {
+        this.professionName = professionName;
     }
 
     // ✅ Getter Methods
@@ -60,5 +76,13 @@ public class WorkExperienceModel {
 
     public String getCurPreExperience() {
         return curPreExperience.equals("1") ? "Current" : "Previous";
+    }
+
+    public String getProfessionId() {
+        return professionId;
+    }
+
+    public String getProfessionName() {
+        return professionName;
     }
 }

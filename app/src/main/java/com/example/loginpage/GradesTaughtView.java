@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -13,8 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.GradesTaughtAdapter;
 import com.example.loginpage.models.GradesTaughtModel;
+import com.example.loginpage.models.UserWiseGrades;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -42,10 +45,14 @@ public class GradesTaughtView extends AppCompatActivity {
         addGrades = findViewById(R.id.imageView96);
         buttonContinue = findViewById(R.id.button30);
 
-        gradesList = loadGrades();
+        gradesList = new ArrayList<>();
         adapter = new GradesTaughtAdapter(this, gradesList, this::deleteGrade);
         gradesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         gradesRecyclerView.setAdapter(adapter);
+
+
+        // Fetch grades from database
+        fetchGradesFromDatabase();
 
         addGrades.setOnClickListener(v -> startActivity(new Intent(this, GradesTaught.class)));
 
@@ -54,6 +61,46 @@ public class GradesTaughtView extends AppCompatActivity {
             finish();
         });
     }
+
+    private void fetchGradesFromDatabase() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+
+        if (userId == -1) {
+            Log.e("GradesTaughtView", "❌ User ID not found in SharedPreferences!");
+            return;
+        }
+
+        Log.d("GradesTaughtView", "📌 Fetching Grades Taught for UserID: " + userId);
+
+        DatabaseHelper.UserWiseGradesSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseGradesResultListener() {
+            @Override
+            public void onQueryResult(List<UserWiseGrades> userWiseGradesList) {
+                if (userWiseGradesList == null || userWiseGradesList.isEmpty()) {
+                    Log.d("GradesTaughtView", "⚠️ No grades data found for UserID: " + userId);
+                    Toast.makeText(GradesTaughtView.this, "No Grades Found!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // ✅ Clear the existing list before adding new data
+                gradesList.clear();
+
+                for (UserWiseGrades grade : userWiseGradesList) {
+                    gradesList.add(new GradesTaughtModel(grade.getSubjectName(), "", grade.getGradename(),grade.getUserId()));
+                    Log.d("GradesTaughtView", "✅ Loaded Grade: " + grade.getGradename() + " | Subject: " + grade.getSubjectName());
+                }
+
+                // ✅ Ensure adapter is updated and notified
+                runOnUiThread(() -> {
+                    adapter.notifyDataSetChanged();  // 🚀 Refresh RecyclerView with new data
+                });
+            }
+        });
+    }
+
+
+
+
 
     private void deleteGrade(int position) {
         if (position >= 0 && position < gradesList.size()) {

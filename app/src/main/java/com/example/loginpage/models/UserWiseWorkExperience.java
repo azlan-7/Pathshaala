@@ -6,14 +6,18 @@ public class UserWiseWorkExperience {
     private String designationName;
     private String workExperience;
     private String curPreExperience;
+    private String professionId;  // ✅ Added
+    private String professionName;  // ✅ Added
 
-    // ✅ Corrected Constructor
-    public UserWiseWorkExperience(String userId, String institutionName, String designationName, String workExperience, String curPreExperience) {
+    // ✅ Updated Constructor to Include ProfessionId & ProfessionName
+    public UserWiseWorkExperience(String userId, String institutionName, String designationName, String workExperience, String curPreExperience, String professionId, String professionName) {
         this.userId = userId;
         this.institutionName = institutionName;
         this.designationName = designationName;
         this.workExperience = workExperience;
         this.curPreExperience = curPreExperience;
+        this.professionId = professionId;
+        this.professionName = professionName;
     }
 
     // ✅ Add Getters
@@ -37,6 +41,14 @@ public class UserWiseWorkExperience {
         return curPreExperience;
     }
 
+    public String getProfessionId() {  // ✅ Added
+        return professionId;
+    }
+
+    public String getProfessionName() {  // ✅ Added
+        return professionName;
+    }
+
     // ✅ Add Setters (if needed)
     public void setUserId(String userId) {
         this.userId = userId;
@@ -56,5 +68,13 @@ public class UserWiseWorkExperience {
 
     public void setCurPreExperience(String curPreExperience) {
         this.curPreExperience = curPreExperience;
+    }
+
+    public void setProfessionId(String professionId) {  // ✅ Added
+        this.professionId = professionId;
+    }
+
+    public void setProfessionName(String professionName) {  // ✅ Added
+        this.professionName = professionName;
     }
 }

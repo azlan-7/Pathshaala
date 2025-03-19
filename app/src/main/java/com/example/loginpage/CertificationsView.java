@@ -49,7 +49,7 @@ public class CertificationsView extends AppCompatActivity {
         buttonContinue = findViewById(R.id.button27);
         TextView textView110 = findViewById(R.id.textView110);
 
-        textView110.setOnClickListener(v -> fetchCertificateFromDB());
+        textView110.setOnClickListener(v -> fetchCertificatesFromDB());
 
         // Load certifications
         certificationList = loadCertifications();
@@ -72,10 +72,8 @@ public class CertificationsView extends AppCompatActivity {
         });
     }
 
-    private void fetchCertificateFromDB() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+    private void fetchCertificatesFromDB() {
         int userId = sharedPreferences.getInt("USER_ID", -1);
-
         if (userId == -1) {
             Toast.makeText(this, "User not found. Please log in again.", Toast.LENGTH_SHORT).show();
             return;
@@ -85,16 +83,19 @@ public class CertificationsView extends AppCompatActivity {
             @Override
             public void onSuccess(List<Map<String, String>> result) {
                 if (!result.isEmpty()) {
-                    Map<String, String> certificateData = result.get(0);
-                    String fileName = certificateData.get("CertificateFileName");
-
-                    Log.d("fetchCertificate", "✅ Certificate Loaded: " + fileName);
-
-                    Intent intent = new Intent(CertificationsView.this, CertificateViewer.class);
-                    intent.putExtra("CERTIFICATE_FILE_NAME", fileName);
-                    startActivity(intent);
+                    certificationList.clear();
+                    for (Map<String, String> certificateData : result) {
+                        certificationList.add(new CertificationModel(
+                                certificateData.get("CertificateName"),
+                                certificateData.get("IssueingOrganization"),  // ✅ Matches stored procedure
+                                certificateData.get("IssueYear"),
+                                certificateData.get("CredentialURL"),
+                                certificateData.get("CertificateFileName")
+                        ));
+                    }
+                    adapter.updateData(certificationList);
                 } else {
-                    Toast.makeText(CertificationsView.this, "No certificate found!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CertificationsView.this, "No certificates found!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -111,6 +112,8 @@ public class CertificationsView extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 

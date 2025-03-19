@@ -27,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class WorkExperienceView extends AppCompatActivity {
 
@@ -104,9 +105,9 @@ public class WorkExperienceView extends AppCompatActivity {
         String userIdString = String.valueOf(userId);
         Log.d(TAG, "📌 Fetching work experience data for user: " + userIdString);
 
-        DatabaseHelper.UserWiseWorkExperienceSelect(this, "4", userIdString, new DatabaseHelper.UserWiseWorkExperienceResultListener() {
+        DatabaseHelper.UserWiseWorkExperienceSelect(this, "4", userIdString, new DatabaseHelper.WorkExperienceCallback() {
             @Override
-            public void onQueryResult(List<UserWiseWorkExperience> userWiseWorkExperienceList) {
+            public void onSuccess(List<UserWiseWorkExperience> userWiseWorkExperienceList) { // ✅ Fix return type
                 if (userWiseWorkExperienceList.isEmpty()) {
                     Log.e(TAG, "⚠️ No work experience records found in DB for UserID: " + userIdString);
                     return;
@@ -114,22 +115,29 @@ public class WorkExperienceView extends AppCompatActivity {
 
                 workExperienceList.clear();
                 for (UserWiseWorkExperience workExp : userWiseWorkExperienceList) {
-                    Log.d(TAG, "✅ Mapping data: Institution=" + workExp.getInstitutionName() +
-                            ", Designation=" + workExp.getDesignationName() +
-                            ", Experience=" + workExp.getWorkExperience() +
-                            ", ExperienceType=" + workExp.getCurPreExperience());
+                    Log.d(TAG, "✅ Mapping data: Institution=" + workExp.getInstitutionName());
 
                     workExperienceList.add(new WorkExperienceModel(
+                            workExp.getProfessionName(),
                             workExp.getInstitutionName(),
-                            workExp.getDesignationName() != null ? workExp.getDesignationName() : "Unknown",
-                            workExp.getWorkExperience() != null ? workExp.getWorkExperience() : "Unknown",
+                            workExp.getDesignationName(),
+                            workExp.getWorkExperience(),
                             workExp.getCurPreExperience(),
+                            workExp.getProfessionId(),
                             workExp.getUserId()
                     ));
                 }
 
+                // ✅ Save to SharedPreferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Gson gson = new Gson();
+                String workExperienceJson = gson.toJson(workExperienceList);
+                editor.putString("WORK_EXPERIENCE_LIST_" + userIdString, workExperienceJson);
+                editor.apply();
+
+                // ✅ Refresh RecyclerView
                 runOnUiThread(() -> {
-                    workExperienceAdapter.notifyDataSetChanged();
+                    workExperienceAdapter.updateData(workExperienceList);
                     Log.d(TAG, "✅ Work experience data updated in RecyclerView.");
                 });
             }
@@ -139,10 +147,16 @@ public class WorkExperienceView extends AppCompatActivity {
                 Log.e(TAG, "❌ Failed to fetch work experience records: " + error);
                 runOnUiThread(() -> Toast.makeText(WorkExperienceView.this, "Error fetching work experience details!", Toast.LENGTH_SHORT).show());
             }
+
+            @Override
+            public void onMessage(String message) {}
+
+            @Override
+            public void onProfessionIdFetched(Integer professionId) {}
         });
+
+
     }
-
-
 
 
     private void saveWorkExperienceData() {

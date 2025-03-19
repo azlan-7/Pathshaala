@@ -1,5 +1,6 @@
 package com.example.loginpage;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,12 +19,13 @@ import java.util.Map;
 
 public class GradesTaught extends AppCompatActivity {
 
-    private AutoCompleteTextView subjectsDropdown, gradesDropdown, topicsDropdown;
+    private AutoCompleteTextView subjectsDropdown, gradesDropdown, topicDropdown;
     private Button saveButton;
     private static final String TAG = "GradesTaught";
 
     private Map<String, String> subjectMap = new HashMap<>(); // SubjectName -> SubjectID
     private Map<String, String> gradeMap = new HashMap<>(); // GradeName -> GradeID
+    private Map<String, String> topicMap = new HashMap<>(); // TopicName -> TopicID
 
 
     @Override
@@ -33,13 +35,25 @@ public class GradesTaught extends AppCompatActivity {
 
         subjectsDropdown = findViewById(R.id.subjectsDropdown);
         gradesDropdown = findViewById(R.id.gradesDropdown);
-//        topicsDropdown = findViewById(R.id.topicsDropdown);
+//        topicDropdown = findViewById(R.id.topicsDropdown);
         saveButton = findViewById(R.id.button29);
+
+        String selectedSubject = subjectsDropdown.getText().toString().trim();
+        String selectedGrade = gradesDropdown.getText().toString().trim();
+
+        String subjectID = subjectMap.get(selectedSubject);
+        String gradeID = gradeMap.get(selectedGrade);
+
+//        if (subjectID != null && gradeID != null) {
+//            loadTopics(subjectID, gradeID); // ✅ Correct: Pass subjectID and gradeID
+//        } else {
+//            Log.e(TAG, "❌ Subject ID or Grade ID is missing!");
+//        }
+
 
         // Load data into dropdowns
         loadSubjects();
         loadGrades();
-//        loadTopics();
         fetchUserGradesTaught();
 
         saveButton.setOnClickListener(v -> insertUserGradesTaught());
@@ -85,12 +99,17 @@ public class GradesTaught extends AppCompatActivity {
                         Log.d(TAG, "✅ Database Response: " + message);
                         runOnUiThread(() -> {
                             Toast.makeText(GradesTaught.this, message, Toast.LENGTH_SHORT).show();
+
+                            // Navigate to GradesTaughtView after inserting successfully
+                            Intent intent = new Intent(GradesTaught.this, GradesTaughtView.class);
+                            startActivity(intent);
+                            finish();
                         });
                     }
 
                     @Override
                     public void onSuccess(List<Map<String, String>> result) {
-                        // Not required in this case
+                        // Not required here
                     }
 
                     @Override
@@ -98,6 +117,7 @@ public class GradesTaught extends AppCompatActivity {
                         Log.e(TAG, "❌ Database Error: " + error);
                     }
                 });
+
     }
 
     private void fetchUserGradesTaught() {
@@ -182,4 +202,42 @@ public class GradesTaught extends AppCompatActivity {
 
         gradesDropdown.setOnClickListener(v -> gradesDropdown.showDropDown());
     }
+
+//    private void loadTopics(String subjectID, String gradeID) {
+//        String query = "SELECT topicsID, topicsName FROM topics WHERE active = 'true' AND SubjectID = '" + subjectID + "' AND GradesID = '" + gradeID + "' ORDER BY topicsName";
+//        Log.d(TAG, "Executing query: " + query);
+//
+//        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+//            if (result == null || result.isEmpty()) {
+//                Log.e(TAG, "No topics found for Subject ID: " + subjectID + " and Grade ID: " + gradeID);
+//                Toast.makeText(this, "No Topics Found!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            List<String> topics = new ArrayList<>();
+//            topicMap.clear();
+//
+//            for (Map<String, String> row : result) {
+//                String id = row.get("topicsID");
+//                String name = row.get("topicsName");
+//                Log.d(TAG, "Topic Retrieved - ID: " + id + ", Name: " + name);
+//                topics.add(name);
+//                topicMap.put(name, id);
+//            }
+//
+//            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, topics);
+//            topicDropdown.setAdapter(adapter);
+//            topicDropdown.showDropDown();
+//        });
+//
+//        topicDropdown.setOnClickListener(v -> topicDropdown.showDropDown());
+//
+//        topicDropdown.setOnItemClickListener((parent, view, position, id) -> {
+//            String selectedTopic = (String) parent.getItemAtPosition(position);
+//            String topicID = topicMap.get(selectedTopic);
+//            Log.d(TAG, "Selected Topic: " + selectedTopic + " (ID: " + topicID + ")");
+//        });
+//    }
+
+
 }

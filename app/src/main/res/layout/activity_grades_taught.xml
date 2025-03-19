@@ -24,7 +24,7 @@
         android:id="@+id/button29"
         android:layout_width="203dp"
         android:layout_height="46dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="60dp"
         android:layout_weight="1"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
@@ -32,7 +32,6 @@
         android:textColor="#FFFFFF"
         android:textSize="19sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gradesDropdown" />
 

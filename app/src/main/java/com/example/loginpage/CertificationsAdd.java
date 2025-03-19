@@ -84,25 +84,17 @@ public class CertificationsAdd extends AppCompatActivity {
     private File getFileFromUri(Uri uri) {
         File file = null;
         try {
-            if (uri == null) {
-                Log.e("CertificationsAdd", "URI is null");
-                return null;
-            }
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                String fileName = (index != -1) ? cursor.getString(index) : "temp_file";
+                cursor.close();
 
-            // Retrieve file name and extension
-            String fileName = getFileNameFromUri(uri);
-            if (fileName == null || fileName.isEmpty()) {
-                fileName = "temp_file"; // Fallback name
-            }
+                File cacheDir = getCacheDir();
+                file = new File(cacheDir, fileName);
 
-            File tempFile = new File(getCacheDir(), fileName);
-            try (InputStream inputStream = getContentResolver().openInputStream(uri);
-                 OutputStream outputStream = new FileOutputStream(tempFile)) {
-
-                if (inputStream == null) {
-                    Log.e("CertificationsAdd", "Failed to open InputStream");
-                    return null;
-                }
+                InputStream inputStream = getContentResolver().openInputStream(uri);
+                OutputStream outputStream = new FileOutputStream(file);
 
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -110,13 +102,15 @@ public class CertificationsAdd extends AppCompatActivity {
                     outputStream.write(buffer, 0, bytesRead);
                 }
 
-                file = tempFile;
+                inputStream.close();
+                outputStream.close();
             }
         } catch (Exception e) {
-            Log.e("CertificationsAdd", "Error getting file from URI: " + e.getMessage());
+            Log.e("CertificationsAdd", "❌ Error getting file from URI: " + e.getMessage());
         }
         return file;
     }
+
 
 
 
@@ -155,8 +149,6 @@ public class CertificationsAdd extends AppCompatActivity {
 
         Log.d("saveCertification", "📌 certificateImageUri: " + certificateImageUri);
 
-        // ✅ Ensure `certificateFileName` is never NULL
-        // ✅ Ensure `certificateFileName` is never NULL
         int userId = sharedPreferences.getInt("USER_ID", -1);
         if (userId == -1) {
             Toast.makeText(this, "User not found. Please log in again.", Toast.LENGTH_SHORT).show();
@@ -165,23 +157,16 @@ public class CertificationsAdd extends AppCompatActivity {
 
         // Get the actual file from URI
         File originalFile = getFileFromUri(certificateImageUri);
-        if (originalFile == null) {
+        if (originalFile == null || !originalFile.exists()) {
             Toast.makeText(this, "File error. Please try again.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Rename the file using FileUploader's method
-        File renamedFile = FileUploader.renameFile(originalFile, userId,"C");
+        File renamedFile = FileUploader.renameFile(originalFile, userId, "C");
         String certificateFileName = (renamedFile != null) ? renamedFile.getName() : "No_File";
 
         Log.d("saveCertification", "✅ Final Stored Filename: " + certificateFileName);
-
-
-
-
-
-
-        Log.d("saveCertification", "📂 certificateFileName: " + certificateFileName);
 
         if (name.isEmpty() || organisation.isEmpty() || yearStr.isEmpty()) {
             Toast.makeText(this, "Please fill all required fields!", Toast.LENGTH_SHORT).show();
@@ -196,30 +181,21 @@ public class CertificationsAdd extends AppCompatActivity {
             return;
         }
 
-//        int userId = sharedPreferences.getInt("USER_ID", -1);
         String selfReferralCode = sharedPreferences.getString("SELF_REFERRAL_CODE", "");
-
-        if (userId == -1) {
-            Toast.makeText(this, "User not found. Please log in again.", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         DatabaseHelper.UserWiseCertificateInsert(
                 this,
-                "1", // Insert operation
-                userId,
+                userId,  // ✅ Corrected position (2nd argument should be userId)
                 name,
                 organisation,
                 credentialUrl,
                 issueYear,
-                certificateFileName,  // ✅ This will NEVER be NULL
+                certificateFileName,
                 selfReferralCode,
-                new DatabaseHelper.DatabaseCallback() {
+                new DatabaseHelper.DatabaseCallback() {  // ✅ Ensure callback is correctly passed
                     @Override
                     public void onMessage(String message) {
-                        if (message == null) message = "Unknown response";
                         Toast.makeText(CertificationsAdd.this, message, Toast.LENGTH_SHORT).show();
-
                         if (message.toLowerCase().contains("success")) {
                             startActivity(new Intent(CertificationsAdd.this, CertificationsView.class));
                             finish();
@@ -238,7 +214,9 @@ public class CertificationsAdd extends AppCompatActivity {
                     }
                 }
         );
+
     }
+
 
 
     private void retrieveCertificate() {
@@ -296,26 +274,42 @@ public class CertificationsAdd extends AppCompatActivity {
 
             Log.d("CertificationsAdd", "File URI: " + fileUri.toString());
 
+            // Check MIME Type
+            String mimeType = getContentResolver().getType(fileUri);
+            if (mimeType == null || !mimeType.startsWith("image/")) {
+                Toast.makeText(this, "Invalid file type. Please select an image.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             // Convert URI to File
             File file = getFileFromUri(fileUri);
+
             if (file != null) {
                 Log.d("CertificationsAdd", "File Path: " + file.getAbsolutePath());
-
-                new Thread(() -> {
-                    boolean success = FileUploader.uploadImage(file, CertificationsAdd.this,"C");
-
-                    runOnUiThread(() -> {
-                        if (success) {
-                            Toast.makeText(this, "File uploaded successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(this, "File upload failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }).start();
-
             } else {
-                Log.e("CertificationsAdd", "Failed to get file from URI");
+                Log.e("CertificationsAdd", "❌ File is NULL. Check if the file path conversion failed.");
             }
+
+
+            if (file == null || !file.exists()) {
+                Log.e("CertificationsAdd", "❌ Failed to get file from URI");
+                Toast.makeText(this, "File error. Please try again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Log.d("CertificationsAdd", "✅ File Path: " + file.getAbsolutePath());
+
+            new Thread(() -> {
+                boolean success = file != null && FileUploader.uploadImage(file, CertificationsAdd.this, "C");
+
+                runOnUiThread(() -> {
+                    if (success) {
+                        Toast.makeText(this, "✅ File uploaded successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "❌ File upload failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }).start();
         }
     }
 

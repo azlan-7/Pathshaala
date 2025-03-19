@@ -50,6 +50,9 @@ public class WorkExperience extends AppCompatActivity {
     private WorkExperienceAdapter workExperienceAdapter;
     private List<WorkExperienceModel> workExperienceList;
 
+    private String selectedProfession = "";
+    private int professionId = -1; // Default value
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +65,53 @@ public class WorkExperience extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
 
-        etProfession = findViewById(R.id.editTextText23);
+         etProfession = findViewById(R.id.editTextText23);
+         etDesignation = findViewById(R.id.editTextText25);
         etInstitution = findViewById(R.id.editTextText24);
-        etDesignation = findViewById(R.id.editTextText25);
+
         experienceDropdown = findViewById(R.id.experienceDropdown);
         designationDropdown = findViewById(R.id.editTextText25);
         professionDropdown = findViewById(R.id.editTextText23);
         btnSave = findViewById(R.id.button24);
+        Log.d(TAG, "📌 btnSave initialized. Setting onClickListener.");
         radioPrevious = findViewById(R.id.radioPrevious);
         radioCurrent = findViewById(R.id.radioCurrent);
         radioGroupWork = findViewById(R.id.radioGroupWork);
+
+
+        professionDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedProfession = (String) parent.getItemAtPosition(position);
+            Log.d(TAG, "📌 Profession Selected in dropdown: " + selectedProfession);
+        });
+
+
+        DatabaseHelper.getProfessionId(this, selectedProfession, new DatabaseHelper.WorkExperienceCallback() {
+            @Override
+            public void onProfessionIdFetched(Integer fetchedProfessionId) {
+                if (fetchedProfessionId != null) {
+                    professionId = fetchedProfessionId;
+                    Log.d(TAG, "✅ Profession ID Retrieved: " + professionId);
+
+                    // ✅ Now insert work experience
+                    insertUserWorkExperience(professionId);
+                } else {
+                    professionId = -1;
+                    Log.e(TAG, "❌ Profession ID not found for: " + selectedProfession);
+                }
+            }
+
+            @Override
+            public void onMessage(String message) {}
+
+            @Override
+            public void onSuccess(List<UserWiseWorkExperience> result) {}
+
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "❌ Error fetching profession ID: " + error);
+            }
+        });
+
 
 
         fetchUserWorkExperienceDetails();
@@ -100,9 +140,16 @@ public class WorkExperience extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, experienceOptions);
         experienceDropdown.setAdapter(adapter);
         experienceDropdown.setThreshold(0);
-        experienceDropdown.setOnClickListener(v -> experienceDropdown.showDropDown());
+        experienceDropdown.setOnClickListener(v -> {
+            Log.d(TAG, "📌 experienceDropdown clicked - Showing dropdown");
+            experienceDropdown.showDropDown();
+        });
 
-        btnSave.setOnClickListener(v -> saveWorkExperience());
+        btnSave.setOnClickListener(v -> {
+            Log.d(TAG, "📌 Save Button Clicked! Calling saveWorkExperience().");
+            saveWorkExperience();
+        });
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -111,35 +158,86 @@ public class WorkExperience extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "📌 onResume() called. Reloading dropdowns.");
+
+        // ✅ Reload dropdowns when activity resumes
+        loadWorkExperience();
+        loadDesignations();
+        loadProfessions();
+
+        // ✅ Show dropdowns again when clicked
+        experienceDropdown.setOnClickListener(v -> experienceDropdown.showDropDown());
+        designationDropdown.setOnClickListener(v -> designationDropdown.showDropDown());
+        professionDropdown.setOnClickListener(v -> professionDropdown.showDropDown());
+    }
+
+
+
     private void saveWorkExperience() {
+        Log.d(TAG, "📌 Inside saveWorkExperience() method!");
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+
+        if (userId == -1) {
+            Log.e(TAG, "❌ User ID not found in SharedPreferences!");
+            Toast.makeText(this, "User ID not found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String selectedProfession = professionDropdown.getText().toString().trim();
+        String professionId = professionMap.getOrDefault(selectedProfession, "0");
+
         String profession = etProfession.getText().toString().trim();
         String institution = etInstitution.getText().toString().trim();
         String designation = etDesignation.getText().toString().trim();
         String experience = experienceDropdown.getText().toString().trim();
 
+        Log.d(TAG, "📌 Profession: " + profession + ", Institution: " + institution + ", Designation: " + designation + ", Experience: " + experience);
+
         if (profession.isEmpty() || institution.isEmpty() || designation.isEmpty() || experience.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "❌ Missing required fields! Profession: " + profession + ", Institution: " + institution);
+            Log.e(TAG, "❌ Missing required fields!");
             return;
         }
 
         List<WorkExperienceModel> workExperienceList = loadWorkExperienceData();
-        WorkExperienceModel newExperience = new WorkExperienceModel(profession, institution, designation, experience, radioCurrent.isChecked() ? "Current" : "Previous");
+        WorkExperienceModel newExperience = new WorkExperienceModel(
+                profession, institution, designation, experience,
+                radioCurrent.isChecked() ? "Current" : "Previous",
+                professionId, String.valueOf(userId)
+        );
+
+        Log.d(TAG, "📌 New Experience Object Created: " + newExperience.toString());
+
         workExperienceList.add(newExperience);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String updatedJson = gson.toJson(workExperienceList);
-        editor.putString("WORK_EXPERIENCE_LIST", gson.toJson(workExperienceList));
+        editor.putString("WORK_EXPERIENCE_LIST", updatedJson);
         editor.apply();
+
+        Log.d(TAG, "📌 Saving Work Experience to SharedPreferences...");
+        Log.d(TAG, "✅ Work Experience saved to SharedPreferences!");
 
         Toast.makeText(this, "Work Experience Saved!", Toast.LENGTH_SHORT).show();
 
-        // ✅ Insert into the database
-        insertUserWorkExperience();  // Call the database insertion method here
+        // ✅ Ensure insertUserWorkExperience() gets called
+        Log.d(TAG, "📌 Calling insertUserWorkExperience() with Profession ID: " + professionId);
+        insertUserWorkExperience(Integer.parseInt(professionId));
+        Log.d(TAG, "📌 Insert function called successfully.");
 
+        Log.d(TAG, "📌 Starting new activity: WorkExperienceView.class");
         startActivity(new Intent(this, WorkExperienceView.class));
         finish();
     }
+
+
 
 
     private void fetchUserWorkExperienceDetails() {
@@ -154,26 +252,24 @@ public class WorkExperience extends AppCompatActivity {
         String userIdString = String.valueOf(userId);
         Log.d(TAG, "📌 Fetching work experience data for user: " + userIdString);
 
-        DatabaseHelper.UserWiseWorkExperienceSelect(this, "4", userIdString, new DatabaseHelper.UserWiseWorkExperienceResultListener() {
+        DatabaseHelper.UserWiseWorkExperienceSelect(this, "4", userIdString, new DatabaseHelper.WorkExperienceCallback() {
             @Override
-            public void onQueryResult(List<UserWiseWorkExperience> userWiseWorkExperienceList) {
-                if (userWiseWorkExperienceList.isEmpty()) {
+            public void onSuccess(List<UserWiseWorkExperience> workExperienceData) {
+                if (workExperienceData.isEmpty()) {
                     Log.e(TAG, "⚠️ No work experience records found in DB for UserID: " + userIdString);
                     return;
                 }
 
-                workExperienceList.clear();
-                for (UserWiseWorkExperience workExp : userWiseWorkExperienceList) {
-                    Log.d(TAG, "✅ Mapping data: Institution=" + workExp.getInstitutionName() +
-                            ", Designation=" + workExp.getDesignationName() +
-                            ", Experience=" + workExp.getWorkExperience());
+                List<WorkExperienceModel> workExperienceModels = new ArrayList<>();
 
-                    // ✅ Ensure correct data type
-                    workExperienceList.add(new WorkExperienceModel(
+                for (UserWiseWorkExperience workExp : workExperienceData) {
+                    workExperienceModels.add(new WorkExperienceModel(
+                            workExp.getProfessionName(),
                             workExp.getInstitutionName(),
                             workExp.getDesignationName(),
-                            workExp.getWorkExperience() != null ? workExp.getWorkExperience() : "Unknown",
+                            workExp.getWorkExperience(),
                             workExp.getCurPreExperience(),
+                            workExp.getProfessionId(),
                             workExp.getUserId()
                     ));
                 }
@@ -181,13 +277,13 @@ public class WorkExperience extends AppCompatActivity {
                 // ✅ Save to SharedPreferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Gson gson = new Gson();
-                String workExperienceJson = gson.toJson(workExperienceList);
-                editor.putString("WORK_EXPERIENCE_LIST_" + userId, workExperienceJson);
+                String workExperienceJson = gson.toJson(workExperienceModels);
+                editor.putString("WORK_EXPERIENCE_LIST_" + userIdString, workExperienceJson);
                 editor.apply();
 
                 // ✅ Refresh RecyclerView
                 runOnUiThread(() -> {
-                    workExperienceAdapter.notifyDataSetChanged();
+                    workExperienceAdapter.updateData(workExperienceModels);
                     Log.d(TAG, "✅ Work experience data updated in RecyclerView.");
                 });
             }
@@ -197,36 +293,44 @@ public class WorkExperience extends AppCompatActivity {
                 Log.e(TAG, "❌ Failed to fetch work experience records: " + error);
                 runOnUiThread(() -> Toast.makeText(WorkExperience.this, "Error fetching work experience details!", Toast.LENGTH_SHORT).show());
             }
+
+            @Override
+            public void onMessage(String message) {}
+
+            @Override
+            public void onProfessionIdFetched(Integer professionId) {}
         });
     }
 
 
+    private void insertUserWorkExperience(int professionId) {
+        Log.d(TAG, "📌 insertUserWorkExperience() called with Profession ID: " + professionId);
 
-
-
-    private void insertUserWorkExperience() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         int userId = sharedPreferences.getInt("USER_ID", -1);
-
         if (userId == -1) {
             Log.e(TAG, "❌ User ID not found in SharedPreferences!");
             return;
         }
 
-        // ✅ Ensure new WorkExperienceID is unique
-        int curPreExperience = radioCurrent.isChecked() ? 1 : 0;  // 1 = Current, 0 = Previous
-        int designationId = 2;  // Example Designation ID
+        int curPreExperience = radioCurrent.isChecked() ? 1 : 0;
         String institutionName = etInstitution.getText().toString().trim();
-        int cityId = 3;  // Example City ID
-        int workExperienceId = (int) (Math.random() * 10000 + 100);  // ✅ Generate unique WorkExperienceID
-        String selfReferralCode = "ABC123";
 
-        Log.d(TAG, "📌 Inserting Work Experience for UserID: " + userId +
-                " | WorkExperienceID: " + workExperienceId +
-                " | Type: " + (curPreExperience == 1 ? "Current" : "Previous"));
+        String selectedProfession = professionDropdown.getText().toString().trim();
+        String selectedDesignation = designationDropdown.getText().toString().trim();
+        String selectedExperience = experienceDropdown.getText().toString().trim();
 
-        DatabaseHelper.UserWiseWorkExperienceInsert(this, "1", userId, curPreExperience, designationId, institutionName, cityId,
-                workExperienceId, selfReferralCode, new DatabaseHelper.DatabaseCallback() {
+        int designationId = Integer.parseInt(designationMap.getOrDefault(selectedDesignation, "0"));
+        int workExperienceId = Integer.parseInt(workExperienceMap.getOrDefault(selectedExperience, "0"));
+        int cityId = 0;
+        String selfReferralCode = "123";
+
+        Log.d(TAG, "📌 Inserting into DB: UserID=" + userId + ", ProfessionID=" + professionId);
+
+        DatabaseHelper.UserWiseWorkExperienceInsert(this, "1",
+                userId, professionId, curPreExperience,
+                designationId, institutionName, cityId, workExperienceId, selfReferralCode,
+                new DatabaseHelper.WorkExperienceCallback() {
                     @Override
                     public void onMessage(String message) {
                         Log.d(TAG, "✅ Database Response: " + message);
@@ -239,15 +343,19 @@ public class WorkExperience extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onSuccess(List<Map<String, String>> result) {}
+                    public void onSuccess(List<UserWiseWorkExperience> result) {
+                        Log.d(TAG, "✅ Data inserted successfully!");
+                    }
 
                     @Override
                     public void onError(String error) {
                         Log.e(TAG, "❌ Database Error: " + error);
                     }
+
+                    @Override
+                    public void onProfessionIdFetched(Integer professionId) {}
                 });
     }
-
 
 
 
@@ -268,7 +376,7 @@ public class WorkExperience extends AppCompatActivity {
             @Override
             public void onQueryResult(List<Map<String, String>> result) {
                 if (result == null || result.isEmpty()) {
-                    Log.e(TAG, "No Work Experience records found!");
+                    Log.e(TAG, "❌ No Work Experience records found!");
                     Toast.makeText(WorkExperience.this, "No Work Experience Found!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -280,28 +388,25 @@ public class WorkExperience extends AppCompatActivity {
                     String id = row.get("WorkExperienceID");
                     String name = row.get("WorkExperience");
 
-                    Log.d(TAG, "Work Experience Retrieved - ID: " + id + ", Name: " + name);
+                    Log.d(TAG, "✅ Work Experience Retrieved - ID: " + id + ", Name: " + name);
                     workExperiences.add(name);
                     workExperienceMap.put(name, id);
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, workExperiences);
-                experienceDropdown.setAdapter(adapter);
-                Log.d(TAG, "Adapter set with values: " + workExperiences);
+                // ✅ Ensure UI updates properly
+                runOnUiThread(() -> {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, workExperiences);
+                    experienceDropdown.setAdapter(adapter);
+                    experienceDropdown.setThreshold(1);
+                    experienceDropdown.dismissDropDown();  // ✅ Ensure dropdown doesn't stay open
+                    experienceDropdown.showDropDown();
+                    Log.d(TAG, "📌 Work experience dropdown updated.");
+                });
             }
         });
-
-        experienceDropdown.setOnClickListener(v -> {
-            Log.d(TAG, "experienceDropdown clicked - Showing dropdown");
-            experienceDropdown.showDropDown();
-        });
-
-        experienceDropdown.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedExperience = (String) parent.getItemAtPosition(position);
-            String experienceID = workExperienceMap.get(selectedExperience);
-            Log.d(TAG, "Work Experience Selected: " + selectedExperience + " (ID: " + experienceID + ")");
-        });
     }
+
+
 
     private void loadDesignations() {
         String query = "SELECT DesignationID, DesignationName FROM Designation WHERE active = 'true' ORDER BY DesignationName";
@@ -311,7 +416,7 @@ public class WorkExperience extends AppCompatActivity {
             @Override
             public void onQueryResult(List<Map<String, String>> result) {
                 if (result == null || result.isEmpty()) {
-                    Log.e(TAG, "No Designation records found!");
+                    Log.e(TAG, "❌ No Designation records found!");
                     Toast.makeText(WorkExperience.this, "No Designations Found!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -323,28 +428,23 @@ public class WorkExperience extends AppCompatActivity {
                     String id = row.get("DesignationID");
                     String name = row.get("DesignationName");
 
-                    Log.d(TAG, "Designation Retrieved - ID: " + id + ", Name: " + name);
+                    Log.d(TAG, "✅ Designation Retrieved - ID: " + id + ", Name: " + name);
                     designations.add(name);
                     designationMap.put(name, id);
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, designations);
-                designationDropdown.setAdapter(adapter);
-                Log.d(TAG, "Adapter set with values: " + designations);
+                // ✅ Run UI update on the main thread
+                runOnUiThread(() -> {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, designations);
+                    designationDropdown.setAdapter(adapter);
+                    designationDropdown.setThreshold(1);
+                    designationDropdown.showDropDown();  // ✅ Show dropdown after setting adapter
+                    Log.d(TAG, "📌 Designation dropdown updated.");
+                });
             }
         });
-
-        designationDropdown.setOnClickListener(v -> {
-            Log.d(TAG, "designationDropdown clicked - Showing dropdown");
-            designationDropdown.showDropDown();
-        });
-
-        designationDropdown.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedDesignation = (String) parent.getItemAtPosition(position);
-            String designationID = designationMap.get(selectedDesignation);
-            Log.d(TAG, "Designation Selected: " + selectedDesignation + " (ID: " + designationID + ")");
-        });
     }
+
 
     private void loadProfessions() {
         String query = "SELECT ProfessionID, ProfessionName FROM Profession WHERE active = 'true' ORDER BY ProfessionName";
@@ -371,14 +471,18 @@ public class WorkExperience extends AppCompatActivity {
                     professionMap.put(name, id);
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, professions);
-                professionDropdown.setAdapter(adapter);
-                Log.d(TAG, "Adapter set with values: " + professions);
+                runOnUiThread(() -> {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(WorkExperience.this, android.R.layout.simple_dropdown_item_1line, professions);
+                    professionDropdown.setAdapter(adapter);
+                    professionDropdown.setThreshold(1);
+                    professionDropdown.showDropDown();  // ✅ Show dropdown after setting adapter
+                    Log.d(TAG, "📌 Profession dropdown updated.");
+                });
             }
         });
 
         professionDropdown.setOnClickListener(v -> {
-            Log.d(TAG, "professionDropdown clicked - Showing dropdown");
+            Log.d(TAG, "📌 professionDropdown clicked - Showing dropdown");
             professionDropdown.showDropDown();
         });
 
@@ -391,648 +495,3 @@ public class WorkExperience extends AppCompatActivity {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//package com.example.loginpage;
-//
-//import android.os.Bundle;
-//import androidx.activity.EdgeToEdge;
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.core.content.ContextCompat;
-//import androidx.core.graphics.Insets;
-//import androidx.core.view.ViewCompat;
-//import androidx.core.view.WindowInsetsCompat;
-//
-//import android.util.Log;
-//import android.widget.ArrayAdapter;
-//import android.widget.AutoCompleteTextView;
-//import android.widget.Button;
-//import android.widget.EditText;
-//import android.content.Intent;
-//import android.content.SharedPreferences;
-//import android.widget.RadioButton;
-//import android.widget.RadioGroup;
-//import android.widget.Toast;
-//import android.view.View;
-//
-//import com.example.loginpage.models.WorkExperienceModel;
-//import com.google.gson.Gson;
-//import com.google.gson.reflect.TypeToken;
-//
-//import java.lang.reflect.Type;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class WorkExperience extends AppCompatActivity {
-//
-//    private EditText etProfession, etInstitution, etDesignation;
-//    private AutoCompleteTextView experienceDropdown;
-//    private Button btnSave;
-//    private RadioGroup radioGroupWork;
-//    private RadioButton radioCurrent, radioPrevious;
-//    private SharedPreferences sharedPreferences;
-//    private List<WorkExperienceModel> workExperienceList;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
-//        setContentView(R.layout.activity_work_experience);
-//
-//        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//
-//        // Initialize UI elements
-//        etProfession = findViewById(R.id.editTextText23);
-//        etInstitution = findViewById(R.id.editTextText24);
-//        etDesignation = findViewById(R.id.editTextText25);
-//        experienceDropdown = findViewById(R.id.experienceDropdown);
-//        btnSave = findViewById(R.id.button24);
-//        radioPrevious = findViewById(R.id.radioPrevious);
-//        radioCurrent = findViewById(R.id.radioCurrent);
-//        radioGroupWork = findViewById(R.id.radioGroupWork);
-//
-//        radioCurrent.setChecked(true);
-//        etProfession.setHint("Current Profession");
-//
-//        String[] experienceOptions = {"1 Year", "2 Years", "3 Years", "5+ Years", "10+ Years"};
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, experienceOptions);
-//        experienceDropdown.setAdapter(adapter);
-//        experienceDropdown.setThreshold(0);
-//        experienceDropdown.setOnClickListener(v -> experienceDropdown.showDropDown());
-//
-//        // Load saved data
-//        workExperienceList = loadWorkExperienceData();
-//
-//        // Disable "Current" radio button if a current profession exists
-//        if (hasCurrentProfession(workExperienceList)) {
-//            radioCurrent.setEnabled(true);
-//        }
-//        else {
-//            radioCurrent.setChecked(true);
-//        }
-//
-//        // Handle Radio Button Selection
-//        radioGroupWork.setOnCheckedChangeListener((group, checkedId) -> {
-//            if (checkedId == R.id.radioCurrent) {
-//                etProfession.setHint("Current Profession");
-//                radioCurrent.setTextColor(ContextCompat.getColor(this, R.color.blue));
-//            } else if (checkedId == R.id.radioPrevious) {
-//                etProfession.setHint("Previous Profession");
-//                radioPrevious.setTextColor(ContextCompat.getColor(this, R.color.blue));
-//            }
-//        });
-//
-//        // Save Button Click Listener
-//        btnSave.setOnClickListener(v -> saveWorkExperience());
-//
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
-//    }
-//
-//    /**
-//     * Saves work experience based on user input and type selection.
-//     */
-//    private void saveWorkExperience() {
-//        String profession = etProfession.getText().toString().trim();
-//        String institution = etInstitution.getText().toString().trim();
-//        String designation = etDesignation.getText().toString().trim();
-//        String experience = experienceDropdown.getText().toString().trim();
-//        String experienceType = radioCurrent.isChecked() ? "Current" : "Previous";  //
-//
-//        if (profession.isEmpty() || institution.isEmpty() || designation.isEmpty() || experience.isEmpty()) {
-//            Toast.makeText(WorkExperience.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        Gson gson = new Gson();
-//
-//        // Load existing data
-//        workExperienceList = loadWorkExperienceData();
-//        if (workExperienceList == null) {
-//            workExperienceList = new ArrayList<>();
-//        }
-//
-//        // Ensure only one "Current" profession exists
-//        if (experienceType.equals("Current")) {
-//            workExperienceList.removeIf(exp ->
-//                    exp.getExperienceType() != null && exp.getExperienceType().equals("Current"));
-//        }
-//
-//        // Create new experience entry
-//        WorkExperienceModel newExperience = new WorkExperienceModel(profession, institution, designation, experience, experienceType);
-//        workExperienceList.add(newExperience);
-//
-//        // Save updated list
-//        String updatedJson = gson.toJson(workExperienceList);
-//        editor.putString("WORK_EXPERIENCE_LIST", updatedJson);
-//        editor.apply();
-//
-//        Toast.makeText(this, "Work Experience Saved!", Toast.LENGTH_SHORT).show();
-//
-//        // Redirect to WorkExperienceView
-//        startActivity(new Intent(this, WorkExperienceView.class));
-//        finish();
-//    }
-//
-//    /**
-//     * Checks if a "Current" profession exists in the saved work experience list.
-//     * @param experienceList List of work experiences
-//     * @return true if a "Current" profession exists, otherwise false
-//     */
-//    private boolean hasCurrentProfession(List<WorkExperienceModel> experienceList) {
-//        if (experienceList == null) return false;
-//        for (WorkExperienceModel experience : experienceList) {
-//            if ("Current".equals(experience.getExperienceType())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     * Loads work experience data from SharedPreferences.
-//     * @return List of WorkExperienceModel objects
-//     */
-//    private List<WorkExperienceModel> loadWorkExperienceData() {
-//        String json = sharedPreferences.getString("WORK_EXPERIENCE_LIST", null);
-//        if (json == null) return new ArrayList<>();
-//
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<List<WorkExperienceModel>>() {}.getType();
-//        List<WorkExperienceModel> experienceList = gson.fromJson(json, type);
-//        return experienceList != null ? experienceList : new ArrayList<>();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        clearFields(); // Clears fields every time the screen opens
-//    }
-//
-//    /**
-//     * Clears input fields for a new entry.
-//     */
-//    private void clearFields() {
-//        etProfession.setText("");
-//        etInstitution.setText("");
-//        etDesignation.setText("");
-//        experienceDropdown.setText("");
-//        radioCurrent.setChecked(true); // Reset to current profession by default
-//    }
-//}
-//
-//
-//
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//package com.example.loginpage;
-//
-//import android.os.Bundle;
-//import androidx.activity.EdgeToEdge;
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.core.content.ContextCompat;
-//import androidx.core.graphics.Insets;
-//import androidx.core.view.ViewCompat;
-//import androidx.core.view.WindowInsetsCompat;
-//
-//import android.util.Log;
-//import android.widget.ArrayAdapter;
-//import android.widget.AutoCompleteTextView;
-//import android.widget.Button;
-//import android.widget.EditText;
-//import android.content.Intent;
-//import android.content.SharedPreferences;
-//import android.widget.RadioButton;
-//import android.widget.RadioGroup;
-//import android.widget.Toast;
-//import android.view.View;
-//
-//import com.example.loginpage.models.WorkExperienceModel;
-//import com.google.gson.Gson;
-//import com.google.gson.reflect.TypeToken;
-//
-//import java.lang.reflect.Type;
-//import java.util.ArrayList;
-//import java.util.HashSet;
-//import java.util.List;
-//import java.util.Set;
-//
-//public class WorkExperience extends AppCompatActivity {
-//
-//    private EditText etProfession, etInstitution, etDesignation;
-//    private AutoCompleteTextView experienceDropdown;
-//    private Button btnSave;
-//    private RadioGroup radioGroupWork;
-//    private RadioButton radioCurrent, radioPrevious;
-//    private SharedPreferences sharedPreferences;
-//    private List<WorkExperienceModel> workExperienceList;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
-//        setContentView(R.layout.activity_work_experience);
-//
-//        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//
-//        // Initialize UI elements
-//        etProfession = findViewById(R.id.editTextText23);
-//        etInstitution = findViewById(R.id.editTextText24);
-//        etDesignation = findViewById(R.id.editTextText25);
-//        experienceDropdown = findViewById(R.id.experienceDropdown);
-//        btnSave = findViewById(R.id.button24);
-//        radioPrevious = findViewById(R.id.radioPrevious);
-//        radioCurrent = findViewById(R.id.radioCurrent);
-//        radioGroupWork = findViewById(R.id.radioGroupWork);
-//
-//        radioCurrent.setChecked(true);
-//        etProfession.setHint("Current Profession");
-//
-//        String[] experienceOptions = {"1 Year", "2 Years", "3 Years", "5+ Years", "10+ Years"};
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, experienceOptions);
-//        experienceDropdown.setAdapter(adapter);
-//        experienceDropdown.setThreshold(0);
-//        experienceDropdown.setOnClickListener(v -> experienceDropdown.showDropDown());
-//
-//        // Load saved data
-//        workExperienceList = loadWorkExperienceData();
-//
-//        // Check if a "Current" profession exists, disable selection if found
-//        if (hasCurrentProfession(workExperienceList)) {
-//            radioCurrent.setEnabled(false);
-//        }
-//
-//        // Handle Radio Button Selection
-//        radioGroupWork.setOnCheckedChangeListener((group, checkedId) -> {
-//            if (checkedId == R.id.radioCurrent) {
-//                etProfession.setHint("Current Profession");
-//                radioCurrent.setTextColor(ContextCompat.getColor(this, R.color.blue));
-//            } else if (checkedId == R.id.radioPrevious) {
-//                etProfession.setHint("Previous Profession");
-//                radioPrevious.setTextColor(ContextCompat.getColor(this, R.color.blue));
-//            }
-//        });
-//
-//        // Save Button Click Listener
-//        btnSave.setOnClickListener(v -> saveWorkExperience());
-//
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
-//    }
-//
-//    /**
-//     * Saves work experience based on user input and type selection.
-//     */
-//    private void saveWorkExperience() {
-//        String profession = etProfession.getText().toString().trim();
-//        String institution = etInstitution.getText().toString().trim();
-//        String designation = etDesignation.getText().toString().trim();
-//        String experience = experienceDropdown.getText().toString().trim();
-//        String experienceType = radioCurrent.isChecked() ? "Current" : "Previous";
-//
-//        if (profession.isEmpty() || institution.isEmpty() || designation.isEmpty() || experience.isEmpty()) {
-//            Toast.makeText(WorkExperience.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        Gson gson = new Gson();
-//
-//        // Load existing data
-//        workExperienceList = loadWorkExperienceData();
-//        if (workExperienceList == null) {
-//            workExperienceList = new ArrayList<>();
-//        }
-//
-//        if (radioCurrent.isChecked()) {
-//            // Ensure only one "Current" profession exists
-//            workExperienceList.removeIf(exp ->
-//                    exp.getExperienceType() != null && exp.getExperienceType().equals(experienceType));
-//        }
-//
-//        // Create new experience entry
-//        WorkExperienceModel newExperience = new WorkExperienceModel(profession, institution, designation, experience,
-//                radioCurrent.isChecked() ? "Current" : "Previous");
-//
-//        workExperienceList.add(newExperience);
-//
-//        // Save updated list
-//        String updatedJson = gson.toJson(workExperienceList);
-//        editor.putString("WORK_EXPERIENCE_LIST", updatedJson);
-//        editor.apply();
-//
-//        Toast.makeText(this, "Work Experience Saved!", Toast.LENGTH_SHORT).show();
-//
-//        // Redirect to WorkExperienceView
-//        startActivity(new Intent(this, WorkExperienceView.class));
-//        finish();
-//    }
-//
-//    /**
-//     * Checks if a "Current" profession exists in the saved work experience list.
-//     * @param experienceList List of work experiences
-//     * @return true if a "Current" profession exists, otherwise false
-//     */
-//    private boolean hasCurrentProfession(List<WorkExperienceModel> experienceList) {
-//        if (experienceList == null) return false;
-//        for (WorkExperienceModel experience : experienceList) {
-//            if ("Current".equals(experience.getExperienceType())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     * Loads work experience data from SharedPreferences.
-//     * @return List of WorkExperienceModel objects
-//     */
-//    private List<WorkExperienceModel> loadWorkExperienceData() {
-//        String json = sharedPreferences.getString("WORK_EXPERIENCE_LIST", null);
-//        if (json == null) return new ArrayList<>();
-//
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<List<WorkExperienceModel>>() {}.getType();
-//        List<WorkExperienceModel> experienceList = gson.fromJson(json, type);
-//        return experienceList != null ? experienceList : new ArrayList<>();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        clearFields(); // Clears fields every time the screen opens
-//    }
-//
-//    /**
-//     * Clears input fields for a new entry.
-//     */
-//    private void clearFields() {
-//        etProfession.setText("");
-//        etInstitution.setText("");
-//        etDesignation.setText("");
-//        experienceDropdown.setText("");
-//        radioCurrent.setChecked(true); // Reset to current profession by default
-//    }
-//}
-//
-//
-//
-//
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//package com.example.loginpage;
-//
-//import android.os.Bundle;
-//
-//import androidx.activity.EdgeToEdge;
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.core.content.ContextCompat;
-//import androidx.core.graphics.Insets;
-//import androidx.core.view.ViewCompat;
-//import androidx.core.view.WindowInsetsCompat;
-//
-//import android.util.Log;
-//import android.widget.ArrayAdapter;
-//import android.widget.AutoCompleteTextView;
-//import android.widget.Button;
-//import android.widget.EditText;
-//import android.content.Intent;
-//import android.content.SharedPreferences;
-//import android.widget.ImageView;
-//import android.widget.Toast;
-//import android.view.View;
-//import android.widget.RadioButton;
-//import android.widget.RadioGroup;
-//
-//import com.example.loginpage.models.WorkExperienceModel;
-//import com.google.gson.Gson;
-//import com.google.gson.reflect.TypeToken;
-//
-//import java.lang.reflect.Type;
-//import java.util.ArrayList;
-//import java.util.HashSet;
-//import java.util.List;
-//import java.util.Set;
-//
-//
-//
-//
-//public class WorkExperience extends AppCompatActivity {
-//
-//    private EditText etProfession, etInstitution, etDesignation;
-//    private AutoCompleteTextView experienceDropdown;
-//    private Button btnSave;
-//    private RadioGroup radioGroupWork;
-//    private RadioButton radioCurrent, radioPrevious;
-//    private Set<String> previousProfessions = new HashSet<>();
-//    private SharedPreferences sharedPreferences;
-//
-//
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
-//        setContentView(R.layout.activity_work_experience);
-//
-//        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//
-//
-//        etProfession = findViewById(R.id.editTextText23);
-//        etInstitution = findViewById(R.id.editTextText24);
-//        etDesignation = findViewById(R.id.editTextText25);
-//        experienceDropdown = findViewById(R.id.experienceDropdown);
-//        btnSave = findViewById(R.id.button24); // Add this button in XML
-//        radioPrevious = findViewById(R.id.radioPrevious);
-//        radioGroupWork = findViewById(R.id.radioGroupWork);
-//
-//
-//        radioCurrent = findViewById(R.id.radioCurrent);
-//        radioCurrent.setChecked(true);
-//        etProfession.setHint("Current Profession");
-//
-//
-//
-//        String[] experienceOptions = {"1 Year", "2 Years", "3 Years", "5+ Years", "10+ Years"};
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, experienceOptions);
-//        experienceDropdown.setAdapter(adapter);
-//        experienceDropdown.setThreshold(0); // Opens dropdown without typing
-//        experienceDropdown.setOnClickListener(v -> experienceDropdown.showDropDown());
-//
-//        // Radio Button Selection Handling
-//        radioGroupWork.setOnCheckedChangeListener((group, checkedId) -> {
-//            if (checkedId == R.id.radioCurrent) {
-//                etProfession.setHint("Current Profession");
-//                radioCurrent.setTextColor(ContextCompat.getColor(this,R.color.blue));
-//            } else if (checkedId == R.id.radioPrevious) {
-//                etProfession.setHint("Previous Profession");
-//                radioPrevious.setTextColor(ContextCompat.getColor(this,R.color.blue));
-//            }
-//        });
-//
-//        loadSavedData();
-//
-//        // Save Button Click Listener
-//        btnSave.setOnClickListener(v -> {
-//            String profession = etProfession.getText().toString().trim();
-//            String institution = etInstitution.getText().toString().trim();
-//            String designation = etDesignation.getText().toString().trim();
-//            String experience = experienceDropdown.getText().toString().trim();
-//
-//
-//            if (profession.isEmpty() || institution.isEmpty() || designation.isEmpty() || experience.isEmpty()) {
-//                Toast.makeText(WorkExperience.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//
-//
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
-//            if (radioCurrent.isChecked()) {
-//                editor.putString("WORK_PROFESSION", profession);
-//                editor.putString("WORK_INSTITUTION", institution);
-//                editor.putString("WORK_DESIGNATION", designation);
-//                editor.putString("WORK_EXPERIENCE", experience);
-//            } else if (radioPrevious.isChecked()) {
-//                // Save multiple previous professions
-//                Set<String> previousProfessions = sharedPreferences.getStringSet("PREVIOUS_PROFESSIONS", new HashSet<>());
-//                previousProfessions.add(profession);
-//                editor.putStringSet("PREVIOUS_PROFESSIONS", previousProfessions);
-//            }
-//
-//            editor.apply();
-//
-//            saveWorkExperience();
-//            Toast.makeText(WorkExperience.this, "Work Experience Saved!", Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(WorkExperience.this, WorkExperienceView.class); // Redirect to another page
-//            startActivity(intent);
-//            finish();
-//        });
-//
-//
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
-//    }
-//
-//    private void saveWorkExperience() {
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        // Retrieve existing data
-//        Gson gson = new Gson();
-//
-//        String json = sharedPreferences.getString("WORK_EXPERIENCE_LIST", null);
-//        Type type = new TypeToken<List<WorkExperienceModel>>() {}.getType();
-//        List<WorkExperienceModel> experienceList = (json == null) ? new ArrayList<>() : gson.fromJson(json, type);
-//
-//
-//        WorkExperienceModel newExperience = new WorkExperienceModel(
-//                etProfession.getText().toString().trim(),
-//                etInstitution.getText().toString().trim(),
-//                etDesignation.getText().toString().trim(),
-//                experienceDropdown.getText().toString().trim()
-//        );
-//
-//        experienceList.add(newExperience); // Append new data to list
-//
-//        // Save the updated list back to SharedPreferences
-//        String updatedJson = gson.toJson(experienceList);
-//        editor.putString("WORK_EXPERIENCE_LIST", updatedJson);
-//        editor.apply();
-//        Log.d("WorkExperience", "Saved work experience: " + updatedJson);
-//    }
-//    private void loadSavedData() {
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//        etProfession.setText(sharedPreferences.getString("WORK_PROFESSION", ""));
-//        etInstitution.setText(sharedPreferences.getString("WORK_INSTITUTION", ""));
-//        etDesignation.setText(sharedPreferences.getString("WORK_DESIGNATION", ""));
-//        experienceDropdown.setText(sharedPreferences.getString("WORK_EXPERIENCE", ""));
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        clearFields(); // Clears fields every time the screen opens
-//    }
-//
-//    private void clearFields() {
-//        etProfession.setText("");
-//        etInstitution.setText("");
-//        etDesignation.setText("");
-//        experienceDropdown.setText("");
-//        radioCurrent.setChecked(true); // Reset to current profession by default
-//    }
-//
-//}
