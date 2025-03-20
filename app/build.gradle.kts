@@ -35,6 +35,7 @@ dependencies {
 
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation (libs.mpandroidchart)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
@@ -54,7 +55,5 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
-
-
 
 }
