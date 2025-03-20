@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -11,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:padding="10dp">
 
         <!-- Profile Icon -->
         <ImageView
@@ -59,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
             android:fontFamily="@font/work_sans_light"
-            android:text="Learning: Subject1, Subject2"
+            android:text="Learning: Sub1, Sub2"
             android:textColor="#0F4D73"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +78,22 @@
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSubjects" />
+
+        <ImageButton
+            android:id="@+id/whatsappButton"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:contentDescription="whatsapp button"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/profileIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/wp_logo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

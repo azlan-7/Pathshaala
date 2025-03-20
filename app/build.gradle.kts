@@ -55,5 +55,5 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
-
+    implementation("com.razorpay:checkout:1.6.40")
 }
