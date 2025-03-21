@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.RouteListingPreference;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Spannable;
@@ -86,6 +87,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
         showEnrolledStudentsMonthlyBarChart();
         showChannelViewsChart();
         MoveToWhatsAppScreen();
+        NavigationBarWorking();
         // Grade & Subject Data
         String[] grades = {"9th", "10th", "11th", "12th"};
         String[] subjects = {"Math", "Science", "History"};
@@ -116,9 +118,6 @@ public class TeachersDashboardNew extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        // bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
     }
 
 
@@ -157,6 +156,25 @@ public class TeachersDashboardNew extends AppCompatActivity {
         handler.post(runnable); // Start the animation immediately
     }
 
+
+    // Working of the BOTTOM NAVIGATION BAR
+    public void NavigationBarWorking() {
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.chatBot) {
+                Intent intent = new Intent(TeachersDashboardNew.this, ChatActivity.class);
+                startActivity(intent);
+            } else if (itemId == R.id.home) {
+                Intent intent = new Intent(TeachersDashboardNew.this, TeachersDashboardNew.class);
+                startActivity(intent);
+            } else if (itemId == R.id.profile){
+                Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
+                startActivity(intent);
+            }
+            return true;
+        });
+    }
 
     public void showStudentEnrolledClassBarChart() {
         // Find bar chart view
