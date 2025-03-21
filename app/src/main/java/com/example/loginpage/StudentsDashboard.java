@@ -30,6 +30,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -42,10 +43,11 @@ public class StudentsDashboard extends AppCompatActivity {
 
     Handler mainTextHandler = new Handler();
     private TextView welcomeText;
-    private ImageView profileIcon;
+    private ImageView profileIcon,profileIconTop;
     private Button searchButton;
     private BarChart barChart;
     private PieChart pieChart;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class StudentsDashboard extends AppCompatActivity {
         searchButton = findViewById(R.id.button37);
         barChart = findViewById(R.id.barChartStudentEnrolledClass);
         pieChart = findViewById(R.id.barChartStudentEnrolledMonth);
+        profileIconTop = findViewById(R.id.imageView151);
 
 //        Toolbar toolbar = findViewById(R.id.toolbar2);
 //        setSupportActionBar(toolbar);
@@ -66,8 +69,14 @@ public class StudentsDashboard extends AppCompatActivity {
         setupCharts();
         setupDropdowns();
         loadUserName();
+        NavigationBarWorking();
 
         profileIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
+            startActivity(intent);
+        });
+
+        profileIconTop.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
             startActivity(intent);
         });
@@ -81,6 +90,25 @@ public class StudentsDashboard extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+
+    public void NavigationBarWorking() {
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.chatBot) {
+                Intent intent = new Intent(StudentsDashboard.this, ChatActivity.class);
+                startActivity(intent);
+            } else if (itemId == R.id.home) {
+                Intent intent = new Intent(StudentsDashboard.this, StudentsDashboard.class);
+                startActivity(intent);
+            } else if (itemId == R.id.profile) {
+                Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
+                startActivity(intent);
+            }
+            return true;
         });
     }
 
@@ -219,7 +247,7 @@ public class StudentsDashboard extends AppCompatActivity {
                     connection.close();
                 }
             } catch (Exception e) {
-                Log.e("TeachersDashboardNew", "Error fetching city data: " + e.getMessage());
+                Log.e("StudentsDashboard", "Error fetching city data: " + e.getMessage());
             }
 
             runOnUiThread(() -> {

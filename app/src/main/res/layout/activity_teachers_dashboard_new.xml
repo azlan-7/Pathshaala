@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:background="#e3f2fd">
+        android:background="@drawable/toolbar_background">
 
         <LinearLayout
             android:id="@+id/linearLayout7"
@@ -21,26 +21,38 @@
             android:background="@drawable/toolbar_background"
             android:gravity="center_vertical">
 
+            <!-- Notification Icon on Left -->
             <ImageView
-                android:id="@+id/toolbarImage"
-                android:layout_width="0dp"
-                android:layout_height="57dp"
-                android:layout_gravity="start"
-                android:layout_weight="1"
-                android:contentDescription="@string/sample_logo"
-                android:src="@drawable/logo_sample_white" />
+                android:id="@+id/imageView141"
+                android:layout_width="35sp"
+                android:layout_height="35sp"
+                android:layout_marginEnd="10dp"
+                app:srcCompat="@drawable/notifications_24dp_ffffff_fill0_wght400_grad0_opsz24" />
 
+            <!-- Dashboard Title in the Center, Taking Majority of Space -->
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Dashboard"
+                android:textSize="32sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/work_sans_bold" />
+
+            <!-- Profile Icon on Right -->
             <ImageView
                 android:id="@+id/imageView151"
-                android:layout_width="70dp"
+                android:layout_width="57dp"
                 android:layout_height="57dp"
+                android:layout_marginStart="10dp"
                 android:contentDescription="@string/user_profile"
-                android:paddingStart="15dp"
-                android:paddingEnd="1dp"
                 app:srcCompat="@drawable/profile_icon_no_bg" />
-        </LinearLayout>
 
+        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <ScrollView
         android:id="@+id/scrollView2"

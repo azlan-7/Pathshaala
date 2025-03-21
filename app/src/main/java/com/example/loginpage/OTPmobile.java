@@ -343,7 +343,7 @@ public class OTPmobile extends AppCompatActivity {
                         UserDetailsClass user = userList.get(0);
                         String userIdString = user.getUserId();
 
-                        Log.d(TAG, "✅ User Found: " + user.getName() + ", ID: " + userIdString);
+                        Log.d(TAG, "✅ User Found: " + user.getName() + ", ID: " + userIdString + " User Type: " + user.getUserType());
 
                         if (userIdString == null || userIdString.isEmpty()) {
                             Log.e(TAG, "❌ ERROR: User ID is NULL or EMPTY!");
@@ -358,12 +358,28 @@ public class OTPmobile extends AppCompatActivity {
                         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                         sharedPreferences.edit().putInt("USER_ID", userId).apply();
                         sharedPreferences.edit().putString("phoneNumber", phoneNumber).apply();
+                        sharedPreferences.edit().putString("selfreferralcode", user.getSelfReferralCode()).apply();
+                        sharedPreferences.edit().putString("usertype", user.getUserType()).apply();
                         Log.d(TAG, "✅ Stored User ID: " + userId);
 
+                        Log.d(TAG, "UserType 34 :" + user.getUserType());
+
                         // 🚀 Navigate to TeachersInfo
-                        Log.d(TAG, "🚀 Navigating to TeachersInfo NOW!");
-                        navigateToTeachersInfo(phoneNumber);
-                    } else {
+
+                        if (user.getUserType().equals("T")) {
+                            Log.d(TAG, "🚀 Navigating to TeachersInfo NOW!");
+                            navigateToTeachersDashboard(phoneNumber);
+                        }
+                        else if (user.getUserType().equals("S")) {
+                            Log.d(TAG, "🚀 Navigating to StudentsInfo NOW!" + phoneNumber);
+                            navigateToStudentsDashboard(phoneNumber);
+                        }
+                        else {
+                            Log.d(TAG, "🚀 Navigating to UserOnboarding NOW! " + user.getUserType());
+                            navigateToOnboarding(phoneNumber);
+                        }
+                    }
+                    else {
                         Log.d(TAG, "⚠️ No users found! Navigating to Onboarding.");
                         navigateToOnboarding(phoneNumber);
                     }
@@ -393,10 +409,19 @@ public class OTPmobile extends AppCompatActivity {
         finish();
     }
 
-    private void navigateToTeachersInfo(String phoneNumber) {
+    private void navigateToTeachersDashboard(String phoneNumber) {
         Log.d("OTPmobile", "Navigating to TeachersInfo with phone number: " + phoneNumber);
 
-        Intent intent = new Intent(OTPmobile.this, TeachersInfo.class);
+        Intent intent = new Intent(OTPmobile.this, TeachersDashboardNew.class);
+        intent.putExtra("phoneNumber", phoneNumber);  // Pass the phone number
+        startActivity(intent);
+    }
+
+
+    private void navigateToStudentsDashboard(String phoneNumber) {
+        Log.d("OTPmobile", "Navigating to StudentsInfo with phone number: " + phoneNumber);
+
+        Intent intent = new Intent(OTPmobile.this, StudentsDashboard.class);
         intent.putExtra("phoneNumber", phoneNumber);  // Pass the phone number
         startActivity(intent);
     }

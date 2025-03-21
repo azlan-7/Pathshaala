@@ -1,5 +1,6 @@
 package com.example.loginpage;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -46,7 +47,9 @@ public class SearchStudentsDashboard extends AppCompatActivity {
             TextView experience = cardView.findViewById(R.id.tvExperience);
             TextView subjects = cardView.findViewById(R.id.tvSubjects);
             TextView location = cardView.findViewById(R.id.tvLocation);
-            Button whatsAppButton = cardView.findViewById(R.id.whatsappButton);
+            Button payment = cardView.findViewById(R.id.paymentButton);
+
+            payment.setOnClickListener(v -> MoveToPaymentGateway());
 
             name.setText(teachers[i][0]);
             experience.setText(teachers[i][1]);
@@ -82,5 +85,11 @@ public class SearchStudentsDashboard extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+
+    private void MoveToPaymentGateway() {
+        Intent intent = new Intent(this, PaymentGatewayDemo.class);
+        startActivity(intent);
     }
 }

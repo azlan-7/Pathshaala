@@ -20,15 +20,25 @@
             android:padding="15dp"
             android:background="@drawable/toolbar_background"
             android:gravity="center_vertical">
-
+            <!-- Notification Icon on Left -->
             <ImageView
-                android:id="@+id/toolbarImage"
+                android:id="@+id/imageView141"
+                android:layout_width="35sp"
+                android:layout_height="35sp"
+                android:layout_marginEnd="10dp"
+                app:srcCompat="@drawable/notifications_24dp_ffffff_fill0_wght400_grad0_opsz24" />
+
+            <!-- Dashboard Title in the Center, Taking Majority of Space -->
+            <TextView
+                android:id="@+id/toolbarTitle"
                 android:layout_width="0dp"
-                android:layout_height="57dp"
-                android:layout_gravity="start"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:contentDescription="@string/sample_logo"
-                android:src="@drawable/logo_sample_white" />
+                android:gravity="center"
+                android:text="Dashboard"
+                android:textSize="32sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/work_sans_bold" />
 
             <ImageView
                 android:id="@+id/imageView151"

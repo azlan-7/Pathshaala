@@ -68,6 +68,10 @@ public class TeachersBasicInfo extends AppCompatActivity {
         etEmail = findViewById(R.id.editTextText12);
         etDOB = findViewById(R.id.editTextText13);
         profileImageView = findViewById(R.id.imageView50);
+        cameraIcon = findViewById(R.id.imageView54);
+
+        cameraIcon.setOnClickListener(v -> openGallery());
+        loadCitiesFromDatabase();
 
         Log.d("TeachersBasicInfo", "📌 onCreate() Started!"); // Debug ✅
 
@@ -138,56 +142,6 @@ public class TeachersBasicInfo extends AppCompatActivity {
         autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
     }
 
-//    private void fetchUserDetails12() {
-//
-//        Log.e("TeachersInfo", "phoneNumberFetched: 8899");
-//                Intent intent = getIntent();
-//        String phoneNumber = intent.getStringExtra("phoneNumber");  // Get phone number from Intent
-//
-//        Log.e("TeachersInfo", "phoneNumberFetched: " + phoneNumber);
-//        if (phoneNumber == null || phoneNumber.isEmpty()) {
-//            Log.e("TeachersInfo", "❌ ERROR: Phone number missing from Intent!");
-//            return;
-//        }
-//
-//        Log.d("TeachersInfo", "📌 Fetching user details for phone number: " + phoneNumber);
-//
-//        DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
-//            Log.d("TeachersInfo", "✅ Loaded Correct User: 34 " + user.getName() + " " + user.getLastName());
-//            if (!userList.isEmpty()) {
-//                user = userList.get(0);  // ✅ Store user object
-//                Log.d("TeachersInfo", "✅ Loaded Correct User: " + user.getName() + " " + user.getLastName());
-//
-//                runOnUiThread(() -> {
-//                    etFirstName.setText(user.getName());
-//                    etLastName.setText(user.getLastName());
-//                    etContact.setText(user.getMobileNo());
-//                    etEmail.setText(user.getEmailId());
-//
-//                    String imageName = user.getUserImageName();
-//                    String referralCode = user.getSelfReferralCode();
-//
-//                    if (imageName != null && !imageName.isEmpty()) {
-//                        String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
-//                        Log.d(TAG, "✅ Profile image URL: " + imageUrl);
-//
-//                        runOnUiThread(() -> Glide.with(this)
-//                                .load(imageUrl)
-//                                .placeholder(R.drawable.generic_avatar) // Default profile image
-//                                .error(R.drawable.generic_avatar) // Show default if error
-//                                .into(profileImageView));
-//                    } else {
-//                        Log.e(TAG, "❌ No profile image found in DB or empty value.");
-//                    }
-//
-//                    // ✅ Enable navigation once data is loaded
-//                    Log.d("TeachersInfo", "📌 Calling enableNavigation() after user is loaded.");  // Debug log ✅
-//                });
-//
-//            }
-//        });
-//    }
-
     private void fetchUserDetails12(String phoneNumber) {
 
 
@@ -242,10 +196,6 @@ public class TeachersBasicInfo extends AppCompatActivity {
             });
         });
     }
-
-
-
-
 
 
 

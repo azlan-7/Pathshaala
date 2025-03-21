@@ -190,21 +190,27 @@ public class UserOnboardingRadio extends AppCompatActivity {
 
 
                             editor.apply(); // ✅ Save changes
-                            Log.d("UserOnboardingRadio", "✅ User Data Saved in SharedPreferences");
+                            Log.d("UserOnboardingRadio", "✅ User Data Saved in SharedPreferences 123 ");
 
 
 
                             // ✅ Navigate to `TeachersInfo` **AFTER** saving data
                             String userType = (radioGroup.getCheckedRadioButtonId() == R.id.radioTeacher) ? "T" : "S";
+                            Log.d("UserOnboardingRadio", "UserType: 123:  " + userType);
                             if(userType == "T"){
 
                                 Intent intent = new Intent(UserOnboardingRadio.this, TeachersInfo.class);
                                 startActivity(intent);
                                 finish();
 
-                            }else{
+                            }else if(userType == "S"){
 
                                 Intent intent = new Intent(UserOnboardingRadio.this, StudentsInfo.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else{
+                                Intent intent = new Intent(UserOnboardingRadio.this, NextLoginPage.class);
                                 startActivity(intent);
                                 finish();
                             }

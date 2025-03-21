@@ -28,7 +28,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -138,6 +140,53 @@ public class StudentsBasicInfo extends AppCompatActivity {
         autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
     }
 
+    private void insertProfileImageIntoDB(Uri imageUri) {
+        if (imageUri == null) {
+            Log.e("StudentsBasicInfo", "⚠️ No image selected.");
+            return;
+        }
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        String selfReferralCode = sharedPreferences.getString("SELF_REFERRAL_CODE", "");
+
+//        if (userId == -1) {
+        if (userId <= 0) {
+            Log.e("StudentsBasicInfo", "⚠️ User ID not found in SharedPreferences.");
+            return;
+        }
+
+        if (selfReferralCode.isEmpty()) {
+            Log.e("StudentsBasicInfo", "⚠️ Self Referral Code not available.");
+            return;
+        }
+
+        File imageFile = FileUploader.renameFileForTeachers(this, imageUri, userId, "U_T");
+        if (imageFile == null) {
+            Log.e("StudentsBasicInfo", "❌ Failed to copy and rename file.");
+            return;
+        }
+
+        // Upload image asynchronously
+        FileUploader.uploadImage(imageFile, this, "U_S", new FileUploader.UploadCallback() {
+            @Override
+            public void onUploadComplete(boolean success) {
+                if (success) {
+                    String uploadedFileName = imageFile.getName();
+                    DatabaseHelper.updateUserProfileImage(userId, uploadedFileName);
+                    Log.d("StudentsBasicInfo", "✅ Image uploaded and DB updated successfully.");
+                } else {
+                    Log.e("StudentsBasicInfo", "❌ Image upload failed.");
+                }
+            }
+        });
+
+    }
+
+
+
+    
+
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
@@ -151,12 +200,12 @@ public class StudentsBasicInfo extends AppCompatActivity {
             Uri imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                profileImageView.setImageBitmap(bitmap);
-                // Save image URI to SharedPreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("PROFILE_IMAGE_URI", imageUri.toString());
-                editor.apply();
+                profileImageView.setImageBitmap(bitmap);  // Set the chosen image as profile picture
+
+                // Upload and save image in DB
+                insertProfileImageIntoDB(imageUri);
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

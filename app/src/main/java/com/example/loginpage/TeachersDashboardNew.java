@@ -26,7 +26,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -54,7 +56,7 @@ import java.util.List;
 public class TeachersDashboardNew extends AppCompatActivity {
 
     private TextView welcomeText;
-    private ImageView profileIcon;
+    private ImageView profileIcon, profileIconTop;
     private ImageView searchButton;
     private ImageButton whatsappButton;
     Handler mainTextHandler = new Handler();
@@ -80,6 +82,10 @@ public class TeachersDashboardNew extends AppCompatActivity {
         Button searchButton = findViewById(R.id.button37);
         welcomeText = findViewById(R.id.textViewHello); // Corrected TextView ID
         profileIcon = findViewById(R.id.imageView151);
+        profileIconTop = findViewById(R.id.imageView151);
+
+        // ✅ Fetch Profile Image from Database
+        fetchProfileImageFromDB();
 
         loadUserName();
         showStudentEnrolledClassBarChart();
@@ -110,6 +116,11 @@ public class TeachersDashboardNew extends AppCompatActivity {
             startActivity(intent);
         });
 
+        profileIconTop.setOnClickListener(v -> {
+            Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
+            startActivity(intent);
+        });
+
 
         // Handle insets for layout adjustments
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -121,6 +132,32 @@ public class TeachersDashboardNew extends AppCompatActivity {
         // bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
     }
+
+    private void fetchProfileImageFromDB() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1); // ✅ Get updated USER_ID
+
+        if (userId <= 0) {
+            Log.e("TeachersDashboardNew", "⚠️ User ID not found in SharedPreferences.");
+            return;
+        }
+
+        DatabaseHelper.fetchUserProfileImage(userId, imageName -> {
+            if (imageName != null && !imageName.isEmpty()) {
+                String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+                Log.d("TeachersDashboardNew", "✅ Profile image URL: " + imageUrl);
+
+                runOnUiThread(() -> Glide.with(this)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.generic_avatar) // Default profile image
+                        .error(R.drawable.generic_avatar) // Show default if error
+                        .into(profileIconTop)); // ✅ Load image into Toolbar Profile
+            } else {
+                Log.e("TeachersDashboardNew", "❌ No profile image found in DB or empty value.");
+            }
+        });
+    }
+
 
 
     // Working of the BOTTOM NAVIGATION BAR
@@ -134,7 +171,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
             } else if (itemId == R.id.home) {
                 Intent intent = new Intent(TeachersDashboardNew.this, TeachersDashboardNew.class);
                 startActivity(intent);
-            } else if (itemId == R.id.profile){
+            } else if (itemId == R.id.profile) {
                 Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
                 startActivity(intent);
             }
@@ -154,7 +191,8 @@ public class TeachersDashboardNew extends AppCompatActivity {
     private void loadUserName() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String firstName = sharedPreferences.getString("FIRST_NAME", "User"); // Default "User"
-        final String text = "Welcome Back, " + firstName + "\uD83D\uDC4B ";
+//        final String text = "Welcome Back, " + firstName + "\uD83D\uDC4B ";
+        final String text = "Welcome Back, " +  "\uD83D\uDC4B ";
         welcomeText.setText("");
 
         Handler handler = new Handler(); // Single handler instance

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -37,6 +38,8 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
     private static final String TAG = "SubjectExpertiseNewOne";
     private FlexboxLayout subjectContainer;
 
+    private TextView heading;
+
     private FlexboxLayout retrievedSubjectContainer;
     private RecyclerView subjectsRecyclerView;
     private SharedPreferences sharedPreferences;
@@ -56,13 +59,20 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
         subjectContainer = findViewById(R.id.subjectContainer);
         subjectsRecyclerView = findViewById(R.id.subjectsRecycler);
         saveButton = findViewById(R.id.button21);
+        heading = findViewById(R.id.textView56);
+
 
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         selectedSubjects = new HashSet<>(sharedPreferences.getStringSet("SELECTED_SUBJECTS", new HashSet<>()));
 
 
         userId = sharedPreferences.getInt("USER_ID", -1);
-        Log.d(TAG, "Retrieved User ID from SharedPreferences: " + userId);
+        String userType = sharedPreferences.getString("usertype", "N/A");;
+        Log.d(TAG, "Retrieved User type from SharedPreferences: " + userType);
+
+        if(userType.equals("S")){
+            heading.setText("Learning Preferences");
+        }
 
 //        if (userId == -1) {
 //            Log.e(TAG, "USER_ID not found! Fetching from the database...");

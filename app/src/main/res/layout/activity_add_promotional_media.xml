@@ -73,16 +73,18 @@
         app:layout_constraintVertical_bias="0.447"
         app:srcCompat="@drawable/upload_24dp_1674ae_fill0_wght400_grad0_opsz24" />
 
-
-
     <VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@id/image_select_vid"
         android:visibility="gone"
+        android:layout_below="@id/image_select_vid"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.447"/>
 
 
     <TextView
@@ -132,19 +134,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.795" />
-
-    <ImageView
-        android:id="@+id/retrieved_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:scaleType="fitCenter"
-        android:maxHeight="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/button15"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView54"
-        app:srcCompat="@drawable/ic_7" />
 
 
     <!--    <TextView-->

@@ -316,7 +316,7 @@ public class DatabaseHelper {
                         stmt.setString(11, phoneNumber);  // ✅ Phone number
                         stmt.setString(12, "");
                         stmt.setString(13, "");
-                        Log.d("DatabaseHelper", "📌 Executing query for phone: 778  " + phoneNumber);
+                        Log.d("DatabaseHelper", "📌 Executing query for phone: " + phoneNumber);
                         stmt.setString(14, "");
                         stmt.setString(15, "");
                         stmt.setString(16, "");
@@ -352,11 +352,12 @@ public class DatabaseHelper {
                             user.setName(rs.getString("Name"));
                             user.setEmailId(rs.getString("emailId"));
                             user.setMobileNo(rs.getString("mobileno"));
-                           // user.setSelfReferralCode(rs.getString("selfreferralcode"));
+                            user.setSelfReferralCode(rs.getString("selfreferralcode"));
+                            user.setUserType(rs.getString("usertype"));
                             user.setUserImageName(rs.getString("UserImageName"));
                             userList.add(user);
 
-                            Log.d("DatabaseHelper", "✅ User Retrieved: " + user.getName() + " (ID: " + user.getUserId() + ")");
+                            Log.d("DatabaseHelper", "✅ User Retrieved: " + user.getUserType() + " (ID: " + user.getUserId() + ")");
                         }
 
                         rs.close();

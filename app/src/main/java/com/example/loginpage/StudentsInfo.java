@@ -3,6 +3,7 @@ package com.example.loginpage;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,13 +15,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.models.UserDetailsClass;
+
 public class StudentsInfo extends AppCompatActivity {
 
     private TextView tvFullName, tvContact, tvEmail;
-    private TextView accountInfo, academicDetails, learningPreferences, parentGuardian, skillExtraCurr,progress,attendance,commPref,feedback;
+    private UserDetailsClass user;
+    private TextView accountInfo, academicDetails, learningPreferences, parentGuardian, skillExtraCurr,progress,attendance,commPref,feedback,dashboard;
     private TextView tvAboutYourself;
     private TextView uniqueIdTextView;
+    private ImageView profileImage;
 
+    private static final String TAG = "StudentsInfo";
 
 
     private final ActivityResultLauncher<Intent> aboutActivityLauncher =
@@ -45,6 +53,7 @@ public class StudentsInfo extends AppCompatActivity {
         learningPreferences = findViewById(R.id.textViewCourses);
         skillExtraCurr = findViewById(R.id.textViewActivities);
         parentGuardian = findViewById(R.id.textViewLocation);
+        dashboard = findViewById(R.id.textView121);
         ImageView editAbout = findViewById(R.id.imageView44);
         ImageView qrCode = findViewById(R.id.imageView113);
         ImageView payment = findViewById(R.id.imageView138);
@@ -55,6 +64,10 @@ public class StudentsInfo extends AppCompatActivity {
         tvAboutYourself = findViewById(R.id.textViewAboutYourself);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView2);
         skillExtraCurr = findViewById(R.id.textViewActivities);
+        
+        profileImage = findViewById(R.id.imageView55);
+
+        fetchUserDetailsFromDB();
 
         // Get Unique ID
         String uniqueID = getIntent().getStringExtra("UNIQUE_ID");
@@ -90,6 +103,12 @@ public class StudentsInfo extends AppCompatActivity {
             startActivity(intent);
         });
 
+        dashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentsInfo.this, StudentsDashboard.class);
+            aboutActivityLauncher.launch(intent);
+            startActivity(intent);
+        });
+
         academicDetails.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, StudentsAcademicDetails.class);
             aboutActivityLauncher.launch(intent);
@@ -110,7 +129,7 @@ public class StudentsInfo extends AppCompatActivity {
         });
 
         learningPreferences.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, LearningPreferences.class);
+            Intent intent = new Intent(StudentsInfo.this, SubjectExpertiseNewOne.class);
             aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });
@@ -131,18 +150,29 @@ public class StudentsInfo extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String contactNumber = sharedPreferences.getString("phoneNumber", "Not Available");
         String aboutYourself = sharedPreferences.getString("ABOUT_STUDENT", "Write about yourself..."); // <-- Changed from ABOUT_YOURSELF
+        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
+        if (!storedImageName.isEmpty()) {
+            String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
+            Log.d("StudentsInfo", "✅ Loaded Image from SharedPreferences: " + imageUrl);
+            Glide.with(this).load(imageUrl).placeholder(R.drawable.generic_avatar).error(R.drawable.generic_avatar).into(profileImage);
+        }
 
         tvAboutYourself.setText(aboutYourself);
         tvContact.setText(contactNumber);
 
         String firstName = sharedPreferences.getString("FIRST_NAME", "N/A");
-        String lastName = sharedPreferences.getString("LAST_NAME", "N/A");
+        String lastName = sharedPreferences.getString("LAST_NAME", "");
         String contact = sharedPreferences.getString("CONTACT", "N/A");
         String email = sharedPreferences.getString("EMAIL", "N/A");
+        String selfreferralcode = sharedPreferences.getString("selfreferralcode", "N/A");
 
-        tvFullName.setText(firstName + " " + lastName);
-        tvContact.setText(contact);
-        tvEmail.setText(email);
+//        tvFullName.setText(firstName + " " + lastName);
+//        tvContact.setText(contact);
+//        tvEmail.setText(email);
+        tvFullName.setText("Student " + "Test");
+        tvContact.setText("2323232333");
+        tvEmail.setText("student@Test.com");
+        uniqueIdTextView.setText(selfreferralcode);
 
         // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -151,4 +181,64 @@ public class StudentsInfo extends AppCompatActivity {
             return insets;
         });
     }
+
+
+    private void fetchUserDetailsFromDB() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
+        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
+
+        if (!storedImageName.isEmpty()) {
+            String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
+            Log.d("StudentsInfo", "✅ Loaded Image from SharedPreferences: " + imageUrl);
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.generic_avatar)
+                    .error(R.drawable.generic_avatar)
+                    .into(profileImage);
+        } else {
+            Log.e("StudentsInfo", "❌ No profile image found in SharedPreferences, checking DB...");
+        }
+
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            Log.e("StudentsInfo", "❌ ERROR: Phone number missing from SharedPreferences!");
+            return;
+        }
+
+        DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
+            if (!userList.isEmpty()) {
+                UserDetailsClass user = userList.get(0);
+                Log.d("StudentsInfo", "✅ Loaded Correct User: " + user.getName());
+
+                runOnUiThread(() -> {
+                    tvFullName.setText(user.getName());
+                    tvContact.setText(user.getMobileNo());
+                    tvEmail.setText(user.getEmailId());
+
+                    String imageName = user.getUserImageName();
+                    if (imageName != null && !imageName.isEmpty()) {
+                        String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+                        Log.d("StudentsInfo", "✅ Profile image URL: " + imageUrl);
+                        Glide.with(this)
+                                .load(imageUrl)
+                                .placeholder(R.drawable.generic_avatar)
+                                .error(R.drawable.generic_avatar)
+                                .into(profileImage);
+
+                        // ✅ Save to SharedPreferences for future use
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("USER_PROFILE_IMAGE", imageName);
+                        editor.apply();
+                    } else {
+                        Log.e("StudentsInfo", "❌ No profile image found in DB or empty value.");
+                    }
+                });
+            } else {
+                Log.e("StudentsInfo", "❌ No user found in DB for phone: " + phoneNumber);
+            }
+        });
+    }
+
+
+
 }

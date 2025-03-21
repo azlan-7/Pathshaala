@@ -77,6 +77,7 @@ public class TeachersInfo extends AppCompatActivity {
         String phoneNumber = sharedPreferences.getString("phoneNumber", "");
         int userId = sharedPreferences.getInt("USER_ID", -1);
 
+
 //
         Log.d("TeachersInfo","phoneNumber: " + phoneNumber);
 
@@ -182,13 +183,15 @@ public class TeachersInfo extends AppCompatActivity {
 
                     runOnUiThread(() -> {
                         String lastName = user.getLastName();
-                        if (lastName == null || lastName.trim().isEmpty()) {
-                            lastName = "N/A";
+                        if (user.getLastName() == null || user.getLastName().trim().isEmpty()) {
+                            lastName = "";
                         }
-                        Log.d(TAG, "✅ Last Name Retrieved from DB: " + lastName);
+                        Log.d(TAG, "✅ Last Name Retrieved from DB: " + user.getLastName());
                         tvFullName.setText(user.getName() + " " + lastName);
                         tvContact.setText(user.getMobileNo());
                         tvEmail.setText(user.getEmailId());
+                        tvEmail.setText(user.getEmailId());
+                        uniqueIdTextView.setText(user.getSelfReferralCode());
                     });
                 } else {
 //                    Log.e(TAG, "⚠️ No users found in DB for phone: " + phoneNumber);
@@ -225,7 +228,7 @@ public class TeachersInfo extends AppCompatActivity {
                 Log.d("TeachersInfo", "✅ Loaded Correct User: " + user.getName() + " " + user.getLastName());
 
                 runOnUiThread(() -> {
-                    tvFullName.setText(user.getName() + " " + (user.getLastName() != null ? user.getLastName() : "N/A"));
+                    tvFullName.setText(user.getName() + " " + (user.getLastName() != null ? user.getLastName() : ""));
                     tvContact.setText(user.getMobileNo());
                     tvEmail.setText(user.getEmailId());
                     //uniqueIdTextView.setText(user.getSelfReferralCode());
