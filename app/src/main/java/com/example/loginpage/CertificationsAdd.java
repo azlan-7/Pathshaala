@@ -137,10 +137,6 @@ public class CertificationsAdd extends AppCompatActivity {
     }
 
 
-
-
-
-
     private void saveCertification() {
         String name = etCertificationName.getText().toString().trim();
         String organisation = etOrganisation.getText().toString().trim();
@@ -185,14 +181,15 @@ public class CertificationsAdd extends AppCompatActivity {
 
         DatabaseHelper.UserWiseCertificateInsert(
                 this,
-                userId,  // ✅ Corrected position (2nd argument should be userId)
+                "1",  // ✅ Insert operation
+                userId,
                 name,
                 organisation,
                 credentialUrl,
                 issueYear,
                 certificateFileName,
                 selfReferralCode,
-                new DatabaseHelper.DatabaseCallback() {  // ✅ Ensure callback is correctly passed
+                new DatabaseHelper.DatabaseCallback() {
                     @Override
                     public void onMessage(String message) {
                         Toast.makeText(CertificationsAdd.this, message, Toast.LENGTH_SHORT).show();
@@ -214,6 +211,7 @@ public class CertificationsAdd extends AppCompatActivity {
                     }
                 }
         );
+
 
     }
 
@@ -259,59 +257,7 @@ public class CertificationsAdd extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data == null || data.getData() == null) {
-                Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Uri fileUri = data.getData();
-            certificateImageUri = fileUri; // Save URI for later use
-
-            Log.d("CertificationsAdd", "File URI: " + fileUri.toString());
-
-            // Check MIME Type
-            String mimeType = getContentResolver().getType(fileUri);
-            if (mimeType == null || !mimeType.startsWith("image/")) {
-                Toast.makeText(this, "Invalid file type. Please select an image.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Convert URI to File
-            File file = getFileFromUri(fileUri);
-
-            if (file != null) {
-                Log.d("CertificationsAdd", "File Path: " + file.getAbsolutePath());
-            } else {
-                Log.e("CertificationsAdd", "❌ File is NULL. Check if the file path conversion failed.");
-            }
-
-
-            if (file == null || !file.exists()) {
-                Log.e("CertificationsAdd", "❌ Failed to get file from URI");
-                Toast.makeText(this, "File error. Please try again.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Log.d("CertificationsAdd", "✅ File Path: " + file.getAbsolutePath());
-
-            new Thread(() -> {
-                boolean success = file != null && FileUploader.uploadImage(file, CertificationsAdd.this, "C");
-
-                runOnUiThread(() -> {
-                    if (success) {
-                        Toast.makeText(this, "✅ File uploaded successfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "❌ File upload failed", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }).start();
-        }
-    }
 
 
 }

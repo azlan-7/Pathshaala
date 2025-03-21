@@ -1,5 +1,7 @@
 package com.example.loginpage.models;
 
+import android.util.Log;
+
 public class CertificationModel {
     private String name, organisation, year, credentialUrl, imageUri;
 
@@ -9,6 +11,8 @@ public class CertificationModel {
         this.year = year;
         this.credentialUrl = credentialUrl;
         this.imageUri = imageUri;
+        Log.d("CertificationModel", "Created: " + name + ", Org: " + organisation);
+
     }
 
     public String getName() { return name; }

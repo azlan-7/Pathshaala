@@ -31,55 +31,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <!-- Card 1 -->
-        <include layout="@layout/student_card"
-            android:id="@+id/cardStudent1"
-            tools:studentName="John Doe"
-            tools:grade="Grade: 10"
-            tools:subjects="Learning: Math, Science"
-            tools:location="Lucknow"/>
+            <!-- Card 1 -->
+            <include layout="@layout/student_card"
+                android:id="@+id/cardStudent1"
+                tools:studentName="John Doe"
+                tools:grade="Grade: 10"
+                tools:subjects="Learning: Math, Science"
+                tools:location="Lucknow"/>
 
-        <!-- Card 2 -->
-        <include layout="@layout/student_card"
-            android:id="@+id/cardStudent2"
-            tools:studentName="Jane Doe"
-            tools:grade="Grade: 8"
-            tools:subjects="Learning: English, History"
-            tools:location="Delhi"/>
+            <!-- Card 2 -->
+            <include layout="@layout/student_card"
+                android:id="@+id/cardStudent2"
+                tools:studentName="Jane Doe"
+                tools:grade="Grade: 8"
+                tools:subjects="Learning: English, History"
+                tools:location="Delhi"/>
 
-        <!-- Card 3 -->
-        <include layout="@layout/student_card"
-            android:id="@+id/cardStudent3"
-            tools:studentName="Arjun Kumar"
-            tools:grade="Grade: 9"
-            tools:subjects="Learning: Physics, Chemistry"
-            tools:location="Mumbai"/>
+            <!-- Card 3 -->
+            <include layout="@layout/student_card"
+                android:id="@+id/cardStudent3"
+                tools:studentName="Arjun Kumar"
+                tools:grade="Grade: 9"
+                tools:subjects="Learning: Physics, Chemistry"
+                tools:location="Mumbai"/>
 
-        <!-- Card 4 -->
-        <include layout="@layout/student_card"
-            android:id="@+id/cardStudent4"
-            tools:studentName="Sara Ali"
-            tools:grade="Grade: 7"
-            tools:subjects="Learning: Biology, Geography"
-            tools:location="Bangalore"/>
+            <!-- Card 4 -->
+            <include layout="@layout/student_card"
+                android:id="@+id/cardStudent4"
+                tools:studentName="Sara Ali"
+                tools:grade="Grade: 7"
+                tools:subjects="Learning: Biology, Geography"
+                tools:location="Bangalore"/>
 
-        <!-- Card 5 -->
-        <include layout="@layout/student_card"
-            android:id="@+id/cardStudent5"
-            tools:studentName="Dwight Shrute"
-            tools:grade="Grade: 7"
-            tools:subjects="Learning: History, Geography"
-            tools:location="Jau"/>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+            <!-- Card 5 -->
+            <include layout="@layout/student_card"
+                android:id="@+id/cardStudent5"
+                tools:studentName="Dwight Shrute"
+                tools:grade="Grade: 7"
+                tools:subjects="Learning: History, Geography"
+                tools:location="Jau"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-<!-- Save Button (Ensuring It's Visible) -->
+    <!-- Save Button (Ensuring It's Visible) -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button36"
         android:layout_width="186dp"

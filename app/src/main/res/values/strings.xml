@@ -1,4 +1,31 @@
 <resources>
     <string name="app_name">Pathshaala
     </string>
+    <string name="back_btn">Back Button\n</string>
+    <string name="skills_extra">Skills and Extracurriculars</string>
+    <string name="add_hobbies">Hobbies and Interests</string>
+    <string name="add_extracurriculars">Extracurricular Activities</string>
+    <string name="skills_acquired">Skills Accquired</string>
+    <string name="user_profile">User Profile</string>
+    <string name="sample_logo">Application Sample Logo</string>
+    <string name="hello_user">Hello, Welcome Back</string>
+    <string name="stats">Statistics</string>
+    <string name="search">Search Information</string>
+    <string name="course_enrollments_n1075">Course Enrollments\n1075</string>
+    <string name="live_students_n75">Live Students\n75</string>
+    <string name="loc_stats">Location Based Stats</string>
+    <string name="subject">Subject</string>
+    <string name="grade">Grade</string>
+    <string name="loc">Location</string>
+    <string name="send_msg">Send Message</string>
+    <string name="wp_page_title">Connect Instantly via WhatsApp 🚀</string>
+    <string name="msg_to">Message To:</string>
+    <string name="ph_no">Phone Number</string>
+    <string name="yr_msg">Write your message</string>
+    <string name="instant_msg">Instant Messages</string>
+    <string name="class_reminder">1️⃣ Class Reminder: \nHello [Student\'s Name], just a reminder that our next class is scheduled for [Date and Time]. Please be on time!</string>
+    <string name="assignemnt_submission">2️⃣ Assignment Submission: \nDear students, please remember to submit your [Assignment Name] by [Deadline]. Let me know if you have any questions!</string>
+    <string name="exam_schedule">3️⃣ Exam Schedule Update: \nAttention everyone! The [Subject] exam has been scheduled for [Date]. Please check your syllabus and prepare accordingly.</string>
+    <string name="attendance_warning">4️⃣ Attendance Warning :\nHi [Student\'s Name], I noticed that you\'ve missed a few classes recently. Is everything okay? Let me know if you need any help.</string>
+    <string name="msg">Message:</string>
 </resources>

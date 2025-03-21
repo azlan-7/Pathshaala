@@ -54,47 +54,30 @@ public class TeachersInfo extends AppCompatActivity {
         tvEmail = findViewById(R.id.tvEmail);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView);
 
-        String phoneNumber = getIntent().getStringExtra("phoneNumber");
-
         fetchUserDetailsFromDB();
-//        fetchReferralCodeFromDB(uniqueIdTextView);
-//        fetchProfileImageFromDB(); // Fetch and load profile image
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
+        int userId = sharedPreferences.getInt("USER_ID", -1);
 
-
-//        String firstName = intent.getStringExtra("USER_FIRST_NAME");
-//        String lastName = intent.getStringExtra("USER_LAST_NAME");
-//        String email = intent.getStringExtra("USER_EMAIL");
+//
         Log.d("TeachersInfo","phoneNumber: " + phoneNumber);
-        // Fallback to SharedPreferences if Intent data is missing
-//        if (firstName == null) firstName = sharedPreferences.getString("FIRST_NAME", "N/A");
-//        if (lastName == null) lastName = sharedPreferences.getString("LAST_NAME", "N/A");
-//        if (email == null) email = sharedPreferences.getString("EMAIL", "N/A");
+
         if (phoneNumber == null) phoneNumber = sharedPreferences.getString("phoneNumber", "N/A");
 
         // Set values immediately
 //        tvFullName.setText(firstName + " " + lastName);
         tvContact.setText(phoneNumber);
-//        tvEmail.setText(email);
 
-
-
-//        Log.d("TeachersInfo", "📌 Initial SharedPreferences Data: " + firstName + lastName + email + " | " + contact);
-
-        String selfReferralCode = getIntent().getStringExtra("SELF_REFERRAL_CODE");
-
-        if (selfReferralCode != null && !selfReferralCode.equals("N/A")) {
-            Log.d(TAG, "📌 Self Referral Code: " + selfReferralCode);
-            uniqueIdTextView.setText(selfReferralCode);  // ✅ Display Code
-        } else {
+         {
             Log.e(TAG, "⚠️ Self Referral Code Not Found! Fetching from DB...");
 //
 //            Log.d("TeachersInfo", "📌 First Name: " + firstName);
 //            Log.d("TeachersInfo", "📌 Last Name: " + lastName);
 
             if (!phoneNumber.isEmpty()) {
-                DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, new DatabaseHelper.UserResultListener() {
+                DatabaseHelper.UserDetailsSelect
+                        (this, "4", phoneNumber, new DatabaseHelper.UserResultListener() {
                     @Override
                     public void onQueryResult(List<UserDetailsClass> userList) {
                         if (!userList.isEmpty()) {
@@ -141,8 +124,6 @@ public class TeachersInfo extends AppCompatActivity {
         location.setOnClickListener(v -> startActivity(new Intent(TeachersInfo.this, TeachersAddress.class)));
         dashboard.setOnClickListener(v -> startActivity(new Intent(TeachersInfo.this, TeachersDashboardNew.class)));
 
-        int userId = sharedPreferences.getInt("USER_ID", -1);
-
         if (userId == -1) {
             Log.e(TAG, "❌ ERROR: User ID not found in SharedPreferences!");
             Toast.makeText(this, "User ID not found. Please log in again.", Toast.LENGTH_LONG).show();
@@ -150,11 +131,16 @@ public class TeachersInfo extends AppCompatActivity {
             Log.d(TAG, "✅ User ID retrieved from SharedPreferences: " + userId);
         }
 
+
+
+        String phoneNum = sharedPreferences.getString("phoneNumber", "");
+
+
         // Get phone number from intent
         // Try getting phone number from Intent
         // Try getting phone number from Intent
         // Get phone number from Intent
-        String phoneNum = getIntent().getStringExtra("phoneNumber");
+//        String phoneNum = getIntent().getStringExtra("phoneNumber");
 
         // If not found in Intent, get it from SharedPreferences
         if (phoneNum == null || phoneNum.isEmpty()) {
@@ -204,14 +190,17 @@ public class TeachersInfo extends AppCompatActivity {
     }
 
     private void fetchUserDetailsFromDB() {
-        String phoneNumber = getIntent().getStringExtra("phoneNumber");  // Get from Intent
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
+
+//        String phoneNumber = getIntent().getStringExtra("phoneNumber");  // Get from Intent
         Log.e("TeachersInfo", "phoneNumberFetched: " + phoneNumber);
         if (phoneNumber == null || phoneNumber.isEmpty()) {
             Log.e("TeachersInfo", "❌ ERROR: Phone number missing from Intent!");
             return;
         }
 
-        Log.d("TeachersInfo", "📌 Fetching user details for phone number: " + phoneNumber);
+        Log.d("TeachersInfo", "📌 Fetching user details for phone number:89 :: " + phoneNumber);
 
         DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
             if (!userList.isEmpty()) {
@@ -222,10 +211,10 @@ public class TeachersInfo extends AppCompatActivity {
                     tvFullName.setText(user.getName() + " " + (user.getLastName() != null ? user.getLastName() : "N/A"));
                     tvContact.setText(user.getMobileNo());
                     tvEmail.setText(user.getEmailId());
-                    uniqueIdTextView.setText(user.getSelfReferralCode());
+                    //uniqueIdTextView.setText(user.getSelfReferralCode());
 
                     String imageName = user.getUserImageName();
-                    String referralCode = user.getSelfReferralCode();
+                   // String referralCode = user.getSelfReferralCode();
 
                     if (imageName != null && !imageName.isEmpty()) {
                         String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;

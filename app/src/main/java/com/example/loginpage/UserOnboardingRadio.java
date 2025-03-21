@@ -134,11 +134,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
         buttonSave = findViewById(R.id.generateUID);
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String savedPhoneNumber = getIntent().getStringExtra("phoneNumber"); // Get from Intent first
-
-        if (savedPhoneNumber == null || savedPhoneNumber.isEmpty()) {
-            savedPhoneNumber = sharedPreferences.getString("phoneNumber", ""); // Fallback to SharedPreferences
-        }
+        String savedPhoneNumber = sharedPreferences.getString("phoneNumber", "");
 
         Log.d("UserOnboardingRadio", "Stored Phone Number: " + savedPhoneNumber);
 
@@ -190,15 +186,29 @@ public class UserOnboardingRadio extends AppCompatActivity {
                             editor.putString("USER_EMAIL", user.getEmailId());  // ✅ Save email
                             editor.putString("USER_PHONE", user.getMobileNo()); // ✅ Save phone number
                             editor.putInt("USER_ID", Integer.parseInt(user.getUserId())); // ✅ Save user ID
+                            editor.putString("SELF_REFERRAL_CODE", user.getSelfReferralCode());
 
 
                             editor.apply(); // ✅ Save changes
                             Log.d("UserOnboardingRadio", "✅ User Data Saved in SharedPreferences");
 
+
+
                             // ✅ Navigate to `TeachersInfo` **AFTER** saving data
-                            Intent intent = new Intent(UserOnboardingRadio.this, TeachersInfo.class);
-                            startActivity(intent);
-                            finish();
+                            String userType = (radioGroup.getCheckedRadioButtonId() == R.id.radioTeacher) ? "T" : "S";
+                            if(userType == "T"){
+
+                                Intent intent = new Intent(UserOnboardingRadio.this, TeachersInfo.class);
+                                startActivity(intent);
+                                finish();
+
+                            }else{
+
+                                Intent intent = new Intent(UserOnboardingRadio.this, StudentsInfo.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
                         } else {
                             Log.e("UserOnboardingRadio", "❌ No user found to retrieve details.");
                         }
@@ -225,7 +235,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
         // Create DatePickerDialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
-                    String formattedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    String formattedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
                     etDOB.setText(formattedDate);
                 }, year, month, day);
 

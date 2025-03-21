@@ -46,23 +46,20 @@ public class WorkExperienceView extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_work_experience_view);
 
+        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+
         // Initialize UI elements
         addWorkExperience = findViewById(R.id.imageView81);
         buttonContinue = findViewById(R.id.button25);
         workExperienceRecyclerView = findViewById(R.id.workExperienceRecyclerView);
 
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-
         workExperienceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Load work experience data
-        // Initialize empty list
         workExperienceList = new ArrayList<>();
-        workExperienceAdapter = new WorkExperienceAdapter(this, workExperienceList, this::deleteExperience);
+        workExperienceAdapter = new WorkExperienceAdapter(this, workExperienceList);
         workExperienceRecyclerView.setAdapter(workExperienceAdapter);
 
-        // ✅ Fetch data from DB
-        fetchUserWorkExperienceDetails();
+        fetchWorkExperience();  // ✅ Fetch data after initializing the adapter
 
 
         // ✅ Log the retrieved data
@@ -93,70 +90,64 @@ public class WorkExperienceView extends AppCompatActivity {
         });
     }
 
-    private void fetchUserWorkExperienceDetails() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+    private void fetchWorkExperience() {
         int userId = sharedPreferences.getInt("USER_ID", -1);
-
         if (userId == -1) {
-            Log.e(TAG, "❌ User ID not found in SharedPreferences!");
+            Toast.makeText(this, "User not found. Please log in again.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String userIdString = String.valueOf(userId);
-        Log.d(TAG, "📌 Fetching work experience data for user: " + userIdString);
+        Log.d("WorkExperienceView", "🟢 Fetching work experience for UserID: " + userId);
 
-        DatabaseHelper.UserWiseWorkExperienceSelect(this, "4", userIdString, new DatabaseHelper.WorkExperienceCallback() {
+        DatabaseHelper.UserWiseWorkExperienceSelect(this, "4", String.valueOf(userId), new DatabaseHelper.WorkExperienceCallback() {
             @Override
-            public void onSuccess(List<UserWiseWorkExperience> userWiseWorkExperienceList) { // ✅ Fix return type
-                if (userWiseWorkExperienceList.isEmpty()) {
-                    Log.e(TAG, "⚠️ No work experience records found in DB for UserID: " + userIdString);
+            public void onSuccess(List<UserWiseWorkExperience> result) {
+                if (result == null || result.isEmpty()) {
+                    Log.e("WorkExperienceView", "❌ No work experience data retrieved!");
                     return;
                 }
 
-                workExperienceList.clear();
-                for (UserWiseWorkExperience workExp : userWiseWorkExperienceList) {
-                    Log.d(TAG, "✅ Mapping data: Institution=" + workExp.getInstitutionName());
+                List<WorkExperienceModel> newList = new ArrayList<>();
 
-                    workExperienceList.add(new WorkExperienceModel(
-                            workExp.getProfessionName(),
-                            workExp.getInstitutionName(),
-                            workExp.getDesignationName(),
-                            workExp.getWorkExperience(),
-                            workExp.getCurPreExperience(),
-                            workExp.getProfessionId(),
-                            workExp.getUserId()
-                    ));
+                for (UserWiseWorkExperience row : result) {
+                    WorkExperienceModel experience = new WorkExperienceModel(
+                            row.getProfessionName(),
+                            row.getInstitutionName(),
+                            row.getDesignationName(),
+                            row.getWorkExperience(),
+                            row.getCurPreExperience(),
+                            row.getProfessionId(),
+                            row.getUserId()
+                    );
+
+                    newList.add(experience);
                 }
 
-                // ✅ Save to SharedPreferences
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Gson gson = new Gson();
-                String workExperienceJson = gson.toJson(workExperienceList);
-                editor.putString("WORK_EXPERIENCE_LIST_" + userIdString, workExperienceJson);
-                editor.apply();
+                Log.d("WorkExperienceView", "Total items to display: " + newList.size());
 
-                // ✅ Refresh RecyclerView
                 runOnUiThread(() -> {
-                    workExperienceAdapter.updateData(workExperienceList);
-                    Log.d(TAG, "✅ Work experience data updated in RecyclerView.");
+                    workExperienceAdapter.updateData(newList);
+                    workExperienceRecyclerView.setVisibility(View.VISIBLE);
                 });
             }
 
             @Override
-            public void onError(String error) {
-                Log.e(TAG, "❌ Failed to fetch work experience records: " + error);
-                runOnUiThread(() -> Toast.makeText(WorkExperienceView.this, "Error fetching work experience details!", Toast.LENGTH_SHORT).show());
+            public void onMessage(String message) {
+                runOnUiThread(() -> Toast.makeText(WorkExperienceView.this, message, Toast.LENGTH_SHORT).show());
             }
 
             @Override
-            public void onMessage(String message) {}
-
-            @Override
-            public void onProfessionIdFetched(Integer professionId) {}
+            public void onError(String error) {
+                Log.e("WorkExperienceView", "❌ Error fetching work experience: " + error);
+                runOnUiThread(() -> Toast.makeText(WorkExperienceView.this, "Database error: " + error, Toast.LENGTH_LONG).show());
+            }
         });
-
-
     }
+
+
+
+
+
 
 
     private void saveWorkExperienceData() {
@@ -179,7 +170,7 @@ public class WorkExperienceView extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // ✅ Fetch Work Experience from DB instead of SharedPreferences
-        fetchUserWorkExperienceDetails();
+        fetchWorkExperience();
     }
 
 

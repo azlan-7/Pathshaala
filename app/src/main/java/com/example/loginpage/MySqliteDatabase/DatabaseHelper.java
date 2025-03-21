@@ -87,7 +87,7 @@ public class DatabaseHelper {
         void onSuccess(List<UserWiseWorkExperience> workExperienceList); // ✅ Fix return type
         void onMessage(String message);
         void onError(String error);
-        void onProfessionIdFetched(Integer professionId);
+
     }
 
 
@@ -237,7 +237,7 @@ public class DatabaseHelper {
                         stmt.setString(6, user.getLastName());
                         stmt.setString(7, user.getDateOfBirth());
                         Log.d("DatabaseHelper", "Date of birth of the user 13: " + user.getDateOfBirth());
-                        stmt.setString(8, "T");
+                        stmt.setString(8, user.getUserType());
                         stmt.setString(9, "");
                         stmt.setString(10, user.getCountryCode());
                         stmt.setString(11, user.getMobileNo());
@@ -251,7 +251,7 @@ public class DatabaseHelper {
                         stmt.setString(18, user.getLongitude());
                         stmt.setString(19, user.getUserImageName());
 
-                        Log.d("DatabaseHelper", "Executing stored procedure for user lookup with Value 3344  : " + user.getMobileNo());
+                        Log.d("DatabaseHelper", "Executing stored procedure for user lookup with Value of mobile no.  : " + user.getMobileNo());
                         stmt.registerOutParameter(20, Types.VARCHAR); // @selfreferralcodeOutput
                         stmt.registerOutParameter(21, Types.VARCHAR); // @messageOutput
 
@@ -294,39 +294,43 @@ public class DatabaseHelper {
             protected List<UserDetailsClass> doInBackground(Void... voids) {
                 List<UserDetailsClass> userList = new ArrayList<>();
                 try {
-                    Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserDetailsSelect...");
-                    Connection connection = getConnection();
+                    Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserDetailsSelect.4455.."+phoneNumber);
 
-                    if (connection != null) {
+                    Connection con = getConnection();
+
+                    if (con != null) {
                         String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
-                        PreparedStatement stmt = connection.prepareStatement(query);
+                        PreparedStatement stmt = con.prepareStatement(query);
+                        Log.d("DatabaseHelper", "📌 Executing query for phone: Query  " + query);
 
                         stmt.setString(1, QryStatus);
-                        stmt.setInt(2, 1);
-                        stmt.setString(3, "username");
-                        stmt.setString(4, "password");
-                        stmt.setString(5, "Name");
-                        stmt.setString(6, "LastName");
-                        stmt.setString(7, null);
-                        stmt.setString(8, "UserType");
-                        stmt.setString(9, "signuptype");
-                        stmt.setString(10, "CountryCode");
+                        stmt.setInt(2, 0);
+                        stmt.setString(3, "");
+                        stmt.setString(4, "");
+                        stmt.setString(5, "");
+                        stmt.setString(6, "");
+                        stmt.setString(7, null); //dob
+                        stmt.setString(8, "");
+                        stmt.setString(9, "");
+                        stmt.setString(10, "");
                         stmt.setString(11, phoneNumber);  // ✅ Phone number
-                        stmt.setString(12, "emailId");
-                        stmt.setString(13, "SecurityKey");
-                        stmt.setString(14, "selfreferralcode");
-                        stmt.setString(15, "custreferralcode");
-                        stmt.setString(16, "LoginStatus");
-                        stmt.setString(17, "latitude");
-                        stmt.setString(18, "longitude");
-                        stmt.setString(19, "UserImageName");
-                        stmt.setString(20, "selfreferralcodeOutput");
-                        stmt.setString(21, "messageOutput");
+                        stmt.setString(12, "");
+                        stmt.setString(13, "");
+                        Log.d("DatabaseHelper", "📌 Executing query for phone: 778  " + phoneNumber);
+                        stmt.setString(14, "");
+                        stmt.setString(15, "");
+                        stmt.setString(16, "");
+                        stmt.setString(17, "");
+                        stmt.setString(18, "");
+                        stmt.setString(19, "");
+                        stmt.setString(20, "");
+                        stmt.setString(21, "");
 
-                        Log.d("DatabaseHelper", "🔍 Executing query for phone: " + phoneNumber);
-                        Log.d("DatabaseHelper", "📌 Executing query for phone: " + phoneNumber);
-                        Log.d("DatabaseHelper", "📌 Query Result Size: " + userList.size());
+
                         ResultSet rs = stmt.executeQuery();
+
+                        Log.d("DatabaseHelper", "📌 Executing query for phone:  " + phoneNumber);
+                        Log.d("DatabaseHelper", "📌 Query Result Size: " + userList.size());
 
                         if (!rs.isBeforeFirst()) { // ✅ No data found
                             Log.d("DatabaseHelper", "⚠️ No user data found in DB!");
@@ -348,7 +352,7 @@ public class DatabaseHelper {
                             user.setName(rs.getString("Name"));
                             user.setEmailId(rs.getString("emailId"));
                             user.setMobileNo(rs.getString("mobileno"));
-                            user.setSelfReferralCode(rs.getString("selfreferralcode"));
+                           // user.setSelfReferralCode(rs.getString("selfreferralcode"));
                             user.setUserImageName(rs.getString("UserImageName"));
                             userList.add(user);
 
@@ -357,7 +361,7 @@ public class DatabaseHelper {
 
                         rs.close();
                         stmt.close();
-                        connection.close();
+                        con.close();
                     } else {
                         Log.e("DatabaseHelper", "❌ DB connection failed!");
                     }
@@ -901,6 +905,7 @@ public class DatabaseHelper {
                 List<UserWiseWorkExperience> userWiseWorkExperienceList = new ArrayList<>();
                 Connection connection = null;
                 CallableStatement stmt = null;
+
                 try {
                     Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserWiseWorkExperienceSelect with UserID: " + UserID);
                     connection = getConnection();
@@ -909,7 +914,7 @@ public class DatabaseHelper {
                         String query = "{call sp_UserWorkExperienceInsertUpdateSelect(?,?,?,?,?,?,?,?,?,?,?)}";
                         stmt = connection.prepareCall(query);
 
-                        stmt.setString(1, QryStatus);
+                        stmt.setString(1, QryStatus); // Ensure this is correct
                         stmt.setNull(2, Types.INTEGER);
                         stmt.setInt(3, Integer.parseInt(UserID));
                         stmt.setNull(4, Types.INTEGER);
@@ -919,10 +924,9 @@ public class DatabaseHelper {
                         stmt.setNull(8, Types.INTEGER);
                         stmt.setNull(9, Types.INTEGER);
                         stmt.setNull(10, Types.VARCHAR);
+                        stmt.registerOutParameter(11, Types.VARCHAR);
 
-                        stmt.registerOutParameter(11, Types.VARCHAR); // ✅ Fix: Ensure @Message is registered
-
-                        Log.d("DatabaseHelper", "🔍 Executing query for UserID: " + UserID);
+                        Log.d("DatabaseHelper", "🔍 Executing stored procedure for UserID: " + UserID);
                         boolean hasResults = stmt.execute();
 
                         if (!hasResults) {
@@ -931,16 +935,24 @@ public class DatabaseHelper {
 
                         ResultSet rs = stmt.getResultSet();
                         while (rs.next()) {
-                            Log.d("DatabaseHelper", "📌 Raw Data -> Institution: " + rs.getString("InstitutionName"));
+                            String professionName = rs.getString("ProfessionName");
+                            String institutionName = rs.getString("InstitutionName");
+                            String designationName = rs.getString("DesignationName");
+                            String workExperience = rs.getString("WorkExperience");
+
+                            Log.d("DatabaseHelper", "📌 Retrieved Entry -> Profession: " + professionName +
+                                    " | Institution: " + institutionName +
+                                    " | Designation: " + designationName +
+                                    " | Experience: " + workExperience);
 
                             UserWiseWorkExperience workExp = new UserWiseWorkExperience(
                                     rs.getString("UserId"),
-                                    rs.getString("InstitutionName"),
-                                    rs.getString("DesignationName"),
-                                    rs.getString("WorkExperience"),
+                                    institutionName,
+                                    designationName,
+                                    workExperience,
                                     rs.getString("CurPreExperience"),
                                     rs.getString("ProfessionId"),
-                                    rs.getString("ProfessionName")
+                                    professionName
                             );
                             userWiseWorkExperienceList.add(workExp);
                         }
@@ -962,6 +974,7 @@ public class DatabaseHelper {
                 return userWiseWorkExperienceList;
             }
 
+
             @Override
             protected void onPostExecute(List<UserWiseWorkExperience> userWiseWorkExperienceList) {
                 if (callback != null) {
@@ -970,59 +983,6 @@ public class DatabaseHelper {
             }
         }.execute();
     }
-
-
-
-
-    public static void getProfessionId(Context context, String professionName, WorkExperienceCallback callback) {
-        new AsyncTask<Void, Void, Integer>() {
-            @Override
-            protected Integer doInBackground(Void... voids) {
-                Integer professionId = null;
-                try {
-                    Log.d("DatabaseHelper", "🛠️ Fetching Profession ID for: " + professionName);
-                    Connection connection = getConnection();
-
-                    if (connection != null) {
-                        String query = "SELECT ProfessionID FROM ProfessionTable WHERE ProfessionName = ?";
-                        PreparedStatement stmt = connection.prepareStatement(query);
-                        stmt.setString(1, professionName);
-
-                        ResultSet rs = stmt.executeQuery();
-                        if (rs.next()) {
-                            professionId = rs.getInt("ProfessionID");
-                            Log.d("DatabaseHelper", "✅ Retrieved Profession ID: " + professionId);
-                        } else {
-                            Log.d("DatabaseHelper", "⚠️ No Profession ID found for: " + professionName);
-                        }
-
-                        rs.close();
-                        stmt.close();
-                        connection.close();
-                    } else {
-                        Log.e("DatabaseHelper", "❌ DB Connection Failed!");
-                    }
-                } catch (SQLException e) {
-                    Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
-                }
-                return professionId;
-            }
-
-            @Override
-            protected void onPostExecute(Integer professionId) {
-                if (callback != null) {
-                    callback.onProfessionIdFetched(professionId); // ✅ Now uses WorkExperienceCallback
-                }
-            }
-        }.execute();
-    }
-
-
-
-
-
-
-
 
 
 
@@ -1149,43 +1109,62 @@ public class DatabaseHelper {
         }.execute();
     }
 
+
     public static void UserWiseCertificateInsert(
-            Context context, int userId, String certificateName, String issuingOrganization,
-            String credentialURL, int issueYear, String certificateFileName, String selfReferralCode,
-            DatabaseCallback callback) {
+            Context context, String QryStatus, int userId, String certificateName,
+            String issuingOrganization, String credentialURL, int issueYear,
+            String certificateFileName, String selfReferralCode, DatabaseCallback callback) {
+
+        // ✅ Ensure `certificateFileName` is never null
+        final String finalCertificateFileName =
+                (certificateFileName == null || certificateFileName.trim().isEmpty()) ? "No_File" : certificateFileName;
 
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... voids) {
-                String messageOutput = "";
+                String messageOutput = "Operation failed";
                 try {
                     Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserWiseCertificateInsert...");
                     Connection connection = getConnection();
 
                     if (connection != null) {
-                        String query = "{call sp_UserCertificateInsertUpdateSelect(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+                        String query = "{call sp_UserCertificateInsertUpdateSelect(?,?,?,?,?,?,?,?,?,?)}";
                         CallableStatement stmt = connection.prepareCall(query);
 
-                        stmt.setInt(1, 1);  // ✅ QryStatus: 1 (Insert)
-                        stmt.setNull(2, Types.INTEGER);  // ✅ UserwiseCertificateId (NULL for insert)
-                        stmt.setString(3, certificateName);  // ✅ Certificate Name
-                        stmt.setString(4, issuingOrganization);  // ✅ Issuing Organization
-                        stmt.setString(5, credentialURL);  // ✅ Credential URL
-                        stmt.setInt(6, issueYear);  // ✅ Issue Year
-                        stmt.setString(7, certificateFileName);  // ✅ Certificate File Name
-                        stmt.setInt(8, userId);  // ✅ User ID
-                        stmt.setString(9, selfReferralCode);  // ✅ Self Referral Code
-                        stmt.registerOutParameter(10, Types.VARCHAR);  // ✅ Message Output
+                        stmt.setString(1, QryStatus);
+                        stmt.setInt(2, 0);
+                        stmt.setString(3, certificateName);
+                        stmt.setString(4, issuingOrganization);
+                        stmt.setString(5, credentialURL);
+                        stmt.setInt(6, issueYear);
 
-                        Log.d("DatabaseHelper", "🔍 Executing insert query...");
+                        // ✅ Ensure we send a valid `certificateFileName`
+                        Log.d("DatabaseHelper", "📂 finalCertificateFileName (Before Insert): " + finalCertificateFileName);
+                        stmt.setString(7, finalCertificateFileName);
+
+                        stmt.setInt(8, userId);
+                        stmt.setString(9, selfReferralCode);
+                        stmt.registerOutParameter(10, Types.VARCHAR);
+
+                        Log.d("DatabaseHelper", "🔍 Query Params: ");
+                        Log.d("DatabaseHelper", "  - QryStatus: " + QryStatus);
+                        Log.d("DatabaseHelper", "  - UserID: " + userId);
+                        Log.d("DatabaseHelper", "  - Certificate Name: " + certificateName);
+                        Log.d("DatabaseHelper", "  - Issuing Org: " + issuingOrganization);
+                        Log.d("DatabaseHelper", "  - Credential URL: " + credentialURL);
+                        Log.d("DatabaseHelper", "  - Issue Year: " + issueYear);
+                        Log.d("DatabaseHelper", "  - Certificate File Name: " + finalCertificateFileName);
+                        Log.d("DatabaseHelper", "  - Self Referral Code: " + selfReferralCode);
+
                         stmt.execute();
 
-                        // Retrieve message from stored procedure
                         messageOutput = stmt.getString(10);
                         Log.d("DatabaseHelper", "✅ Insert Response: " + messageOutput);
 
                         stmt.close();
                         connection.close();
+                    } else {
+                        Log.e("DatabaseHelper", "❌ DB Connection Failed!");
                     }
                 } catch (SQLException e) {
                     Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
@@ -1202,8 +1181,6 @@ public class DatabaseHelper {
         }.execute();
     }
 
-
-
     public static void UserWiseCertificateSelect(Context context, int userId, DatabaseCallback callback) {
         new AsyncTask<Void, Void, List<Map<String, String>>>() {
             @Override
@@ -1217,31 +1194,30 @@ public class DatabaseHelper {
                         String query = "{call sp_UserCertificateInsertUpdateSelect(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
                         CallableStatement stmt = connection.prepareCall(query);
 
-                        stmt.setInt(1, 4);  // ✅ QryStatus: 4 (Select by UserId)
-                        stmt.setNull(2, Types.INTEGER);  // ✅ UserwiseCertificateId (Not needed for select)
-                        stmt.setNull(3, Types.VARCHAR);  // ✅ CertificateName (Not needed for select)
-                        stmt.setNull(4, Types.VARCHAR);  // ✅ IssueingOrganization (Not needed for select)
-                        stmt.setNull(5, Types.VARCHAR);  // ✅ CredentialURL (Not needed for select)
-                        stmt.setNull(6, Types.INTEGER);  // ✅ IssueYear (Not needed for select)
-                        stmt.setNull(7, Types.VARCHAR);  // ✅ CertificateFileName (Not needed for select)
-                        stmt.setInt(8, userId);  // ✅ User ID
-                        stmt.setNull(9, Types.VARCHAR);  // ✅ SelfReferralCode (Not needed for select)
-                        stmt.registerOutParameter(10, Types.VARCHAR);  // ✅ Message Output
+                        stmt.setInt(1, 4); // Query Type: Select by UserID
+                        stmt.setNull(2, Types.INTEGER); // UserwiseCertificateId (Not required for select)
+                        stmt.setNull(3, Types.VARCHAR); // CertificateName
+                        stmt.setNull(4, Types.VARCHAR); // IssuingOrganization
+                        stmt.setNull(5, Types.VARCHAR); // CredentialURL
+                        stmt.setNull(6, Types.INTEGER); // IssueYear
+                        stmt.setNull(7, Types.VARCHAR); // CertificateFileName
+                        stmt.setInt(8, userId); // UserId
+                        stmt.setNull(9, Types.VARCHAR); // SelfReferralCode
+                        stmt.registerOutParameter(10, Types.VARCHAR); // Output Message
 
-                        Log.d("DatabaseHelper", "🔍 Executing query for UserID: " + userId);
+                        Log.d("DatabaseHelper", "🔍 Executing stored procedure for UserID: " + userId);
                         ResultSet rs = stmt.executeQuery();
 
                         while (rs.next()) {
                             Map<String, String> row = new HashMap<>();
                             row.put("UserwiseCertificateId", rs.getString("UserwiseCertificateId"));
                             row.put("CertificateName", rs.getString("CertificateName"));
-                            row.put("IssueingOrganization", rs.getString("IssueingOrganization"));  // ✅ Matches stored procedure
+                            row.put("IssuingOrganization", rs.getString("IssueingOrganization"));
                             row.put("CredentialURL", rs.getString("CredentialURL"));
                             row.put("IssueYear", rs.getString("IssueYear"));
-                            row.put("CertificateFileName", rs.getString("CertifcateFileName")); // ✅ Match stored procedure spelling
                             row.put("UserId", rs.getString("UserId"));
-                            row.put("SelfReferralCode", rs.getString("SelfReferralCode"));
-                            row.put("IsActive", rs.getString("IsActive"));
+                            row.put("SelfReferralCode", rs.getString("selfreferralcode"));
+                            row.put("IsActive", rs.getString("isActive"));
 
                             resultList.add(row);
                         }
@@ -1252,6 +1228,8 @@ public class DatabaseHelper {
                         rs.close();
                         stmt.close();
                         connection.close();
+                    } else {
+                        Log.e("DatabaseHelper", "❌ DB Connection Failed!");
                     }
                 } catch (SQLException e) {
                     Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
@@ -1271,7 +1249,6 @@ public class DatabaseHelper {
             }
         }.execute();
     }
-
 
 
 
@@ -1491,63 +1468,73 @@ public class DatabaseHelper {
     }
 
 
-
     public static void UserWisePromotionalMediaInsert(
             Context context, String QryStatus, int userId, String promotionalCaption,
             String mediaType, String remarks, String promotionalMediaFileName,
             String selfReferralCode, DatabaseCallback callback) {
 
-        final String finalPromotionalMediaFileName =
-                (promotionalMediaFileName == null || promotionalMediaFileName.trim().isEmpty()) ? "No_File" : promotionalMediaFileName;
-
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... voids) {
-                String messageOutput = "Operation failed";
+                String messageOutput = "Operation failed";  // Default error message
+                Connection connection = null;
+                CallableStatement stmt = null;
+                if (connection == null) {
+                    Log.e("DatabaseHelper", "❌ DB Connection is NULL! Check database credentials.");
+                }
+
+
                 try {
                     Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserWisePromotionalMediaInsert...");
-                    Connection connection = getConnection();
+                    connection = getConnection();
 
                     if (connection != null) {
                         String query = "{call sp_UserPromotionalMediaInsertUpdateSelect(?,?,?,?,?,?,?,?,?)}";
-                        CallableStatement stmt = connection.prepareCall(query);
+                        stmt = connection.prepareCall(query);
 
                         stmt.setString(1, QryStatus);
-                        stmt.setNull(2, Types.INTEGER); // UserwisePromotionalMediaId (NULL for insert)
+                        stmt.setNull(2, Types.INTEGER);  // Always NULL for insert
                         stmt.setString(3, promotionalCaption);
                         stmt.setString(4, mediaType);
                         stmt.setString(5, remarks);
-
-                        // ✅ Ensure valid file name
-
-                        Log.d("DatabaseHelper", "📂 finalPromotionalMediaFileName: " + finalPromotionalMediaFileName);
-                        stmt.setString(6, finalPromotionalMediaFileName);
-
+                        stmt.setString(6, promotionalMediaFileName);
                         stmt.setInt(7, userId);
                         stmt.setString(8, selfReferralCode);
-                        stmt.registerOutParameter(9, Types.VARCHAR);
+                        stmt.registerOutParameter(9, Types.VARCHAR);  // Output parameter
 
-                        Log.d("DatabaseHelper", "🔍 Executing Stored Procedure...");
-                        boolean hasResultSet = stmt.execute();  // ✅ Check if a result set exists
-                        Log.d("DatabaseHelper", "Stored procedure executed, has result set: " + hasResultSet);
+                        // ✅ Log all parameters before execution
+                        Log.d("DatabaseHelper", "📌 Executing Stored Procedure with Params:");
+                        Log.d("DatabaseHelper", "  - QryStatus: " + QryStatus);
+                        Log.d("DatabaseHelper", "  - UserID: " + userId);
+                        Log.d("DatabaseHelper", "  - Promotional Caption: " + promotionalCaption);
+                        Log.d("DatabaseHelper", "  - Media Type: " + mediaType);
+                        Log.d("DatabaseHelper", "  - Remarks: " + remarks);
+                        Log.d("DatabaseHelper", "  - File Name: " + promotionalMediaFileName);
+                        Log.d("DatabaseHelper", "  - Self Referral Code: " + selfReferralCode);
 
-                        try {
-                            messageOutput = stmt.getString(9);
-                        } catch (SQLException e) {
-                            Log.e("DatabaseHelper", "❌ Error fetching output parameter: " + e.getMessage());
-                            messageOutput = "Database error: Could not retrieve output message.";
-                        }
+                        // ✅ Execute Stored Procedure
+                        Log.d("DatabaseHelper", "🛠️ Preparing to execute stored procedure...");
+                        boolean executed = stmt.execute();
+                        Log.d("DatabaseHelper", "✅ Stored procedure executed: " + executed);
 
-                        Log.d("DatabaseHelper", "✅ Insert Response: " + messageOutput);
+                        // ✅ Fetch the output message safely
+                        messageOutput = stmt.getString(9);
+                        Log.d("DatabaseHelper", "📩 DB Output Message: " + messageOutput);
 
-                        stmt.close();
-                        connection.close();
                     } else {
                         Log.e("DatabaseHelper", "❌ DB Connection Failed!");
-                        messageOutput = "Database connection error.";
+                        messageOutput = "DB Connection Failed!";
                     }
                 } catch (SQLException e) {
-                    Log.e("DatabaseHelper", "❌ SQL Exception: " + e.getMessage());
+                    Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
+                    messageOutput = "SQL Error: " + e.getMessage();
+                } finally {
+                    try {
+                        if (stmt != null) stmt.close();
+                        if (connection != null) connection.close();
+                    } catch (SQLException closeEx) {
+                        Log.e("DatabaseHelper", "❌ Error closing DB resources: " + closeEx.getMessage());
+                    }
                 }
                 return messageOutput;
             }
@@ -1607,6 +1594,11 @@ public class DatabaseHelper {
                                 mediaData.put("SelfReferralCode", resultSet.getString("SelfReferralCode"));
 
                                 mediaList.add(mediaData);
+
+                                Log.d("DatabaseHelper", "Retrieved Media Data:");
+                                for (Map.Entry<String, String> entry : mediaData.entrySet()) {
+                                    Log.d("DatabaseHelper", entry.getKey() + ": " + entry.getValue());
+                                }
                             }
                         } else {
                             Log.w("DatabaseHelper", "⚠️ No result set returned from stored procedure.");
@@ -1653,91 +1645,3 @@ public class DatabaseHelper {
 
 }
 
-
-
-
-
-
-//public static void UserWiseGradesSelect(Context context, String QryStatus, String UserID, UserWiseGradesResultListener listener) {
-//    new AsyncTask<Void, Void, List<UserWiseGrades>>() {
-//        @Override
-//        protected List<UserWiseGrades> doInBackground(Void... voids) {
-//            List<UserWiseGrades> userWiseGradesList = new ArrayList<>();
-//            try {
-//                Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserWiseGradesSelect...");
-//                Connection connection = getConnection();
-//
-//                if (connection != null) {
-//                    String query = "{call sp_UserGradesInsertUpdateSelect(?,?,?,?,?,?,?,?)}"; // ✅ Fixed Parameter Count
-//                    CallableStatement stmt = connection.prepareCall(query);
-//
-//                    stmt.setString(1, QryStatus); // Query Type (4 = Select by UserId)
-//                    stmt.setNull(2, Types.INTEGER); // UserwiseGradesId (NULL for Select)
-//                    stmt.setString(3, UserID); // UserId
-//                    stmt.setNull(4, Types.INTEGER); // CurrentProfession (Not needed for Select)
-//                    stmt.setNull(5, Types.INTEGER); // GradeID (Not needed for Select)
-//                    stmt.setNull(6, Types.INTEGER); // SubjectID (Not needed for Select)
-//                    stmt.setNull(7, Types.VARCHAR); // SelfReferralCode (Not needed for Select)
-//                    stmt.registerOutParameter(8, Types.VARCHAR); // ✅ Register @Message Output Parameter
-//
-//                    Log.d("DatabaseHelper", "🔍 Executing query for UserID: " + UserID);
-//                    ResultSet rs = stmt.executeQuery();
-//
-//                    if (!rs.isBeforeFirst()) { // ✅ No data found
-//                        Log.d("DatabaseHelper", "⚠️ No grades data found in DB!");
-//                    }
-//
-//                    while (rs.next()) {
-//                        // ✅ Fetch CurrentProfession as INT and convert it into a readable String
-//                        int currentProfession = rs.getInt("CurrentProfession");
-//                        String currentProfessionRem;
-//                        switch (currentProfession) {
-//                            case 1:
-//                                currentProfessionRem = "Current";
-//                                break;
-//                            case 2:
-//                                currentProfessionRem = "Previous";
-//                                break;
-//                            default:
-//                                currentProfessionRem = "Not Mentioned";
-//                                break;
-//                        }
-//
-//                        // ✅ Create UserWiseGrades object with Correct Parameter Order
-//                        UserWiseGrades grade = new UserWiseGrades(
-//                                rs.getString("UserwiseGradesId"),
-//                                rs.getString("UserId"),
-//                                rs.getString("selfreferralcode"),
-//                                rs.getString("mobileno"),
-//                                currentProfessionRem, // ✅ Corrected
-//                                rs.getString("SubjectName"),
-//                                rs.getString("Subjectid"),
-//                                rs.getString("Gradename"),
-//                                rs.getString("username"),
-//                                rs.getString("IsActive")
-//                        );
-//
-//                        Log.d("DatabaseHelper", "✅ Retrieved Grade: " + grade.getGradename() + " | UserID: " + grade.getUserId());
-//                        userWiseGradesList.add(grade);
-//                    }
-//
-//                    // ✅ Retrieve the output message from @Message
-//                    String messageOutput = stmt.getString(8);
-//                    Log.d("DatabaseHelper", "✅ DB Response: " + messageOutput);
-//
-//                    rs.close();
-//                    stmt.close();
-//                    connection.close();
-//                }
-//            } catch (SQLException e) {
-//                Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
-//            }
-//            return userWiseGradesList;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<UserWiseGrades> userWiseGradesList) {
-//            listener.onQueryResult(userWiseGradesList);
-//        }
-//    }.execute();
-//}

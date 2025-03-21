@@ -17,11 +17,13 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 
 import java.io.File;
@@ -34,12 +36,15 @@ import java.util.Map;
 public class AddPromotionalMedia extends AppCompatActivity {
 
     private static final int PICK_MEDIA_REQUEST = 1;
-    private ImageView mediaImageView;
+    private ImageView mediaImageView,retrievedImageView;
     private VideoView videoView;
     private Button uploadButton, saveButton;
     private TextView textView54;
     private Uri selectedMediaUri = null;
     private String mediaType = "I"; // Default type is Image ('I' for Image, 'V' for Video)
+    private String promotionalMediaFileName;
+    private int userIdFinal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,7 @@ public class AddPromotionalMedia extends AppCompatActivity {
         });
 
         // Initialize Views
+        retrievedImageView = findViewById(R.id.retrieved_image_view);
         mediaImageView = findViewById(R.id.image_select_vid);
         videoView = findViewById(R.id.videoView);
         uploadButton = findViewById(R.id.uploadButton);
@@ -114,14 +120,35 @@ public class AddPromotionalMedia extends AppCompatActivity {
     // Show image preview
     // Show image preview
     private void showImage(Uri imageUri) {
-        videoView.setVisibility(View.GONE);
-        mediaImageView.setVisibility(View.VISIBLE);
-        mediaImageView.setImageURI(imageUri);
+        if (isDestroyed() || isFinishing()) {
+            Log.e("showImage", "❌ Activity is destroyed. Skipping image loading.");
+            return;
+        }
 
+        if (retrievedImageView == null) {
+            Log.e("showImage", "❌ retrievedImageView is null, skipping image display.");
+            return;
+        }
+        videoView.setVisibility(View.GONE);
+        retrievedImageView.setVisibility(View.VISIBLE);
+
+        Log.d("showImage", "📷 Loading image from: " + imageUri.toString());
+
+//        retrievedImageView.setImageURI(imageUri);
+
+        Glide.with(this)
+                .load(imageUri)
+                .placeholder(R.drawable.photo_camera_24dp_1674ae_fill0_wght400_grad0_opsz24)  // Use a placeholder if the image takes time to load
+                .error(R.drawable.ic_7)  // Show an error image if it fails to load
+                .override(200, 200)  // ✅ Limit image size
+                .into(retrievedImageView);
+
+        mediaImageView.setVisibility(View.VISIBLE); // Keep button visible
         uploadButton.setVisibility(View.GONE);
         saveButton.setVisibility(View.VISIBLE);
         textView54.setText("Image selected successfully. Click Save to upload.");
     }
+
 
 
     // Show video preview
@@ -162,23 +189,33 @@ public class AddPromotionalMedia extends AppCompatActivity {
         if (selectedMediaUri != null) {
             File originalFile = getFileFromUri(selectedMediaUri);
             if (originalFile != null) {
+                Log.d("insertPromotionalMediaIntoDB", "📂 File exists: " + originalFile.getAbsolutePath());
                 File renamedFile = FileUploader.renameFile(originalFile, userIdFinal, "P");
                 if (renamedFile != null) {
+                    Log.d("insertPromotionalMediaIntoDB", "📂 Renamed File exists: " + renamedFile.getAbsolutePath());
                     promotionalMediaFileName[0] = renamedFile.getName();  // ✅ Store inside array to modify inside lambda
 
                     // ✅ Upload file to the server
                     new Thread(() -> {
                         boolean success = FileUploader.uploadImage(renamedFile, AddPromotionalMedia.this, "P");
+                        Log.d("uploadFileToServer", "✅ File Upload Success: " + success);
+
                         runOnUiThread(() -> {
                             if (success) {
-                                Log.d("insertPromotionalMediaIntoDB", "✅ Image uploaded successfully.");
-                                insertMediaIntoDatabase(userIdFinal, promotionalMediaFileName[0]);  // ✅ Call the correct method
+                                Log.d("uploadFileToServer", "✅ File uploaded, inserting into DB...");
+                                Toast.makeText(AddPromotionalMedia.this, "Upload successful!", Toast.LENGTH_SHORT).show();  // ✅ Fix toast message
+                                insertMediaIntoDatabase();
                             } else {
-                                Log.e("insertPromotionalMediaIntoDB", "❌ Image upload failed.");
-                                Toast.makeText(AddPromotionalMedia.this, "Upload failed!", Toast.LENGTH_SHORT).show();
+                                Log.e("uploadFileToServer", "❌ Image upload failed.");
+//                                Toast.makeText(AddPromotionalMedia.this, "Upload failed!", Toast.LENGTH_SHORT).show();
                             }
                         });
+
+
                     }).start();
+
+
+
                 } else {
                     Log.e("insertPromotionalMediaIntoDB", "❌ Renamed file is null. Skipping upload.");
                 }
@@ -189,52 +226,46 @@ public class AddPromotionalMedia extends AppCompatActivity {
     }
 
 
-    private void insertMediaIntoDatabase(int userId, String promotionalMediaFileName) {
+    private void insertMediaIntoDatabase() {
+        if (promotionalMediaFileName == null || promotionalMediaFileName.isEmpty()) {
+            Log.e("insertMediaIntoDatabase", "❌ No valid file name to insert into DB.");
+            return;
+        }
+
         String promotionalCaption = "Promotional Media " + System.currentTimeMillis();
         String remarks = "User uploaded a promotional media";
-        String selfReferralCode = ""; // Modify if required
 
-        Log.d("insertMediaIntoDatabase", "🟢 Inserting Promotional Media into DB");
-        Log.d("insertMediaIntoDatabase", "  - User ID: " + userId);
-        Log.d("insertMediaIntoDatabase", "  - Promotional Caption: " + promotionalCaption);
-        Log.d("insertMediaIntoDatabase", "  - Type of Media: " + mediaType);
-        Log.d("insertMediaIntoDatabase", "  - Remarks: " + remarks);
-        Log.d("insertMediaIntoDatabase", "  - Media File Name: " + promotionalMediaFileName);
+        Log.d("DatabaseHelper", "📂 Inserting into DB -> FileName: " + promotionalMediaFileName);
+
 
         DatabaseHelper.UserWisePromotionalMediaInsert(
                 this,
-                "1", // Insert operation
-                userId,
+                "1",  // 1 means INSERT operation
+                userIdFinal,
                 promotionalCaption,
-                mediaType,
+                "I",  // TypeOfMedia (I for Image, V for Video)
                 remarks,
                 promotionalMediaFileName,
-                selfReferralCode,
+                "",
                 new DatabaseHelper.DatabaseCallback() {
                     @Override
                     public void onMessage(String message) {
-                        Log.d("DatabaseHelper", "📩 DB Message: " + message);
+                        Log.d("DatabaseHelper", "✅ DB Insert Response: " + message);
                         Toast.makeText(AddPromotionalMedia.this, message, Toast.LENGTH_SHORT).show();
-                        if (message.toLowerCase().contains("success")) {
-                            startActivity(new Intent(AddPromotionalMedia.this, TeachersInfo.class));
-                            finish();
-                        }
                     }
 
                     @Override
                     public void onSuccess(List<Map<String, String>> result) {
-                        Log.d("DatabaseCallback", "✅ Promotional Media Insert successful!");
+                        Log.d("DatabaseHelper", "✅ Insert Successful! Retrieved: " + result.toString());
                     }
 
                     @Override
                     public void onError(String error) {
-                        Log.e("DatabaseHelper", "❌ Insert failed: " + error);
-                        Toast.makeText(AddPromotionalMedia.this, "Database error: " + error, Toast.LENGTH_LONG).show();
+                        Log.e("DatabaseHelper", "❌ Database Insert Error: " + error);
                     }
                 }
         );
     }
-
 
 
     private File getFileFromUri(Uri uri) {
@@ -304,62 +335,36 @@ public class AddPromotionalMedia extends AppCompatActivity {
         DatabaseHelper.UserWisePromotionalMediaSelect(this, userId, new DatabaseHelper.DatabaseCallback() {
             @Override
             public void onSuccess(List<Map<String, String>> result) {
+                Log.d("retrievePromotionalMedia", "✅ Retrieved Data: " + result.toString());
+
                 if (!result.isEmpty()) {
-                    Map<String, String> mediaData = result.get(0); // Get first media entry
+                    for (Map<String, String> mediaData : result) {
+                        String mediaFileName = mediaData.get("PromotionalMediaFileName");
 
-                    Log.d("retrievePromotionalMedia", "✅ Media Loaded: " + mediaData.toString());
+                        if (mediaFileName == null || mediaFileName.isEmpty()) {
+                            Log.e("retrievePromotionalMedia", "❌ No valid media file found in DB.");
+                            continue;
+                        }
 
-                    String mediaType = mediaData.get("TypeOfMedia");
-                    String mediaFileName = mediaData.get("PromotionalMediaFileName");
-
-                    // 🔹 Convert file name to actual URI (Check if full path is stored)
-                    String fileURL = "http://129.154.238.214/Pathshaala/uploads/" + mediaFileName;
-                    Uri mediaUri = Uri.parse(fileURL);
-
-
-                    if ("I".equals(mediaType)) {
-                        showImage(mediaUri);
-                    } else if ("V".equals(mediaType)) {
-                        showVideo(mediaUri);
+                        String fileURL = "http://129.154.238.214/Pathshaala/UploadedFiles/Media/" + mediaFileName;
+                        Log.d("retrievePromotionalMedia", "✅ Constructed URL: " + fileURL);
+                        showImage(Uri.parse(fileURL));
                     }
-
-
-                    if ("I".equals(mediaType)) {
-                        showImage(mediaUri);
-                    } else if ("V".equals(mediaType)) {
-                        showVideo(mediaUri);
-                    }
-
-
-                    Toast.makeText(AddPromotionalMedia.this, "Promotional media retrieved successfully!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("retrievePromotionalMedia", "⚠️ No promotional media found for UserID: " + userId);
-                    Toast.makeText(AddPromotionalMedia.this, "No promotional media found!", Toast.LENGTH_SHORT).show();
+                    Log.e("retrievePromotionalMedia", "❌ No promotional media found.");
                 }
             }
 
             @Override
             public void onMessage(String message) {
-                Log.d("retrievePromotionalMedia", "ℹ️ Message: " + message);
-                Toast.makeText(AddPromotionalMedia.this, message, Toast.LENGTH_SHORT).show();
+                Log.d("retrievePromotionalMedia", "ℹ️ DB Message: " + message);
             }
 
             @Override
             public void onError(String error) {
-                Toast.makeText(AddPromotionalMedia.this, "Database error: " + error, Toast.LENGTH_LONG).show();
-                Log.e("retrievePromotionalMedia", "Error: " + error);
+                Log.e("retrievePromotionalMedia", "❌ Database error: " + error);
             }
         });
-    }
-
-    private Uri getMediaUri(String fileName) {
-        File mediaFile = new File(getExternalFilesDir(null), fileName);
-        if (mediaFile.exists()) {
-            return Uri.fromFile(mediaFile);
-        } else {
-            Log.e("getMediaUri", "❌ File not found: " + mediaFile.getAbsolutePath());
-            return Uri.EMPTY; // Return an empty URI if file is missing
-        }
     }
 
 

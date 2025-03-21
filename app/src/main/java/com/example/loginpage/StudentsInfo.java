@@ -47,6 +47,7 @@ public class StudentsInfo extends AppCompatActivity {
         parentGuardian = findViewById(R.id.textViewLocation);
         ImageView editAbout = findViewById(R.id.imageView44);
         ImageView qrCode = findViewById(R.id.imageView113);
+        ImageView payment = findViewById(R.id.imageView138);
         progress = findViewById(R.id.textView84);
         attendance = findViewById(R.id.textView85);
         commPref = findViewById(R.id.textView86);
@@ -77,6 +78,12 @@ public class StudentsInfo extends AppCompatActivity {
             startActivity(intent);
         });
 
+        payment.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentsInfo.this, PaymentGatewayDemo.class);
+            aboutActivityLauncher.launch(intent);
+            startActivity(intent);
+        });
+
         accountInfo.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, StudentsBasicInfo.class);
             aboutActivityLauncher.launch(intent);
@@ -84,7 +91,7 @@ public class StudentsInfo extends AppCompatActivity {
         });
 
         academicDetails.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, AcademicDetailsAdd.class);
+            Intent intent = new Intent(StudentsInfo.this, StudentsAcademicDetails.class);
             aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });

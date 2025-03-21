@@ -92,6 +92,7 @@ public class UserDetailsClass {
     public String getSecurityKey() { return securityKey; }
     public void setSecurityKey(String securityKey) { this.securityKey = securityKey; }
 
+
     public String getSelfReferralCode() { return selfReferralCode; }
     public void setSelfReferralCode(String selfReferralCode) { this.selfReferralCode = selfReferralCode; }
 

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,32 @@ public class SearchStudentsDashboard extends AppCompatActivity {
         // Setup Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        String[][] teachers = {
+                {"Mr. John Doe", "Experience: 10 years", "Math, Science", "Lucknow"},
+                {"Ms. Jane Smith", "Experience: 8 years", "English, History", "Delhi"},
+                {"Dr. Arjun Kumar", "Experience: 12 years", "Physics, Chemistry", "Mumbai"},
+                {"Prof. Jim Halert", "Experience: 15 years", "Biology, Geography", "Bangalore"},
+                {"Mr. Dwight Schrute", "Experience: 5 years", "Agriculture, Business", "Scranton"}
+        };
+
+        int[] cardIds = {R.id.cardTeacher1, R.id.cardTeacher2, R.id.cardTeacher3, R.id.cardTeacher4, R.id.cardTeacher5};
+
+        for (int i = 0; i < teachers.length; i++) {
+            View cardView = findViewById(cardIds[i]);
+
+            TextView name = cardView.findViewById(R.id.tvTeacherName);
+            TextView experience = cardView.findViewById(R.id.tvExperience);
+            TextView subjects = cardView.findViewById(R.id.tvSubjects);
+            TextView location = cardView.findViewById(R.id.tvLocation);
+            Button whatsAppButton = cardView.findViewById(R.id.whatsappButton);
+
+            name.setText(teachers[i][0]);
+            experience.setText(teachers[i][1]);
+            subjects.setText("Subjects: " + teachers[i][2]);
+            location.setText("Location: " + teachers[i][3]);
+
+        }
 
         Button filterButton = findViewById(R.id.buttonFilter);
         filterButton.setOnClickListener(v -> {

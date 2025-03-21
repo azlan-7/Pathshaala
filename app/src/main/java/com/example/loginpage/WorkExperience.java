@@ -85,35 +85,6 @@ public class WorkExperience extends AppCompatActivity {
         });
 
 
-        DatabaseHelper.getProfessionId(this, selectedProfession, new DatabaseHelper.WorkExperienceCallback() {
-            @Override
-            public void onProfessionIdFetched(Integer fetchedProfessionId) {
-                if (fetchedProfessionId != null) {
-                    professionId = fetchedProfessionId;
-                    Log.d(TAG, "✅ Profession ID Retrieved: " + professionId);
-
-                    // ✅ Now insert work experience
-                    insertUserWorkExperience(professionId);
-                } else {
-                    professionId = -1;
-                    Log.e(TAG, "❌ Profession ID not found for: " + selectedProfession);
-                }
-            }
-
-            @Override
-            public void onMessage(String message) {}
-
-            @Override
-            public void onSuccess(List<UserWiseWorkExperience> result) {}
-
-            @Override
-            public void onError(String error) {
-                Log.e(TAG, "❌ Error fetching profession ID: " + error);
-            }
-        });
-
-
-
         fetchUserWorkExperienceDetails();
         loadWorkExperience();
         loadDesignations();
@@ -297,8 +268,6 @@ public class WorkExperience extends AppCompatActivity {
             @Override
             public void onMessage(String message) {}
 
-            @Override
-            public void onProfessionIdFetched(Integer professionId) {}
         });
     }
 
@@ -352,8 +321,6 @@ public class WorkExperience extends AppCompatActivity {
                         Log.e(TAG, "❌ Database Error: " + error);
                     }
 
-                    @Override
-                    public void onProfessionIdFetched(Integer professionId) {}
                 });
     }
 

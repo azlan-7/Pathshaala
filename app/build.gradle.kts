@@ -55,6 +55,13 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.glide)
+    implementation (libs.mpandroidchart)
+    implementation("com.razorpay:checkout:1.6.40")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation ("androidx.activity:activity-compose:1.7.2")
+    implementation ("androidx.compose.ui:ui:1.5.1")
+    implementation ("androidx.compose.material3:material3:1.1.2")
     annotationProcessor(libs.glide.compiler)
 
 }

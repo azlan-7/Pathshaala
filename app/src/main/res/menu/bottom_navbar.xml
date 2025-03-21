@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/home_icon_no_bg"
+        app:iconSize="30dp"/> <!-- Increase size -->
+
+    <item
+        android:id="@+id/goLive"
+        android:iconTint="@color/white"
+        android:title="Go Live"
+        android:icon="@drawable/go_live"
+        app:iconSize="30dp"/> <!-- Increase size -->
+
+    <item
+        android:id="@+id/chatBot"
+        android:title="ChatBot"
+        android:icon="@drawable/chatbot_icon"
+        app:iconSize="30dp"/>
+
+    <item
+        android:id="@+id/profile"
+        android:title="Profile"
+        android:icon="@drawable/profile_icon_no_bg"
+        app:iconSize="30dp"/>
+</menu>

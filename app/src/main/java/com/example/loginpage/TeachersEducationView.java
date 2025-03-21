@@ -135,5 +135,4 @@ public class TeachersEducationView extends AppCompatActivity {
 
     }
 
-
 }

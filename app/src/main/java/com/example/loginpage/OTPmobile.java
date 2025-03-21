@@ -357,6 +357,7 @@ public class OTPmobile extends AppCompatActivity {
                         // Store User ID in SharedPreferences
                         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                         sharedPreferences.edit().putInt("USER_ID", userId).apply();
+                        sharedPreferences.edit().putString("phoneNumber", phoneNumber).apply();
                         Log.d(TAG, "✅ Stored User ID: " + userId);
 
                         // 🚀 Navigate to TeachersInfo

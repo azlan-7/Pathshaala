@@ -77,18 +77,18 @@ public class FileUploader {
                             .build();
 
                     Response response = client.newCall(request).execute();
-
-                    int responseCode = response.code(); // ✅ Capture response code
-
-                    Log.d("FileUploader", "Server response: " + responseCode); // ✅ Log response code
+                    int responseCode = response.code();
+                    String responseBody = response.body() != null ? response.body().string() : "No response";
 
                     if (responseCode == 200) {
                         Log.d("FileUploader", "✅ File upload successful!");
+                        return true;  // ✅ Mark as success
                     } else {
-                        Log.e("FileUploader", "❌ File upload failed. Response Code: " + responseCode);
+                        Log.e("FileUploader", "❌ Upload failed. Response Code: " + responseCode);
+                        Log.e("FileUploader", "❌ Server Response: " + responseBody);
+                        return false;
                     }
 
-                    return responseCode == 200;
                 } catch (IOException e) {
                     Log.e("FileUploader", "❌ Upload failed: " + e.getMessage());
                     return false;

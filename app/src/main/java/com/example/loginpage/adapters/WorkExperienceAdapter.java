@@ -41,6 +41,7 @@ public class WorkExperienceAdapter extends RecyclerView.Adapter<WorkExperienceAd
     @NonNull
     @Override
     public WorkExperienceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d("WorkExperienceAdapter", "testing adapter 123 ");
         View view = LayoutInflater.from(context).inflate(R.layout.item_work_experience, parent, false);
         return new WorkExperienceViewHolder(view);
     }
@@ -51,19 +52,20 @@ public class WorkExperienceAdapter extends RecyclerView.Adapter<WorkExperienceAd
     public void onBindViewHolder(@NonNull WorkExperienceViewHolder holder, int position) {
         WorkExperienceModel experience = workExperienceList.get(position);
 
-        if (experience == null) {
-            Log.e("Adapter", "❌ Null WorkExperienceModel at position: " + position);
-            return;
+        if (experience != null) {
+            Log.d("WorkExperienceAdapter", "Binding data -> Position: " + position +
+                    " | Profession: " + experience.getProfessionName() +
+                    " | Institution: " + experience.getInstitutionName() +
+                    " | Designation: " + experience.getDesignationName() +
+                    " | Experience: " + experience.getWorkExperience());
+
+            holder.tvProfession.setText(experience.getProfessionName() != null ? experience.getProfessionName() : "N/A");
+            holder.tvInstitution.setText(experience.getInstitutionName() != null ? experience.getInstitutionName() : "N/A");
+            holder.tvDesignation.setText(experience.getDesignationName() != null ? experience.getDesignationName() : "N/A");
+            holder.tvExperience.setText(experience.getWorkExperience() != null ? "Experience: " + experience.getWorkExperience() : "Experience: N/A");
+        } else {
+            Log.e("WorkExperienceAdapter", "Null data at position: " + position);
         }
-
-        Log.d("Adapter", "📌 Binding data: " +
-                "Institution=" + experience.getInstitutionName() + ", " +
-                "Designation=" + experience.getDesignationName() + ", " +
-                "Experience=" + experience.getWorkExperience());
-
-        holder.tvInstitution.setText(experience.getInstitutionName() != null ? experience.getInstitutionName() : "Unknown");
-        holder.tvDesignation.setText(experience.getDesignationName() != null ? experience.getDesignationName() : "Unknown");
-        holder.tvExperience.setText(experience.getWorkExperience() != null ? experience.getWorkExperience() : "Unknown");
     }
 
 
@@ -72,10 +74,32 @@ public class WorkExperienceAdapter extends RecyclerView.Adapter<WorkExperienceAd
 
 
     public void updateData(List<WorkExperienceModel> newData) {
-        this.workExperienceList.clear();
-        this.workExperienceList.addAll(newData);
-        notifyDataSetChanged();
+        workExperienceList.clear();
+        workExperienceList.addAll(newData);
+
+        Log.d("WorkExperienceAdapter", "Updating RecyclerView. Total items: " + workExperienceList.size());
+
+        if (workExperienceList.isEmpty()) {
+            Log.e("WorkExperienceAdapter", "❌ Data list is still empty after update!");
+        } else {
+            for (int i = 0; i < workExperienceList.size(); i++) {
+                WorkExperienceModel item = workExperienceList.get(i);
+                Log.d("WorkExperienceAdapter", "Item " + i + " -> Profession: " + item.getProfessionName() +
+                        ", Institution: " + item.getInstitutionName() +
+                        ", Designation: " + item.getDesignationName() +
+                        ", Experience: " + item.getWorkExperience());
+            }
+        }
+
+        notifyDataSetChanged(); // Ensure UI refresh
     }
+
+
+
+
+
+
+
 
     @Override
     public int getItemCount() {

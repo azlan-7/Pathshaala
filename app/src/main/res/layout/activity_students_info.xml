@@ -384,4 +384,16 @@
         app:layout_constraintTop_toTopOf="@+id/textView85"
         app:srcCompat="@drawable/equalizer_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
 
+    <ImageView
+        android:id="@+id/imageView138"
+        android:layout_width="33dp"
+        android:layout_height="26dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView44"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintStart_toEndOf="@+id/tvEmail"
+        app:layout_constraintTop_toBottomOf="@+id/imageView113"
+        app:layout_constraintVertical_bias="0.526"
+        app:srcCompat="@drawable/payments_24dp_78a75a_fill0_wght400_grad0_opsz24" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
