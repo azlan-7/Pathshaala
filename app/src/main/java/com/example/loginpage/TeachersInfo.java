@@ -36,6 +36,7 @@ public class TeachersInfo extends AppCompatActivity {
         setContentView(R.layout.activity_teachers_info);
 
         // Initialize UI elements
+        TextView aboutText = findViewById(R.id.textView41);
         accountInfo = findViewById(R.id.textView43);
         subjectExpertise = findViewById(R.id.textView44);
         education = findViewById(R.id.textView45);
@@ -53,6 +54,22 @@ public class TeachersInfo extends AppCompatActivity {
         tvContact = findViewById(R.id.tvContact);
         tvEmail = findViewById(R.id.tvEmail);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView);
+
+
+        // Retrieve data from Intent
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("ABOUT_YOURSELF")) {
+            String aboutYourself = intent.getStringExtra("ABOUT_YOURSELF");
+            Log.d("TeachersInfo", "Received About: " + aboutYourself);
+            aboutText.setText(aboutYourself);
+        } else {
+            // If Intent data is missing, fallback to SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            String savedAbout = sharedPreferences.getString("ABOUT_YOURSELF", "No info available");
+            aboutText.setText(savedAbout);
+        }
+
+
 
         fetchUserDetailsFromDB();
 
