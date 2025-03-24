@@ -52,9 +52,8 @@ public class GradesTaughtAdapter extends RecyclerView.Adapter<GradesTaughtAdapte
         GradesTaughtModel grade = gradesList.get(position);
 
         holder.tvSubject.setText(grade.getSubject());
-        holder.tvTopic.setText(grade.getTopic());
+//        holder.tvTopic.setText(grade.getTopic());
         holder.tvGradeLevel.setText(grade.getGradeLevel());
-        holder.tvMedium.setText(grade.getMedium());
 
         holder.btnDelete.setOnClickListener(v -> deleteClickListener.onDeleteClick(position));
 
@@ -66,15 +65,13 @@ public class GradesTaughtAdapter extends RecyclerView.Adapter<GradesTaughtAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvSubject, tvTopic, tvGradeLevel, tvMedium;
+        TextView tvSubject, tvTopic, tvGradeLevel;
         ImageView btnDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSubject = itemView.findViewById(R.id.tvSubject);
-            tvTopic = itemView.findViewById(R.id.tvTopic);
             tvGradeLevel = itemView.findViewById(R.id.tvGradeLevel);
-            tvMedium = itemView.findViewById(R.id.tvMedium);
             btnDelete = itemView.findViewById(R.id.btnDeleteGrade);
         }
     }

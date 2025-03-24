@@ -131,7 +131,9 @@
         android:background="@drawable/cornered_rectangle"
         android:drawableEnd="@drawable/dropdownicon"
         android:ems="10"
-        android:focusable="false"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
         android:fontFamily="@font/work_sans_light"
         android:hint="Course Name"
         android:inputType="none"
@@ -156,19 +158,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/yearDropdown" />
-
-    <TextView
-        android:id="@+id/textView109"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/work_sans_extrabold"
-        android:text="ID"
-        android:textColor="@color/blue"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.36"
-        app:layout_constraintStart_toEndOf="@+id/educationIdDropdown"
-        app:layout_constraintTop_toTopOf="@+id/educationIdDropdown" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

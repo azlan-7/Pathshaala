@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.RouteListingPreference;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Spannable;
@@ -27,7 +26,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -55,7 +56,7 @@ import java.util.List;
 public class TeachersDashboardNew extends AppCompatActivity {
 
     private TextView welcomeText;
-    private ImageView profileIcon;
+    private ImageView profileIcon, profileIconTop;
     private ImageView searchButton;
     private ImageButton whatsappButton;
     Handler mainTextHandler = new Handler();
@@ -81,16 +82,20 @@ public class TeachersDashboardNew extends AppCompatActivity {
         Button searchButton = findViewById(R.id.button37);
         welcomeText = findViewById(R.id.textViewHello); // Corrected TextView ID
         profileIcon = findViewById(R.id.imageView151);
+        profileIconTop = findViewById(R.id.imageView151);
+
+        // ✅ Fetch Profile Image from Database
+        fetchProfileImageFromDB();
 
         loadUserName();
         showStudentEnrolledClassBarChart();
         showEnrolledStudentsMonthlyBarChart();
         showChannelViewsChart();
-        MoveToWhatsAppScreen();
         NavigationBarWorking();
+//        MoveToWhatsAppScreen();
         // Grade & Subject Data
-        String[] grades = {"9th", "10th", "11th", "12th"};
-        String[] subjects = {"Math", "Science", "History"};
+        String[] grades = {"Primary","Secondary","Middle School","9th", "10th", "11th", "12th"};
+        String[] subjects = {"Math", "Science", "English", "History", "Geography"};
 
         autoCompleteGrade.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades));
         autoCompleteSubject.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects));
@@ -111,6 +116,11 @@ public class TeachersDashboardNew extends AppCompatActivity {
             startActivity(intent);
         });
 
+        profileIconTop.setOnClickListener(v -> {
+            Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
+            startActivity(intent);
+        });
+
 
         // Handle insets for layout adjustments
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -118,8 +128,56 @@ public class TeachersDashboardNew extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
     }
 
+    private void fetchProfileImageFromDB() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1); // ✅ Get updated USER_ID
+
+        if (userId <= 0) {
+            Log.e("TeachersDashboardNew", "⚠️ User ID not found in SharedPreferences.");
+            return;
+        }
+
+        DatabaseHelper.fetchUserProfileImage(userId, imageName -> {
+            if (imageName != null && !imageName.isEmpty()) {
+                String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+                Log.d("TeachersDashboardNew", "✅ Profile image URL: " + imageUrl);
+
+                runOnUiThread(() -> Glide.with(this)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.generic_avatar) // Default profile image
+                        .error(R.drawable.generic_avatar) // Show default if error
+                        .into(profileIconTop)); // ✅ Load image into Toolbar Profile
+            } else {
+                Log.e("TeachersDashboardNew", "❌ No profile image found in DB or empty value.");
+            }
+        });
+    }
+
+
+
+    // Working of the BOTTOM NAVIGATION BAR
+    public void NavigationBarWorking() {
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.chatBot) {
+                Intent intent = new Intent(TeachersDashboardNew.this, ChatActivity.class);
+                startActivity(intent);
+            } else if (itemId == R.id.home) {
+                Intent intent = new Intent(TeachersDashboardNew.this, TeachersDashboardNew.class);
+                startActivity(intent);
+            } else if (itemId == R.id.profile) {
+                Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
+                startActivity(intent);
+            }
+            return true;
+        });
+    }
 
 
     @Override
@@ -132,10 +190,9 @@ public class TeachersDashboardNew extends AppCompatActivity {
     // Function to get the username of the logged in user
     private void loadUserName() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String firstName = sharedPreferences.getString("FIRST_NAME", "Samarth"); // Default "Samarth"
-
-        final String text = "Welcome Back, " + firstName + "\uD83D\uDC4B ";
-        System.out.println(text);
+        String firstName = sharedPreferences.getString("FIRST_NAME", "User"); // Default "User"
+//        final String text = "Welcome Back, " + firstName + "\uD83D\uDC4B ";
+        final String text = "Welcome Back, " +  "\uD83D\uDC4B ";
         welcomeText.setText("");
 
         Handler handler = new Handler(); // Single handler instance
@@ -156,25 +213,6 @@ public class TeachersDashboardNew extends AppCompatActivity {
         handler.post(runnable); // Start the animation immediately
     }
 
-
-    // Working of the BOTTOM NAVIGATION BAR
-    public void NavigationBarWorking() {
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.chatBot) {
-                Intent intent = new Intent(TeachersDashboardNew.this, ChatActivity.class);
-                startActivity(intent);
-            } else if (itemId == R.id.home) {
-                Intent intent = new Intent(TeachersDashboardNew.this, TeachersDashboardNew.class);
-                startActivity(intent);
-            } else if (itemId == R.id.profile){
-                Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
-                startActivity(intent);
-            }
-            return true;
-        });
-    }
 
     public void showStudentEnrolledClassBarChart() {
         // Find bar chart view
@@ -386,11 +424,5 @@ public class TeachersDashboardNew extends AppCompatActivity {
         }).start();
     }
 
-    private void MoveToWhatsAppScreen(){
-        whatsappButton = findViewById(R.id.whatsappButton);
-        whatsappButton.setOnClickListener(v->{
-            Intent intent = new Intent(this, WhatsAppScreen.class);
-            startActivity(intent);
-        });
-    }
+
 }

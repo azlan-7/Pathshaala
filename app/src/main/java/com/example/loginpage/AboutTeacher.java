@@ -59,19 +59,19 @@ public class AboutTeacher extends AppCompatActivity {
 
 
 
-            btnSave.setOnClickListener(v -> {
-                String aboutText = etAbout.getText().toString().trim();
+        btnSave.setOnClickListener(v -> {
+            String aboutText = etAbout.getText().toString().trim();
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("ABOUT_YOURSELF", aboutText);
-                editor.apply();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("ABOUT_YOURSELF", aboutText);
+            editor.apply();
 
-                Intent intent = new Intent(AboutTeacher.this, TeachersInfo.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); // Ensures no duplicate activity
-                intent.putExtra("ABOUT_YOURSELF", aboutText);
-                setResult(RESULT_OK, intent);  // Notify the previous activity
-                finish();  // Close this activity and return to TeachersInfo
-            });
+            Intent intent = new Intent(AboutTeacher.this, TeachersInfo.class);
+            intent.putExtra("ABOUT_YOURSELF", aboutText);
+            startActivity(intent);
+            finish(); // Close AboutTeacher
+        });
+
 
 
 

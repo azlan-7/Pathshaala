@@ -1,40 +1,23 @@
 package com.example.loginpage.models;
 
 public class WorkExperienceModel {
-    private String profession, institution, designation, experience,experienceType;
+    private String professionName, institutionName, designationName, workExperience, curPreExperience, professionId, userId;
 
-    public WorkExperienceModel(String profession, String institution, String designation, String experience, String experienceType) {
-        this.profession = profession;
-        this.institution = institution;
-        this.designation = designation;
-        this.experience = experience;
-        this.experienceType = experienceType;
+    public WorkExperienceModel(String professionName, String institutionName, String designationName, String workExperience, String curPreExperience, String professionId, String userId) {
+        this.professionName = professionName;
+        this.institutionName = institutionName;
+        this.designationName = designationName;
+        this.workExperience = workExperience;
+        this.curPreExperience = curPreExperience;
+        this.professionId = professionId;
+        this.userId = userId;
     }
 
-    public String getProfession() {
-        return profession;
-    }
-
-    public String getInstitution() {
-        return institution;
-    }
-
-    public String getDesignation() {
-        return designation;
-    }
-
-    public String getExperience() {
-        return experience;
-    }
-
-
-    public String getExperienceType() {
-        return experienceType;
-    }
-
-    public void setExperienceType(String experienceType) {
-        this.experienceType = experienceType;
-    }
-
-
+    public String getProfessionName() { return professionName; }
+    public String getInstitutionName() { return institutionName; }
+    public String getDesignationName() { return designationName; }
+    public String getWorkExperience() { return workExperience; }
+    public String getCurPreExperience() { return curPreExperience; }
+    public String getProfessionId() { return professionId; }
+    public String getUserId() { return userId; }
 }

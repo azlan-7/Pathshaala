@@ -82,17 +82,21 @@ public class AddPromotionalMedia extends AppCompatActivity {
                 videoView.requestFocus();
                 videoView.start();
 
-                // Change UI elements
-                Button skipButton = findViewById(R.id.button15);
-                Button uploadButton = findViewById(R.id.uploadButton);
-                TextView textView54 = findViewById(R.id.textView54);
+                Button saveButton = findViewById(R.id.button15);
 
-                // Hide Skip button and show Upload button
-                skipButton.setVisibility(View.GONE);
-                uploadButton.setVisibility(View.VISIBLE);
+                saveButton.setOnClickListener(v -> {
+                    Toast.makeText(AddPromotionalMedia.this, "Saved Successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(AddPromotionalMedia.this, TeachersInfo.class);
+                    startActivity(intent);
+                    finish(); // Close current activity
+
+                });
+
+                TextView textView54 = findViewById(R.id.textView54);
+                saveButton.setVisibility(View.VISIBLE);
 
                 // Change text
-                textView54.setText("Thanks for uploading the video.");
+                textView54.setText("");
             }
         }
     }

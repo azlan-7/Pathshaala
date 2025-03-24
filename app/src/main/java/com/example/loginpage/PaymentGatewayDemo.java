@@ -1,8 +1,10 @@
 package com.example.loginpage;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 
 public class PaymentGatewayDemo extends AppCompatActivity {
     private Button payNowBtn;
+    private TextView referralCode;
     private EditText amountText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,15 @@ public class PaymentGatewayDemo extends AppCompatActivity {
 
         payNowBtn = findViewById(R.id.payNowBtn);
         amountText = findViewById(R.id.amountText);
+        referralCode = findViewById(R.id.textView119);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String selfReferralCode = sharedPreferences.getString("selfreferralcode", "N/A"); // Default: "N/A" if not found
+
+        // ✅ Set Referral Code to TextView
+        referralCode.setText(selfReferralCode);
+
+
         Checkout.preload(PaymentGatewayDemo.this);
         payNowBtn.setOnClickListener(v -> {
             startPayment(Integer.parseInt(amountText.getText().toString()));

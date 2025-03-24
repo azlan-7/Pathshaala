@@ -26,49 +26,72 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/logopathshaala"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/logopathshaala_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp.Light"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".SampleLoginPage"
-            android:exported="false" />
-        <activity
             android:name=".ChatActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".PaymentGatewayDemo"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".StudentsAcademicDetailsView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".StudentsAcademicDetails"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".WhatsAppScreen"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
-            android:name=".BasicTestPage"
-            android:exported="false" />
+            android:name=".AwardsViewer"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
+            android:name=".CertificateViewer"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".YearDropDown"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".AwardsDropDown"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".ProfessionDropDown"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".DesignationDropDown"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".WorkExperienceDropdown"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".SubjectGradeTopic"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".CourseSelectionSample"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".SelectEducationActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".RegisterActivity"
             android:exported="true"
@@ -238,7 +261,7 @@
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SubjectExpertise"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".TeachersAddSubject"
@@ -266,7 +289,7 @@
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".OTPmobile"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".GoogleLogin"

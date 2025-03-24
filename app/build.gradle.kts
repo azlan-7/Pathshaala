@@ -56,8 +56,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
-
-    // Razorpay Payments API
     implementation("com.razorpay:checkout:1.6.40")
 
     //
@@ -66,6 +64,7 @@ dependencies {
     implementation ("androidx.activity:activity-compose:1.7.2")
     implementation ("androidx.compose.ui:ui:1.5.1")
     implementation ("androidx.compose.material3:material3:1.1.2")
+    annotationProcessor(libs.glide.compiler)
 
     // Credential Manager Firebase (Google)
     implementation("androidx.credentials:credentials:1.5.0")

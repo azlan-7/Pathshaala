@@ -59,32 +59,31 @@ public class NextLoginPage extends AppCompatActivity {
         btnLogin = findViewById(R.id.button);
 
         btnLogin.setOnClickListener(v -> {
-            // Retrieve mobile number entered by the user
-//            doInBackground();
-            String mobileNumber = PhoneNumber.getText().toString().trim();
+            String phoneNumber = PhoneNumber.getText().toString().trim();
 
-            if (mobileNumber.isEmpty() || mobileNumber.length() < 10) {
+            if (phoneNumber.isEmpty() || phoneNumber.length() < 10) {
                 PhoneNumber.setError("Please enter a valid mobile number");
             } else {
+                Log.d("NextLoginPage", "📲 Sending OTP to: " + phoneNumber);
 
+                // Call OTPService to send OTP
+                OTPService.sendOTP(phoneNumber, this);
 
-//                String otp = generateOTP();
-//                Log.d("NextLoginPage", "Generated OTP: " + otp);
-                // Send OTP directly to the entered mobile number
-                OTPService.sendOTP(mobileNumber, NextLoginPage.this);
+                // Store the phone number in SharedPreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("phoneNumber", phoneNumber);
+                editor.apply();
 
-
-                Toast.makeText(NextLoginPage.this, "OTP has been sent to: " + mobileNumber, Toast.LENGTH_SHORT).show();
-
+                // Navigate to OTPmobile activity
                 Intent intentPhone = new Intent(NextLoginPage.this, OTPmobile.class);
-                intentPhone.putExtra("phoneNumber", mobileNumber);  // Pass the phone number to OTP page
-                intentPhone.putExtra("generatedOTP", otp);  // Pass the generated OTP
-//              intentPhone.putExtra("phoneNumber", PhoneNumber.getText().toString().trim());  // Pass the phone number
+                intentPhone.putExtra("phoneNumber", phoneNumber);  // Pass phone number
                 startActivity(intentPhone);
-
-
             }
         });
+
+
+
 
 
 
@@ -349,7 +348,7 @@ public class NextLoginPage extends AppCompatActivity {
             Log.d("NextLoginPage", "Generated OTP: " + otp);  // Log OTP before sending
 
             // Call OTPService to send OTP
-            OTPService.sendOTP(phoneNumber, NextLoginPage.this);
+            OTPService.sendOTP(phoneNumber, this);
 
 
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
