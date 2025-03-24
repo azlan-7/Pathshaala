@@ -11,6 +11,11 @@ import android.widget.TextView;
 import android.content.Intent;
 import android.view.View;
 
+
+// REMEMBER TO GET THE RELEASE KEY BEFORE THE LAUNCH OF THE APPLICATION ON THE PLAY STORE (Related to SHA1 Key)
+
+
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

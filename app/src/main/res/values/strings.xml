@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Pathshaala
-    </string>
+    <string name="app_name">Pathshaala</string>
+    <string name="web_client_id">126063303088-h32a0chonh0m0hv4p0p1b3a2es79gvfh.apps.googleusercontent.com</string>
     <string name="back_btn">Back Button\n</string>
     <string name="skills_extra">Skills and Extracurriculars</string>
     <string name="add_hobbies">Hobbies and Interests</string>

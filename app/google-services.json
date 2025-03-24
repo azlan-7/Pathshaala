@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "126063303088",
+    "project_id": "pathshaala-magnus",
+    "storage_bucket": "pathshaala-magnus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126063303088:android:15a2df90303ee066c59e75",
+        "android_client_info": {
+          "package_name": "com.example.loginpage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126063303088-9eoc3n9ts1iv6ha37basr4vjdsd601c3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.loginpage",
+            "certificate_hash": "10d6e260ba7cdb31ad01b0b65df5a3bec993ffb1"
+          }
+        },
+        {
+          "client_id": "126063303088-ped0e43nptjv9c3ee0ak6h7u92ss53q5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvt_20-lExIM7sBBiqqbpCo-1hdq-dbBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126063303088-ped0e43nptjv9c3ee0ak6h7u92ss53q5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
