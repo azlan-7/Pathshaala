@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,6 +36,7 @@ import java.util.Map;
 public class CertificationsAdd extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private ImageView backButton;
     private EditText etCertificationName, etOrganisation, etYear, etCredentialUrl;
     private Button btnSave, btnUpload;
     private SharedPreferences sharedPreferences;
@@ -49,6 +51,7 @@ public class CertificationsAdd extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
 
         // Initialize UI Elements
+        backButton = findViewById(R.id.imageView149);
         etCertificationName = findViewById(R.id.editTextText26);
         etOrganisation = findViewById(R.id.editTextText27);
         etYear = findViewById(R.id.editTextText28);
@@ -68,6 +71,8 @@ public class CertificationsAdd extends AppCompatActivity {
                 openFilePicker();
             }
         });
+
+        backButton.setOnClickListener(v -> startActivity(new Intent(CertificationsAdd.this, TeachersInfoSubSection.class)));
 
     }
 

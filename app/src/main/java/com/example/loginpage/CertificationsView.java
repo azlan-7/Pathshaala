@@ -33,7 +33,7 @@ public class CertificationsView extends AppCompatActivity {
     private CertificationsAdapter adapter;
     private List<CertificationModel> certificationList;
     private SharedPreferences sharedPreferences;
-    private ImageView addCertification;
+    private ImageView addCertification, backButton;
     private Button buttonContinue;
 
     @Override
@@ -44,6 +44,7 @@ public class CertificationsView extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
 
+        backButton = findViewById(R.id.imageView150);
         certificationsRecyclerView = findViewById(R.id.certificationRecyclerView);
         addCertification = findViewById(R.id.imageView91);
         buttonContinue = findViewById(R.id.button27);
@@ -68,6 +69,9 @@ public class CertificationsView extends AppCompatActivity {
             startActivity(new Intent(CertificationsView.this, TeachersInfo.class));
             finish();
         });
+
+        backButton.setOnClickListener(v -> finish());
+
     }
 
 

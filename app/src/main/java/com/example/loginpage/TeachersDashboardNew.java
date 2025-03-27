@@ -27,6 +27,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.github.mikephil.charting.charts.BarChart;
@@ -112,12 +113,12 @@ public class TeachersDashboardNew extends AppCompatActivity {
         });
 
         profileIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
+            Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfoSubSection.class);
             startActivity(intent);
         });
 
         profileIconTop.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
+            Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfoSubSection.class);
             startActivity(intent);
         });
 
@@ -151,13 +152,13 @@ public class TeachersDashboardNew extends AppCompatActivity {
                         .load(imageUrl)
                         .placeholder(R.drawable.generic_avatar) // Default profile image
                         .error(R.drawable.generic_avatar) // Show default if error
+                        .apply(RequestOptions.circleCropTransform()) // Makes the image round
                         .into(profileIconTop)); // ✅ Load image into Toolbar Profile
             } else {
                 Log.e("TeachersDashboardNew", "❌ No profile image found in DB or empty value.");
             }
         });
     }
-
 
 
     // Working of the BOTTOM NAVIGATION BAR
@@ -172,7 +173,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
                 Intent intent = new Intent(TeachersDashboardNew.this, TeachersDashboardNew.class);
                 startActivity(intent);
             } else if (itemId == R.id.profile) {
-                Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
+                Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfoSubSection.class);
                 startActivity(intent);
             }
             return true;

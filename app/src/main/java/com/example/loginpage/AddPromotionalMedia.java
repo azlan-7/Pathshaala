@@ -21,7 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class AddPromotionalMedia extends AppCompatActivity {
 
     private static final int PICK_VIDEO_REQUEST = 1;
-    private ImageView mediaImageView;  // Image to trigger video selection
+    private ImageView mediaImageView, backButton;  // Image to trigger video selection
     private VideoView videoView;  // VideoView to play the selected video
 
     @Override
@@ -40,6 +40,10 @@ public class AddPromotionalMedia extends AppCompatActivity {
         mediaImageView = findViewById(R.id.image_select_vid);
         videoView = findViewById(R.id.videoView);
         Button saveButton = findViewById(R.id.button15);
+        backButton = findViewById(R.id.imageView156);
+
+        backButton.setOnClickListener(v -> finish());
+
 
         // Set click listener to open video picker
         mediaImageView.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +55,7 @@ public class AddPromotionalMedia extends AppCompatActivity {
 
         saveButton.setOnClickListener(v -> {
             Toast.makeText(AddPromotionalMedia.this, "Saved Successfully!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddPromotionalMedia.this, TeachersInfo.class);
+            Intent intent = new Intent(AddPromotionalMedia.this, TeachersInfoSubSection.class);
             startActivity(intent);
             finish(); // Close current activity
         });

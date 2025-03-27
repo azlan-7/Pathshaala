@@ -159,4 +159,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/yearDropdown" />
 
+    <ImageView
+        android:id="@+id/imageView144"
+        android:layout_width="42dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="108dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView36"
+        app:layout_constraintEnd_toStartOf="@+id/textView36"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/arrow_back_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

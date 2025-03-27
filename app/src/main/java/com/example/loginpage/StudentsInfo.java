@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,16 +19,28 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.adapters.StudentsExpandableListAdapter;
 import com.example.loginpage.models.UserDetailsClass;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class StudentsInfo extends AppCompatActivity {
 
     private TextView tvFullName, tvContact, tvEmail;
     private UserDetailsClass user;
-    private TextView accountInfo, academicDetails, learningPreferences, parentGuardian, skillExtraCurr,progress,attendance,commPref,feedback,dashboard;
     private TextView tvAboutYourself;
     private TextView uniqueIdTextView;
     private ImageView profileImage;
+
+    private ExpandableListView expandableListView;
+
+    private List<String> sectionTitles;
+    private HashMap<String, List<String>> sectionItems;
+    private ExpandableListAdapter adapter;
 
     private static final String TAG = "StudentsInfo";
 
@@ -48,22 +62,35 @@ public class StudentsInfo extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_students_info);
 
-        accountInfo = findViewById(R.id.textViewAccountInfo);
-        academicDetails = findViewById(R.id.textViewEducation);
-        learningPreferences = findViewById(R.id.textViewCourses);
-        skillExtraCurr = findViewById(R.id.textViewActivities);
-        parentGuardian = findViewById(R.id.textViewLocation);
-        dashboard = findViewById(R.id.textView121);
+        expandableListView = findViewById(R.id.expandableView);
+
+        setupExpandableList();
+
+        // Add the Group Expand Listener here
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                for (int i = 0; i < expandableListView.getExpandableListAdapter().getGroupCount(); i++) {
+                    if (i != groupPosition) {
+                        expandableListView.collapseGroup(i); // Collapse all other groups
+                    }
+                }
+            }
+        });
+
+        expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
+            String selectedItem = sectionItems.get(sectionTitles.get(groupPosition)).get(childPosition);
+            navigateToActivity(selectedItem);
+            return true;
+        });
+
         ImageView editAbout = findViewById(R.id.imageView44);
         ImageView qrCode = findViewById(R.id.imageView113);
         ImageView payment = findViewById(R.id.imageView138);
-        progress = findViewById(R.id.textView84);
-        attendance = findViewById(R.id.textView85);
-        commPref = findViewById(R.id.textView86);
-        feedback = findViewById(R.id.textView87);
+
         tvAboutYourself = findViewById(R.id.textViewAboutYourself);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView2);
-        skillExtraCurr = findViewById(R.id.textViewActivities);
+
         
         profileImage = findViewById(R.id.imageView55);
 
@@ -93,49 +120,6 @@ public class StudentsInfo extends AppCompatActivity {
 
         payment.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsInfo.this, PaymentGatewayDemo.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
-
-        accountInfo.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, StudentsBasicInfo.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
-
-        dashboard.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, StudentsDashboard.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
-
-        academicDetails.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, StudentsAcademicDetails.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
-
-
-        parentGuardian.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, StudentsParentInfo.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
-
-        commPref.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, CommunicationPreferences.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
-
-        learningPreferences.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, SubjectExpertiseNewOne.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
-
-        skillExtraCurr.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, AddExtracurriculars.class);
             aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });
@@ -181,6 +165,81 @@ public class StudentsInfo extends AppCompatActivity {
             return insets;
         });
     }
+
+    private void setupExpandableList() {
+        sectionTitles = new ArrayList<>();
+        sectionItems = new HashMap<>();
+
+        sectionTitles.add("Account Info");
+        sectionTitles.add("Academic Details");
+        sectionTitles.add("Parent Guardian Details");
+        sectionTitles.add("Skills and Extracurriculars");
+        sectionTitles.add("Progress and Performance");
+        sectionTitles.add("Attendance and Participation");
+        sectionTitles.add("Communication Preferences");
+        sectionTitles.add("Feedback and Ratings");
+        sectionTitles.add("Dashboard");
+
+        // Adding subsections (Dropdown Items)
+        List<String> academicDetailsOptions = new ArrayList<>();
+        academicDetailsOptions.add("View your Academic Details");
+        academicDetailsOptions.add("Add Academic Details");
+
+        List<String> parentDetailsOptions = new ArrayList<>();
+        parentDetailsOptions.add("Edit Details");
+        parentDetailsOptions.add("Add Details");
+
+        List<String> skillsOptions = new ArrayList<>();
+        skillsOptions.add("View your Skills");
+        skillsOptions.add("Add Skills/Extracurriculars");
+
+        // Correct Mapping
+        sectionItems.put(sectionTitles.get(1), academicDetailsOptions); // Academic Details -> Correct dropdown
+        sectionItems.put(sectionTitles.get(2), parentDetailsOptions); // Parent Guardian Details -> Correct dropdown
+        sectionItems.put(sectionTitles.get(3), skillsOptions); // Skills and Extracurriculars -> Correct dropdown
+
+        // Sections with no dropdown (empty lists)
+        for (int i = 4; i < sectionTitles.size(); i++) {
+            sectionItems.put(sectionTitles.get(i), new ArrayList<>());
+        }
+
+        adapter = new StudentsExpandableListAdapter(this, sectionTitles, sectionItems);
+        expandableListView.setAdapter(adapter);
+    }
+
+
+
+
+    private void navigateToActivity(String selectedItem) {
+        Intent intent = null;
+        switch (selectedItem) {
+            case "View your Academic Details":
+                intent = new Intent(this, StudentsAcademicDetailsView.class);
+                break;
+            case "Add Academic Details":
+                intent = new Intent(this, StudentsAcademicDetails.class);
+                break;
+                case "View your Skills":
+                intent = new Intent(this, AddExtracurriculars.class);
+                break;
+            case "Add Skills/Extracurriculars":
+                intent = new Intent(this, AddExtracurriculars.class);
+                break;
+            case "Edit Details":
+                intent = new Intent(this, StudentsParentInfo.class);
+                break;
+            case "Add Details":
+                intent = new Intent(this, StudentsParentInfo.class);
+                break;
+
+            default:
+                Toast.makeText(this, "Invalid selection!", Toast.LENGTH_SHORT).show();
+                return;
+        }
+        startActivity(intent);
+    }
+
+
 
 
     private void fetchUserDetailsFromDB() {

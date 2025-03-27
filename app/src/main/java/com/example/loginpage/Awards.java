@@ -38,7 +38,7 @@ public class Awards extends AppCompatActivity {
     private AwardsAdapter adapter;
     private List<AwardModel> awardsList;
     private SharedPreferences sharedPreferences;
-    private ImageView addAwardButton;
+    private ImageView addAwardButton, backButton;
     private Button continueButton;
     private List<AwardModel> awardList = new ArrayList<>();
     private TextView tvNoAwards;
@@ -52,6 +52,7 @@ public class Awards extends AppCompatActivity {
         awardsRecyclerView = findViewById(R.id.awardsRecyclerView);
         addAwardButton = findViewById(R.id.imageView82);
         continueButton = findViewById(R.id.button26);
+        backButton = findViewById(R.id.imageView155);
 
         awardsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AwardsAdapter(this, awardList);
@@ -115,6 +116,8 @@ public class Awards extends AppCompatActivity {
         awardsList = loadAwardsData();
         adapter = new AwardsAdapter(this, awardsList);
         awardsRecyclerView.setAdapter(adapter);
+
+        backButton.setOnClickListener(v -> finish());
 
         addAwardButton.setOnClickListener(v -> {
             Intent intent = new Intent(Awards.this, AddAwards.class);

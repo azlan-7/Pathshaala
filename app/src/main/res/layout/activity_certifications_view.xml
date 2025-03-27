@@ -101,4 +101,16 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/certificationRecyclerView" />
+
+    <ImageView
+        android:id="@+id/imageView150"
+        android:layout_width="37dp"
+        android:layout_height="35dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView78"
+        app:layout_constraintEnd_toStartOf="@+id/textView78"
+        app:layout_constraintHorizontal_bias="0.297"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.252"
+        app:srcCompat="@drawable/arrow_back_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class WorkExperience extends AppCompatActivity {
     private Map<String, String> workExperienceMap = new HashMap<>(); // WorkExperience -> WorkExperienceID
     private Map<String, String> designationMap = new HashMap<>(); // DesignationName -> DesignationID
     private Map<String, String> professionMap = new HashMap<>(); // ProfessionName -> ProfessionID
+    private ImageView backButton;
     private EditText etProfession, etInstitution, etDesignation;
     private AutoCompleteTextView experienceDropdown,designationDropdown,professionDropdown;
     private Button btnSave;
@@ -69,6 +71,7 @@ public class WorkExperience extends AppCompatActivity {
          etDesignation = findViewById(R.id.editTextText25);
         etInstitution = findViewById(R.id.editTextText24);
 
+        backButton = findViewById(R.id.imageView147);
         experienceDropdown = findViewById(R.id.experienceDropdown);
         designationDropdown = findViewById(R.id.editTextText25);
         professionDropdown = findViewById(R.id.editTextText23);
@@ -120,6 +123,8 @@ public class WorkExperience extends AppCompatActivity {
             Log.d(TAG, "📌 Save Button Clicked! Calling saveWorkExperience().");
             saveWorkExperience();
         });
+
+        backButton.setOnClickListener(v -> startActivity(new Intent(WorkExperience.this, TeachersInfoSubSection.class)));
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

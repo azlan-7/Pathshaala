@@ -37,7 +37,7 @@ public class WorkExperienceView extends AppCompatActivity {
 
     private List<WorkExperienceModel> workExperienceList;
     private SharedPreferences sharedPreferences;
-    private ImageView addWorkExperience;
+    private ImageView addWorkExperience, backButton;
     private Button buttonContinue;
 
     @Override
@@ -50,6 +50,7 @@ public class WorkExperienceView extends AppCompatActivity {
 
         // Initialize UI elements
         addWorkExperience = findViewById(R.id.imageView81);
+        backButton = findViewById(R.id.imageView148);
         buttonContinue = findViewById(R.id.button25);
         workExperienceRecyclerView = findViewById(R.id.workExperienceRecyclerView);
 
@@ -70,6 +71,8 @@ public class WorkExperienceView extends AppCompatActivity {
                     "Experience=" + exp.getWorkExperience());
         }
 
+
+        backButton.setOnClickListener(v -> finish());
 
         // Add work experience button
         addWorkExperience.setOnClickListener(v -> {

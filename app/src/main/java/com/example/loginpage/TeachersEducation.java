@@ -49,6 +49,7 @@ import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 public class TeachersEducation extends AppCompatActivity {
 
     private List<Education> educationList;
+    private ImageView backButton;
     private EducationAdapter educationAdapter;
     private SharedPreferences sharedPreferences;
     private RecyclerView educationRecyclerView;
@@ -78,11 +79,14 @@ public class TeachersEducation extends AppCompatActivity {
         textViewYear = findViewById(R.id.yearDropdown);
         etInstitution = findViewById(R.id.editTextText15);
         courseName = findViewById(R.id.educationIdDropdown);
+        backButton = findViewById(R.id.imageView144);
 
         educationList = new ArrayList<>();
         educationAdapter = new EducationAdapter(this, educationList);
         educationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         educationRecyclerView.setAdapter(educationAdapter);
+
+        backButton.setOnClickListener(v -> startActivity(new Intent(TeachersEducation.this, TeachersInfoSubSection.class)));
 
         // ✅ Ensure dropdown opens on click
         educationLevel.setOnClickListener(v -> {

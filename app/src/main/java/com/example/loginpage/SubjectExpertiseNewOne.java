@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,8 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
 
     private TextView heading;
 
+    private ImageView backButton;
+
     private FlexboxLayout retrievedSubjectContainer;
     private RecyclerView subjectsRecyclerView;
     private SharedPreferences sharedPreferences;
@@ -60,6 +63,7 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
         subjectsRecyclerView = findViewById(R.id.subjectsRecycler);
         saveButton = findViewById(R.id.button21);
         heading = findViewById(R.id.textView56);
+        backButton = findViewById(R.id.imageView143);
 
 
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -104,6 +108,7 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
 
         // Save subjects on button click
         saveButton.setOnClickListener(v -> saveSubjects());
+        backButton.setOnClickListener(v -> startActivity(new Intent(SubjectExpertiseNewOne.this, TeachersInfoSubSection.class)));
 
         // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

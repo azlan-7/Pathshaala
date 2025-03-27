@@ -33,65 +33,72 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".TeachersInfoSubSection"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".DashboardSideNav"
+            android:exported="false" />
+        <activity
             android:name=".ChatActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".PaymentGatewayDemo"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".StudentsAcademicDetailsView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".StudentsAcademicDetails"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".WhatsAppScreen"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".AwardsViewer"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".CertificateViewer"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".YearDropDown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".AwardsDropDown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".ProfessionDropDown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".DesignationDropDown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".WorkExperienceDropdown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SubjectGradeTopic"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".CourseSelectionSample"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SelectEducationActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".RegisterActivity"
             android:exported="true"

@@ -83,6 +83,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/detailonboardingbottom" />
 
+    <ImageView
+        android:id="@+id/imageView148"
+        android:layout_width="34dp"
+        android:layout_height="29dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView77"
+        app:layout_constraintEnd_toStartOf="@+id/textView77"
+        app:layout_constraintHorizontal_bias="0.346"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.388"
+        app:srcCompat="@drawable/arrow_back_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
