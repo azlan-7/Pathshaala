@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,10 +41,44 @@
     </RadioGroup>
 
     <EditText
-        android:id="@+id/editTextText10"
+        android:id="@+id/editTextFirstName"
         android:layout_width="264dp"
         android:layout_height="46dp"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="First Name"
+        android:inputType="textCapWords"
+        android:textColorHint="#1674AE"
+        app:layout_constraintBottom_toTopOf="@+id/editTextLastName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/teacherorstudent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <EditText
+        android:id="@+id/editTextLastName"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Last Name"
+        android:inputType="text"
+        android:textColorHint="#1674AE"
+        app:layout_constraintBottom_toTopOf="@+id/editTextContact"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextFirstName" />
+
+    <EditText
+        android:id="@+id/editTextContact"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:enabled="false"
@@ -53,10 +86,28 @@
         android:hint="Contact No."
         android:inputType="phone"
         android:textColorHint="#1674AE"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText11" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="264dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#1674AE"
+        app:layout_constraintBottom_toTopOf="@+id/editTextDOB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextContact" />
 
     <ImageView
         android:id="@+id/imageView31"
@@ -96,57 +147,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.039" />
 
-    <EditText
-        android:id="@+id/editTextText9"
-        android:layout_width="264dp"
-        android:layout_height="46dp"
-        android:background="@drawable/cornered_rectangle"
-        android:ems="10"
-        android:fontFamily="@font/work_sans_light"
-        android:hint="First Name"
-        android:inputType="textCapWords"
-        android:textColorHint="#1674AE"
-        tools:layout_editor_absoluteX="63dp"
-        tools:layout_editor_absoluteY="113dp" />
 
     <EditText
-        android:id="@+id/editTextText11"
+        android:id="@+id/editTextDOB"
         android:layout_width="264dp"
         android:layout_height="46dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/cornered_rectangle"
-        android:ems="10"
-        android:fontFamily="@font/work_sans_light"
-        android:hint="Last Name"
-        android:inputType="text"
-        android:textColorHint="#1674AE"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText9" />
-
-    <EditText
-        android:id="@+id/editTextText12"
-        android:layout_width="264dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/cornered_rectangle"
-        android:ems="10"
-        android:fontFamily="@font/work_sans_light"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress"
-        android:textColorHint="#1674AE"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText11" />
-
-
-    <EditText
-        android:id="@+id/editTextText13"
-        android:layout_width="264dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/cornered_rectangle"
         android:drawableRight="@drawable/calendaricon"
         android:ems="10"
@@ -155,16 +161,17 @@
         android:hint="Date of Birth"
         android:inputType="date"
         android:textColorHint="#1674AE"
+        app:layout_constraintBottom_toTopOf="@+id/autoCompleteCity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText12" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
     <AutoCompleteTextView
         android:id="@+id/autoCompleteCity"
         android:layout_width="264dp"
         android:layout_height="46dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/cornered_rectangle"
         android:clickable="true"
         android:drawableEnd="@drawable/dropdownicon"
@@ -175,32 +182,17 @@
         android:inputType="none"
         android:padding="12dp"
         android:textColorHint="#1674AE"
+        app:layout_constraintBottom_toTopOf="@+id/userName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText13" />
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/generateUID"
-        android:layout_width="194dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/cornered_button"
-        android:fontFamily="@font/work_sans_semibold"
-        android:text="Generate UID"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextDOB" />
 
     <EditText
         android:id="@+id/userName"
         android:layout_width="264dp"
         android:layout_height="46dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -208,6 +200,7 @@
         android:inputType="text"
         android:padding="12dp"
         android:textColorHint="#1674AE"
+        app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
@@ -218,13 +211,14 @@
         android:id="@+id/password"
         android:layout_width="264dp"
         android:layout_height="46dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
         android:hint="Password"
         android:inputType="textPassword"
         android:textColorHint="#1674AE"
+        app:layout_constraintBottom_toTopOf="@+id/confirmPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
@@ -234,7 +228,7 @@
         android:id="@+id/confirmPassword"
         android:layout_width="264dp"
         android:layout_height="46dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -257,4 +251,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userName"
         app:srcCompat="@drawable/full_width" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/generateUID"
+        android:layout_width="194dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/cornered_button"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Generate UID"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,10 +22,26 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             Log.d("SplashActivity", "Transitioning to Welcome Activity");
-            Intent intent = new Intent(SplashActivity.this, Welcome.class);
+            Intent intent = new Intent(SplashActivity.this, TeachersDashboardNew.class);
             startActivity(intent);
             finish(); // Close SplashActivity
         }, SPLASH_TIME_OUT);
+
+
+        
+
+
+        // TABHI SHOW KRNA JAB MEDIA VISIBLE NAHI HO
+
+
+
+
+
+
+
+
+
+
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -33,6 +49,5 @@ public class SplashActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//        return null;
     }
 }

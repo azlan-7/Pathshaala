@@ -55,7 +55,7 @@ public class NextLoginPage extends AppCompatActivity {
         }
 
 
-        PhoneNumber = findViewById(R.id.editTextText4);
+        PhoneNumber = findViewById(R.id.numberInput);
         btnLogin = findViewById(R.id.button);
 
         btnLogin.setOnClickListener(v -> {

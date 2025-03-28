@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
+    implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+")
     implementation("com.razorpay:checkout:1.6.40")
 
     //
@@ -64,7 +65,9 @@ dependencies {
     implementation ("androidx.activity:activity-compose:1.7.2")
     implementation ("androidx.compose.ui:ui:1.5.1")
     implementation ("androidx.compose.material3:material3:1.1.2")
-    annotationProcessor(libs.glide.compiler)
+
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 
     // Credential Manager Firebase (Google)
     implementation("androidx.credentials:credentials:1.5.0")

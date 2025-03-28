@@ -28,4 +28,5 @@
     <string name="exam_schedule">3️⃣ Exam Schedule Update: \nAttention everyone! The [Subject] exam has been scheduled for [Date]. Please check your syllabus and prepare accordingly.</string>
     <string name="attendance_warning">4️⃣ Attendance Warning :\nHi [Student\'s Name], I noticed that you\'ve missed a few classes recently. Is everything okay? Let me know if you need any help.</string>
     <string name="msg">Message:</string>
+    <string name="mob_verify">Mobile Verification</string>
 </resources>

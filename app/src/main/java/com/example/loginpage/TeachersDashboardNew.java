@@ -175,6 +175,10 @@ public class TeachersDashboardNew extends AppCompatActivity {
                 Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
                 startActivity(intent);
             }
+            else if(itemId == R.id.goLive){
+                Intent intent = new Intent(TeachersDashboardNew.this, SampleGoLiveZego.class);
+                startActivity(intent);
+            }
             return true;
         });
     }

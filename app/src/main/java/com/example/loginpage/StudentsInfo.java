@@ -129,7 +129,7 @@ public class StudentsInfo extends AppCompatActivity {
         });
 
         learningPreferences.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, SubjectExpertiseNewOne.class);
+            Intent intent = new Intent(StudentsInfo.this, LearningPreferences.class);
             aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });

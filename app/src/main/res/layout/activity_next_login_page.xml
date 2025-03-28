@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -52,31 +51,72 @@
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-    <EditText
-        android:id="@+id/editTextText4"
-        android:layout_width="292dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="55dp"
-        android:background="@drawable/cornered_rectangle"
-        android:ems="10"
-        android:fontFamily="@font/work_sans_light"
-        android:hint="+91"
-        android:inputType="phone"
-        android:textColorHint="#1674AE"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView11"
-        app:layout_constraintVertical_bias="0.002" />
+<!--    <EditText-->
+<!--        android:id="@+id/editTextText4"-->
+<!--        android:layout_width="292dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="55dp"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:layout_marginEnd="55dp"-->
+<!--        android:background="@drawable/cornered_rectangle"-->
+<!--        android:ems="10"-->
+<!--        android:fontFamily="@font/work_sans"-->
+<!--        android:hint="+91"-->
+<!--        android:inputType="phone"-->
+<!--        android:textColorHint="#1674AE"-->
+<!--        android:textSize="15sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.444"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView11"-->
+<!--        app:layout_constraintVertical_bias="0.002" />-->
 
     <LinearLayout
+        android:id="@+id/numberInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView11"
+        app:layout_constraintVertical_bias="0.032">
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/editTextText4"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView11"
+            app:srcCompat="@drawable/indianflag" />
+
+        <EditText
+            android:id="@+id/numberInput"
+            android:paddingVertical="10dp"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="@drawable/cornered_rectangle"
+            android:ems="10"
+            android:layout_weight="1"
+            android:fontFamily="@font/work_sans"
+            android:hint="+91"
+            android:textStyle="bold"
+            android:inputType="phone"
+            android:textColorHint="#1674AE"
+            android:textSize="8pt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.444"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView11"
+            app:layout_constraintVertical_bias="0.002" />
 
     </LinearLayout>
 
@@ -93,18 +133,18 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
+        app:layout_constraintTop_toBottomOf="@+id/numberInputLayout" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.278"
         app:layout_constraintStart_toStartOf="parent"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintTop_toBottomOf="@+id/button"
         app:srcCompat="@drawable/icons8_facebook" />
 
@@ -113,11 +153,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintTop_toBottomOf="@+id/button"
         app:srcCompat="@drawable/icons8_microsoft_outlook" />
 
@@ -126,25 +166,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.732"
         app:layout_constraintStart_toStartOf="parent"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintTop_toBottomOf="@+id/button"
         app:srcCompat="@drawable/icons8_google" />
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="34dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/editTextText4"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView11"
-        app:srcCompat="@drawable/indianflag" />
 
     <ImageView
         android:id="@+id/imageView9"
