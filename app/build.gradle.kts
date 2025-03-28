@@ -62,6 +62,7 @@ dependencies {
     implementation ("androidx.activity:activity-compose:1.7.2")
     implementation ("androidx.compose.ui:ui:1.5.1")
     implementation ("androidx.compose.material3:material3:1.1.2")
+    implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+")
     annotationProcessor(libs.glide.compiler)
 
 }

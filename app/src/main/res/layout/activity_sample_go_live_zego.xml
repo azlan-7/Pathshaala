@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e3f2fd"
+    tools:context=".MainActivity">
+
+    <!-- AppBar Stuck at the Top -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_background"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@drawable/toolbar_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <!-- Notification Icon on Left -->
+            <ImageView
+                android:id="@+id/imageView141"
+                android:layout_width="35sp"
+                android:layout_height="35sp"
+                android:layout_marginEnd="10dp"
+                app:srcCompat="@drawable/notifications_24dp_ffffff_fill0_wght400_grad0_opsz24" />
+
+            <!-- Dashboard Title in Center -->
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/work_sans_bold"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="#FFFFFF"
+                android:textSize="32sp" />
+
+            <!-- Profile Icon on Right -->
+            <ImageView
+                android:id="@+id/imageView151"
+                android:layout_width="57dp"
+                android:layout_height="57dp"
+                android:layout_marginStart="10dp"
+                android:contentDescription="@string/user_profile"
+                app:srcCompat="@drawable/profile_icon_no_bg" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Content -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GO LIVE"
+            android:fontFamily="@font/work_sans "
+            android:textColor="@color/black"
+            android:textSize="18pt"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
+            android:text="Pathshaala Live Class"
+            android:textColor="@color/black"
+            android:textSize="9pt"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.247" />
+
+        <!-- Bottom Aligned Section -->
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start a new live class or Enter the live ID to join."
+            android:textColor="#0077b6"
+            android:fontFamily="@font/work_sans"
+            android:textSize="6.2pt"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.615" />
+
+        <!-- Input Section -->
+        <LinearLayout
+            android:id="@+id/linearLayout10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounder_corner_top"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/liveClassIdInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/edittext_border_go_live"
+                android:fontFamily="@font/work_sans"
+                android:hint="Enter the Live ID"
+                android:inputType="number"
+                android:maxLength="5"
+                android:textColor="@color/black"
+                android:textSize="8pt"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/yourClassNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/edittext_border_go_live"
+                android:fontFamily="@font/work_sans"
+                android:hint="Enter your Name"
+                android:inputType="text"
+                android:maxLength="50"
+                android:textColor="@color/black"
+                android:textSize="8pt"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/goLiveBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/submit_button1"
+                android:padding="10dp"
+                android:text="START NEW LIVE"
+                android:textColor="@color/white"
+                android:textSize="7pt"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
