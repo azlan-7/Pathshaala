@@ -1,5 +1,6 @@
 package com.example.loginpage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,6 +42,14 @@ public class SampleLiveZego extends AppCompatActivity {
         liveIDText.setText(liveID);
 
         AddFragment();
+
+        shareBtn.setOnClickListener(v->{
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.setType("text/plain");
+            sendIntent.putExtra(Intent.EXTRA_TEXT,  "Join the live class in the Pathshaala app.\n Live ID: "+liveID);
+            startActivity(sendIntent.createChooser(sendIntent, "Share via"));
+        });
     }
 
     void AddFragment(){

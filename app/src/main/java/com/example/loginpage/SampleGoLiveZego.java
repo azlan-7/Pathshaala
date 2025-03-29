@@ -1,6 +1,7 @@
 package com.example.loginpage;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +22,8 @@ public class SampleGoLiveZego extends AppCompatActivity {
     private Button goLiveBtn;
     public EditText liveClassIdInput, yourNameInput;
 
+    SharedPreferences sharedPreferences;
+
     String liveID, name, userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +36,13 @@ public class SampleGoLiveZego extends AppCompatActivity {
             return insets;
         });
 
+        sharedPreferences = getSharedPreferences("name_pref", MODE_PRIVATE);
+
         goLiveBtn = findViewById(R.id.goLiveBtn);
         liveClassIdInput = findViewById(R.id.liveClassIdInput);
         yourNameInput = findViewById(R.id.yourClassNameInput);
+
+        yourNameInput.setText(sharedPreferences.getString("name", ""));
 
         liveClassIdInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -79,6 +86,7 @@ public class SampleGoLiveZego extends AppCompatActivity {
 
     void startMeeting(){
         Log.i("LOG", "Starting Meeting");
+        sharedPreferences.edit().putString("name", name).apply();
 
         boolean isHost = true;
         if(liveID.length() == 5){
