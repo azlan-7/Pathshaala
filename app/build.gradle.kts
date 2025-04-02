@@ -56,10 +56,16 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
+
+    // ZegoCloud API
     implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+")
+
+    // Razorpay API
     implementation("com.razorpay:checkout:1.6.40")
 
-    //
+    // Google Gemini API
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation ("androidx.activity:activity-compose:1.7.2")

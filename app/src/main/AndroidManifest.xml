@@ -18,7 +18,7 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -33,6 +33,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ChatPage"
+            android:exported="false" />
+
+        <activity
             android:name=".SampleLiveZego"
             android:exported="false" />
         <activity
@@ -44,10 +48,13 @@
         <activity
             android:name=".PromotionalMediaUpload"
             android:exported="false" />
+
         <activity
             android:name=".ChatActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
+
         <activity
             android:name=".PaymentGatewayDemo"
             android:exported="true"

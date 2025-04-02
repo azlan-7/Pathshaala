@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             Log.d("SplashActivity", "Transitioning to Welcome Activity");
-            Intent intent = new Intent(SplashActivity.this, TeachersDashboardNew.class);
+            Intent intent = new Intent(SplashActivity.this, ChatActivity.class);
             startActivity(intent);
             finish(); // Close SplashActivity
         }, SPLASH_TIME_OUT);
