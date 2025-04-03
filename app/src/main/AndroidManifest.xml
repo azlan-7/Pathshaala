@@ -47,11 +47,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".SampleLiveZego"
-            android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
-
-        <activity
             android:name=".TeachersInfoSubSection"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
