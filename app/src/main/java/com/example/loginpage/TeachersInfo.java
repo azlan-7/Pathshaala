@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.models.UserDetailsClass;
 
@@ -26,7 +27,7 @@ public class TeachersInfo extends AppCompatActivity {
 
     private TextView tvFirstName, tvFullName, tvLastName, tvContact, tvEmail, tvDOB,uniqueIdTextView;
 
-    private ImageView profileImage;
+    private ImageView profileImage, backButton;
     private TextView accountInfo, subjectExpertise, education, workExperience, gradesTaught, certifications, awards, promotionalActivities, location, dashboard;
     private static final String TAG = "TeachersInfo";
 
@@ -37,6 +38,7 @@ public class TeachersInfo extends AppCompatActivity {
 
         // Initialize UI elements
         TextView aboutText = findViewById(R.id.textView41);
+        backButton = findViewById(R.id.imageView140);
         accountInfo = findViewById(R.id.textView43);
         subjectExpertise = findViewById(R.id.textView44);
         education = findViewById(R.id.textView45);
@@ -141,6 +143,7 @@ public class TeachersInfo extends AppCompatActivity {
         promotionalActivities.setOnClickListener(v -> startActivity(new Intent(TeachersInfo.this, AddPromotionalMedia.class)));
         location.setOnClickListener(v -> startActivity(new Intent(TeachersInfo.this, TeachersAddress.class)));
         dashboard.setOnClickListener(v -> startActivity(new Intent(TeachersInfo.this, TeachersDashboardNew.class)));
+        backButton.setOnClickListener(v -> startActivity(new Intent(TeachersInfo.this, TeachersDashboardNew.class)));
 
         if (userId == -1) {
             Log.e(TAG, "❌ ERROR: User ID not found in SharedPreferences!");
@@ -244,6 +247,7 @@ public class TeachersInfo extends AppCompatActivity {
                                 .load(imageUrl)
                                 .placeholder(R.drawable.generic_avatar) // Default profile image
                                 .error(R.drawable.generic_avatar) // Show default if error
+                                .apply(RequestOptions.circleCropTransform()) // Makes the image round
                                 .into(profileImage));
                     } else {
                         Log.e(TAG, "❌ No profile image found in DB or empty value.");

@@ -90,5 +90,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/otpView" />
 
+    <TextView
+        android:id="@+id/textView122"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone No."
+        android:textColor="#0F4D73"
+        android:fontFamily="@font/work_sans"
+        app:layout_constraintBottom_toTopOf="@+id/otpView"
+        app:layout_constraintEnd_toEndOf="@+id/textView17"
+        app:layout_constraintStart_toStartOf="@+id/textView17"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <ImageView
+        android:id="@+id/imageView157"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/textView122"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.156"
+        app:layout_constraintStart_toEndOf="@+id/textView122"
+        app:layout_constraintTop_toTopOf="@+id/textView122"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/pencilvector" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -236,7 +237,7 @@ public class DatabaseHelper {
                         Log.d("DatabaseHelper", "Name of the User 12: " + user.getName());
                         stmt.setString(6, user.getLastName());
                         stmt.setString(7, user.getDateOfBirth());
-                        Log.d("DatabaseHelper", "Date of birth of the user 13: " + user.getDateOfBirth());
+                        Log.d("DatabaseHelper", "Date of birth of the user: " + user.getDateOfBirth());
                         stmt.setString(8, user.getUserType());
                         stmt.setString(9, "");
                         stmt.setString(10, user.getCountryCode());
@@ -453,8 +454,10 @@ public class DatabaseHelper {
             @Override
             protected List<UserWiseSubject> doInBackground(Void... voids) {
                 List<UserWiseSubject> userWiseSubjectList = new ArrayList<>();
+                List<UserWiseSubject> filteredSubjects = new ArrayList<>(); // ✅ This will store only the correct user's subjects
+
                 try {
-                    Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserWiseSubjectSelect...");
+                    Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserWiseSubjectSelect for UserID: " + UserID);
                     Connection connection = getConnection();
 
                     if (connection != null) {
@@ -468,30 +471,36 @@ public class DatabaseHelper {
                         stmt.setString(5, "");
                         stmt.setString(6, "");
 
-                        Log.d("DatabaseHelper", "🔍 Executing query for UserID: " + UserID);
+                        Log.d("DatabaseHelper", "🔍 Executing stored procedure for UserID: " + UserID);
                         ResultSet rs = stmt.executeQuery();
 
-                        if (!rs.isBeforeFirst()) { // ✅ No data found
-                            Log.d("DatabaseHelper", "⚠️ No user data found in DB!");
-                        }
-
                         while (rs.next()) {
-                            UserWiseSubject userSubject = new UserWiseSubject();
-                            userSubject.setUserId(rs.getString("UserId"));
-                            userSubject.setSubjectName(rs.getString("subjectname"));
-                            userSubject.setUserwiseSubjectId(rs.getString("UserwiseSubjectId"));
-                            userSubject.setSubjectId(rs.getString("SubjectId"));
-                            userSubject.setSelfReferralCode(rs.getString("selfreferralcode"));
-                            userSubject.setMobileNo(rs.getString("mobileno"));
-                            userSubject.setUsername(rs.getString("username"));
+                            String retrievedUserId = rs.getString("UserId");
+                            String subjectName = rs.getString("subjectname");
 
-                            Log.d("DatabaseHelper", "✅ Retrieved: " + userSubject.getSubjectName() + " | ID: " + userSubject.getUserId());
+                            if (retrievedUserId != null && subjectName != null) {
+                                UserWiseSubject userSubject = new UserWiseSubject();
+                                userSubject.setUserId(retrievedUserId);
+                                userSubject.setSubjectName(subjectName);
+                                userSubject.setUserwiseSubjectId(rs.getString("UserwiseSubjectId"));
+                                userSubject.setSubjectId(rs.getString("SubjectId"));
+                                userSubject.setSelfReferralCode(rs.getString("selfreferralcode"));
+                                userSubject.setMobileNo(rs.getString("mobileno"));
+                                userSubject.setUsername(rs.getString("username"));
 
-                            userWiseSubjectList.add(userSubject);
+                                userWiseSubjectList.add(userSubject);
+                            }
                         }
 
-                        // ✅ Ensure resources are closed
-                        // ✅ Close ResultSet BEFORE stmt & connection
+                        // ✅ Manually filter only subjects that match the given UserID
+                        for (UserWiseSubject subject : userWiseSubjectList) {
+                            if (subject.getUserId().equals(UserID)) {
+                                filteredSubjects.add(subject);
+                            }
+                        }
+
+                        Log.d("DatabaseHelper", "✅ Final filtered subjects for UserID: " + UserID + " -> " + filteredSubjects.size());
+
                         rs.close();
                         stmt.close();
                         connection.close();
@@ -499,7 +508,8 @@ public class DatabaseHelper {
                 } catch (SQLException e) {
                     Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
                 }
-                return userWiseSubjectList;
+
+                return filteredSubjects; // ✅ Return only the filtered subjects
             }
 
             @Override
@@ -508,6 +518,8 @@ public class DatabaseHelper {
             }
         }.execute();
     }
+
+
 
     public static void userSubjectInsert(Context context, int qryStatus,Integer userId, Integer subjectId, String selfReferralCode, DatabaseCallback callback) {
         String query = "{CALL sp_UserSubjectInsertUpdateSelect(?, ?, ?, ?, ?, ?)}"; // Use {CALL ...} for stored procedures
@@ -903,87 +915,78 @@ public class DatabaseHelper {
         new AsyncTask<Void, Void, List<UserWiseWorkExperience>>() {
             @Override
             protected List<UserWiseWorkExperience> doInBackground(Void... voids) {
-                List<UserWiseWorkExperience> userWiseWorkExperienceList = new ArrayList<>();
-                Connection connection = null;
-                CallableStatement stmt = null;
+                List<UserWiseWorkExperience> workExperienceList = new ArrayList<>();
+                List<UserWiseWorkExperience> filteredExperience = new ArrayList<>(); // ✅ To store only correct user data
 
                 try {
-                    Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserWiseWorkExperienceSelect with UserID: " + UserID);
-                    connection = getConnection();
+                    Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserWiseWorkExperienceSelect. UserID: " + UserID);
+                    Connection connection = getConnection();
 
                     if (connection != null) {
                         String query = "{call sp_UserWorkExperienceInsertUpdateSelect(?,?,?,?,?,?,?,?,?,?,?)}";
-                        stmt = connection.prepareCall(query);
+                        PreparedStatement stmt = connection.prepareStatement(query);
 
-                        stmt.setString(1, QryStatus); // Ensure this is correct
-                        stmt.setNull(2, Types.INTEGER);
-                        stmt.setInt(3, Integer.parseInt(UserID));
-                        stmt.setNull(4, Types.INTEGER);
-                        stmt.setNull(5, Types.INTEGER);
-                        stmt.setNull(6, Types.INTEGER);
-                        stmt.setNull(7, Types.VARCHAR);
-                        stmt.setNull(8, Types.INTEGER);
-                        stmt.setNull(9, Types.INTEGER);
-                        stmt.setNull(10, Types.VARCHAR);
-                        stmt.registerOutParameter(11, Types.VARCHAR);
+                        stmt.setString(1, QryStatus);
+                        stmt.setInt(2, 0);
+                        stmt.setString(3, UserID);
+                        stmt.setInt(4, 0);
+                        stmt.setInt(5, 0);
+                        stmt.setInt(6, 0);
+                        stmt.setString(7, "");
+                        stmt.setInt(8, 0);
+                        stmt.setInt(9, 0);
+                        stmt.setString(10, "");
+                        stmt.setString(11, "");
 
                         Log.d("DatabaseHelper", "🔍 Executing stored procedure for UserID: " + UserID);
-                        boolean hasResults = stmt.execute();
+                        ResultSet rs = stmt.executeQuery();
 
-                        if (!hasResults) {
-                            Log.d("DatabaseHelper", "⚠️ No work experience data found for UserID: " + UserID);
-                        }
-
-                        ResultSet rs = stmt.getResultSet();
                         while (rs.next()) {
-                            String professionName = rs.getString("ProfessionName");
-                            String institutionName = rs.getString("InstitutionName");
-                            String designationName = rs.getString("DesignationName");
-                            String workExperience = rs.getString("WorkExperience");
+                            String retrievedUserId = rs.getString("UserId");
+                            String experience = rs.getString("WorkExperience");
 
-                            Log.d("DatabaseHelper", "📌 Retrieved Entry -> Profession: " + professionName +
-                                    " | Institution: " + institutionName +
-                                    " | Designation: " + designationName +
-                                    " | Experience: " + workExperience);
+                            if (retrievedUserId != null && experience != null) {
+                                UserWiseWorkExperience workExp = new UserWiseWorkExperience(
+                                        retrievedUserId,
+                                        rs.getString("InstitutionName"),
+                                        rs.getString("DesignationName"),
+                                        experience,
+                                        rs.getString("CurPreExperience"),
+                                        rs.getString("ProfessionId"),
+                                        rs.getString("ProfessionName")
+                                );
 
-                            UserWiseWorkExperience workExp = new UserWiseWorkExperience(
-                                    rs.getString("UserId"),
-                                    institutionName,
-                                    designationName,
-                                    workExperience,
-                                    rs.getString("CurPreExperience"),
-                                    rs.getString("ProfessionId"),
-                                    professionName
-                            );
-                            userWiseWorkExperienceList.add(workExp);
+                                workExperienceList.add(workExp);
+                            }
                         }
+
+                        // ✅ Manually filter only experiences that match the given UserID
+                        for (UserWiseWorkExperience exp : workExperienceList) {
+                            if (exp.getUserId().equals(UserID)) {
+                                filteredExperience.add(exp);
+                            }
+                        }
+
+                        Log.d("DatabaseHelper", "✅ Final filtered work experiences for UserID: " + UserID + " -> " + filteredExperience.size());
 
                         rs.close();
-                    } else {
-                        Log.e("DatabaseHelper", "❌ DB Connection Failed!");
+                        stmt.close();
+                        connection.close();
                     }
                 } catch (SQLException e) {
                     Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
-                } finally {
-                    try {
-                        if (stmt != null) stmt.close();
-                        if (connection != null) connection.close();
-                    } catch (SQLException e) {
-                        Log.e("DatabaseHelper", "❌ Error closing DB resources: " + e.getMessage());
-                    }
                 }
-                return userWiseWorkExperienceList;
+
+                return filteredExperience; // ✅ Return only the filtered experiences
             }
 
-
             @Override
-            protected void onPostExecute(List<UserWiseWorkExperience> userWiseWorkExperienceList) {
-                if (callback != null) {
-                    callback.onSuccess(userWiseWorkExperienceList);
-                }
+            protected void onPostExecute(List<UserWiseWorkExperience> workExperienceList) {
+                callback.onSuccess(workExperienceList);
             }
         }.execute();
     }
+
 
 
 
@@ -1642,7 +1645,6 @@ public class DatabaseHelper {
             }
         }.execute();
     }
-
 
 }
 

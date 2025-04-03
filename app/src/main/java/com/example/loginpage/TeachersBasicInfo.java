@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.models.UserDetailsClass;
@@ -51,7 +52,7 @@ public class TeachersBasicInfo extends AppCompatActivity {
     private UserDetailsClass user;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView profileImageView;
-    private ImageView cameraIcon;
+    private ImageView cameraIcon,backButton;
 
     private AutoCompleteTextView autoCompleteCity;
 
@@ -128,9 +129,11 @@ public class TeachersBasicInfo extends AppCompatActivity {
         Button btnSave = findViewById(R.id.button12);
         btnSave.setOnClickListener(v -> {
             // Reuse the existing intent by setting a new destination
-            intent.setClass(TeachersBasicInfo.this, TeachersInfo.class);
+            intent.setClass(TeachersBasicInfo.this, TeachersInfoSubSection.class);
             startActivity(intent);
         });
+
+        backButton.setOnClickListener(v -> startActivity(new Intent(TeachersBasicInfo.this, TeachersInfoSubSection.class)));
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -186,6 +189,7 @@ public class TeachersBasicInfo extends AppCompatActivity {
                             .load(imageUrl)
                             .placeholder(R.drawable.generic_avatar) // Default profile image
                             .error(R.drawable.generic_avatar) // Show default if error
+                            .apply(RequestOptions.circleCropTransform()) // Makes the image round
                             .into(profileImageView));
                 } else {
                     Log.e(TAG, "❌ No profile image found in DB or empty value.");

@@ -56,7 +56,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
-
+    annotationProcessor(libs.glide.compiler)
+    
     // ZegoCloud API
     implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+")
 
@@ -71,6 +72,7 @@ dependencies {
     implementation ("androidx.activity:activity-compose:1.7.2")
     implementation ("androidx.compose.ui:ui:1.5.1")
     implementation ("androidx.compose.material3:material3:1.1.2")
+
 
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")

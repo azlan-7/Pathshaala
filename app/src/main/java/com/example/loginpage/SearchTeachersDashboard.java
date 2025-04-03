@@ -1,20 +1,30 @@
 package com.example.loginpage;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.fragments.FilterDialogFragment;
+import com.example.loginpage.models.UserDetailsClass;
+import com.example.loginpage.models.UserWiseEducation;
+
+import java.util.List;
+import java.util.Map;
 
 public class SearchTeachersDashboard extends AppCompatActivity {
 
@@ -28,38 +38,83 @@ public class SearchTeachersDashboard extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String[][] students = {
-                {"John Doe", "Grade: 10", "Math, Science", "Lucknow","S-012378"},
-                {"Jane Doe", "Grade: 8", "English, History", "Delhi","S-231026"},
-                {"Arjun Kumar", "Grade: 9", "Physics, Chemistry", "Mumbai","S-554398"},
-                {"Michael Scott", "Grade: 7", "Biology, Geography", "Bangalore","S-544213"},
-                {"Kevin Malone", "Grade: 7", "History, Geography", "Jaipur","S-762231"}
-        };
-
         int[] cardIds = {R.id.cardStudent1, R.id.cardStudent2, R.id.cardStudent3, R.id.cardStudent4, R.id.cardStudent5};
 
-        for (int i = 0; i < students.length; i++) {
-            View cardView = findViewById(cardIds[i]);
+        DatabaseHelper.UserDetailsSelect(this, "3", "", userList -> {
+            if (userList.size() > 0) {
+                int studentIndex = 0; // Track number of students displayed
 
-            TextView name = cardView.findViewById(R.id.tvStudentName);
-            TextView grade = cardView.findViewById(R.id.tvGrade);
-            TextView subjects = cardView.findViewById(R.id.tvSubjects);
-            TextView location = cardView.findViewById(R.id.tvLocation);
-            TextView referral = cardView.findViewById(R.id.tvSelfReferral);
-            Button whatsAppButton = cardView.findViewById(R.id.whatsappButton);
+                for (UserDetailsClass student : userList) {
+                    if (!"S".equals(student.getUserType())) continue; // ✅ Show only students
 
-            name.setText(students[i][0]);
-            grade.setText(students[i][1]);
-            subjects.setText("Learning: " + students[i][2]);
-            location.setText("Location: " + students[i][3]);
-            referral.setText(students[i][4]);
+                    if (studentIndex >= cardIds.length) break; // ✅ Prevent array overflow
 
-            // Set card background color
-            ((CardView) cardView).setCardBackgroundColor(Color.parseColor("#D3E2F1"));
+                    View cardView = findViewById(cardIds[studentIndex]);
 
-            // Set WhatsApp button click listener
-            whatsAppButton.setOnClickListener(v -> MoveToWhatsAppScreen());
-        }
+                    TextView name = cardView.findViewById(R.id.tvStudentName);
+                    TextView grade = cardView.findViewById(R.id.tvGrade);
+                    TextView subjects = cardView.findViewById(R.id.tvSubjects);
+                    TextView email = cardView.findViewById(R.id.tvEmail);
+                    TextView referral = cardView.findViewById(R.id.tvSelfReferral);
+                    ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
+                    Button whatsAppButton = cardView.findViewById(R.id.whatsappButton);
+
+                    name.setText(student.getName());
+                    email.setText(student.getEmailId());
+                    referral.setText(student.getSelfReferralCode());
+
+                    // ✅ Fetch Grade & Institution from UserWiseEducation
+                    DatabaseHelper.UserWiseEducationSelect(this, "3", student.getUserId(), new DatabaseHelper.UserWiseEducationResultListener() {
+                        @Override
+                        public void onQueryResult(List<UserWiseEducation> educationList) {
+                            if (educationList != null && !educationList.isEmpty()) {
+                                Log.d("Education Fetch", "✅ Total Records Retrieved: " + educationList.size());
+
+                                // Check if the correct user data is being retrieved
+                                for (UserWiseEducation education : educationList) {
+                                    Log.d("Education Fetch", "🔍 UserID: " + student.getUserId() +
+                                            " | Education Level: " + education.getEducationLevelName() +
+                                            " | Institution: " + education.getInstitutionName());
+                                }
+
+                                // Find the record that matches the student ID
+                                UserWiseEducation matchingEducation = null;
+                                for (UserWiseEducation edu : educationList) {
+                                    if (edu.getUserId().equals(student.getUserId())) {
+                                        matchingEducation = edu;
+                                        break;
+                                    }
+                                }
+
+                                if (matchingEducation != null) {
+                                    grade.setText("Grade: " + matchingEducation.getEducationLevelName());
+                                    subjects.setText("Learning: " + matchingEducation.getInstitutionName());
+                                    Log.d("Education Fetch", "✅ Displayed: " + matchingEducation.getEducationLevelName() +
+                                            " | " + matchingEducation.getInstitutionName());
+                                } else {
+                                    grade.setText("Grade: N/A");
+                                    subjects.setText("Learning: N/A");
+                                    Log.e("Education Fetch", "❌ No matching record found for UserID: " + student.getUserId());
+                                }
+                            } else {
+                                grade.setText("Grade: N/A");
+                                subjects.setText("Learning: N/A");
+                                Log.e("Education Fetch", "❌ No education data found for UserID: " + student.getUserId());
+                            }
+                        }
+                    });
+
+
+
+                    // ✅ WhatsApp Button Click
+                    whatsAppButton.setOnClickListener(v -> MoveToWhatsAppScreen());
+
+                    studentIndex++; // ✅ Move to the next student card
+                }
+            }
+        });
+
+
 
         // Filter Button
         Button filterButton = findViewById(R.id.button36);

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class AddAwards extends AppCompatActivity {
     private Spinner spinner6;
     private static final String TAG = "AddAwards";
     private SharedPreferences sharedPreferences;
-
+    private ImageView backButton;
     private EditText etAwardTitle, etOrganisation, etYear, etDescription;
     private AutoCompleteTextView awardsDropdown,yearDropdown;
     private Button btnSubmit;
@@ -68,6 +69,7 @@ public class AddAwards extends AppCompatActivity {
         AutoCompleteTextView yearDropdown = findViewById(R.id.editTextText19);
         etDescription = findViewById(R.id.editTextTextMultiLine2);
         btnSubmit = findViewById(R.id.button17);
+        backButton = findViewById(R.id.imageView154);
 
         retrieveAwards(); // ✅ Call this to fetch existing awards
 
@@ -85,7 +87,7 @@ public class AddAwards extends AppCompatActivity {
 
         btnSubmit.setOnClickListener(v -> insertAwardIntoDB());
 
-
+        backButton.setOnClickListener(v -> startActivity(new Intent(AddAwards.this, TeachersInfoSubSection.class)));
 
         Button uploadButton = findViewById(R.id.button16); // Upload button
         // Set up file picker when button is clicked

@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".AddPromotionalMedia">
 
 
     <ImageView
         android:id="@+id/imageView30"
-        android:layout_width="186dp"
-        android:layout_height="119dp"
+        android:layout_width="235dp"
+        android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -43,10 +43,9 @@
         android:textSize="12pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.175" />
+        app:layout_constraintVertical_bias="0.228" />
 
     <TextView
         android:id="@+id/textView53"
@@ -60,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.232" />
+        app:layout_constraintVertical_bias="0.285" />
 
     <ImageView
         android:id="@+id/image_select_vid"
@@ -68,36 +67,24 @@
         android:layout_height="63dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.871"
+        app:layout_constraintHorizontal_bias="0.907"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.435"
+        app:layout_constraintVertical_bias="0.447"
         app:srcCompat="@drawable/upload_24dp_1674ae_fill0_wght400_grad0_opsz24" />
 
     <VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_margin="10dp"
         android:visibility="gone"
+        android:layout_below="@id/image_select_vid"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <ImageView
-        android:layout_margin="20dp"
-        android:id="@+id/image_thumbnail"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        android:background="@drawable/cornered_rectangle"
-        app:layout_constraintTop_toBottomOf="@id/textView53"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintVertical_bias="0.447"/>
 
 
     <TextView
@@ -112,16 +99,14 @@
         android:textSize="07pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/image_select_vid"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.432" />
+        app:layout_constraintVertical_bias="0.45" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button15"
         android:layout_width="144dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="244dp"
+        android:layout_height="49dp"
         android:background="@drawable/cornered_rectangle"
         android:fontFamily="@font/work_sans_bold"
         android:text="Save"
@@ -129,28 +114,39 @@
         android:textSize="08pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView54"
-        app:layout_constraintVertical_bias="0.952" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.76" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/socialsBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="180dp"
-        android:background="@drawable/cornered_button_green"
+        android:id="@+id/uploadButton"
+        android:layout_width="144dp"
+        android:layout_height="49dp"
+        android:background="@drawable/cornered_rectangle"
         android:fontFamily="@font/work_sans_bold"
-        android:paddingHorizontal="20dp"
-        android:text="Add Socials"
-        android:textColor="#74c69d"
+        android:text="Upload"
+        android:textColor="#1674AE"
         android:textSize="08pt"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button15"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.795" />
+
+    <ImageView
+        android:id="@+id/imageView156"
+        android:layout_width="47dp"
+        android:layout_height="44dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView30"
+        app:layout_constraintEnd_toEndOf="@+id/imageView30"
+        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintStart_toStartOf="@+id/imageView30"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15"
+        app:srcCompat="@drawable/arrow_back_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
 
     <!--    <TextView-->
     <!--        android:id="@+id/textView55"-->

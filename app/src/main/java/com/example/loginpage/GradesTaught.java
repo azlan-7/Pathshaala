@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
@@ -21,6 +22,7 @@ public class GradesTaught extends AppCompatActivity {
 
     private AutoCompleteTextView subjectsDropdown, gradesDropdown, topicDropdown;
     private Button saveButton;
+    private ImageView backButton;
     private static final String TAG = "GradesTaught";
 
     private Map<String, String> subjectMap = new HashMap<>(); // SubjectName -> SubjectID
@@ -37,6 +39,7 @@ public class GradesTaught extends AppCompatActivity {
         gradesDropdown = findViewById(R.id.gradesDropdown);
 //        topicDropdown = findViewById(R.id.topicsDropdown);
         saveButton = findViewById(R.id.button29);
+        backButton = findViewById(R.id.imageView152);
 
         String selectedSubject = subjectsDropdown.getText().toString().trim();
         String selectedGrade = gradesDropdown.getText().toString().trim();
@@ -57,6 +60,8 @@ public class GradesTaught extends AppCompatActivity {
         fetchUserGradesTaught();
 
         saveButton.setOnClickListener(v -> insertUserGradesTaught());
+
+        backButton.setOnClickListener(v -> startActivity(new Intent(GradesTaught.this, TeachersInfoSubSection.class)));
 
     }
 

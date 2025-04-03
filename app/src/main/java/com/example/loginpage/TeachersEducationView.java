@@ -30,6 +30,7 @@ import java.util.List;
 
 public class TeachersEducationView extends AppCompatActivity {
     private RecyclerView educationRecyclerView;
+    private ImageView backButton;
     private EducationAdapter educationAdapter;
     private List<Education> educationList;
     private static final String TAG = "TeachersEducationView";
@@ -43,6 +44,10 @@ public class TeachersEducationView extends AppCompatActivity {
 
         Button continueButton = findViewById(R.id.button23); // Continue Button
         ImageView editButton = findViewById(R.id.imageView74); // Pencil (Edit) Button
+        backButton = findViewById(R.id.imageView145);
+
+        backButton.setOnClickListener(v -> finish());
+
 
         // Set click listeners for buttons
         continueButton.setOnClickListener(v -> {

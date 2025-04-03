@@ -32,9 +32,6 @@
         android:theme="@style/Theme.MyApp.Light"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".ChatPage"
-            android:exported="false" />
 
         <activity
             android:name=".SampleLiveZego"
@@ -50,11 +47,21 @@
             android:exported="false" />
 
         <activity
+            android:name=".SampleLiveZego"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+
+        <activity
+            android:name=".TeachersInfoSubSection"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".DashboardSideNav"
+            android:exported="false" />
+        <activity
             android:name=".ChatActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
-
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
             android:name=".PaymentGatewayDemo"
             android:exported="true"

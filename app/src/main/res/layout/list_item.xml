@@ -1,0 +1,30 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:gravity="center_vertical">
+
+    <!-- Icon for list item -->
+    <ImageView
+        android:id="@+id/itemIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/star_24dp_0f4d73_fill0_wght400_grad0_opsz24" /> <!-- Default icon -->
+
+    <!-- Text for list item -->
+    <TextView
+        android:id="@+id/listItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#0F4D73"
+        android:background="?android:attr/selectableItemBackground"
+        android:textSize="16sp" />
+</LinearLayout>
+
+
+
+
+

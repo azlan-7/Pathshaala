@@ -31,7 +31,7 @@ public class GradesTaughtView extends AppCompatActivity {
     private GradesTaughtAdapter adapter;
     private List<GradesTaughtModel> gradesList;
     private SharedPreferences sharedPreferences;
-    private ImageView addGrades;
+    private ImageView addGrades, backButton;
     private Button buttonContinue;
 
     @Override
@@ -44,6 +44,7 @@ public class GradesTaughtView extends AppCompatActivity {
         gradesRecyclerView = findViewById(R.id.gradesTaughtRecyclerView);
         addGrades = findViewById(R.id.imageView96);
         buttonContinue = findViewById(R.id.button30);
+        backButton = findViewById(R.id.imageView153);
 
         gradesList = new ArrayList<>();
         adapter = new GradesTaughtAdapter(this, gradesList, this::deleteGrade);
@@ -60,6 +61,9 @@ public class GradesTaughtView extends AppCompatActivity {
             startActivity(new Intent(this, TeachersInfo.class));
             finish();
         });
+
+        backButton.setOnClickListener(v -> finish());
+
     }
 
     private void fetchGradesFromDatabase() {

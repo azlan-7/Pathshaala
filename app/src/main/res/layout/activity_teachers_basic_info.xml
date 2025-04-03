@@ -236,4 +236,16 @@
         android:clickable="true"
         android:focusable="true"
         app:srcCompat="@drawable/photo_camera_24dp_1674ae_fill0_wght400_grad0_opsz24" />
+
+    <ImageView
+        android:id="@+id/imageView142"
+        android:layout_width="49dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView50"
+        app:layout_constraintEnd_toStartOf="@+id/textView50"
+        app:layout_constraintHorizontal_bias="0.307"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/arrow_back_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
