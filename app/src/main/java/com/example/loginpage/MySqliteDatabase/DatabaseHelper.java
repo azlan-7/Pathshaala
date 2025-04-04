@@ -1,8 +1,11 @@
 package com.example.loginpage.MySqliteDatabase;
 
+//import android.app.Notification;
+import com.example.loginpage.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.Log;
@@ -28,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.example.loginpage.models.UserDetailsClass;
+import com.example.loginpage.models.UserInfoItem;
 import com.example.loginpage.models.UserWiseEducation;
 import com.example.loginpage.models.UserWiseGrades;
 import com.example.loginpage.models.UserWiseSubject;
@@ -1829,6 +1833,132 @@ public class DatabaseHelper {
             }
         }.execute();
     }
+
+
+    public static int insertNotification(int senderId, String title, String message, String type) {
+        String sql = "INSERT INTO Notifications (sender_id, title, message, type, created_at) " +
+                "VALUES (?, ?, ?, ?, DATEADD(minute, 750, GETDATE()))";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setInt(1, senderId);
+            stmt.setString(2, title);
+            stmt.setString(3, message);
+            stmt.setString(4, type);
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "insertNotification Error: " + e.getMessage());
+        }
+        return -1;
+    }
+
+    public static void insertNotificationRead(int notificationId, int userId) {
+        String sql = "INSERT INTO Notification_Reads (notification_id, user_id) VALUES (?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, notificationId);
+            stmt.setInt(2, userId);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "insertNotificationRead Error: " + e.getMessage());
+        }
+    }
+
+    public static void markNotificationRead(int notificationId, int userId) {
+        String sql = "UPDATE Notification_Reads SET read_at = DATEADD(minute, 750, GETDATE()) " +
+                "WHERE notification_id = ? AND user_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, notificationId);
+            stmt.setInt(2, userId);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "markNotificationRead Error: " + e.getMessage());
+        }
+    }
+
+    public static List<Notification> getNotificationsForUser(int userId) {
+        List<Notification> notifications = new ArrayList<>();
+        String sql = "SELECT n.id, n.title, n.message, n.type, n.created_at, r.read_at " +
+                "FROM Notifications n " +
+                "JOIN Notification_Reads r ON n.id = r.notification_id " +
+                "WHERE r.user_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Notification notif = new Notification(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("message"),
+                        rs.getString("type"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("read_at")
+                );
+                notifications.add(notif);
+            }
+
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "getNotificationsForUser Error: " + e.getMessage());
+        }
+        return notifications;
+    }
+
+    public static List<UserInfoItem> getAllUserInfo(int userId) {
+        Log.d("DatabaseHelper", "Fetching data for userId: " + userId);
+        List<UserInfoItem> userInfoList = new ArrayList<>();
+
+        Connection conn = null;
+        CallableStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            stmt = conn.prepareCall("{call sp_UserWiseInfo(?)}");
+            stmt.setInt(1, 10);
+
+            rs = stmt.executeQuery();
+            if(rs!=null)
+            {
+                Log.d("DatabaseHelper","uyuyttyu 1");
+            }
+            while (rs.next()) {
+                Log.d("DatabaseHelper","inside while loop 1");
+                UserInfoItem item = new UserInfoItem();
+                item.setSlno(rs.getString("slno"));
+                item.setHeading(rs.getString("heading"));
+                item.setDescription(rs.getString("description"));
+                userInfoList.add(item);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "SQL Error: " + e.getMessage(), e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                Log.e("DatabaseHelper", "Closing Error: " + e.getMessage(), e);
+            }
+        }
+
+        Log.d("DatabaseHelper", "Total items fetched: " + userInfoList.size());
+        return userInfoList;
+    }
+
 
 }
 

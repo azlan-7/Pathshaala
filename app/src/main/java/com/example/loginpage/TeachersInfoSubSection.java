@@ -26,10 +26,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.api.ApiClient;
+import com.example.loginpage.api.ApiInterface;
 import com.example.loginpage.models.CertificationModel;
 import com.example.loginpage.models.Education;
 import com.example.loginpage.models.UserDetailsClass;
 import com.example.loginpage.adapters.CustomExpandableListAdapter;
+import com.example.loginpage.models.UserInfoItem;
 import com.example.loginpage.models.UserWiseEducation;
 import com.example.loginpage.models.UserWiseGrades;
 import com.example.loginpage.models.UserWiseSubject;
@@ -38,9 +41,15 @@ import com.example.loginpage.models.WorkExperienceModel;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TeachersInfoSubSection extends AppCompatActivity {
 
@@ -52,12 +61,17 @@ public class TeachersInfoSubSection extends AppCompatActivity {
     private TextView accountInfo, subjectExpertise, education, workExperience, gradesTaught, certifications, awards, promotionalActivities, location, dashboard;
     private static final String TAG = "TeachersInfoSubSection";
     private ExpandableListView expandableListView;
-    private ExpandableListAdapter adapter;
+//    private ExpandableListAdapter adapter;
+
+    private CustomExpandableListAdapter adapter;
+
 
     private List<String> sectionTitles;
     private HashMap<String, List<String>> sectionItems;
     private int userId;
     private int lastExpandedPosition = -1;
+    private ApiInterface apiService;
+
 
 
     @Override
@@ -87,6 +101,11 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView1);
 
         expandableListView = findViewById(R.id.expandableListView);
+
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+
+
+        Log.d("TeachersInfoSubSection", "expandableListView is " + (expandableListView != null));
 
 
         setupExpandableList();
@@ -259,11 +278,60 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         });
     }
 
+    private void loadAllUserInfoFromApi() {
+        apiService.getAllUserInfo(userId).enqueue(new Callback<List<UserInfoItem>>() {
+            @Override
+            public void onResponse(Call<List<UserInfoItem>> call, Response<List<UserInfoItem>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    updateSectionItemsFromData(response.body());
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.e("API", "Failed or empty response");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserInfoItem>> call, Throwable t) {
+                Log.e("API", "Error: " + t.getMessage());
+            }
+        });
+
+    }
+
+
+    private void updateSectionItemsFromData(List<UserInfoItem> dataList) {
+        // Clear placeholders first
+        for (String title : sectionTitles) {
+            List<String> list = sectionItems.get(title);
+            if (list != null) list.clear();
+        }
+
+        for (UserInfoItem item : dataList) {
+            String heading = item.getHeading();
+            String description = item.getDescription();
+
+            if (sectionItems.containsKey(heading)) {
+                sectionItems.get(heading).add(description);
+            }
+        }
+
+        // Fallback if any section is still empty
+        for (String title : sectionTitles) {
+            List<String> list = sectionItems.get(title);
+            if (list != null && list.isEmpty() && !title.equals("Promotional Activities") && !title.equals("Dashboard")) {
+                list.add("No Data Found");
+            }
+        }
+    }
+
+
+
+
     private void setupExpandableList() {
         sectionTitles = new ArrayList<>();
         sectionItems = new HashMap<>();
 
-        // Adding sections
+        // Sections
         sectionTitles.add("Subject Expertise");
         sectionTitles.add("Education");
         sectionTitles.add("Work Experience");
@@ -271,52 +339,117 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         sectionTitles.add("Grades Taught");
         sectionTitles.add("Awards/Achievements");
 
-        // Standalone sections (No dropdowns)
         sectionTitles.add("Promotional Activities");
         sectionTitles.add("Dashboard");
 
-        // Adding subsections (Dropdown Items)
-        List<String> subjectExpertiseOptions = new ArrayList<>();
-        subjectExpertiseOptions.add("Loading..."); // Placeholder until data loads
+        // Initialize with "Loading..." for dropdown sections
+        for (int i = 0; i < 6; i++) {
+            List<String> placeholder = new ArrayList<>();
+            placeholder.add("Loading...");
+            sectionItems.put(sectionTitles.get(i), placeholder);
+        }
 
-
-        List<String> educationOptions = new ArrayList<>();
-        educationOptions.add("Loading..."); // Placeholder until data loads
-
-        List<String> workExperienceOptions = new ArrayList<>();
-        workExperienceOptions.add("Loading..."); // Placeholder until data loads
-
-        List<String> certificationsOptions = new ArrayList<>();
-        certificationsOptions.add("Loading...");
-
-        List<String> gradesTaughtOptions = new ArrayList<>();
-        gradesTaughtOptions.add("Loading...");
-
-        List<String> awardsAchievementsOptions = new ArrayList<>();
-        awardsAchievementsOptions.add("Loading...");
-
-        // Adding sections with dropdowns
-        sectionItems.put(sectionTitles.get(0), subjectExpertiseOptions);
-        sectionItems.put(sectionTitles.get(1), educationOptions);
-        sectionItems.put(sectionTitles.get(2), workExperienceOptions);
-        sectionItems.put(sectionTitles.get(3), certificationsOptions);
-        sectionItems.put(sectionTitles.get(4), gradesTaughtOptions);
-        sectionItems.put(sectionTitles.get(5), awardsAchievementsOptions);
-
-        // For Promotional & Dashboard (No Dropdown, Just a Single Click)
-        sectionItems.put(sectionTitles.get(6), new ArrayList<>()); // Empty list to prevent dropdown
-        sectionItems.put(sectionTitles.get(7), new ArrayList<>()); // Empty list to prevent dropdown
+        // Non-dropdowns
+        sectionItems.put("Promotional Activities", new ArrayList<>());
+        sectionItems.put("Dashboard", new ArrayList<>());
 
         adapter = new CustomExpandableListAdapter(this, sectionTitles, sectionItems);
         expandableListView.setAdapter(adapter);
 
-        loadUserSubjects(subjectExpertiseOptions);
-        loadUserEducation(educationOptions); // ✅ Pass the list to be updated
-        loadUserWorkExperience(workExperienceOptions);
-        loadUserCertificates(certificationsOptions);
-        loadUserGradesTaught(gradesTaughtOptions);
-        loadUserAwards(awardsAchievementsOptions);
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+
+        Log.d("TeachersInfoSubSection","UserId fetched through sharedpreferences: " + userId);
+        getAllUserInfoDirect(userId);
     }
+
+
+    private void getAllUserInfoDirect(int userId) {
+        Log.d("TeachersInfoSubSection", "getAllUserInfoDirect() called");
+
+        new Thread(() -> {
+            List<UserInfoItem> userInfoList = DatabaseHelper.getAllUserInfo(userId);
+
+            runOnUiThread(() -> {
+                if (userInfoList != null) {
+                    Map<String, List<String>> headingMap = new HashMap<>();
+                    headingMap.put("Subject", sectionItems.get("Subject Expertise"));
+                    headingMap.put("Education", sectionItems.get("Education"));
+                    headingMap.put("Work", sectionItems.get("Work Experience"));
+                    headingMap.put("Certificate", sectionItems.get("Certifications"));
+                    headingMap.put("Grades", sectionItems.get("Grades Taught"));
+                    headingMap.put("Award", sectionItems.get("Awards/Achievements"));
+
+                    for (UserInfoItem item : userInfoList) {
+                        String heading = item.getHeading();
+                        String description = item.getDescription();
+
+                        Log.d("TeachersInfoSubSection", "Heading: " + heading + ", Description: " + description);
+
+                        if (headingMap.containsKey(heading)) {
+                            List<String> list = headingMap.get(heading);
+                            if (list != null && list.contains("Loading...")) list.clear();
+                            list.add(description);
+                        }
+                    }
+
+                    // ✅ Add "Add" button/subsection entry to all mapped sections
+                    for (Map.Entry<String, List<String>> entry : headingMap.entrySet()) {
+                        entry.getValue().add("Add");
+                    }
+
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.e("TeachersInfoSubSection", "No data returned from database.");
+                }
+            });
+        }).start();
+    }
+
+
+
+
+
+//    private void loadUserSubjects(List<String> subjectList) {
+//        loadUserInfoByType(1, subjectList); // 1 = Subject
+//    }
+//
+//    private void loadUserEducation(List<String> educationList) {
+//        loadUserInfoByType(2, educationList); // 2 = Education
+//    }
+//
+//    private void loadUserWorkExperience(List<String> workList) {
+//        loadUserInfoByType(3, workList); // 3 = Work
+//    }
+//
+//    private void loadUserCertificates(List<String> certificateList) {
+//        loadUserInfoByType(4, certificateList); // 4 = Certificate
+//    }
+//
+//    private void loadUserGradesTaught(List<String> gradesList) {
+//        loadUserInfoByType(5, gradesList); // 5 = Grades
+//    }
+//
+//    private void loadUserAwards(List<String> awardsList) {
+//        loadUserInfoByType(6, awardsList); // 6 = Awards
+//    }
+
+
+    private int getCurrentUserId() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        userId = sharedPreferences.getInt("USER_ID", -1);
+        return userId;
+    }
+
+
+//    private void loadUserInfoByType(List<String> targetList) {
+//        int userId = 10;
+//
+//        new Thread(() -> {
+//            DatabaseHelper.getUserWiseInfo(userId, targetList);
+//            runOnUiThread(() -> adapter.notifyDataSetChanged());
+//        }).start();
+//    }
 
 
     private void loadUserSubjects(List<String> subjectExpertiseOptions) {
