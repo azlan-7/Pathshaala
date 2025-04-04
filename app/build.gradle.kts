@@ -29,6 +29,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -66,5 +70,8 @@ dependencies {
     // Google Gemini API
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
     annotationProcessor(libs.glide.compiler)
+
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
 }

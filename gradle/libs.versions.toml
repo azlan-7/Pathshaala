@@ -17,12 +17,15 @@ eazegraph = "1.2.2"
 retrofit = "2.9.0"
 glide = "4.16.0"
 mpandroidchart = "v3.1.0"
-
+navigationFragment = "2.6.0"
+navigationUi = "2.6.0"
 
 
 
 
 [libraries]
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
+androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }

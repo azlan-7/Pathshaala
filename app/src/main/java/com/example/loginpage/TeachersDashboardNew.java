@@ -61,7 +61,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
     private TextView welcomeText;
     private UserDetailsClass user;
     private ImageView profileIcon, profileIconTop;
-    private ImageView searchButton;
+    private ImageView searchButton,notificationButton;
     private ImageButton whatsappButton;
     Handler mainTextHandler = new Handler();
     BarChart barChart;
@@ -87,6 +87,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
         welcomeText = findViewById(R.id.textViewHello); // Corrected TextView ID
         profileIcon = findViewById(R.id.imageView151);
         profileIconTop = findViewById(R.id.imageView151);
+        notificationButton = findViewById(R.id.imageView141);
 
         // ✅ Fetch Profile Image from Database
         fetchProfileImageFromDB();
@@ -122,6 +123,11 @@ public class TeachersDashboardNew extends AppCompatActivity {
 
         profileIconTop.setOnClickListener(v -> {
             Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfoSubSection.class);
+            startActivity(intent);
+        });
+
+        notificationButton.setOnClickListener(v -> {
+            Intent intent = new Intent(TeachersDashboardNew.this, NotificationTeachers.class);
             startActivity(intent);
         });
 
@@ -182,7 +188,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
                 startActivity(intent);
             }
             else if (itemId == R.id.profile) {
-                Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfoSubSection.class);
+                Intent intent = new Intent(TeachersDashboardNew.this, ShowTimeTable.class);
                 startActivity(intent);
             }
             return true;

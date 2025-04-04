@@ -33,13 +33,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".SampleLiveZegoStudent"
+            android:name=".ShowTimeTable"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
+            android:name=".NotificationTeachers"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".SampleLiveZegoStudent"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
             android:name=".SampleGoLiveZegoStudent"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".SampleLiveZego"
             android:exported="true"
@@ -58,8 +66,8 @@
         <activity
             android:name=".ChatActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PaymentGatewayDemo"
             android:exported="true"

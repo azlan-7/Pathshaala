@@ -1835,14 +1835,14 @@ public class DatabaseHelper {
     }
 
 
-    public static int insertNotification(int senderId, String title, String message, String type) {
+    public static int insertNotification(int senderId, String title, String message, String type) { //added title parameter
         String sql = "INSERT INTO Notifications (sender_id, title, message, type, created_at) " +
-                "VALUES (?, ?, ?, ?, DATEADD(minute, 750, GETDATE()))";
+                "VALUES (?, ?, ?, ?, GETDATE())";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setInt(1, senderId);
-            stmt.setString(2, title);
+            stmt.setString(2, title); //add title to prepared statement.
             stmt.setString(3, message);
             stmt.setString(4, type);
             stmt.executeUpdate();
@@ -1853,7 +1853,8 @@ public class DatabaseHelper {
             }
 
         } catch (SQLException e) {
-            Log.e("DatabaseHelper", "insertNotification Error: " + e.getMessage());
+            Log.e("DatabaseHelper", "insertNotification Error: " + e.getMessage() + ", SQL State: " + e.getSQLState() + ", Error Code: " + e.getErrorCode());
+            return -1;
         }
         return -1;
     }

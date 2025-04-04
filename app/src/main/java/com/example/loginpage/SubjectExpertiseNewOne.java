@@ -51,6 +51,7 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
     private SubjectAdapterOne adapter; // Adapter reference
     private Map<String, String> subjectMap = new HashMap<>();
 
+
     private int userId;
 
     @Override
@@ -93,11 +94,13 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
 
         retrievedSubjectContainer = findViewById(R.id.retrievedSubjectContainer);
 
+        loadAllSubjectsForRecyclerView();
+
         // Call method to load subjects from the database into the new container
         loadRetrievedSubjects();
 
         // Call UserWiseSubjectSelect to load user's subjects
-        loadUserSubjects();
+//        loadUserSubjects();
 
         // Debug: Print all stored SharedPreferences values
         Log.d(TAG, "Retrieved SharedPreferences: " + sharedPreferences.getAll());
@@ -115,6 +118,34 @@ public class SubjectExpertiseNewOne extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+
+    private void loadAllSubjectsForRecyclerView() {
+        String query = "SELECT SubjectID, SubjectName FROM Subject WHERE active = 'true' ORDER BY SubjectName"; // Change to 'Subject'
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No subjects found in the database.");
+                Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> subjects = new ArrayList<>();
+            subjectMap.clear();
+
+            for (Map<String, String> row : result) {
+                String id = row.get("SubjectID");
+                String name = row.get("SubjectName");
+                Log.d(TAG, "Subject Retrieved - ID: " + id + ", Name: " + name);
+                subjects.add(name);
+                subjectMap.put(name, id);
+            }
+
+            // Populate RecyclerView with subjects
+            setupRecyclerView(subjects);
         });
     }
 
