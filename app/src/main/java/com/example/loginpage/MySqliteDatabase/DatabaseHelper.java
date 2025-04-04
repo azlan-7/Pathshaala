@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.sql.Timestamp;
+
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -30,6 +32,7 @@ import com.example.loginpage.models.UserWiseEducation;
 import com.example.loginpage.models.UserWiseGrades;
 import com.example.loginpage.models.UserWiseSubject;
 import com.example.loginpage.models.UserWiseWorkExperience;
+import com.example.loginpage.models.VirtualClassClass;
 
 
 import static net.sourceforge.jtds.jdbc.DefaultProperties.DATABASE_NAME;
@@ -1642,6 +1645,187 @@ public class DatabaseHelper {
                         callback.onMessage("No promotional media found for this user.");
                     }
                 }
+            }
+        }.execute();
+    }
+
+    public static void VirtualClassInsert(Context context, int QryStatus, VirtualClassClass virtualClass, QueryResultListener listener) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                String messageOutput = "Operation failed";
+                try {
+                    Connection connection = getConnection();
+                    if (connection != null) {
+                        // Adjust the query to match the stored procedure's parameters
+                        String query = "{call sp_VirtualClassAPICode(?,?,?,?,?,?,?,?,?,?,?)}";
+                        CallableStatement stmt = connection.prepareCall(query);
+
+                        // Debugging Logs
+                        Log.d("DatabaseHelper", "LiveId: " + virtualClass.getLiveId());
+                        Log.d("DatabaseHelper", "QryStatus: " + QryStatus + ", UserId: " + virtualClass.getUserId());
+
+                        // Setting input parameters
+                        stmt.setInt(1, QryStatus);
+                        stmt.setInt(2, 0); // VirtualClassAPICodeID
+                        stmt.setInt(3, virtualClass.getUserId());
+                        stmt.setString(4, virtualClass.getSelfReferralCode());
+                        stmt.setInt(5, virtualClass.getClassId());
+                        stmt.setInt(6, virtualClass.getTimeTableId());
+                        stmt.setString(7, virtualClass.getLiveId() != null ? virtualClass.getLiveId() : "");
+                        stmt.setString(8, "L"); // LoginStatus 'L' for Live
+                        stmt.setNull(9, Types.TIMESTAMP);
+                        stmt.setNull(10, Types.TIMESTAMP);
+
+                        // Register OUTPUT parameter for messageOutput
+                        stmt.registerOutParameter(11, Types.VARCHAR);  // Ensure it matches stored procedure type
+
+                        // Execute statement
+                        stmt.execute();
+
+                        // Retrieve the output message
+                        messageOutput = stmt.getString(11);
+
+                        stmt.close();
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    Log.e("DatabaseHelper", "SQL Error inserting virtual class: " + e.getMessage());
+                }
+                return messageOutput;
+            }
+
+            @Override
+            protected void onPostExecute(String messageOutput) {
+                Toast.makeText(context, messageOutput, Toast.LENGTH_SHORT).show();
+                listener.onQueryResult(new ArrayList<>());
+            }
+        }.execute();
+    }
+
+
+
+    public static void VirtualClassSelect(Context context, int QryStatus, int VirtualClassAPICodeID, int userId, String LiveId, QueryResultListener listener) {
+        new AsyncTask<Void, Void, List<VirtualClassClass>>() {
+            @Override
+            protected List<VirtualClassClass> doInBackground(Void... voids) {
+                List<VirtualClassClass> classList = new ArrayList<>();
+                try {
+                    Connection con = getConnection();
+                    if (con != null) {
+                        String query = "{call sp_VirtualClassAPICode(?,?,?,?,?,?,?,?,?,?)}";
+                        PreparedStatement stmt = con.prepareStatement(query);
+
+                        stmt.setInt(1, QryStatus);
+                        stmt.setInt(2, VirtualClassAPICodeID);
+                        stmt.setInt(3, userId);
+                        stmt.setString(4, ""); // selfreferralcode
+                        stmt.setInt(5, 0); // classID
+                        stmt.setInt(6, 0); // TimeTableID
+                        stmt.setString(7, LiveId);
+                        stmt.setString(8, ""); // LoginStatus
+                        stmt.setTimestamp(9, null); // classStartTime
+                        stmt.setTimestamp(10, null); // classEndTime
+
+                        ResultSet rs = stmt.executeQuery();
+                        while (rs.next()) {
+                            VirtualClassClass virtualClass = new VirtualClassClass();
+                            virtualClass.setVirtualClassAPICodeID(rs.getInt("VirtualClassAPICodeid"));
+                            virtualClass.setUserId(rs.getInt("UserId"));
+                            virtualClass.setSelfReferralCode(rs.getString("selfreferralcode"));
+                            virtualClass.setClassId(rs.getInt("classID"));
+                            virtualClass.setTimeTableId(rs.getInt("TimeTableID"));
+                            virtualClass.setLiveId(rs.getString("LiveId"));
+                            virtualClass.setClassStartTime(rs.getTimestamp("classStartTime"));
+                            virtualClass.setClassEndTime(rs.getTimestamp("classEndTime"));
+                            virtualClass.setFirstName(rs.getString("Name"));
+                            virtualClass.setLastName(rs.getString("LastName"));
+                            classList.add(virtualClass);
+                        }
+
+                        rs.close();
+                        stmt.close();
+                        con.close();
+                    }
+                } catch (SQLException e) {
+                    Log.e("DatabaseHelper", "SQL Error fetching virtual class: " + e.getMessage());
+                }
+                return classList;
+            }
+
+            @Override
+            protected void onPostExecute(List<VirtualClassClass> classList) {
+                List<Map<String, String>> mappedList = new ArrayList<>();
+                for (VirtualClassClass v : classList) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("VirtualClassAPICodeID", String.valueOf(v.getVirtualClassAPICodeID()));
+                    map.put("UserId", String.valueOf(v.getUserId()));
+                    map.put("SelfReferralCode", v.getSelfReferralCode());
+                    map.put("ClassId", String.valueOf(v.getClassId()));
+                    map.put("TimeTableId", String.valueOf(v.getTimeTableId()));
+                    map.put("LiveId", v.getLiveId());
+                    map.put("ClassStartTime", String.valueOf(v.getClassStartTime()));
+                    map.put("ClassEndTime", String.valueOf(v.getClassEndTime()));
+                    map.put("FirstName", v.getFirstName());
+                    map.put("LastName", v.getLastName());
+                    mappedList.add(map);
+                }
+                listener.onQueryResult(mappedList);
+            }
+        }.execute();
+    }
+
+
+    public static void fetchLatestLiveId(Context context, int userId, DatabaseHelper.QueryResultListener listener) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+                String liveId = null;
+                try {
+                    Connection connection = getConnection();
+                    if (connection != null) {
+                        // Stored procedure or direct query to fetch LiveId
+                        String query = "{call sp_VirtualClassAPICode(?,?,?,?,?,?,?,?,?,?,?)}";
+                        CallableStatement stmt = connection.prepareCall(query);
+
+                        // Setting input parameters (adjust as per stored procedure)
+                        stmt.setInt(1, 3); // Assuming 3 is the QryStatus for fetching
+                        stmt.setInt(2, 0); // VirtualClassAPICodeID
+                        stmt.setInt(3, userId);
+                        stmt.setString(4, ""); // SelfReferralCode
+                        stmt.setInt(5, 0); // ClassId
+                        stmt.setInt(6, 0); // TimeTableId
+                        stmt.setString(7, ""); // LiveId
+                        stmt.setString(8, ""); // LoginStatus
+                        stmt.setNull(9, Types.TIMESTAMP); // ClassStartTime
+                        stmt.setNull(10, Types.TIMESTAMP); // ClassEndTime
+
+                        // Registering the missing OUT parameter '@messageOutput'
+                        stmt.registerOutParameter(11, Types.VARCHAR); // Assuming it's a VARCHAR type
+
+                        ResultSet rs = stmt.executeQuery();
+                        if (rs.next()) {
+                            liveId = rs.getString("LiveId");
+                        }
+
+                        // Fetch the output message (if needed)
+                        String messageOutput = stmt.getString(11);
+                        Log.d("DatabaseHelper", "Stored Procedure Output Message: " + messageOutput);
+
+                        rs.close();
+                        stmt.close();
+                        connection.close();
+
+                    }
+                } catch (SQLException e) {
+                    Log.e("DatabaseHelper", "SQL Error fetching LiveId: " + e.getMessage());
+                }
+                return liveId;
+            }
+
+            @Override
+            protected void onPostExecute(String liveId) {
+                listener.onQueryResult(Collections.singletonList(Collections.singletonMap("LiveId", liveId)));
             }
         }.execute();
     }

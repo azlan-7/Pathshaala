@@ -63,6 +63,8 @@ dependencies {
     implementation ("androidx.compose.ui:ui:1.5.1")
     implementation ("androidx.compose.material3:material3:1.1.2")
     implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+")
+    // Google Gemini API
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
     annotationProcessor(libs.glide.compiler)
 
 }

@@ -1,6 +1,5 @@
 package com.example.loginpage;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.zegocloud.uikit.prebuilt.livestreaming.ZegoUIKitPrebuiltLiveStreamingConfig;
 import com.zegocloud.uikit.prebuilt.livestreaming.ZegoUIKitPrebuiltLiveStreamingFragment;
 
-public class SampleLiveZego extends AppCompatActivity {
+public class SampleLiveZegoStudent extends AppCompatActivity {
     String userID, name, liveID;
     boolean isHost;
 
@@ -24,7 +23,7 @@ public class SampleLiveZego extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_sample_live_zego);
+        setContentView(R.layout.activity_sample_live_zego_student);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -42,14 +41,6 @@ public class SampleLiveZego extends AppCompatActivity {
         liveIDText.setText(liveID);
 
         AddFragment();
-
-        shareBtn.setOnClickListener(v->{
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.setType("text/plain");
-            sendIntent.putExtra(Intent.EXTRA_TEXT,  "Join the live class in the Pathshaala app.\n Live ID: "+liveID);
-            startActivity(sendIntent.createChooser(sendIntent, "Share via"));
-        });
     }
 
     void AddFragment(){

@@ -48,10 +48,9 @@ public class TeachersEducationView extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> finish());
 
-
         // Set click listeners for buttons
         continueButton.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersEducationView.this, TeachersInfo.class);
+            Intent intent = new Intent(TeachersEducationView.this, TeachersInfoSubSection.class);
             startActivity(intent);
             finish();
         });

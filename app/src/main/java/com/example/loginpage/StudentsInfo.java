@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -20,7 +21,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.StudentsExpandableListAdapter;
+import com.example.loginpage.models.Education;
 import com.example.loginpage.models.UserDetailsClass;
+import com.example.loginpage.models.UserWiseEducation;
+
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -41,6 +45,7 @@ public class StudentsInfo extends AppCompatActivity {
     private List<String> sectionTitles;
     private HashMap<String, List<String>> sectionItems;
     private ExpandableListAdapter adapter;
+    private int lastExpandedPosition = -1;
 
     private static final String TAG = "StudentsInfo";
 
@@ -182,8 +187,7 @@ public class StudentsInfo extends AppCompatActivity {
 
         // Adding subsections (Dropdown Items)
         List<String> academicDetailsOptions = new ArrayList<>();
-        academicDetailsOptions.add("View your Academic Details");
-        academicDetailsOptions.add("Add Academic Details");
+        academicDetailsOptions.add("Loading...");
 
         List<String> parentDetailsOptions = new ArrayList<>();
         parentDetailsOptions.add("Edit Details");
@@ -205,6 +209,72 @@ public class StudentsInfo extends AppCompatActivity {
 
         adapter = new StudentsExpandableListAdapter(this, sectionTitles, sectionItems);
         expandableListView.setAdapter(adapter);
+
+        loadUserEducation(academicDetailsOptions);
+    }
+
+
+    private void loadUserEducation(List<String> educationOptions) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+
+        if (userId == -1) {
+            Log.e(TAG, "❌ User ID not found in SharedPreferences!");
+            Toast.makeText(this, "User not found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Log.d(TAG, "📌 Fetching education entries for user: " + userId);
+
+        DatabaseHelper.UserWiseEducationSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseEducationResultListener() {
+            @Override
+            public void onQueryResult(List<UserWiseEducation> userWiseEducationList) {
+                educationOptions.clear(); // ✅ Clear placeholder values before adding actual data
+
+                int totalRecords = userWiseEducationList.size();
+
+                if (totalRecords > 0) {
+                    // ✅ Show up to 6 records
+                    int limit = Math.min(totalRecords, 6);
+                    for (int i = 0; i < limit; i++) {
+                        UserWiseEducation education = userWiseEducationList.get(i);
+                        educationOptions.add(education.getEducationLevelName() + "(" + education.getInstitutionName() + ")");
+                    }
+
+                    // ✅ If more than 6 records, add "More..."
+                    if (totalRecords > 6) {
+                        educationOptions.add("More...");
+                    }
+
+                    // ✅ Always add "View your education" at the end
+                    educationOptions.add("Add Education");
+                } else {
+                    // ✅ Show default message if no records exist
+                    educationOptions.add("Add Education");
+                    Log.e(TAG, "⚠️ No education records found in DB!");
+                }
+
+                // ✅ Notify adapter of data change
+                runOnUiThread(() -> {
+                    if (adapter instanceof BaseExpandableListAdapter) {
+                        ((BaseExpandableListAdapter) adapter).notifyDataSetChanged();
+
+                        // ✅ Re-expand the last opened group **AFTER** notifying data change
+                        expandableListView.postDelayed(() -> {
+                            if (lastExpandedPosition != -1) {
+                                expandableListView.expandGroup(lastExpandedPosition);
+                            }
+                        }, 300); // Slight delay ensures smooth UI
+                    }
+                });
+
+            }
+
+            public void onError(String error) {
+                Log.e(TAG, "❌ Failed to fetch education records: " + error);
+                runOnUiThread(() -> Toast.makeText(StudentsInfo.this, "Error fetching education details!", Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
 
@@ -297,7 +367,5 @@ public class StudentsInfo extends AppCompatActivity {
             }
         });
     }
-
-
 
 }

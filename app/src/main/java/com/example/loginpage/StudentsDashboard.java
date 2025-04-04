@@ -104,7 +104,12 @@ public class StudentsDashboard extends AppCompatActivity {
             } else if (itemId == R.id.home) {
                 Intent intent = new Intent(StudentsDashboard.this, StudentsDashboard.class);
                 startActivity(intent);
-            } else if (itemId == R.id.profile) {
+            }
+            else if(itemId == R.id.goLive){
+                Intent intent = new Intent(StudentsDashboard.this, SampleGoLiveZegoStudent.class);
+                startActivity(intent);
+            }
+            else if (itemId == R.id.profile) {
                 Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
                 startActivity(intent);
             }

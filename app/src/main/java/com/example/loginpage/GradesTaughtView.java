@@ -104,8 +104,6 @@ public class GradesTaughtView extends AppCompatActivity {
 
 
 
-
-
     private void deleteGrade(int position) {
         if (position >= 0 && position < gradesList.size()) {
             gradesList.remove(position);  // Remove item from list
