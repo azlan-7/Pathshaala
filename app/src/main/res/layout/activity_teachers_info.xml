@@ -7,6 +7,39 @@
     android:layout_height="match_parent"
     tools:context=".TeachersInfo">
 
+    <!-- Page Heading -->
+    <TextView
+        android:id="@+id/textView42"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Teacher's Profile"
+        android:textColor="#0F4D73"
+        android:textSize="10pt"
+        app:layout_constraintBottom_toTopOf="@+id/tvFullName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <!-- Teacher Full Name -->
+    <TextView
+        android:id="@+id/tvFullName"
+        android:layout_width="218dp"
+        android:layout_height="30dp"
+        android:fontFamily="@font/work_sans"
+        android:textColor="#0F4D73"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.266"
+        app:layout_constraintStart_toEndOf="@+id/imageView55"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.138" />
+
+    <!-- Teacher Contact Number -->
     <TextView
         android:id="@+id/tvContact"
         android:layout_width="222dp"
@@ -23,20 +56,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.183" />
 
-    <TextView
-        android:id="@+id/tvFullName"
-        android:layout_width="218dp"
-        android:layout_height="30dp"
-        android:fontFamily="@font/work_sans"
-        android:textColor="#0F4D73"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.266"
-        app:layout_constraintStart_toEndOf="@+id/imageView55"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.138" />
-
+    <!-- Teacher Email Address -->
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="226dp"
@@ -54,21 +74,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.215" />
 
-    <TextView
-        android:id="@+id/textView42"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
-        android:fontFamily="@font/work_sans_bold"
-        android:text="Teacher's Profile"
-        android:textColor="#0F4D73"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvFullName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.592" />
+
 
     <TextView
         android:id="@+id/textView43"
@@ -340,7 +346,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.015"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/detailonboardingtop" />

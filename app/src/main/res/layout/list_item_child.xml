@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/classTimeTextView"
+        android:fontFamily="@font/work_sans"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Class time"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/classTimeEditText"
+        android:layout_width="0dp"
+        android:fontFamily="@font/work_sans"
+        android:background="@drawable/edittext_border"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Edit time"
+        android:visibility="gone"
+        android:textSize="16sp"/>
+</LinearLayout>
