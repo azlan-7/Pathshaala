@@ -25,6 +25,7 @@ import com.example.loginpage.GradesTaughtView;
 import com.example.loginpage.R;
 import com.example.loginpage.SubjectExpertise;
 import com.example.loginpage.SubjectExpertiseNewOne;
+import com.example.loginpage.TeachersBasicInfo;
 import com.example.loginpage.TeachersDashboardNew;
 import com.example.loginpage.TeachersEducation;
 import com.example.loginpage.TeachersEducationView;
@@ -125,6 +126,9 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
         // 🔹 Set different icons for different section titles
         switch (groupName) {
+            case "Account Info":
+                groupIcon.setImageResource(R.drawable.person_24dp_0f4d73_fill0_wght400_grad0_opsz24);
+                break;
             case "Subject Expertise":
                 groupIcon.setImageResource(R.drawable.import_contacts_24dp_0f4d73_fill0_wght400_grad0_opsz24);
                 break;
@@ -154,7 +158,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         // 🔹 Hide arrow for "Dashboard" and "Promotional Activities"
-        if (groupName.equals("Dashboard") || groupName.equals("Promotional Activities")) {
+        if (groupName.equals("Dashboard") || groupName.equals("Promotional Activities") || groupName.equals("Account Info")) {
             groupIndicator.setVisibility(View.GONE); // Hide arrow
 
             // 🔹 Add Click Listener to Navigate
@@ -164,6 +168,8 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
                     targetActivity = TeachersDashboardNew.class;
                 } else if (groupName.equals("Promotional Activities")) {
                     targetActivity = AddPromotionalMedia.class;
+                }else if (groupName.equals("Account Info")) {
+                    targetActivity = TeachersBasicInfo.class;
                 }
 
                 if (targetActivity != null) {

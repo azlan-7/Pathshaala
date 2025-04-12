@@ -70,6 +70,7 @@ public class TeachersBasicInfo extends AppCompatActivity {
         etDOB = findViewById(R.id.editTextText13);
         profileImageView = findViewById(R.id.imageView50);
         cameraIcon = findViewById(R.id.imageView54);
+        backButton = findViewById(R.id.imageView142);
 
         cameraIcon.setOnClickListener(v -> openGallery());
         loadCitiesFromDatabase();

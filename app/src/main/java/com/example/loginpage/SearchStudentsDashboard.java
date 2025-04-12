@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import java.util.Map;
 
 public class SearchStudentsDashboard extends AppCompatActivity {
 
+    private ImageView profileIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,11 @@ public class SearchStudentsDashboard extends AppCompatActivity {
 
         String query = "{call sp_UserDetailsInsertUpdate(3, 0, '', '', '', '', NULL, '', '', '', '', '', '', '', NULL, '', '', '', '', '')}";
 
+        profileIcon = findViewById(R.id.profileIcon);
+
+
+
+
         DatabaseHelper.UserDetailsSelect(this, "3", "", userList -> {
             if (userList.size() > 0) {
                 for (int i = 0; i < userList.size() && i < cardIds.length; i++) {
@@ -63,7 +71,6 @@ public class SearchStudentsDashboard extends AppCompatActivity {
                     TextView experience = cardView.findViewById(R.id.tvExperience);
                     TextView subjects = cardView.findViewById(R.id.tvSubjects);
                     TextView location = cardView.findViewById(R.id.tvLocation);
-                    Button payment = cardView.findViewById(R.id.paymentButton);
 
                     UserDetailsClass teacher = userList.get(i);
                     name.setText(teacher.getName());
@@ -92,6 +99,13 @@ public class SearchStudentsDashboard extends AppCompatActivity {
                         Log.e("ProfileImage", "❌ No profile image found for user.");
                         profileIcon.setImageResource(R.drawable.generic_avatar); // Default avatar
                     }
+
+                    profileIcon.setOnClickListener(view -> {
+                        Intent intent = new Intent(SearchStudentsDashboard.this, ProfilePageTeacher.class);
+                        intent.putExtra("USER_ID", teacher.getUserId()); // It's a string!
+                        intent.putExtra("USER_PHONE", teacher.getMobileNo());
+                        startActivity(intent);
+                    });
 
                     // Fetch Experience for the teacher
                     DatabaseHelper.UserWiseWorkExperienceSelect(this, "3", teacher.getUserId(), new DatabaseHelper.WorkExperienceCallback() {
@@ -148,8 +162,6 @@ public class SearchStudentsDashboard extends AppCompatActivity {
                             }
                         }
                     });
-
-                    payment.setOnClickListener(v -> MoveToPaymentGateway());
                 }
             } else {
                 Log.d("SearchStudentsDashboard", "No teachers found.");

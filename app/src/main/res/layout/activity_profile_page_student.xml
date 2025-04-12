@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StudentsInfo">
+    tools:context=".ProfilePageStudent">
 
     <TextView
         android:id="@+id/tvContact"
@@ -82,35 +82,6 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView99" />
 
 
-
-
-    <ImageView
-        android:id="@+id/imageView44"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        android:layout_marginTop="148dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.218"
-        app:layout_constraintStart_toEndOf="@+id/tvFullName"
-        app:layout_constraintTop_toBottomOf="@+id/textView42"
-        app:srcCompat="@drawable/pencilvector" />
-
-
-
-    <TextView
-        android:id="@+id/textViewAboutYourself"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/work_sans_light"
-        android:text="Write about yourself"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.21"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
-
     <ImageView
         android:id="@+id/imageView55"
         android:layout_width="wrap_content"
@@ -135,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.712"
         app:layout_constraintStart_toEndOf="@+id/textViewAccountInfo"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAboutYourself" />
+        tools:layout_editor_absoluteY="217dp" />
 
     <ImageView
         android:id="@+id/imageView97"
@@ -158,27 +129,14 @@
         app:srcCompat="@drawable/detailonboardingbottom" />
 
 
-
     <ImageView
         android:id="@+id/imageView99"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAboutYourself"
-        app:srcCompat="@drawable/full_width" />
-
-    <ImageView
-        android:id="@+id/imageView138"
-        android:layout_width="33dp"
-        android:layout_height="26dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView44"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
-        app:layout_constraintStart_toEndOf="@+id/tvEmail"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.901"
-        app:srcCompat="@drawable/payments_24dp_78a75a_fill0_wght400_grad0_opsz24" />
+        app:srcCompat="@drawable/full_width"
+        tools:layout_editor_absoluteY="217dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,7 +43,7 @@ public class StudentsDashboard extends AppCompatActivity {
 
     Handler mainTextHandler = new Handler();
     private TextView welcomeText;
-    private ImageView profileIcon,profileIconTop;
+    private ImageView profileIcon,profileIconTop,notificationBell;
     private Button searchButton;
     private BarChart barChart;
     private PieChart pieChart;
@@ -61,6 +61,7 @@ public class StudentsDashboard extends AppCompatActivity {
         barChart = findViewById(R.id.barChartStudentEnrolledClass);
         pieChart = findViewById(R.id.barChartStudentEnrolledMonth);
         profileIconTop = findViewById(R.id.imageView151);
+        notificationBell = findViewById(R.id.imageView141);
 
 //        Toolbar toolbar = findViewById(R.id.toolbar2);
 //        setSupportActionBar(toolbar);
@@ -73,6 +74,11 @@ public class StudentsDashboard extends AppCompatActivity {
 
         profileIcon.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
+            startActivity(intent);
+        });
+
+        notificationBell.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentsDashboard.this, NotificationStudents.class);
             startActivity(intent);
         });
 
@@ -110,7 +116,7 @@ public class StudentsDashboard extends AppCompatActivity {
                 startActivity(intent);
             }
             else if (itemId == R.id.profile) {
-                Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
+                Intent intent = new Intent(StudentsDashboard.this, ShowTimeTableNewView.class);
                 startActivity(intent);
             }
             return true;

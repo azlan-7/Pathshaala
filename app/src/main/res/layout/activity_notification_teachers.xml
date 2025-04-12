@@ -66,4 +66,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.875" />
+
+    <TextView
+        android:id="@+id/textView87"
+        android:layout_width="232dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Notify Students"
+        android:textColor="#0F4D73"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextText31"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.578" />
 </androidx.constraintlayout.widget.ConstraintLayout>

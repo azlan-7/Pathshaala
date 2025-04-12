@@ -1,12 +1,15 @@
 package com.example.loginpage.MySqliteDatabase;
 
 //import android.app.Notification;
-import com.example.loginpage.Notification;
+//import com.example.loginpage.Notification;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.nfc.Tag;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -25,8 +28,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +43,8 @@ import com.example.loginpage.models.UserWiseSubject;
 import com.example.loginpage.models.UserWiseWorkExperience;
 import com.example.loginpage.models.VirtualClassClass;
 
+import com.example.loginpage.models.Notification;
+import com.example.loginpage.models.UserInfoItem;
 
 import static net.sourceforge.jtds.jdbc.DefaultProperties.DATABASE_NAME;
 import static net.sourceforge.jtds.jdbc.DefaultProperties.getServerType;
@@ -98,8 +105,10 @@ public class DatabaseHelper {
 
     }
 
-
-
+    public interface ProcedureCallback {
+        void onSuccess(String message);
+        void onError(String error);
+    }
 
 
     public static Connection getConnection() {
@@ -1835,28 +1844,57 @@ public class DatabaseHelper {
     }
 
 
-    public static int insertNotification(int senderId, String title, String message, String type) { //added title parameter
-        String sql = "INSERT INTO Notifications (sender_id, title, message, type, created_at) " +
-                "VALUES (?, ?, ?, ?, GETDATE())";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+//    public static int insertNotification(int senderId, String title, String message, String type) { //added title parameter
+//        String sql = "INSERT INTO Notifications (sender_id, title, message, type, created_at) " +
+//                "VALUES (?, ?, ?, ?, GETDATE())";
+//        try (Connection conn = getConnection();
+//             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+//
+//            stmt.setInt(1, senderId);
+//            stmt.setString(2, title); //add title to prepared statement.
+//            stmt.setString(3, message);
+//            stmt.setString(4, type);
+//            stmt.executeUpdate();
+//
+//            ResultSet rs = stmt.getGeneratedKeys();
+//            if (rs.next()) {
+//                return rs.getInt(1);
+//            }
+//
+//        } catch (SQLException e) {
+//            Log.e("DatabaseHelper", "insertNotification Error: " + e.getMessage() + ", SQL State: " + e.getSQLState() + ", Error Code: " + e.getErrorCode());
+//            return -1;
+//        }
+//        return -1;
+//    }
 
-            stmt.setInt(1, senderId);
-            stmt.setString(2, title); //add title to prepared statement.
-            stmt.setString(3, message);
-            stmt.setString(4, type);
-            stmt.executeUpdate();
+    public static int insertNotification(int senderId, String title, String message, String type) {
+        int notificationId = -1;
+        try {
+            Connection con = getConnection();
+            if (con != null) {
+                String query = "{call InsertNotification(?, ?, ?, ?, ?)}"; // Call the stored procedure
+                CallableStatement stmt = con.prepareCall(query); // Use CallableStatement
 
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
+                stmt.setInt(1, senderId);
+                stmt.setString(2, title);
+                stmt.setString(3, message);
+                stmt.setString(4, type);
+                stmt.registerOutParameter(5, Types.INTEGER); // Register output parameter
+
+                stmt.executeUpdate();
+
+                notificationId = stmt.getInt(5); // Retrieve output parameter
+
+                stmt.close();
+                con.close();
+            } else {
+                Log.e("DatabaseHelper", "❌ DB connection failed!");
             }
-
         } catch (SQLException e) {
-            Log.e("DatabaseHelper", "insertNotification Error: " + e.getMessage() + ", SQL State: " + e.getSQLState() + ", Error Code: " + e.getErrorCode());
-            return -1;
+            Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
         }
-        return -1;
+        return notificationId;
     }
 
     public static void insertNotificationRead(int notificationId, int userId) {
@@ -1901,22 +1939,25 @@ public class DatabaseHelper {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Notification notif = new Notification(
+                notifications.add(new Notification(
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("message"),
                         rs.getString("type"),
                         rs.getTimestamp("created_at"),
                         rs.getTimestamp("read_at")
-                );
-                notifications.add(notif);
+                ));
             }
-
+            Log.d("DatabaseHelper", "Notifications fetched for user " + userId + ": " + notifications.size());
+            Log.d("DatabaseHelper", "SQL Query: " + sql);
+            Log.d("DatabaseHelper", "User ID: " + userId);
         } catch (SQLException e) {
             Log.e("DatabaseHelper", "getNotificationsForUser Error: " + e.getMessage());
         }
         return notifications;
     }
+
+
 
     public static List<UserInfoItem> getAllUserInfo(int userId) {
         Log.d("DatabaseHelper", "Fetching data for userId: " + userId);
@@ -1958,6 +1999,353 @@ public class DatabaseHelper {
 
         Log.d("DatabaseHelper", "Total items fetched: " + userInfoList.size());
         return userInfoList;
+    }
+
+
+    public static List<UserInfoItem> getTeacherInfoByUserId(int userId) {
+        List<UserInfoItem> userInfoList = new ArrayList<>();
+
+        try (Connection conn = getConnection()) {
+            CallableStatement stmt = conn.prepareCall("{call sp_UserWiseInfo(?)}");
+            stmt.setInt(1, userId); // ✅ Correct: pass dynamic userId
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserInfoItem item = new UserInfoItem();
+                item.setSlno(rs.getString("slno"));
+                item.setHeading(rs.getString("heading"));
+                item.setDescription(rs.getString("description"));
+                userInfoList.add(item);
+            }
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Error fetching teacher info by userId: " + e.getMessage());
+        }
+
+        return userInfoList;
+    }
+
+
+
+
+
+
+    public static String insertOrUpdateParentGuardianInfo(
+            int parentGuardianInfoID,
+            int userId,
+            String selfReferralCode,
+            String fatherName,
+            String fatherContactNo,
+            String motherName,
+            String motherContactNo,
+            String guardianName,
+            String guardianRelation,
+            String guardianContactNo
+    ) {
+        String message = "";
+        try (Connection con = getConnection();
+             CallableStatement stmt = con.prepareCall("{call InsertOrUpdateParentGuardianInfo(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}")) {
+
+
+            stmt.setInt(1, parentGuardianInfoID);
+            Log.d("DatabaseHelper","ParentID: 1  " + parentGuardianInfoID);
+            stmt.setInt(2, userId);
+            stmt.setString(3, selfReferralCode);
+            stmt.setString(4, fatherName);
+            stmt.setString(5, fatherContactNo);
+            stmt.setString(6, motherName);
+            stmt.setString(7, motherContactNo);
+            stmt.setString(8, guardianName);
+            stmt.setString(9, guardianRelation);
+            stmt.setString(10, guardianContactNo); // Input parameter
+
+            // Output parameter
+            stmt.registerOutParameter(11, Types.VARCHAR); // Message output
+
+            stmt.executeUpdate();
+
+            // Retrieve the output message
+            message = stmt.getString(11);
+            Log.d("DatabaseHelper", "InsertOrUpdateParentGuardianInfo Message: " + message);
+
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "InsertOrUpdateParentGuardianInfo Error: " + e.getMessage());
+            message = "Error: " + e.getMessage();
+        }
+        return message;
+    }
+
+
+//
+//    public static List<ParentGuardianInfo> getParentGuardianInfo(int userId, String fatherContactNo) {
+//        List<ParentGuardianInfo> parentGuardianInfoList = new ArrayList<>();
+//        try (Connection con = getConnection();
+//             CallableStatement stmt = con.prepareCall("{call sp_GetParentGuardianInfo(?, ?)}")) {
+//
+//            stmt.setInt(1, userId);
+//            stmt.setString(2, fatherContactNo);
+//
+//            ResultSet rs = stmt.executeQuery();
+//            while (rs.next()) {
+//                ParentGuardianInfo info = new ParentGuardianInfo();
+//                info.ParentGuardianInfoID = rs.getInt("ParentGuardianInfoID");
+//                info.UserID = rs.getInt("UserID");
+//                info.FatherName = rs.getString("FatherName");
+//                info.FatherContactNo = rs.getString("FatherContactNo");
+//                info.MotherName = rs.getString("MotherName");
+//                info.MotherContactNo = rs.getString("MotherContactNo");
+//                info.GuardianName = rs.getString("GuardianName");
+//                info.GuardianRelation = rs.getString("GuardianRelation");
+//                info.GuardianContactNo = rs.getString("GuardianContactNo");
+//                info.Active = rs.getBoolean("Active");
+//                info.entrydate = rs.getString("entrydate");
+//                info.CreatedDate = rs.getString("CreatedDate");
+//                info.CreatedBy = rs.getString("CreatedBy");
+//                info.IsActive = rs.getBoolean("IsActive");
+//                parentGuardianInfoList.add(info);
+//            }
+//        } catch (SQLException e) {
+//            Log.e("DatabaseHelper", "getParentGuardianInfoBy Error: " + e.getMessage());
+//        }
+//        return parentGuardianInfoList;
+//    }
+
+    public static List<ParentGuardianInfo> getParentGuardianInfo(int userId) {
+        List<ParentGuardianInfo> parentGuardianInfoList = new ArrayList<>();
+        try (Connection con = getConnection();
+             CallableStatement stmt = con.prepareCall("{call sp_GetParentGuardianInfo(?)}")) {
+
+            stmt.setInt(1, userId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ParentGuardianInfo info = new ParentGuardianInfo();
+                info.ParentGuardianInfoID = rs.getInt("ParentGuardianInfoID");
+                info.UserID = rs.getInt("UserID");
+                info.FatherName = rs.getString("FatherName");
+                info.FatherContactNo = rs.getString("FatherContactNo");
+                info.MotherName = rs.getString("MotherName");
+                info.MotherContactNo = rs.getString("MotherContactNo");
+                info.GuardianName = rs.getString("GuardianName");
+                info.GuardianRelation = rs.getString("GuardianRelation");
+                info.GuardianContactNo = rs.getString("GuardianContactNo");
+                info.Active = rs.getBoolean("Active");
+                info.entrydate = rs.getString("entrydate");
+                info.CreatedDate = rs.getString("CreatedDate");
+                info.CreatedBy = rs.getString("CreatedBy");
+                info.IsActive = rs.getBoolean("IsActive");
+                parentGuardianInfoList.add(info);
+            }
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "getParentGuardianInfo Error: " + e.getMessage());
+        }
+        return parentGuardianInfoList;
+    }
+
+
+
+    public static class ParentGuardianInfo {
+        public int ParentGuardianInfoID;
+        public int UserID;
+        public String FatherName;
+        public String FatherContactNo;
+        public String MotherName;
+        public String MotherContactNo;
+        public String GuardianName;
+        public String GuardianRelation;
+        public String GuardianContactNo;
+        public boolean Active;
+        public String entrydate;
+        public String CreatedDate;
+        public String CreatedBy;
+        public boolean IsActive;
+
+        // --- Getter Methods ---
+        public String getFatherName() {
+            return FatherName;
+        }
+
+        public String getFatherContactNo() {
+            return FatherContactNo;
+        }
+
+        public String getMotherName() {
+            return MotherName;
+        }
+
+        public String getMotherContactNo() {
+            return MotherContactNo;
+        }
+
+        public String getGuardianName() {
+            return GuardianName;
+        }
+
+        public String getGuardianContactNo() {
+            return GuardianContactNo;
+        }
+    }
+
+    public static void insertOrUpdateTimeTable(
+            Context context,
+            int timeTableId,
+            int userId,
+            int subjectId,
+            int gradeId,
+            int dayOfWeek,
+            String startTime,
+            String endTime,
+            String roomNo,
+            String remark,
+            int createdBy,
+            DatabaseHelper.ProcedureCallback callback) {
+
+        new Thread(() -> {
+            try (Connection conn = getConnection()) {
+                CallableStatement stmt = conn.prepareCall("{call sp_TimeTableInsertUpdate(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+
+                stmt.setInt(1, timeTableId); // 0 for insert
+                stmt.setInt(2, userId);
+                stmt.setInt(3, subjectId);
+                stmt.setInt(4, gradeId);
+                stmt.setInt(5, dayOfWeek);
+                stmt.setString(6, startTime);
+                stmt.setString(7, endTime);
+                stmt.setString(8, roomNo);
+                stmt.setString(9, remark);
+                stmt.setInt(10, createdBy);
+                stmt.registerOutParameter(11, java.sql.Types.VARCHAR);
+
+                stmt.execute();
+
+                String message = stmt.getString(11);
+                Log.d("TimeTableInsertUpdate", "Stored procedure executed. Message: " + message);
+
+                // Log the message returned from the stored procedure
+                Log.d("TimeTableInsertUpdate", "DB Message: " + message);
+
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (callback != null) callback.onSuccess(message);
+                });
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (callback != null) callback.onError(e.getMessage());
+                });
+            }
+        }).start();
+    }
+
+
+    public static class TimeTableEntry {
+        public String subjectName;
+        public String startTime;
+        public String endTime;
+        public String remark;
+        public String room;
+
+        public TimeTableEntry() {
+            this.subjectName = "";
+            this.startTime = "";
+            this.endTime = "";
+            this.remark = "";
+            this.room = "";
+        }
+
+
+        public TimeTableEntry(String subjectName, String startTime, String endTime, String remark, String room) {
+            this.subjectName = subjectName != null ? subjectName : "";
+            this.startTime = startTime != null ? startTime : "";
+            this.endTime = endTime != null ? endTime : "";
+            this.remark = remark != null ? remark : "";
+            this.room = room != null ? room : "";
+        }
+        @Override
+        public String toString() {
+            return startTime + " - " + endTime; // So when converted to String, it shows the time slot
+        }
+        public int timeTableId;
+        public int userId;
+        public int subjectId;
+        public int gradeId;
+        public int dayOfWeek;
+//        public String subjectName;
+        public String gradeName;
+        public String weekDay;
+//        public String startTime;
+//        public String endTime;
+        public String roomNo;
+//        public String remark;
+        public String entryDate;
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public String getEndTime() {
+            return endTime;
+        }
+    }
+
+    public static void getTimeTableByUserId(int userId, ProcedureResultCallback<List<TimeTableEntry>> callback) {
+        new Thread(() -> {
+            List<TimeTableEntry> timeTableEntries = new ArrayList<>();
+            try (Connection conn = getConnection()) {
+                CallableStatement stmt = conn.prepareCall("{call sp_GetTimeTableByUserID(?)}");
+                stmt.setInt(1, userId);
+
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    TimeTableEntry entry = new TimeTableEntry();
+                    entry.timeTableId = rs.getInt("TimeTableId");
+                    entry.userId = rs.getInt("UserId");
+                    entry.subjectId = rs.getInt("SubjectId");
+                    entry.subjectName = rs.getString("SubjectName");
+                    entry.gradeId = rs.getInt("GradeID");
+                    entry.gradeName = rs.getString("GradeName");
+                    entry.dayOfWeek = rs.getInt("DayOfWeek");
+                    entry.weekDay = rs.getString("WeekDay");
+                    String rawStart = rs.getString("StartTime");
+                    String rawEnd = rs.getString("EndTime");
+
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm:ss.SSSSSS"); // SQL Server format
+                    SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a"); // e.g., 09:00 AM
+
+                    try {
+                        Date startDate = inputFormat.parse(rawStart);
+                        Date endDate = inputFormat.parse(rawEnd);
+
+                        entry.startTime = outputFormat.format(startDate);
+                        entry.endTime = outputFormat.format(endDate);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        // fallback to raw if formatting fails
+                        entry.startTime = rawStart;
+                        entry.endTime = rawEnd;
+                    }
+
+                    entry.roomNo = rs.getString("RoomNo");
+                    entry.remark = rs.getString("Remark");
+                    entry.entryDate = rs.getString("entrydate");
+
+                    timeTableEntries.add(entry);
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    callback.onSuccess(timeTableEntries);
+                });
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    callback.onError(e.getMessage());
+                });
+            }
+        }).start();
+    }
+
+
+    public interface ProcedureResultCallback<T> {
+        void onSuccess(T result);
+        void onError(String error);
     }
 
 

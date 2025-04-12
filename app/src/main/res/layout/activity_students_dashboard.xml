@@ -212,7 +212,7 @@
                         android:id="@+id/textView111"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/loc_stats"
+                        android:text="Find a Teacher"
                         android:fontFamily="@font/work_sans"
                         android:textAlignment="center"
                         android:textSize="20sp"

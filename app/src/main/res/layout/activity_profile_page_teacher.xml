@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfilePageTeacher">
+
+    <TextView
+        android:id="@+id/tvContact1"
+        android:layout_width="222dp"
+        android:layout_height="39dp"
+        android:fontFamily="@font/work_sans_light"
+        android:padding="8dp"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.183" />
+
+    <TextView
+        android:id="@+id/tvFullName1"
+        android:layout_width="218dp"
+        android:layout_height="30dp"
+        android:fontFamily="@font/work_sans"
+        android:textColor="#0F4D73"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.266"
+        app:layout_constraintStart_toEndOf="@+id/imageView551"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.138" />
+
+    <TextView
+        android:id="@+id/tvEmail1"
+        android:layout_width="226dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="80dp"
+        android:fontFamily="@font/work_sans_light"
+        android:padding="8dp"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.215" />
+
+    <TextView
+        android:id="@+id/textView421"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Teacher's Profile"
+        android:textColor="#0F4D73"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvFullName1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.592" />
+
+
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        android:groupIndicator="@null"
+        android:layout_width="339dp"
+        android:layout_height="598dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView631" />
+
+    <TextView
+        android:id="@+id/textView431"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Account Info"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.283"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView631" />
+
+    <TextView
+        android:id="@+id/textView441"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Subject Expertise"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.328"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView671" />
+
+    <TextView
+        android:id="@+id/textView491"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_light"
+        android:text="View/Add your subject expertise"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView441"
+        app:layout_constraintHorizontal_bias="0.015"
+        app:layout_constraintStart_toStartOf="@+id/textView441"
+        app:layout_constraintTop_toBottomOf="@+id/textView441" />
+
+    <TextView
+        android:id="@+id/textView641"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_light"
+        android:text="Add/Edit the grades you want to teach"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView581"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView581"
+        app:layout_constraintTop_toBottomOf="@+id/textView581" />
+
+    <TextView
+        android:id="@+id/textView651"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_light"
+        android:text="Add/View your achievements"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView591"
+        app:layout_constraintHorizontal_bias="0.013"
+        app:layout_constraintStart_toStartOf="@+id/textView591"
+        app:layout_constraintTop_toBottomOf="@+id/textView591" />
+
+    <TextView
+        android:id="@+id/textView571"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Certifications"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.287"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView611" />
+
+    <TextView
+        android:id="@+id/textView601"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Promotional Activities"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.376"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView651" />
+
+    <TextView
+        android:id="@+id/textView611"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_light"
+        android:text="Add/View your work experience"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView461"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView461"
+        app:layout_constraintTop_toBottomOf="@+id/textView461" />
+
+    <ImageView
+        android:id="@+id/imageView611"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView461"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView461"
+        android:visibility="gone"
+        app:srcCompat="@drawable/work_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <TextView
+        android:id="@+id/textView461"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Work Experience"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.317"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView621" />
+
+    <ImageView
+        android:id="@+id/imageView571"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView441"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView441"
+        android:visibility="gone"
+        app:srcCompat="@drawable/import_contacts_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <TextView
+        android:id="@+id/textView591"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Awards/Achievements"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.368"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView641" />
+
+    <TextView
+        android:id="@+id/textView661"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_light"
+        android:text="View videos/channels"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView601"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView601"
+        app:layout_constraintTop_toBottomOf="@+id/textView601" />
+
+    <TextView
+        android:id="@+id/textView631"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_light"
+        android:text="Add/View your certifications"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView571"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView571"
+        app:layout_constraintTop_toBottomOf="@+id/textView571" />
+
+    <TextView
+        android:id="@+id/textView581"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Grades Taught"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.294"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView631" />
+
+    <TextView
+        android:id="@+id/textView481"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Dashboard"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.281"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView661" />
+
+    <TextView
+        android:id="@+id/textView621"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_light"
+        android:text="Add/View your education"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView451"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView451"
+        app:layout_constraintTop_toBottomOf="@+id/textView451" />
+
+    <ImageView
+        android:id="@+id/imageView591"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView451"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView451"
+        android:visibility="gone"
+        app:srcCompat="@drawable/school_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <TextView
+        android:id="@+id/textView451"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans"
+        android:text="Education Qualification"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.403"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView491" />
+
+    <ImageView
+        android:id="@+id/imageView461"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView481"
+        android:layout_width="236dp"
+        android:layout_height="102dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/detailonboardingbottom" />
+
+    <ImageView
+        android:id="@+id/imageView631"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/full_width"
+        tools:layout_editor_absoluteY="221dp" />
+
+    <ImageView
+        android:id="@+id/imageView551"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_marginTop="104dp"
+        app:layout_constraintEnd_toStartOf="@+id/tvContact1"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/generic_avatar" />
+
+    <ImageView
+        android:id="@+id/imageView601"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView431"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView431"
+        android:visibility="gone"
+        app:srcCompat="@drawable/person_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <TextView
+        android:id="@+id/uniqueIdTextView1"
+        android:layout_width="118dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="@font/work_sans_light"
+        android:text="Unique ID"
+        android:textColor="#0F4D73"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/expandableListView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.951" />
+
+    <TextView
+        android:id="@+id/textView671"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_light"
+        android:text="View/Edit your account"
+        android:visibility="gone"
+        android:textColor="#0F4D73"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView431"
+        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintStart_toStartOf="@+id/textView431"
+        app:layout_constraintTop_toBottomOf="@+id/textView431" />
+
+    <ImageView
+        android:id="@+id/imageView621"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        android:layout_marginStart="28dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView571"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView571"
+        android:visibility="gone"
+        app:srcCompat="@drawable/verified_user_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <ImageView
+        android:id="@+id/imageView661"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView581"
+        app:layout_constraintHorizontal_bias="0.684"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView581"
+        android:visibility="gone"
+        app:srcCompat="@drawable/local_library_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <ImageView
+        android:id="@+id/imageView671"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView591"
+        app:layout_constraintHorizontal_bias="0.659"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView591"
+        android:visibility="gone"
+        app:srcCompat="@drawable/trophy_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <ImageView
+        android:id="@+id/imageView681"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView601"
+        app:layout_constraintHorizontal_bias="0.711"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView601"
+        android:visibility="gone"
+        app:srcCompat="@drawable/videocam_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <ImageView
+        android:id="@+id/imageView691"
+        android:layout_width="37dp"
+        android:layout_height="32.5dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView481"
+        app:layout_constraintHorizontal_bias="0.653"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView481"
+        android:visibility="gone"
+        app:srcCompat="@drawable/space_dashboard_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+    <ImageView
+        android:id="@+id/imageView1071"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.344"
+        app:layout_constraintStart_toEndOf="@+id/tvFullName1"
+        app:layout_constraintTop_toTopOf="@+id/tvFullName1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/qr_code_scanner_24dp_8b1a10_fill0_wght400_grad0_opsz24" />
+
+    <ImageView
+        android:id="@+id/imageView1401"
+        android:layout_width="41dp"
+        android:layout_height="37dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView551"
+        app:layout_constraintEnd_toStartOf="@+id/textView421"
+        app:layout_constraintHorizontal_bias="0.369"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.194"
+        app:srcCompat="@drawable/arrow_back_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

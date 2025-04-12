@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class StudentsInfo extends AppCompatActivity {
+public class ProfilePageStudent extends AppCompatActivity {
 
     private TextView tvFullName, tvContact, tvEmail;
     private UserDetailsClass user;
@@ -52,7 +52,7 @@ public class StudentsInfo extends AppCompatActivity {
 
     private int lastExpandedPosition = -1;
 
-    private static final String TAG = "StudentsInfo";
+    private static final String TAG = "ProfilePageStudent";
 
 
     private final ActivityResultLauncher<Intent> aboutActivityLauncher =
@@ -71,6 +71,16 @@ public class StudentsInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_students_info);
+
+
+        String phoneNumber = getIntent().getStringExtra("USER_PHONE");
+        if (phoneNumber != null) {
+            Log.d("ProfilePageStudent", "Phone received: " + phoneNumber);
+            // Use phoneNumber to fetch user info and render it
+            fetchUserDetailsFromDB(phoneNumber);
+        } else {
+            Toast.makeText(this, "Invalid user info", Toast.LENGTH_SHORT).show();
+        }
 
         expandableListView = findViewById(R.id.expandableView);
 
@@ -100,10 +110,9 @@ public class StudentsInfo extends AppCompatActivity {
         tvAboutYourself = findViewById(R.id.textViewAboutYourself);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView2);
 
-        
+
         profileImage = findViewById(R.id.imageView55);
 
-        fetchUserDetailsFromDB();
 
         // Get Unique ID
         String uniqueID = getIntent().getStringExtra("UNIQUE_ID");
@@ -116,14 +125,14 @@ public class StudentsInfo extends AppCompatActivity {
 
         // Open About Student Page
         editAbout.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, AboutStudent.class);
+            Intent intent = new Intent(ProfilePageStudent.this, AboutStudent.class);
             aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });
 
 
         payment.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentsInfo.this, PaymentGatewayDemo.class);
+            Intent intent = new Intent(ProfilePageStudent.this, PaymentGatewayDemo.class);
             aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });
@@ -135,32 +144,31 @@ public class StudentsInfo extends AppCompatActivity {
         tvEmail = findViewById(R.id.tvEmail);
         tvFullName = findViewById(R.id.tvFullName);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String contactNumber = sharedPreferences.getString("phoneNumber", "Not Available");
-        String aboutYourself = sharedPreferences.getString("ABOUT_STUDENT", "Write about yourself..."); // <-- Changed from ABOUT_YOURSELF
-        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
-        if (!storedImageName.isEmpty()) {
-            String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
-            Log.d("StudentsInfo", "✅ Loaded Image from SharedPreferences: " + imageUrl);
+        // 🔹 Fetch all data from Intent
+        String contactNumber = getIntent().getStringExtra("USER_PHONE");
+        String aboutYourself = getIntent().getStringExtra("USER_ABOUT");
+        String imageName = getIntent().getStringExtra("USER_IMAGE");
+        String firstName = getIntent().getStringExtra("USER_FIRST_NAME");
+        String lastName = getIntent().getStringExtra("USER_LAST_NAME");
+        String email = getIntent().getStringExtra("USER_EMAIL");
+        String selfReferralCode = getIntent().getStringExtra("USER_SELF_REFERRAL");
+
+        if (!imageName.isEmpty()) {
+            String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+            Log.d("ProfilePageStudent", "✅ Loaded Image from SharedPreferences: " + imageUrl);
             Glide.with(this).load(imageUrl).placeholder(R.drawable.generic_avatar).error(R.drawable.generic_avatar).into(profileImage);
         }
 
         tvAboutYourself.setText(aboutYourself);
         tvContact.setText(contactNumber);
 
-        String firstName = sharedPreferences.getString("FIRST_NAME", "N/A");
-        String lastName = sharedPreferences.getString("LAST_NAME", "");
-        String contact = sharedPreferences.getString("CONTACT", "N/A");
-        String email = sharedPreferences.getString("EMAIL", "N/A");
-        String selfreferralcode = sharedPreferences.getString("selfreferralcode", "N/A");
-
 //        tvFullName.setText(firstName + " " + lastName);
 //        tvContact.setText(contact);
 //        tvEmail.setText(email);
-        tvFullName.setText("Student " + "Test");
-        tvContact.setText("2323232333");
-        tvEmail.setText("student@Test.com");
-        uniqueIdTextView.setText(selfreferralcode);
+        tvContact.setText(contactNumber != null ? contactNumber : "Not Available");
+        tvEmail.setText(email != null ? email : "Not Available");
+        tvFullName.setText(firstName + " " + (lastName != null ? lastName : ""));
+        uniqueIdTextView.setText(selfReferralCode);
 
         // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -174,7 +182,7 @@ public class StudentsInfo extends AppCompatActivity {
         sectionTitles = new ArrayList<>();
         sectionItems = new HashMap<>();
 
-        sectionTitles.add("Account Info");
+//        sectionTitles.add("Account Info");
         sectionTitles.add("Academic Details");
         sectionTitles.add("Grade");
         sectionTitles.add("Parent Guardian Details");
@@ -183,7 +191,7 @@ public class StudentsInfo extends AppCompatActivity {
         sectionTitles.add("Attendance and Participation");
         sectionTitles.add("Communication Preferences");
         sectionTitles.add("Feedback and Ratings");
-        sectionTitles.add("Dashboard");
+//        sectionTitles.add("Dashboard");
 
         // Adding subsections (Dropdown Items)
         List<String> academicDetailsOptions = new ArrayList<>();
@@ -197,7 +205,7 @@ public class StudentsInfo extends AppCompatActivity {
 
         List<String> skillsOptions = new ArrayList<>();
         skillsOptions.add("View your Skills");
-        skillsOptions.add("Add Skills/Extracurriculars");
+//        skillsOptions.add("Add Skills/Extracurriculars");
 
         // Correct Mapping
         sectionItems.put(sectionTitles.get(1), academicDetailsOptions); // Academic Details -> Correct dropdown
@@ -213,17 +221,23 @@ public class StudentsInfo extends AppCompatActivity {
         adapter = new StudentsExpandableListAdapter(this, sectionTitles, sectionItems);
         expandableListView.setAdapter(adapter);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("USER_ID", -1);
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//        int userId = sharedPreferences.getInt("USER_ID", -1);
+        int userId = getIntent().getIntExtra("USER_ID", -1);
 
-        Log.d("StudentsInfo","UserId fetched through sharedpreferences: " + userId);
-        getAllUserInfoDirect(userId);
+
+        Log.d("ProfilePageStudent","UserId fetched through sharedpreferences: " + userId);
+        loadParentGuardianInfo(parentDetailsOptions);
+        loadUserEducation(academicDetailsOptions);
+        loadUserGradesTaught(gradeOptions);
+
+//        getAllUserInfoDirect(userId);
     }
 
 
 
     private void getAllUserInfoDirect(int userId) {
-        Log.d("StudentsInfo", "getAllUserInfoDirect() called");
+        Log.d("ProfilePageStudent", "getAllUserInfoDirect() called");
 
         new Thread(() -> {
             List<UserInfoItem> userInfoList = DatabaseHelper.getAllUserInfo(userId);
@@ -240,7 +254,7 @@ public class StudentsInfo extends AppCompatActivity {
                         String heading = item.getHeading();
                         String description = item.getDescription();
 
-                        Log.d("StudentsInfo", "Heading: " + heading + ", Description: " + description);
+                        Log.d("ProfilePageStudent", "Heading: " + heading + ", Description: " + description);
 
                         if (headingMap.containsKey(heading)) {
                             List<String> list = headingMap.get(heading);
@@ -256,7 +270,7 @@ public class StudentsInfo extends AppCompatActivity {
 
                     adapter.notifyDataSetChanged();
                 } else {
-                    Log.e("StudentsInfo", "No data returned from database.");
+                    Log.e("ProfilePageStudent", "No data returned from database.");
                 }
             });
         }).start();
@@ -264,13 +278,11 @@ public class StudentsInfo extends AppCompatActivity {
 
 
     private void loadUserGradesTaught(List<String> gradesTaughtOptions) {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("USER_ID", -1);
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//        int userId = sharedPreferences.getInt("USER_ID", -1);
 
-        if (userId == -1) {
-            Log.e("loadUserGradesTaught", "❌ User ID not found in SharedPreferences!");
-            return;
-        }
+        int userId = getIntent().getIntExtra("USER_ID", -1);
+
 
         Log.d("loadUserGradesTaught", "📌 Fetching Grades Taught for UserID: " + userId);
 
@@ -281,7 +293,7 @@ public class StudentsInfo extends AppCompatActivity {
 
                 if (userWiseGradesList == null || userWiseGradesList.isEmpty()) {
                     Log.d("loadUserGradesTaught", "⚠️ No grades data found for UserID: " + userId);
-                    Toast.makeText(StudentsInfo.this, "No Grades Found!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfilePageStudent.this, "No Grades Found!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -316,14 +328,12 @@ public class StudentsInfo extends AppCompatActivity {
     }
 
     private void loadParentGuardianInfo(List<String> parentDetailsOptions) {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("USER_ID", -1);
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//        int userId = sharedPreferences.getInt("USER_ID", -1);
 //        String fatherContactNo = sharedPreferences.getString("FATHER_CONTACT_NO", null); // Assuming it's stored already
 
-        if (userId == -1) {
-            Toast.makeText(this, "User ID not found in SharedPreferences", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        int userId = getIntent().getIntExtra("USER_ID", -1);
+
 
         List<DatabaseHelper.ParentGuardianInfo> infoList = DatabaseHelper.getParentGuardianInfo(userId);
 
@@ -345,14 +355,11 @@ public class StudentsInfo extends AppCompatActivity {
 
 
     private void loadUserEducation(List<String> educationOptions) {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("USER_ID", -1);
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//        int userId = sharedPreferences.getInt("USER_ID", -1);
 
-        if (userId == -1) {
-            Log.e(TAG, "❌ User ID not found in SharedPreferences!");
-            Toast.makeText(this, "User not found!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        int userId = getIntent().getIntExtra("USER_ID", -1);
+
 
         Log.d(TAG, "📌 Fetching education entries for user: " + userId);
 
@@ -402,7 +409,7 @@ public class StudentsInfo extends AppCompatActivity {
 
             public void onError(String error) {
                 Log.e(TAG, "❌ Failed to fetch education records: " + error);
-                runOnUiThread(() -> Toast.makeText(StudentsInfo.this, "Error fetching education details!", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(ProfilePageStudent.this, "Error fetching education details!", Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -419,7 +426,7 @@ public class StudentsInfo extends AppCompatActivity {
             case "Add Academic Details":
                 intent = new Intent(this, StudentsAcademicDetails.class);
                 break;
-                case "View your Skills":
+            case "View your Skills":
                 intent = new Intent(this, AddExtracurriculars.class);
                 break;
             case "Add Skills/Extracurriculars":
@@ -442,32 +449,33 @@ public class StudentsInfo extends AppCompatActivity {
 
 
 
-    private void fetchUserDetailsFromDB() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
-        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
+    private void fetchUserDetailsFromDB(String phoneNumber) {
+        Log.d("ProfilePageStudent", "phoneNumberFetched: " + phoneNumber);
+
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            Log.e("ProfilePageStudent", "❌ ERROR: Phone number missing from Intent!");
+            return;
+        }
+
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
+
+        String storedImageName = getIntent().getStringExtra("USER_IMAGE");
 
         if (!storedImageName.isEmpty()) {
             String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
-            Log.d("StudentsInfo", "✅ Loaded Image from SharedPreferences: " + imageUrl);
+            Log.d("ProfilePageStudent", "✅ Loaded Image from SharedPreferences: " + imageUrl);
             Glide.with(this)
                     .load(imageUrl)
                     .placeholder(R.drawable.generic_avatar)
                     .error(R.drawable.generic_avatar)
                     .into(profileImage);
-        } else {
-            Log.e("StudentsInfo", "❌ No profile image found in SharedPreferences, checking DB...");
-        }
-
-        if (phoneNumber == null || phoneNumber.isEmpty()) {
-            Log.e("StudentsInfo", "❌ ERROR: Phone number missing from SharedPreferences!");
-            return;
         }
 
         DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
             if (!userList.isEmpty()) {
                 UserDetailsClass user = userList.get(0);
-                Log.d("StudentsInfo", "✅ Loaded Correct User: " + user.getName());
+                Log.d("ProfilePageStudent", "✅ Loaded Correct User: " + user.getName());
 
                 runOnUiThread(() -> {
                     tvFullName.setText(user.getName());
@@ -477,25 +485,22 @@ public class StudentsInfo extends AppCompatActivity {
                     String imageName = user.getUserImageName();
                     if (imageName != null && !imageName.isEmpty()) {
                         String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
-                        Log.d("StudentsInfo", "✅ Profile image URL: " + imageUrl);
+                        Log.d("ProfilePageStudent", "✅ Loaded Image from Intent: " + imageUrl);
                         Glide.with(this)
                                 .load(imageUrl)
                                 .placeholder(R.drawable.generic_avatar)
                                 .error(R.drawable.generic_avatar)
                                 .into(profileImage);
-
-                        // ✅ Save to SharedPreferences for future use
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("USER_PROFILE_IMAGE", imageName);
-                        editor.apply();
                     } else {
-                        Log.e("StudentsInfo", "❌ No profile image found in DB or empty value.");
+                        Log.e("ProfilePageStudent", "❌ No image name found in intent.");
                     }
+
                 });
             } else {
-                Log.e("StudentsInfo", "❌ No user found in DB for phone: " + phoneNumber);
+                Log.e("ProfilePageStudent", "❌ No user found for phone: " + phoneNumber);
             }
         });
     }
+
 
 }

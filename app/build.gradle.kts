@@ -45,7 +45,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.pinview)
-    implementation(libs.okhttp)
     implementation(libs.volley)
     implementation(libs.androidx.viewpager2)
     implementation(libs.flexbox)
@@ -67,6 +66,7 @@ dependencies {
     implementation ("androidx.compose.ui:ui:1.5.1")
     implementation ("androidx.compose.material3:material3:1.1.2")
     implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+")
+
     // Google Gemini API
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
     annotationProcessor(libs.glide.compiler)

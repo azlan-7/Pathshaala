@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ShowTimeTableNew">
+
+
+    <AutoCompleteTextView
+        android:id="@+id/editTextText32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="204dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:ems="10"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Subject"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/editTextText49"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:ems="10"
+        android:focusable="true"
+        android:clickable="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Grade"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText32" />
+
+    <AutoCompleteTextView
+        android:id="@+id/editTextText50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:ems="10"
+        android:focusable="true"
+        android:clickable="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Day"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText49" />
+
+    <AutoCompleteTextView
+        android:id="@+id/editTextText51"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:ems="10"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/work_sans_light"
+        android:hint="Time Slot"
+        android:inputType="none"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText50" />
+
+    <ImageView
+        android:id="@+id/imageView52"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView102"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/detailonboardingbottom" />
+
+    <TextView
+        android:id="@+id/textView84"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Create Class"
+        android:textColor="#0F4D73"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/editTextText32"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView52" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button40"
+        android:layout_width="120dp"
+        android:layout_height="54dp"
+        android:background="@drawable/cornered_button"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Save"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText51"
+        app:layout_constraintVertical_bias="0.412" />
+</androidx.constraintlayout.widget.ConstraintLayout>

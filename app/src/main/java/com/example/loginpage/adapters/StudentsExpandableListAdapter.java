@@ -10,11 +10,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.loginpage.R;
 import com.example.loginpage.StudentsAcademicDetails;
 import com.example.loginpage.StudentsAcademicDetailsView;
+import com.example.loginpage.StudentsGrade;
+import com.example.loginpage.StudentsParentInfo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -139,6 +142,9 @@ public class StudentsExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_item, null);
         }
 
+        String sectionTitle = sectionTitles.get(groupPosition); // <-- Section name
+
+
         LinearLayout subjectContainer = convertView.findViewById(R.id.subjectContainer);
         subjectContainer.removeAllViews(); // ✅ Clear previous views to prevent duplication
 
@@ -159,13 +165,26 @@ public class StudentsExpandableListAdapter extends BaseExpandableListAdapter {
         if (itemName.toLowerCase().contains("view")) {
             itemIcon.setImageResource(R.drawable.visibility_24dp_0f4d73_fill0_wght400_grad0_opsz24); // View icon
         } else if (itemName.toLowerCase().contains("add")) {
-            itemIcon.setImageResource(R.drawable.add_24dp_0f4d73_fill0_wght400_grad0_opsz24); // Add icon
-            // Set click listener for "Add" icon
+            itemIcon.setImageResource(R.drawable.add_24dp_0f4d73_fill0_wght400_grad0_opsz24);
+
             itemIcon.setOnClickListener(v -> {
-                Intent intent = new Intent(context, StudentsAcademicDetails.class);
-                context.startActivity(intent);
+                switch (sectionTitle) {
+                    case "Academic Details":
+                        context.startActivity(new Intent(context, StudentsAcademicDetails.class));
+                        break;
+                    case "Grade":
+                        context.startActivity(new Intent(context, StudentsGrade.class)); // Replace with your actual activity
+                        break;
+                    case "Parent Guardian Details":
+                        context.startActivity(new Intent(context, StudentsParentInfo.class)); // If you want to allow editing or adding
+                        break;
+                    default:
+                        Toast.makeText(context, "Add functionality not set for this section", Toast.LENGTH_SHORT).show();
+                }
             });
-        } else if (itemName.toLowerCase().contains("edit")) {
+
+
+    } else if (itemName.toLowerCase().contains("edit")) {
             itemIcon.setImageResource(R.drawable.pencilvector); // Edit icon
         } else {
             itemIcon.setImageResource(R.drawable.dot_single_svgrepo_com); // Default fallback icon

@@ -318,7 +318,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         // Fallback if any section is still empty
         for (String title : sectionTitles) {
             List<String> list = sectionItems.get(title);
-            if (list != null && list.isEmpty() && !title.equals("Promotional Activities") && !title.equals("Dashboard")) {
+            if (list != null && list.isEmpty() && !title.equals("Promotional Activities") && !title.equals("Dashboard") && !title.equals("Account Info")) {
                 list.add("No Data Found");
             }
         }
@@ -332,6 +332,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         sectionItems = new HashMap<>();
 
         // Sections
+
         sectionTitles.add("Subject Expertise");
         sectionTitles.add("Education");
         sectionTitles.add("Work Experience");
@@ -341,6 +342,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
 
         sectionTitles.add("Promotional Activities");
         sectionTitles.add("Dashboard");
+        sectionTitles.add("Account Info");
 
         // Initialize with "Loading..." for dropdown sections
         for (int i = 0; i < 6; i++) {
@@ -352,6 +354,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         // Non-dropdowns
         sectionItems.put("Promotional Activities", new ArrayList<>());
         sectionItems.put("Dashboard", new ArrayList<>());
+        sectionItems.put("Account Info", new ArrayList<>());
 
         adapter = new CustomExpandableListAdapter(this, sectionTitles, sectionItems);
         expandableListView.setAdapter(adapter);
@@ -390,6 +393,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
                             List<String> list = headingMap.get(heading);
                             if (list != null && list.contains("Loading...")) list.clear();
                             list.add(description);
+
                         }
                     }
 
@@ -862,6 +866,9 @@ public class TeachersInfoSubSection extends AppCompatActivity {
                 break;
             case "Dashboard":
                 intent = new Intent(this, TeachersDashboardNew.class);
+                break;
+            case "Account Info":
+                intent = new Intent(this, TeachersBasicInfo.class);
                 break;
             default:
                 Toast.makeText(this, "Invalid selection!", Toast.LENGTH_SHORT).show();

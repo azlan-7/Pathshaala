@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans_bold"
-        android:text="Parent/Guardin Info"
+        android:text="Parent/Guardian Info"
         android:textColor="#0F4D73"
         android:textSize="22sp"
         android:textStyle="normal"
