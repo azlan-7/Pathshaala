@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NotificationTeachers">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button39"
+        android:layout_width="122dp"
+        android:layout_height="65dp"
+        android:layout_weight="1"
+        android:background="@drawable/cornered_button"
+        android:drawableRight="@drawable/send_24dp_ffffff_fill0_wght400_grad0_opsz24"
+        android:fontFamily="@font/work_sans_semibold"
+        android:text="Send"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.822" />
+
+    <EditText
+        android:id="@+id/editTextText30"
+        android:layout_width="243dp"
+        android:layout_height="140dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:gravity="top|start"
+        android:hint="Type your message"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/button39"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextText31"
+        android:layout_width="232dp"
+        android:layout_height="52dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:gravity="top|start"
+        android:hint="Message Title"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:textColorHint="#1674AE"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextText30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.875" />
+
+    <TextView
+        android:id="@+id/textView87"
+        android:layout_width="232dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Notify Students"
+        android:textColor="#0F4D73"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextText31"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.578" />
+</androidx.constraintlayout.widget.ConstraintLayout>

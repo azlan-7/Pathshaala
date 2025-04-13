@@ -3,6 +3,7 @@ package com.example.loginpage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -56,6 +57,7 @@ public class StudentsAcademicDetailsView extends AppCompatActivity {
             Intent intent = new Intent(StudentsAcademicDetailsView.this, StudentsAcademicDetails.class);
             startActivity(intent);
         });
+
 
         educationRecyclerView = findViewById(R.id.educationRecyclerView);
         educationRecyclerView.setLayoutManager(new LinearLayoutManager(this));

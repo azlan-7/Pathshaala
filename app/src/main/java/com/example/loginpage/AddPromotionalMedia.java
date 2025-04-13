@@ -17,12 +17,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.loginpage.adapters.MediaAdapter;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class AddPromotionalMedia extends AppCompatActivity {
 
-    private static final int PICK_VIDEO_REQUEST = 1;
-    private ImageView mediaImageView, backButton;  // Image to trigger video selection
-    private VideoView videoView;  // VideoView to play the selected video
+    private ImageView backButton;  // Image to trigger video selection
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,28 +35,32 @@ public class AddPromotionalMedia extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_promotional_media);
 
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewMedia);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+
+        List<Uri> mediaList = Arrays.asList(
+                Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.teaching1),
+                Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.teaching2),
+                Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.teaching3),
+                Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.samplevideo) // For video
+        );
+
+
+        MediaAdapter adapter = new MediaAdapter(this, mediaList);
+        recyclerView.setAdapter(adapter);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Find views
-        mediaImageView = findViewById(R.id.image_select_vid);
-        videoView = findViewById(R.id.videoView);
+
         Button saveButton = findViewById(R.id.button15);
         backButton = findViewById(R.id.imageView156);
 
         backButton.setOnClickListener(v -> finish());
-
-
-        // Set click listener to open video picker
-        mediaImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openVideoPicker();
-            }
-        });
 
         saveButton.setOnClickListener(v -> {
             Toast.makeText(AddPromotionalMedia.this, "Saved Successfully!", Toast.LENGTH_SHORT).show();
@@ -61,47 +70,4 @@ public class AddPromotionalMedia extends AppCompatActivity {
         });
     }
 
-    // Method to open video picker
-    private void openVideoPicker() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("video/*");  // Only allow video selection
-        startActivityForResult(intent, PICK_VIDEO_REQUEST);
-    }
-
-    // Handle selected video
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null) {
-            Uri selectedVideoUri = data.getData();
-            if (selectedVideoUri != null) {
-                // Hide ImageView and show VideoView
-                mediaImageView.setVisibility(View.GONE);
-                videoView.setVisibility(View.VISIBLE);
-
-                // Set video URI and add controls
-                videoView.setVideoURI(selectedVideoUri);
-                videoView.setMediaController(new MediaController(this));
-                videoView.requestFocus();
-                videoView.start();
-
-                Button saveButton = findViewById(R.id.button15);
-
-                saveButton.setOnClickListener(v -> {
-                    Toast.makeText(AddPromotionalMedia.this, "Saved Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddPromotionalMedia.this, TeachersInfo.class);
-                    startActivity(intent);
-                    finish(); // Close current activity
-
-                });
-
-                TextView textView54 = findViewById(R.id.textView54);
-                saveButton.setVisibility(View.VISIBLE);
-
-                // Change text
-                textView54.setText("");
-            }
-        }
-    }
 }

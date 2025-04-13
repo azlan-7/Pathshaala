@@ -21,7 +21,7 @@
 
     <item
         android:id="@+id/profile"
-        android:title="Profile"
-        android:icon="@drawable/profile_icon_no_bg"
+        android:title="TimeTable"
+        android:icon="@drawable/calendaricon"
         app:iconSize="30dp"/>
 </menu>

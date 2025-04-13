@@ -25,11 +25,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import com.example.loginpage.models.UserDetailsClass;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.models.UserDetailsClass;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -57,8 +59,9 @@ import java.util.List;
 public class TeachersDashboardNew extends AppCompatActivity {
 
     private TextView welcomeText;
+    private UserDetailsClass user;
     private ImageView profileIcon, profileIconTop;
-    private ImageView searchButton;
+    private ImageView searchButton,notificationButton;
     private ImageButton whatsappButton;
     Handler mainTextHandler = new Handler();
     BarChart barChart;
@@ -84,6 +87,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
         welcomeText = findViewById(R.id.textViewHello); // Corrected TextView ID
         profileIcon = findViewById(R.id.imageView151);
         profileIconTop = findViewById(R.id.imageView151);
+        notificationButton = findViewById(R.id.imageView141);
 
         // ✅ Fetch Profile Image from Database
         fetchProfileImageFromDB();
@@ -119,6 +123,11 @@ public class TeachersDashboardNew extends AppCompatActivity {
 
         profileIconTop.setOnClickListener(v -> {
             Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfoSubSection.class);
+            startActivity(intent);
+        });
+
+        notificationButton.setOnClickListener(v -> {
+            Intent intent = new Intent(TeachersDashboardNew.this, NotificationTeachers.class);
             startActivity(intent);
         });
 
@@ -172,8 +181,14 @@ public class TeachersDashboardNew extends AppCompatActivity {
             } else if (itemId == R.id.home) {
                 Intent intent = new Intent(TeachersDashboardNew.this, TeachersDashboardNew.class);
                 startActivity(intent);
-            } else if (itemId == R.id.profile) {
-                Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfoSubSection.class);
+            }
+            else if(itemId == R.id.goLive){
+                Intent intent = new Intent(TeachersDashboardNew.this, SampleGoLiveZego.class);
+
+                startActivity(intent);
+            }
+            else if (itemId == R.id.profile) {
+                Intent intent = new Intent(TeachersDashboardNew.this, ShowTimeTable.class);
                 startActivity(intent);
             }
             else if(itemId == R.id.goLive){

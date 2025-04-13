@@ -1,15 +1,23 @@
 package com.example.loginpage.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.loginpage.R;
+import com.example.loginpage.StudentsAcademicDetails;
+import com.example.loginpage.StudentsAcademicDetailsView;
+import com.example.loginpage.StudentsGrade;
+import com.example.loginpage.StudentsParentInfo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -134,21 +142,57 @@ public class StudentsExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_item, null);
         }
 
-        TextView listItemText = convertView.findViewById(R.id.listItemText);
-        ImageView itemIcon = convertView.findViewById(R.id.itemIcon);
+        String sectionTitle = sectionTitles.get(groupPosition); // <-- Section name
 
+
+        LinearLayout subjectContainer = convertView.findViewById(R.id.subjectContainer);
+        subjectContainer.removeAllViews(); // ✅ Clear previous views to prevent duplication
+
+        ImageView itemIcon = convertView.findViewById(R.id.itemIcon);
         String itemName = (String) getChild(groupPosition, childPosition);
+
+        // ✅ Create a new TextView dynamically
+        TextView listItemText = new TextView(context);
         listItemText.setText(itemName);
+        listItemText.setTextColor(Color.parseColor("#0F4D73"));
+        listItemText.setTextSize(16);
+        listItemText.setPadding(10, 0, 10, 0);
+
+        // ✅ Add the dynamically created TextView to the container
+        subjectContainer.addView(listItemText);
 
         // 🔹 Assign icons based on keywords
         if (itemName.toLowerCase().contains("view")) {
             itemIcon.setImageResource(R.drawable.visibility_24dp_0f4d73_fill0_wght400_grad0_opsz24); // View icon
         } else if (itemName.toLowerCase().contains("add")) {
-            itemIcon.setImageResource(R.drawable.add_24dp_0f4d73_fill0_wght400_grad0_opsz24); // Add icon
-        } else if (itemName.toLowerCase().contains("edit")) {
+            itemIcon.setImageResource(R.drawable.add_24dp_0f4d73_fill0_wght400_grad0_opsz24);
+
+            itemIcon.setOnClickListener(v -> {
+                switch (sectionTitle) {
+                    case "Academic Details":
+                        context.startActivity(new Intent(context, StudentsAcademicDetails.class));
+                        break;
+                    case "Grade":
+                        context.startActivity(new Intent(context, StudentsGrade.class)); // Replace with your actual activity
+                        break;
+                    case "Parent Guardian Details":
+                        context.startActivity(new Intent(context, StudentsParentInfo.class)); // If you want to allow editing or adding
+                        break;
+                    default:
+                        Toast.makeText(context, "Add functionality not set for this section", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+    } else if (itemName.toLowerCase().contains("edit")) {
             itemIcon.setImageResource(R.drawable.pencilvector); // Edit icon
         } else {
-            itemIcon.setImageResource(R.drawable.star_24dp_0f4d73_fill0_wght400_grad0_opsz24); // Default fallback icon
+            itemIcon.setImageResource(R.drawable.dot_single_svgrepo_com); // Default fallback icon
+            // Set click listener for "Add" icon
+            itemIcon.setOnClickListener(v -> {
+                Intent intent = new Intent(context, StudentsAcademicDetailsView.class);
+                context.startActivity(intent);
+            });
         }
 
         return convertView;

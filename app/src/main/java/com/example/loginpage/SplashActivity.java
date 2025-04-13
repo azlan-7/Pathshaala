@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             Log.d("SplashActivity", "Transitioning to Welcome Activity");
-            Intent intent = new Intent(SplashActivity.this, ShowTimeTable.class);
+            Intent intent = new Intent(SplashActivity.this, StudentsInfo.class);
             startActivity(intent);
             finish(); // Close SplashActivity
         }, SPLASH_TIME_OUT);

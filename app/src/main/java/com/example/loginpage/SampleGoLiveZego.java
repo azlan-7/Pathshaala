@@ -15,6 +15,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.models.VirtualClassClass;
+
 import java.util.UUID;
 
 public class SampleGoLiveZego extends AppCompatActivity {
@@ -22,7 +25,7 @@ public class SampleGoLiveZego extends AppCompatActivity {
     private Button goLiveBtn;
     public EditText liveClassIdInput, yourNameInput;
 
-    SharedPreferences sharedPreferences;
+    public SharedPreferences sharedPreferences;
 
     String liveID, name, userID;
     @Override
@@ -36,13 +39,14 @@ public class SampleGoLiveZego extends AppCompatActivity {
             return insets;
         });
 
-        sharedPreferences = getSharedPreferences("name_pref", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+
 
         goLiveBtn = findViewById(R.id.goLiveBtn);
         liveClassIdInput = findViewById(R.id.liveClassIdInput);
         yourNameInput = findViewById(R.id.yourClassNameInput);
 
-        yourNameInput.setText(sharedPreferences.getString("name", ""));
+        yourNameInput.setText(sharedPreferences.getString("selfreferralcode", ""));
 
         liveClassIdInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -67,20 +71,14 @@ public class SampleGoLiveZego extends AppCompatActivity {
         });
 
         goLiveBtn.setOnClickListener(v -> {
-            name = yourNameInput.getText().toString();
-            if(name.isEmpty()){
-                yourNameInput.setError("Please enter your name");
-                yourNameInput.requestFocus();
-                return;
-            }
             liveID = liveClassIdInput.getText().toString();
             if(liveID.length() > 0 && liveID.length() != 5){
                 liveClassIdInput.setError("Please enter a valid LIVE ID");
                 liveClassIdInput.requestFocus();
                 return;
             }
-
             startMeeting();
+            insertLiveID(1);
         });
     }
 
@@ -111,5 +109,20 @@ public class SampleGoLiveZego extends AppCompatActivity {
             id.append(random);
         }
         return id.toString();
+    }
+
+
+    private void insertLiveID(int qryStatus) {
+        VirtualClassClass virtualClass = new VirtualClassClass();
+        virtualClass.setUserId(sharedPreferences.getInt("USER_ID",-1)); // Assuming user ID is not needed
+        virtualClass.setSelfReferralCode(sharedPreferences.getString("selfreferralcode", "")); // No referral code needed
+        virtualClass.setClassId(0); // No class ID needed
+        virtualClass.setTimeTableId(0); // No timetable ID needed
+        virtualClass.setLiveId(liveID); // Only storing the live ID
+        virtualClass.setClassStartTime(null); // No start time needed
+
+        DatabaseHelper.VirtualClassInsert(this, qryStatus, virtualClass, result -> {
+            Log.i("DB", "Live ID Inserted: " + liveID);
+        });
     }
 }

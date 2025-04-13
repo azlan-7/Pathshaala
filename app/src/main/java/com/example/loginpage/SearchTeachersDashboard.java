@@ -1,10 +1,13 @@
 package com.example.loginpage;
 
+import static im.zego.connection.internal.ZegoConnectionImpl.context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ImageView;
 
@@ -62,6 +65,20 @@ public class SearchTeachersDashboard extends AppCompatActivity {
                     name.setText(student.getName());
                     email.setText(student.getEmailId());
                     referral.setText(student.getSelfReferralCode());
+
+
+
+                    profileIcon.setOnClickListener(v -> {
+                        Intent intent = new Intent(this, ProfilePageStudent.class);
+                        intent.putExtra("USER_PHONE", student.getMobileNo());
+                        intent.putExtra("USER_IMAGE", student.getUserImageName()); // 👈 pass image name
+                        intent.putExtra("USER_ID", student.getUserId()); // 👈 if you're passing userId too
+                        intent.putExtra("USER_FIRST_NAME", student.getName());
+                        intent.putExtra("USER_LAST_NAME", student.getLastName());
+                        intent.putExtra("USER_SELF_REFERRAL", student.getSelfReferralCode());
+                        intent.putExtra("USER_EMAIL", student.getEmailId());
+                        startActivity(intent);
+                    });
 
                     // ✅ Fetch Grade & Institution from UserWiseEducation
                     DatabaseHelper.UserWiseEducationSelect(this, "3", student.getUserId(), new DatabaseHelper.UserWiseEducationResultListener() {

@@ -12,7 +12,7 @@ import com.example.loginpage.databinding.FragmentSecondBinding;
 
 public class SecondFragment extends Fragment {
 
-private FragmentSecondBinding binding;
+    private FragmentSecondBinding binding;
 
     @Override
     public View onCreateView(
@@ -20,8 +20,8 @@ private FragmentSecondBinding binding;
             Bundle savedInstanceState
     ) {
 
-      binding = FragmentSecondBinding.inflate(inflater, container, false);
-      return binding.getRoot();
+        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        return binding.getRoot();
 
     }
 
@@ -34,7 +34,7 @@ private FragmentSecondBinding binding;
         );
     }
 
-@Override
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;

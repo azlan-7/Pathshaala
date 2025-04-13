@@ -1,13 +1,17 @@
 package com.example.loginpage.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper.TimeTableEntry;
 import com.example.loginpage.R;
 
 import java.util.HashMap;
@@ -15,36 +19,48 @@ import java.util.List;
 
 public class TimeTableExpandableListAdapter extends BaseExpandableListAdapter {
 
-    private final Context context;
-    private final List<String> groupList;
-    private final HashMap<String, List<String>> itemMap;
-    private boolean isEditMode = false;
-    private int editingGroupPosition = -1;
+    private Context context;
+    private List<String> listDays; // Group titles (e.g., Monday, Tuesday)
+    private HashMap<String, List<TimeTableEntry>> listTimeTable;
 
-    public TimeTableExpandableListAdapter(Context context, List<String> groupList, HashMap<String, List<String>> itemMap) {
+    private int selectedGroupPosition = -1;
+    private int selectedChildPosition = -1;
+
+
+    public TimeTableExpandableListAdapter(Context context, List<String> listDays,
+                                          HashMap<String, List<DatabaseHelper.TimeTableEntry>> listTimeTable) {
         this.context = context;
-        this.groupList = groupList;
-        this.itemMap = itemMap;
+        this.listDays = listDays;
+        this.listTimeTable = listTimeTable;
     }
+
+    public void setSelectedItem(int groupPosition, int childPosition) {
+        this.selectedGroupPosition = groupPosition;
+        this.selectedChildPosition = childPosition;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getGroupCount() {
-        return groupList.size();
+        return listDays.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return itemMap.get(groupList.get(groupPosition)).size();
+        String day = listDays.get(groupPosition);
+        return listTimeTable.get(day).size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return groupList.get(groupPosition);
+        return listDays.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return itemMap.get(groupList.get(groupPosition)).get(childPosition);
+        String day = listDays.get(groupPosition);
+        return listTimeTable.get(day).get(childPosition);
     }
 
     @Override
@@ -62,67 +78,64 @@ public class TimeTableExpandableListAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-    // Group view
+    // Group view (day)
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String title = (String) getGroup(groupPosition);
+        String day = (String) getGroup(groupPosition);
+
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
+            LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
         }
-        TextView textView = convertView.findViewById(android.R.id.text1);
-        textView.setText(title);
+
+        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+        textView.setText(day);
+
         return convertView;
     }
 
-    // Child view
+    // Child view (class entry)
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                              View convertView, ViewGroup parent) {
-        String item = (String) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.list_item_child, parent, false);
+            LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(android.R.layout.simple_list_item_2, parent, false);
         }
 
-        TextView textView = convertView.findViewById(R.id.classTimeTextView);
-        EditText editText = convertView.findViewById(R.id.classTimeEditText);
+        TimeTableEntry entry = (TimeTableEntry) getChild(groupPosition, childPosition);
 
-        if ("Edit Timetable".equals(item)) {
-            textView.setText(item);
-            textView.setVisibility(View.VISIBLE);
-            editText.setVisibility(View.GONE);
-
-            convertView.setOnClickListener(v -> {
-                isEditMode = true;
-                editingGroupPosition = groupPosition;
-                notifyDataSetChanged();
-            });
-
+        if (groupPosition == selectedGroupPosition && childPosition == selectedChildPosition) {
+            convertView.setBackgroundColor(ContextCompat.getColor(context, R.color.light_blue)); // Highlight if selected
         } else {
-            textView.setText(item);
-            editText.setText(item);
+            convertView.setBackgroundColor(Color.TRANSPARENT); // Reset to default
+        }
 
-            if (isEditMode && groupPosition == editingGroupPosition) {
-                textView.setVisibility(View.GONE);
-                editText.setVisibility(View.VISIBLE);
+        TextView text1 = convertView.findViewById(android.R.id.text1);
+        TextView text2 = convertView.findViewById(android.R.id.text2);
 
-                editText.setOnFocusChangeListener((v, hasFocus) -> {
-                    if (!hasFocus) {
-                        String updated = editText.getText().toString();
-                        itemMap.get(groupList.get(groupPosition)).set(childPosition, updated);
-                        textView.setText(updated);
-                        notifyDataSetChanged();
-                    }
-                });
+        String subject = entry.subjectName != null ? entry.subjectName : "";
+        String grade = entry.gradeName != null ? entry.gradeName : "";
+        String start = entry.startTime != null ? entry.startTime : "";
+        String end = entry.endTime != null ? entry.endTime : "";
+        String room = entry.roomNo != null ? entry.roomNo : "";
 
-            } else {
-                textView.setVisibility(View.VISIBLE);
-                editText.setVisibility(View.GONE);
-            }
+        if ("Edit Timetable".equals(subject)) {
+            text1.setText("Edit Timetable");
+            text2.setText("");
+        } else {
+            // Show ✅ if selected via remark (not just adapter selection)
+            String tick = (entry.remark != null && entry.remark.contains("✓")) ? " ✅" : "";
+            text1.setText(subject + " - " + grade + tick);
+            text2.setText(start + " to " + end + (room.isEmpty() ? "" : " | Room: " + room));
         }
 
         return convertView;
     }
+
+
+
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {

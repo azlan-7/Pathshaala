@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView android:id="@+id/tvFatherName" android:textStyle="bold" />
+        <TextView android:id="@+id/tvFatherContact" />
+        <TextView android:id="@+id/tvMotherName" android:textStyle="bold" />
+        <TextView android:id="@+id/tvMotherContact" />
+        <TextView android:id="@+id/tvGuardianName" android:textStyle="bold" />
+        <TextView android:id="@+id/tvGuardianRelation" />
+        <TextView android:id="@+id/tvGuardianContact" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
