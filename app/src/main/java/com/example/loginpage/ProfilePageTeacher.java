@@ -33,6 +33,7 @@ import com.example.loginpage.models.Education;
 import com.example.loginpage.models.UserDetailsClass;
 import com.example.loginpage.adapters.CustomExpandableListAdapter;
 import com.example.loginpage.models.UserInfoItem;
+import com.example.loginpage.models.UserSearchResult;
 import com.example.loginpage.models.UserWiseEducation;
 import com.example.loginpage.models.UserWiseGrades;
 import com.example.loginpage.models.UserWiseSubject;
@@ -123,15 +124,15 @@ public class ProfilePageTeacher extends AppCompatActivity {
         });
 
 
-        String userId = getIntent().getStringExtra("USER_ID");
+//        String userId = getIntent().getStringExtra("USER_ID");
         String phoneNumber = getIntent().getStringExtra("USER_PHONE");
 
 
-        if (userId == null || userId.isEmpty() || phoneNumber == null || phoneNumber.isEmpty()) {
-            Toast.makeText(this, "Invalid user info", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+//        if (userId == null || userId.isEmpty() || phoneNumber == null || phoneNumber.isEmpty()) {
+//            Toast.makeText(this, "Invalid user info", Toast.LENGTH_SHORT).show();
+//            finish();
+//            return;
+//        }
 
         Log.d("ProfilePageTeacher", "UserID received: " + userId + ", Phone: " + phoneNumber);
 
@@ -340,8 +341,50 @@ public class ProfilePageTeacher extends AppCompatActivity {
             return;
         }
 
-        Log.d("ProfilePageTeacher","UserId fetched through sharedpreferences: " + userId);
+        Log.d("ProfilePageTeacher","UserId fetched through intent: " + userId);
         getAllTeacherInfoByUserId(userId); // or getTeacherInfoByPhone(phoneNumber)
+
+//        loadTeacherInfoFromProcedure(userId);
+
+    }
+
+
+    private void loadTeacherInfoFromProcedure(int userId) {
+        new Thread(() -> {
+            List<UserSearchResult> results = DatabaseHelper.getUserSearchResults("T", 1, 0, 0);
+
+            runOnUiThread(() -> {
+                if (results != null && !results.isEmpty()) {
+                    Map<String, List<String>> headingMap = new HashMap<>();
+                    headingMap.put("Subject", sectionItems.get("Subject Expertise"));
+                    headingMap.put("Grades", sectionItems.get("Grades Taught"));
+                    headingMap.put("Work", sectionItems.get("Work Experience")); // You can enrich this
+                    headingMap.put("Education", sectionItems.get("Education"));
+
+                    for (UserSearchResult item : results) {
+                        if (item.getUserId() == userId) {
+                            Log.d("ProfilePageTeacher", "Matched User ID: " + item.getUserId());
+
+                            headingMap.get("Subject").add("Subject: " + item.getSubjectName());
+                            headingMap.get("Grades").add("Grade: " + item.getGradeName());
+                            headingMap.get("Work").add("Institution: " + item.getInstitutionName());
+                            headingMap.get("Education").add("Referral Code: " + item.getSelfReferralCode());
+
+                            break;
+                        }
+                    }
+
+                    // Add "Add" button
+                    for (Map.Entry<String, List<String>> entry : headingMap.entrySet()) {
+                        entry.getValue().add("Add");
+                    }
+
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.e("ProfilePageTeacher", "No results from procedure for teachers.");
+                }
+            });
+        }).start();
     }
 
 

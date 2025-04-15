@@ -142,56 +142,55 @@ public class StudentsExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_item, null);
         }
 
-        String sectionTitle = sectionTitles.get(groupPosition); // <-- Section name
-
-
+        String sectionTitle = sectionTitles.get(groupPosition);
         LinearLayout subjectContainer = convertView.findViewById(R.id.subjectContainer);
-        subjectContainer.removeAllViews(); // ✅ Clear previous views to prevent duplication
+        subjectContainer.removeAllViews();
 
         ImageView itemIcon = convertView.findViewById(R.id.itemIcon);
         String itemName = (String) getChild(groupPosition, childPosition);
 
-        // ✅ Create a new TextView dynamically
         TextView listItemText = new TextView(context);
         listItemText.setText(itemName);
         listItemText.setTextColor(Color.parseColor("#0F4D73"));
         listItemText.setTextSize(16);
         listItemText.setPadding(10, 0, 10, 0);
-
-        // ✅ Add the dynamically created TextView to the container
         subjectContainer.addView(listItemText);
 
-        // 🔹 Assign icons based on keywords
         if (itemName.toLowerCase().contains("view")) {
-            itemIcon.setImageResource(R.drawable.visibility_24dp_0f4d73_fill0_wght400_grad0_opsz24); // View icon
+            itemIcon.setImageResource(R.drawable.visibility_24dp_0f4d73_fill0_wght400_grad0_opsz24);
         } else if (itemName.toLowerCase().contains("add")) {
             itemIcon.setImageResource(R.drawable.add_24dp_0f4d73_fill0_wght400_grad0_opsz24);
 
             itemIcon.setOnClickListener(v -> {
-                switch (sectionTitle) {
-                    case "Academic Details":
-                        context.startActivity(new Intent(context, StudentsAcademicDetails.class));
-                        break;
-                    case "Grade":
-                        context.startActivity(new Intent(context, StudentsGrade.class)); // Replace with your actual activity
-                        break;
-                    case "Parent Guardian Details":
-                        context.startActivity(new Intent(context, StudentsParentInfo.class)); // If you want to allow editing or adding
-                        break;
-                    default:
-                        Toast.makeText(context, "Add functionality not set for this section", Toast.LENGTH_SHORT).show();
+                if (context != null) { // Add null check for context
+                    switch (sectionTitle) {
+                        case "Academic Details":
+                            context.startActivity(new Intent(context, StudentsAcademicDetails.class));
+                            break;
+                        case "Grade":
+                            context.startActivity(new Intent(context, StudentsGrade.class));
+                            break;
+                        case "Parent Guardian Details":
+                            context.startActivity(new Intent(context, StudentsParentInfo.class));
+                            break;
+                        default:
+                            Toast.makeText(context, "Add functionality not set for this section", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Context is null", Toast.LENGTH_SHORT).show();
                 }
             });
-
-
-    } else if (itemName.toLowerCase().contains("edit")) {
-            itemIcon.setImageResource(R.drawable.pencilvector); // Edit icon
+        } else if (itemName.toLowerCase().contains("edit")) {
+            itemIcon.setImageResource(R.drawable.pencilvector);
         } else {
-            itemIcon.setImageResource(R.drawable.dot_single_svgrepo_com); // Default fallback icon
-            // Set click listener for "Add" icon
+            itemIcon.setImageResource(R.drawable.dot_single_svgrepo_com);
             itemIcon.setOnClickListener(v -> {
-                Intent intent = new Intent(context, StudentsAcademicDetailsView.class);
-                context.startActivity(intent);
+                if (context != null) {
+                    Intent intent = new Intent(context, StudentsAcademicDetailsView.class);
+                    context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Context is null", Toast.LENGTH_SHORT).show();
+                }
             });
         }
 

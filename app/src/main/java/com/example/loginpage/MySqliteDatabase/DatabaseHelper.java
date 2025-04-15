@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import com.example.loginpage.models.UserDetailsClass;
 import com.example.loginpage.models.UserInfoItem;
+import com.example.loginpage.models.UserSearchResult;
 import com.example.loginpage.models.UserWiseEducation;
 import com.example.loginpage.models.UserWiseGrades;
 import com.example.loginpage.models.UserWiseSubject;
@@ -109,6 +110,8 @@ public class DatabaseHelper {
         void onSuccess(String message);
         void onError(String error);
     }
+
+
 
 
     public static Connection getConnection() {
@@ -2347,6 +2350,107 @@ public class DatabaseHelper {
         void onSuccess(T result);
         void onError(String error);
     }
+
+    public static void searchUsersForTS(
+            Context context,
+            String userType,
+            int currentProfession,
+            int gradeId,
+            int subjectId,
+            ProcedureResultCallback<List<UserSearchResult>> callback
+    ) {
+        new Thread(() -> {
+            List<UserSearchResult> resultList = new ArrayList<>();
+            Connection conn = null;
+            CallableStatement stmt = null;
+            ResultSet rs = null;
+
+            try {
+                conn = getConnection();
+                stmt = conn.prepareCall("{call sp_UserSearchforTS(?, ?, ?, ?)}");
+                stmt.setString(1, userType); // 'T' for Teacher or 'S' for Student
+                stmt.setInt(2, currentProfession); // 1: Current, 2: Previous, 0: Not mentioned
+                stmt.setInt(3, gradeId); // Grade ID or 0
+                stmt.setInt(4, subjectId); // Subject ID or 0
+
+                rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    UserSearchResult result = new UserSearchResult();
+                    result.setUserId(rs.getInt("UserId"));
+                    result.setUserType(rs.getString("userType"));
+                    result.setGradeId(rs.getInt("GradeID"));
+                    result.setGradeName(rs.getString("GradeName"));
+                    result.setSubjectId(rs.getInt("SubjectId"));
+                    result.setSubjectName(rs.getString("SubjectName"));
+                    result.setDesignationName(rs.getString("DesignationName"));
+                    result.setInstitutionName(rs.getString("InstitutionName"));
+                    result.setUsername(rs.getString("username"));
+                    result.setMobileNo(rs.getString("mobileno"));
+                    result.setSelfReferralCode(rs.getString("selfreferralcode"));
+                    result.setCurrentProfession(rs.getInt("CurrentProfession"));
+                    result.setCurrentProfessionRem(rs.getString("CurrentProfessionRem"));
+
+                    resultList.add(result);
+                }
+
+                List<UserSearchResult> finalResultList = resultList;
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (callback != null) callback.onSuccess(finalResultList);
+                });
+
+            } catch (Exception e) {
+                String errorMsg = "❌ Error fetching search results: " + e.getMessage();
+                Log.e("DatabaseHelper", errorMsg, e);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (callback != null) callback.onError(errorMsg);
+                });
+            } finally {
+                try {
+                    if (rs != null) rs.close();
+                    if (stmt != null) stmt.close();
+                    if (conn != null) conn.close();
+                } catch (SQLException e) {
+                    Log.e("DatabaseHelper", "❌ Error closing resources: " + e.getMessage(), e);
+                }
+            }
+        }).start();
+    }
+
+
+    public static List<UserSearchResult> getUserSearchResults(String userType, int currentProfession, int gradeId, int subjectId) {
+        List<UserSearchResult> resultList = new ArrayList<>();
+
+        try (Connection conn = getConnection()) {
+            CallableStatement stmt = conn.prepareCall("{call sp_UserSearchforTS(?, ?, ?, ?)}");
+            stmt.setString(1, userType); // 'T' or 'S'
+            stmt.setInt(2, currentProfession);
+            stmt.setInt(3, gradeId);
+            stmt.setInt(4, subjectId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserSearchResult result = new UserSearchResult();
+
+                result.setUserId(rs.getInt("UserId"));
+                result.setGradeId(rs.getInt("GradeID"));
+                result.setGradeName(rs.getString("GradeName"));
+                result.setSubjectId(rs.getInt("SubjectId"));
+                result.setSubjectName(rs.getString("SubjectName"));
+                result.setInstitutionName(rs.getString("InstitutionName"));
+                result.setUserType(rs.getString("userType"));
+                result.setMobileNo(rs.getString("mobileno"));
+                result.setSelfReferralCode(rs.getString("selfreferralcode"));
+
+                resultList.add(result);
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error in getUserSearchResults: " + e.getMessage(), e);
+        }
+
+        return resultList;
+    }
+
 
 
 }

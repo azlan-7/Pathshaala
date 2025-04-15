@@ -100,7 +100,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
 //        MoveToWhatsAppScreen();
         // Grade & Subject Data
         String[] grades = {"Primary","Secondary","Middle School","9th", "10th", "11th", "12th"};
-        String[] subjects = {"Math", "Science", "English", "History", "Geography"};
+        String[] subjects = {"Math", "Science", "English", "History", "Geography","Biology"};
 
         autoCompleteGrade.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades));
         autoCompleteSubject.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects));
@@ -112,7 +112,12 @@ public class TeachersDashboardNew extends AppCompatActivity {
         fetchCityData(autoCompleteLocation);
 
         searchButton.setOnClickListener(v -> {
+            String selectedGrade = autoCompleteGrade.getText().toString();
+            String selectedSubject = autoCompleteSubject.getText().toString();
+
             Intent intent = new Intent(this, SearchTeachersDashboard.class);
+            intent.putExtra("GRADE", selectedGrade);
+            intent.putExtra("SUBJECT", selectedSubject);
             startActivity(intent);
         });
 

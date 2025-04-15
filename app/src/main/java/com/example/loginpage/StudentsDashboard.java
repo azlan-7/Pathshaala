@@ -88,7 +88,15 @@ public class StudentsDashboard extends AppCompatActivity {
         });
 
         searchButton.setOnClickListener(v -> {
+            AutoCompleteTextView autoCompleteGrade = findViewById(R.id.autoCompleteGrade);
+            AutoCompleteTextView autoCompleteSubject = findViewById(R.id.autoCompleteSubject);
+
+            String selectedGrade = autoCompleteGrade.getText().toString();
+            String selectedSubject = autoCompleteSubject.getText().toString();
+
             Intent intent = new Intent(this, SearchStudentsDashboard.class);
+            intent.putExtra("GRADE", selectedGrade);
+            intent.putExtra("SUBJECT", selectedSubject);
             startActivity(intent);
         });
 
@@ -222,8 +230,8 @@ public class StudentsDashboard extends AppCompatActivity {
 //    }
 
     private void setupDropdowns() {
-        List<String> grades = Arrays.asList("Primary","Secondary","Middle School","9th", "10th", "11th", "12th");
-        List<String> subjects = Arrays.asList("Math", "Science", "English", "History", "Geography");
+        List<String> grades = Arrays.asList("Primary","Secondary","Middle School","1-5","6-8","9th", "10th", "11th", "12th");
+        List<String> subjects = Arrays.asList("Accountancy","Math", "Science", "English", "History", "Geography","Economics","Computer Science","Sociology","Business Studies");
 //        List<String> locations = Arrays.asList("New York", "Los Angeles", "Chicago", "Houston", "Phoenix");
 
         AutoCompleteTextView autoCompleteGrade = findViewById(R.id.autoCompleteGrade);

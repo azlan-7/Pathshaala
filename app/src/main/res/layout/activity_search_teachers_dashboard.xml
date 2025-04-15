@@ -32,51 +32,58 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
+            android:id="@+id/cardContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:orientation="vertical" />
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:padding="8dp">-->
+
 
             <!-- Card 1 -->
-            <include layout="@layout/student_card"
-                android:id="@+id/cardStudent1"
-                tools:studentName="John Doe"
-                tools:grade="Grade: 10"
-                tools:subjects="Learning: Math, Science"
-                tools:location="Lucknow"/>
+<!--            <include layout="@layout/student_card"-->
+<!--                android:id="@+id/cardStudent1"-->
+<!--                tools:studentName="John Doe"-->
+<!--                tools:grade="Grade: 10"-->
+<!--                tools:subjects="Learning: Math, Science"-->
+<!--                tools:location="Lucknow"/>-->
 
-            <!-- Card 2 -->
-            <include layout="@layout/student_card"
-                android:id="@+id/cardStudent2"
-                tools:studentName="Jane Doe"
-                tools:grade="Grade: 8"
-                tools:subjects="Learning: English, History"
-                tools:location="Delhi"/>
+<!--            &lt;!&ndash; Card 2 &ndash;&gt;-->
+<!--            <include layout="@layout/student_card"-->
+<!--                android:id="@+id/cardStudent2"-->
+<!--                tools:studentName="Jane Doe"-->
+<!--                tools:grade="Grade: 8"-->
+<!--                tools:subjects="Learning: English, History"-->
+<!--                tools:location="Delhi"/>-->
 
-            <!-- Card 3 -->
-            <include layout="@layout/student_card"
-                android:id="@+id/cardStudent3"
-                tools:studentName="Arjun Kumar"
-                tools:grade="Grade: 9"
-                tools:subjects="Learning: Physics, Chemistry"
-                tools:location="Mumbai"/>
+<!--            &lt;!&ndash; Card 3 &ndash;&gt;-->
+<!--            <include layout="@layout/student_card"-->
+<!--                android:id="@+id/cardStudent3"-->
+<!--                tools:studentName="Arjun Kumar"-->
+<!--                tools:grade="Grade: 9"-->
+<!--                tools:subjects="Learning: Physics, Chemistry"-->
+<!--                tools:location="Mumbai"/>-->
 
-            <!-- Card 4 -->
-            <include layout="@layout/student_card"
-                android:id="@+id/cardStudent4"
-                tools:studentName="Sara Ali"
-                tools:grade="Grade: 7"
-                tools:subjects="Learning: Biology, Geography"
-                tools:location="Bangalore"/>
+<!--            &lt;!&ndash; Card 4 &ndash;&gt;-->
+<!--            <include layout="@layout/student_card"-->
+<!--                android:id="@+id/cardStudent4"-->
+<!--                tools:studentName="Sara Ali"-->
+<!--                tools:grade="Grade: 7"-->
+<!--                tools:subjects="Learning: Biology, Geography"-->
+<!--                tools:location="Bangalore"/>-->
 
-            <!-- Card 5 -->
-            <include layout="@layout/student_card"
-                android:id="@+id/cardStudent5"
-                tools:studentName="Dwight Shrute"
-                tools:grade="Grade: 7"
-                tools:subjects="Learning: History, Geography"
-                tools:location="Jau"/>
-        </LinearLayout>
+<!--            &lt;!&ndash; Card 5 &ndash;&gt;-->
+<!--            <include layout="@layout/student_card"-->
+<!--                android:id="@+id/cardStudent5"-->
+<!--                tools:studentName="Dwight Shrute"-->
+<!--                tools:grade="Grade: 7"-->
+<!--                tools:subjects="Learning: History, Geography"-->
+<!--                tools:location="Jau"/>-->
+<!--        </LinearLayout>-->
     </androidx.core.widget.NestedScrollView>
 
     <!-- Save Button (Ensuring It's Visible) -->

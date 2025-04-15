@@ -32,47 +32,53 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
+            android:id="@+id/cardContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:orientation="vertical" />
 
-            <!-- Teacher Cards -->
-            <include layout="@layout/teacher_card"
-                android:id="@+id/cardTeacher1"
-                tools:teacherName="Mr. John Doe"
-                tools:experience="Experience: 10 years"
-                tools:subjects="Subjects: Math, Science"
-                tools:location="Lucknow"/>
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:padding="8dp">-->
 
-            <include layout="@layout/teacher_card"
-                android:id="@+id/cardTeacher2"
-                tools:teacherName="Ms. Jane Smith"
-                tools:experience="Experience: 8 years"
-                tools:subjects="Subjects: English, History"
-                tools:location="Delhi"/>
+<!--            &lt;!&ndash; Teacher Cards &ndash;&gt;-->
+<!--            <include layout="@layout/teacher_card"-->
+<!--                android:id="@+id/cardTeacher1"-->
+<!--                tools:teacherName="Mr. John Doe"-->
+<!--                tools:experience="Experience: 10 years"-->
+<!--                tools:subjects="Subjects: Math, Science"-->
+<!--                tools:location="Lucknow"/>-->
 
-            <include layout="@layout/teacher_card"
-                android:id="@+id/cardTeacher3"
-                tools:teacherName="Dr. Arjun Kumar"
-                tools:experience="Experience: 12 years"
-                tools:subjects="Subjects: Physics, Chemistry"
-                tools:location="Mumbai"/>
+<!--            <include layout="@layout/teacher_card"-->
+<!--                android:id="@+id/cardTeacher2"-->
+<!--                tools:teacherName="Ms. Jane Smith"-->
+<!--                tools:experience="Experience: 8 years"-->
+<!--                tools:subjects="Subjects: English, History"-->
+<!--                tools:location="Delhi"/>-->
 
-            <include layout="@layout/teacher_card"
-                android:id="@+id/cardTeacher4"
-                tools:teacherName="Prof. Sara Ali"
-                tools:experience="Experience: 15 years"
-                tools:subjects="Subjects: Biology, Geography"
-                tools:location="Bangalore"/>
+<!--            <include layout="@layout/teacher_card"-->
+<!--                android:id="@+id/cardTeacher3"-->
+<!--                tools:teacherName="Dr. Arjun Kumar"-->
+<!--                tools:experience="Experience: 12 years"-->
+<!--                tools:subjects="Subjects: Physics, Chemistry"-->
+<!--                tools:location="Mumbai"/>-->
 
-            <include layout="@layout/teacher_card"
-                android:id="@+id/cardTeacher5"
-                tools:teacherName="Mr. Dwight Schrute"
-                tools:experience="Experience: 5 years"
-                tools:subjects="Subjects: Agriculture, Business"
-                tools:location="Jau"/>
-        </LinearLayout>
+<!--            <include layout="@layout/teacher_card"-->
+<!--                android:id="@+id/cardTeacher4"-->
+<!--                tools:teacherName="Prof. Sara Ali"-->
+<!--                tools:experience="Experience: 15 years"-->
+<!--                tools:subjects="Subjects: Biology, Geography"-->
+<!--                tools:location="Bangalore"/>-->
+
+<!--            <include layout="@layout/teacher_card"-->
+<!--                android:id="@+id/cardTeacher5"-->
+<!--                tools:teacherName="Mr. Dwight Schrute"-->
+<!--                tools:experience="Experience: 5 years"-->
+<!--                tools:subjects="Subjects: Agriculture, Business"-->
+<!--                tools:location="Jau"/>-->
+<!--        </LinearLayout>-->
     </androidx.core.widget.NestedScrollView>
 
     <!-- Filter Button -->
