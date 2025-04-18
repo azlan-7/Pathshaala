@@ -32,6 +32,7 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
     private String gradeFilter;
     private String subjectFilter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +99,9 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
                             TextView grade = cardView.findViewById(R.id.tvGrade);
                             TextView subjects = cardView.findViewById(R.id.tvSubjects);
                             ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
+//                            ImageView notificationButton = cardView.findViewById(R.id.tvNotificationButton);
                             Button whatsAppButton = cardView.findViewById(R.id.whatsappButton);
+                            Button notificationButton = cardView.findViewById(R.id.tvNotificationButton);
 
                             name.setText(student.getUsername());
                             email.setText(student.getEmail());
@@ -106,7 +109,7 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
                             grade.setText("Grade: " + student.getGradeName());
                             subjects.setText("Learning: " + student.getSubjectName());
 
-                            Log.d("SearchDashboard", "Card - Name: " + student.getUsername() + ", Email: " + student.getEmail());
+                            Log.d("SearchTeachersDashboard", "Card - Name: " + student.getUsername() + ", Email: " + student.getEmail());
 
                             profileIcon.setOnClickListener(v -> {
                                 Intent intent = new Intent(SearchTeachersDashboard.this, ProfilePageStudent.class);
@@ -120,17 +123,26 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
 
                             whatsAppButton.setOnClickListener(v -> MoveToWhatsAppScreen());
 
+                            notificationButton.setOnClickListener(v -> {
+                                Intent intent = new Intent(SearchTeachersDashboard.this, NotificationTeachers.class);
+                                intent.putExtra("USER_PHONE", student.getMobileNo());
+                                intent.putExtra("USER_ID", student.getUserId());
+                                intent.putExtra("USER_FIRST_NAME", student.getUsername());
+                                Log.d("SearchTeachersDashboard","Intent passed for UserID: " + student.getUserId());
+                                startActivity(intent);
+                            });
+
                             cardContainer.addView(cardView);
                         }
                     }
                 } else {
-                    Log.e("SearchDashboard", "No search results found.");
+                    Log.e("SearchTeachersDashboard", "No search results found.");
                 }
             }
 
             @Override
             public void onError(String errorMessage) {
-                Log.e("SearchDashboard", "Error fetching search results: " + errorMessage);
+                Log.e("SearchTeachersDashboard", "Error fetching search results: " + errorMessage);
             }
         });
     }

@@ -7,40 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".OTPmobile">
 
-
-    <com.chaos.view.PinView
-        android:id="@+id/otpView"
-        style="@style/PinWidget.PinView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:background="@drawable/otp_background"
-        android:cursorVisible="true"
-        android:inputType="text"
-        android:textColor="@color/line_color_selector"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:cursorColor="@color/line_selected"
-        app:cursorWidth="2dp"
-        app:hideLineWhenFilled="true"
-        app:itemCount="6"
-        app:itemHeight="48dp"
-        app:itemRadius="4dp"
-        app:itemSpacing="0dp"
-        app:itemWidth="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView17"
-        app:lineColor="#D7EDF6"
-        app:lineWidth="2dp"
-        app:viewType="rectangle" />
-
     <TextView
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="64dp"
         android:fontFamily="@font/work_sans_bold"
         android:text="Mobile Verification"
         android:textColor="#0F4D73"
@@ -50,36 +21,91 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="222dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/work_sans"
-        android:text="Enter your 6-digit OTP.  We’ve sent an SMS with the OTP to"
-        android:textColor="#757575"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView18" />
-
     <ImageView
         android:id="@+id/imageView18"
         android:layout_width="118dp"
         android:layout_height="133dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView16"
         app:srcCompat="@drawable/enter_otp_bro" />
 
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/work_sans"
+        android:gravity="center"
+        android:text="Enter your 6-digit OTP. We’ve sent an SMS with the OTP to"
+        android:textColor="#757575"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView18" />
+
+    <TextView
+        android:id="@+id/textView122"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/work_sans"
+        android:text="Phone No."
+        android:textColor="#0F4D73"
+        app:layout_constraintEnd_toStartOf="@+id/imageView157"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <com.chaos.view.PinView
+        android:id="@+id/otpView"
+        style="@style/PinWidget.PinView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/otp_background"
+        android:cursorVisible="true"
+        android:inputType="number"
+        android:textColor="@color/line_color_selector"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:cursorColor="@color/line_selected"
+        app:cursorWidth="2dp"
+        app:hideLineWhenFilled="true"
+        app:itemCount="6"
+        app:itemHeight="48dp"
+        app:itemRadius="4dp"
+        app:itemSpacing="8dp"
+        app:itemWidth="48dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView157"
+        app:layout_constraintHorizontal_bias="0.595"
+        app:layout_constraintStart_toEndOf="@+id/textView122"
+        app:layout_constraintTop_toBottomOf="@+id/textView17"
+        app:lineColor="#D7EDF6"
+        app:lineWidth="2dp"
+        app:viewType="rectangle" />
+
+    <ImageView
+        android:id="@+id/imageView157"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="144dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView122"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView122"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/pencilvector" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button6"
-        android:layout_width="239dp"
+        android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="32dp"
         android:layout_weight="1"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
@@ -87,32 +113,8 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/otpView" />
-
-    <TextView
-        android:id="@+id/textView122"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Phone No."
-        android:textColor="#0F4D73"
-        android:fontFamily="@font/work_sans"
-        app:layout_constraintBottom_toTopOf="@+id/otpView"
-        app:layout_constraintEnd_toEndOf="@+id/textView17"
-        app:layout_constraintStart_toStartOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-    <ImageView
-        android:id="@+id/imageView157"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/textView122"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
-        app:layout_constraintStart_toEndOf="@+id/textView122"
-        app:layout_constraintTop_toTopOf="@+id/textView122"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/pencilvector" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

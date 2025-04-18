@@ -94,6 +94,17 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                             TextView subjects = cardView.findViewById(R.id.tvSubjects);
                             TextView referralCode = cardView.findViewById(R.id.tvLocation);
                             ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
+                            Button messageButton = cardView.findViewById(R.id.tvNotificationButton);
+
+                            messageButton.setOnClickListener(v -> {
+                                Intent intent = new Intent(SearchStudentsDashboard.this, NotificationStudentsMessage.class);
+                                intent.putExtra("USER_PHONE", teacher.getMobileNo());
+                                intent.putExtra("USER_ID", teacher.getUserId());
+                                intent.putExtra("USER_FIRST_NAME", teacher.getUsername());
+                                Log.d("SearchTeachersDashboard","Intent passed for UserID: " + teacher.getUserId());
+                                startActivity(intent);
+                            });
+
 
                             profileIcon.setOnClickListener(v -> {
                                 Log.d("SearchStudentsDashboard", "Teacher UserID: " + teacher.getUserId());

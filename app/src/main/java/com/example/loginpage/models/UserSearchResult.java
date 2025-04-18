@@ -3,6 +3,7 @@ package com.example.loginpage.models;
 public class UserSearchResult {
     private int userId;
     private String userType;
+    private String fullName;
     private int gradeId;
     private String gradeName;
     private int subjectId;
@@ -26,6 +27,10 @@ public class UserSearchResult {
 
     public String getUserType() {
         return userType;
+    }
+
+    public String getFullName(){
+        return fullName;
     }
 
     public String getEmail(){
@@ -79,6 +84,10 @@ public class UserSearchResult {
     // Setters
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public void setFirstName(String fullName){
+        this.fullName = fullName;
     }
 
     public void setEmail(String email){

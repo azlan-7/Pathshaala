@@ -33,6 +33,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NotificationTeachersMessage"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".NotificationStudentsMessage"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
             android:name=".ProfilePageStudent"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />

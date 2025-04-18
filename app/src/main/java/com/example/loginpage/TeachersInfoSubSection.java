@@ -112,13 +112,38 @@ public class TeachersInfoSubSection extends AppCompatActivity {
 
         // Add the Group Expand Listener here
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            int lastExpandedPosition = -1; // To track the last expanded group
+
             @Override
             public void onGroupExpand(int groupPosition) {
-                for (int i = 0; i < expandableListView.getExpandableListAdapter().getGroupCount(); i++) {
-                    if (i != groupPosition) {
-                        expandableListView.collapseGroup(i); // Collapse all other groups
-                    }
+                if (lastExpandedPosition != -1 && groupPosition != lastExpandedPosition) {
+                    expandableListView.collapseGroup(lastExpandedPosition); // Collapse the previously expanded group
                 }
+                lastExpandedPosition = groupPosition; // Update the last expanded group
+            }
+        });
+
+        // Add the Group Collapse Listener (optional but good practice for symmetry)
+        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                if (groupPosition == expandableListView.getExpandableListAdapter().getGroupCount() - 1 && lastExpandedPosition == groupPosition) {
+                    lastExpandedPosition = -1; // Reset if the last group is collapsed
+                } else if (groupPosition == lastExpandedPosition) {
+                    lastExpandedPosition = -1; // Reset when the currently expanded group is collapsed
+                }
+            }
+        });
+
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (parent.isGroupExpanded(groupPosition)) {
+                    parent.collapseGroup(groupPosition);
+                } else {
+                    parent.expandGroup(groupPosition);
+                }
+                return true;
             }
         });
 

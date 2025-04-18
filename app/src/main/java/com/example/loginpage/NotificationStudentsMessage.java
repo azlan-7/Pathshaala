@@ -19,7 +19,7 @@ import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 
 import java.util.List;
 
-public class NotificationTeachers extends AppCompatActivity implements DatabaseHelper.UserResultListener {
+public class NotificationStudentsMessage extends AppCompatActivity implements DatabaseHelper.UserResultListener {
 
     private AppCompatButton sendButton;
     private EditText messageNotification;
@@ -34,7 +34,7 @@ public class NotificationTeachers extends AppCompatActivity implements DatabaseH
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_notification_teachers);
+        setContentView(R.layout.activity_notification_students_message);
 
         sendButton = findViewById(R.id.button39);
         messageNotification = findViewById(R.id.editTextText30);
@@ -65,6 +65,7 @@ public class NotificationTeachers extends AppCompatActivity implements DatabaseH
 
         sendButton.setOnClickListener(v -> sendMessage());
 
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -76,7 +77,7 @@ public class NotificationTeachers extends AppCompatActivity implements DatabaseH
     public void onQueryResult(List<UserDetailsClass> userList) {
         if (!userList.isEmpty()) {
             user = userList.get(0);
-            Log.d("NotificationTeachers", "User Type: " + user.getUserType());
+            Log.d("NotificationStudentsMessage", "User Type: " + user.getUserType());
         } else {
             Toast.makeText(this, "User details not found.", Toast.LENGTH_SHORT).show();
             finish();
@@ -96,9 +97,9 @@ public class NotificationTeachers extends AppCompatActivity implements DatabaseH
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         int senderId = sharedPreferences.getInt("USER_ID", -1);
 
-        Log.d("NotificationTeachers", "Fetched UserId for Teacher " + senderId);
+        Log.d("NotificationStudentsMessage", "Fetched UserId for Student " + senderId);
 
-        Log.d("NotificationTeachers","Received UserId for Student:  " + receiverUserId);
+        Log.d("NotificationStudentsMessage","Received UserId for Teacher:  " + receiverUserId);
 
         if (senderId == -1) {
             Toast.makeText(this, "User ID not found.", Toast.LENGTH_SHORT).show();
@@ -115,15 +116,15 @@ public class NotificationTeachers extends AppCompatActivity implements DatabaseH
 
         if (notificationId != -1) {
             DatabaseHelper.insertNotificationRead(notificationId, receiverUserId); // Insert into Notification_Reads for user 10
-            Toast.makeText(this, "Message sent successfully. Notification ID: " + notificationId + " for Students UserId: " + receiverUserId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Message sent successfully. Notification ID: " + notificationId + " for Teacher's UserId: " + receiverUserId, Toast.LENGTH_SHORT).show();
             messageNotification.setText("");
             messageTitle.setText("");
-            Log.d("NotificationTeachers", "Notification inserted with ID: " + notificationId + " for UserId: " + receiverUserId);
-
-            Intent intent = new Intent(this, SearchTeachersDashboard.class);
+            Log.d("NotificationStudentsMessage", "Notification inserted with ID: " + notificationId + " for UserId: " + receiverUserId);
+            Intent intent = new Intent(this, SearchStudentsDashboard.class);
             intent.putExtra("key", "value"); // Example of passing data
             startActivity(intent);
             finish();
+
         } else {
             Toast.makeText(this, "Failed to send message.", Toast.LENGTH_SHORT).show();
         }

@@ -11,7 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="12dp">
 
         <!-- Profile Icon -->
@@ -27,11 +27,14 @@
             app:layout_constraintVertical_bias="0.5" />
 
         <!-- Teacher Name -->
+
+        <!-- Experience -->
         <TextView
             android:id="@+id/tvTeacherName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/work_sans_bold"
             android:text="Teacher Name"
             android:textColor="#0F4D73"
@@ -40,7 +43,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Experience -->
         <TextView
             android:id="@+id/tvGrade"
             android:layout_width="wrap_content"
@@ -89,10 +91,10 @@
             android:paddingHorizontal="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.906"
             app:layout_constraintStart_toEndOf="@+id/tvLocation"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintVertical_bias="0.184">
 
             <ImageView
                 android:layout_width="18dp"
@@ -110,6 +112,42 @@
                 android:text="Send"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutNotification"
+            android:layout_width="98dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/cornered_button"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvSelfReferral"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.733"
+            app:layout_constraintStart_toEndOf="@+id/tvSubjects"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintVertical_bias="0.466">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/notifications_24dp_ffffff_fill0_wght400_grad0_opsz24" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tvNotificationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/work_sans_bold"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:padding="0dp"
+                android:text="Message"
+                android:textColor="@color/white"
+                android:textSize="9sp" />
         </LinearLayout>
 
 

@@ -7,12 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".Welcome">
 
-
     <TextView
         android:id="@+id/textView19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/work_sans"
         android:text="Welcome to the"
         android:textColor="#0F4D73"
@@ -26,68 +25,66 @@
         android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/work_sans_extrabold"
         android:text="Pathshaala"
         android:textColor="#0F4D73"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView19"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <TextView
         android:id="@+id/textView21"
-        android:layout_width="181dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/work_sans"
+        android:gravity="center"
         android:text="Bridging the gap between passion and knowledge."
         android:textColor="#757575"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
-
+        app:layout_constraintTop_toBottomOf="@+id/textView20"
+        app:layout_constraintWidth_percent="0.8" />
 
     <ImageView
         android:id="@+id/imageView24"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button9"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/welcomevectorbottom" />
 
     <ImageView
         android:id="@+id/imageView25"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/welcomevectortop" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button9"
-        android:layout_width="230dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
+        android:paddingHorizontal="64dp"
         android:text="Continue"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
