@@ -152,7 +152,4 @@ public class SampleGoLiveZegoStudent extends AppCompatActivity {
         intent.putExtra("host", isHost);
         startActivity(intent);
     }
-
-
-
 }

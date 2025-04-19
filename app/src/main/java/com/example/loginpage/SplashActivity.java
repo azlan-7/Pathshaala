@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             Log.d("SplashActivity", "Transitioning to Welcome Activity");
-            Intent intent = new Intent(SplashActivity.this, StudentsInfo.class);
+            Intent intent = new Intent(SplashActivity.this, NextLoginPage.class);
             startActivity(intent);
             finish(); // Close SplashActivity
         }, SPLASH_TIME_OUT);
@@ -32,13 +32,6 @@ public class SplashActivity extends AppCompatActivity {
 
 
         // TABHI SHOW KRNA JAB MEDIA VISIBLE NAHI HO
-
-
-
-
-
-
-
 
 
 

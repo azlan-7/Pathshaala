@@ -152,42 +152,48 @@ public class StudentsDashboard extends AppCompatActivity {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
-        // Define grade levels for the bar chart
-        String[] gradeLevels = {"Pre","Pri","Sec","Mid","9th","10th","11th","12th","UG"};
-
-        // Define subjects for the pie chart
+        String[] gradeLevels = {"Pre", "Pri", "Sec", "Mid", "9th", "10th", "11th", "12th", "UG"};
         String[] subjects = {"Math", "Science", "English", "History", "Geography", "Physics", "Chemistry", "Biology", "Computer Science"};
 
         for (int i = 0; i < gradeLevels.length; i++) {
             float value = (float) ((i + 1) * 10.0);
-
-            // Bar Chart Entry with Grade Levels
             barEntries.add(new BarEntry(i, value));
-
-            // Pie Chart Entry with Subjects (Now Corrected)
-            if (i < subjects.length) {  // Ensure we don't go out of bounds
+            if (i < subjects.length) {
                 pieEntries.add(new PieEntry(value, subjects[i]));
             }
         }
 
-        // Set Bar Chart with Grade Level Labels
+        // Bar Chart Setup
         BarDataSet barDataSet = new BarDataSet(barEntries, "Grade Levels");
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         barDataSet.setDrawValues(true);
-        barChart.setData(new BarData(barDataSet));
+        barDataSet.setValueTextSize(12f); // ✅ Decrease bar value text size
+
+        BarData barData = new BarData(barDataSet);
+        barData.setValueTextSize(12f); // ✅ Apply to the data object as well
+
+        barChart.setData(barData);
         barChart.animateY(2000);
         barChart.getDescription().setText("Student Distribution by Grade");
         barChart.getDescription().setTextColor(Color.BLACK);
 
-        // Customize X-Axis Labels
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(gradeLevels));
         barChart.getXAxis().setGranularity(1f);
         barChart.getXAxis().setLabelCount(gradeLevels.length);
+        barChart.getXAxis().setTextSize(12f); // ✅ X-axis label text size
 
-        // Set Pie Chart with Subject Labels
+        // Pie Chart Setup
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Subjects");
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.setData(new PieData(pieDataSet));
+        pieDataSet.setValueTextSize(12f); // Pie slice value text size (optional)
+
+        PieData pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+
+// Hide subject names on slices, show only legend
+        pieChart.setDrawEntryLabels(false);
+        pieChart.getLegend().setEnabled(true);
+
         pieChart.animateXY(2000, 2000);
         pieChart.getDescription().setEnabled(false);
     }

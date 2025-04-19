@@ -32,10 +32,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
-            android:fontFamily="@font/work_sans_bold"
+            android:fontFamily="@font/work_sans_semibold"
             android:text="Teacher Name"
             android:textColor="#0F4D73"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,9 +47,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
             android:fontFamily="@font/work_sans"
-            android:text="Experience: 5 years"
+            android:textStyle="bold"
+            android:text="Experience: 5 yrs"
             android:textColor="#0F4D73"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTeacherName" />
 
@@ -60,9 +61,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
             android:fontFamily="@font/work_sans_light"
+            android:textStyle="bold"
             android:text="Subjects: Math, Science"
             android:textColor="#0F4D73"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvExperience" />
 

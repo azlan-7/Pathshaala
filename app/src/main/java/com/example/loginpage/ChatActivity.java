@@ -1,6 +1,8 @@
 package com.example.loginpage;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -76,58 +78,73 @@ public class ChatActivity extends AppCompatActivity {
             messageInput.setText("");
 
             // Call Gemini API with chat history
-            generateText();
+            generateText(messageText);
+
         }
     }
 
-    private void generateText() {
-        // Format chat history as a string
-        StringBuilder chatHistory = new StringBuilder();
-        for (MessageModel message : messageList) {
-            if (message.isUser()) {
-                chatHistory.append("User: ").append(message.getMessage()).append("\n");
-            } else {
-                if (!message.getMessage().equals("Typing...")) {  // Skip "Typing..." messages
-                    chatHistory.append("Bot: ").append(message.getMessage()).append("\n");
-                }
-            }
-        }
+    private void generateText(String latestUserMessage) {
+        Log.d("GeminiPrompt", "Prompt to Gemini: " + latestUserMessage);
 
-        // Initialize the GenerativeModel
         GenerativeModel model = new GenerativeModel(MODEL_NAME, API_KEY);
 
-        // Call the generateContent method asynchronously
-        model.generateContent(chatHistory.toString(), new Continuation<GenerateContentResponse>() {
+        // Timeout handler setup
+        Handler timeoutHandler = new Handler(Looper.getMainLooper());
+        Runnable timeoutRunnable = () -> {
+            if (messageList.get(messageList.size() - 1).getMessage().equals("Typing...")) {
+                messageList.remove(messageList.size() - 1);
+                messageList.add(new MessageModel("Still thinking... Please try rephrasing your question if there's no response.", false));
+                chatAdapter.notifyDataSetChanged();
+                chatRecyclerView.smoothScrollToPosition(messageList.size() - 1);
+            }
+        };
+
+        // Post timeout task (20 seconds)
+        timeoutHandler.postDelayed(timeoutRunnable, 20000); // 20,000 milliseconds
+
+        model.generateContent(latestUserMessage, new Continuation<GenerateContentResponse>() {
             @Override
             public void resumeWith(Object result) {
+                // Cancel timeout if response received in time
+                timeoutHandler.removeCallbacks(timeoutRunnable);
+
                 if (result instanceof GenerateContentResponse) {
                     Content content = ((GenerateContentResponse) result).getCandidates().get(0).getContent();
-                    if (content != null) {
-                        Log.d("GeminiAPI", "Generated Response: " + content.getParts().get(0).toString());
+
+                    if (content != null && !content.getParts().isEmpty()) {
+                        String botResponse = ((TextPart) content.getParts().get(0)).getText();
+                        Log.d("GeminiResponse", "Bot reply: " + botResponse);
 
                         runOnUiThread(() -> {
-                            // Remove "Typing..." message
-                            if (!messageList.isEmpty()) {
-                                messageList.remove(messageList.size() - 1);
-                            }
-
-                            // Add Gemini AI response
-                            String botResponse = ((TextPart) content.getParts().get(0)).getText();
-                            messageList.add(new MessageModel(botResponse, false)); // 'false' indicates bot message
+                            messageList.remove(messageList.size() - 1); // Remove "Typing..."
+                            messageList.add(new MessageModel(botResponse, false)); // Add bot reply
                             chatAdapter.notifyDataSetChanged();
                             chatRecyclerView.smoothScrollToPosition(messageList.size() - 1);
                         });
 
+                    } else {
+                        Log.e("GeminiResponse", "Empty content or no parts returned!");
                     }
+
                 } else if (result instanceof Throwable) {
-                    Log.e("GeminiAPI", "Error generating response", (Throwable) result);
+                    Throwable error = (Throwable) result;
+                    Log.e("GeminiError", "Error while generating response", error);
+
+                    runOnUiThread(() -> {
+                        messageList.remove(messageList.size() - 1);
+                        messageList.add(new MessageModel("Hmm... Couldn't fetch a response this time. Try again in a moment!", false));
+                        chatAdapter.notifyDataSetChanged();
+                        chatRecyclerView.smoothScrollToPosition(messageList.size() - 1);
+                    });
                 }
             }
 
             @Override
             public CoroutineContext getContext() {
-                return EmptyCoroutineContext.INSTANCE; // Required for Kotlin coroutines
+                return EmptyCoroutineContext.INSTANCE;
             }
         });
     }
+
+
 }

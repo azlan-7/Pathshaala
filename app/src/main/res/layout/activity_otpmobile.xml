@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
         android:fontFamily="@font/work_sans_bold"
-        android:text="@string/mob_verify"
+        android:text="Verify Mobile Number"
         android:textColor="#0F4D73"
         android:textSize="22sp"
         android:textStyle="normal"

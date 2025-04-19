@@ -34,7 +34,7 @@
         android:layout_width="141dp"
         android:layout_height="50dp"
         android:background="@drawable/cornered_button"
-        android:fontFamily="@font/work_sans_semibold"
+        android:fontFamily="@font/work_sans"
         android:text="Continue"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
