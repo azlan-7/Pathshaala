@@ -1,5 +1,7 @@
 package com.example.loginpage;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +23,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
@@ -37,7 +41,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentsDashboard extends AppCompatActivity {
 
@@ -48,6 +54,11 @@ public class StudentsDashboard extends AppCompatActivity {
     private BarChart barChart;
     private PieChart pieChart;
     BottomNavigationView bottomNavigationView;
+    private static final String TAG = "StudentsDashboard";
+    AutoCompleteTextView subjectDropdown;
+    AutoCompleteTextView gradeDropdown;
+    Map<String, String> subjectMap = new HashMap<>();
+    Map<String, String> gradeMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +73,16 @@ public class StudentsDashboard extends AppCompatActivity {
         pieChart = findViewById(R.id.barChartStudentEnrolledMonth);
         profileIconTop = findViewById(R.id.imageView151);
         notificationBell = findViewById(R.id.imageView141);
+        subjectDropdown = findViewById(R.id.autoCompleteSubject);
+        gradeDropdown = findViewById(R.id.autoCompleteGrade); // Initialize gradeDropdown HERE
 
 //        Toolbar toolbar = findViewById(R.id.toolbar2);
 //        setSupportActionBar(toolbar);
 //        getSupportActionBar().setTitle("Pathshaala");
 
         setupCharts();
+        loadGrades(); // Load grades from the database
+        loadSubjects(); // Load subjects from the database
         setupDropdowns();
         loadUserName();
         NavigationBarWorking();
@@ -88,7 +103,12 @@ public class StudentsDashboard extends AppCompatActivity {
         });
 
         searchButton.setOnClickListener(v -> {
+            String selectedGrade = gradeDropdown.getText().toString();
+            String selectedSubject = subjectDropdown.getText().toString();
+
             Intent intent = new Intent(this, SearchStudentsDashboard.class);
+            intent.putExtra("GRADE", selectedGrade);
+            intent.putExtra("SUBJECT", selectedSubject);
             startActivity(intent);
         });
 
@@ -96,6 +116,57 @@ public class StudentsDashboard extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+    private void loadGrades() {
+        String query = "SELECT GradeID, GradeName FROM Grades WHERE active = 'true' ORDER BY GradeName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No grades found!");
+                Toast.makeText(this, "No Grades Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> grades = new ArrayList<>();
+            gradeMap.clear();
+
+            for (Map<String, String> row : result) {
+                grades.add(row.get("GradeName"));
+                gradeMap.put(row.get("GradeName"), row.get("GradeID"));
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades);
+            gradeDropdown.setAdapter(adapter);
+        });
+    }
+
+    private void loadSubjects() {
+        String query = "SELECT SubjectID, SubjectName FROM Subject WHERE active = 'true' ORDER BY SubjectName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No subjects found in the database.");
+                Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> subjects = new ArrayList<>();
+            subjectMap.clear();
+
+            for (Map<String, String> row : result) {
+                String id = row.get("SubjectID");
+                String name = row.get("SubjectName");
+                Log.d(TAG, "Subject Retrieved - ID: " + id + ", Name: " + name);
+                subjects.add(name);
+                subjectMap.put(name, id);
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects);
+            subjectDropdown.setAdapter(adapter);
         });
     }
 
@@ -228,16 +299,17 @@ public class StudentsDashboard extends AppCompatActivity {
 //    }
 
     private void setupDropdowns() {
-        List<String> grades = Arrays.asList("Primary","Secondary","Middle School","9th", "10th", "11th", "12th");
-        List<String> subjects = Arrays.asList("Math", "Science", "English", "History", "Geography");
+//        List<String> grades = Arrays.asList("Primary","Secondary","Middle School","1-5","6-8","9th", "10th", "11th", "12th");
+//        List<String> subjects = Arrays.asList("Accountancy","Math", "Science", "English", "History", "Geography","Economics","Computer Science","Sociology","Business Studies");
 //        List<String> locations = Arrays.asList("New York", "Los Angeles", "Chicago", "Houston", "Phoenix");
 
         AutoCompleteTextView autoCompleteGrade = findViewById(R.id.autoCompleteGrade);
+
         AutoCompleteTextView autoCompleteSubject = findViewById(R.id.autoCompleteSubject);
         AutoCompleteTextView autoCompleteLocation = findViewById(R.id.autoCompleteLocation);
 
-        autoCompleteGrade.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades));
-        autoCompleteSubject.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects));
+//        autoCompleteGrade.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades));
+//        autoCompleteSubject.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects));
 //        autoCompleteLocation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, locations));
 
         autoCompleteGrade.setOnClickListener(v -> autoCompleteGrade.showDropDown());

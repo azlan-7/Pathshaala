@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotificationTeachers">
+    tools:context=".NotificationStudentsMessage">
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button39"
@@ -72,7 +72,7 @@
         android:layout_width="232dp"
         android:layout_height="50dp"
         android:fontFamily="@font/work_sans_bold"
-        android:text="Notify Student"
+        android:text="Send Message"
         android:textColor="#0F4D73"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/editTextText31"

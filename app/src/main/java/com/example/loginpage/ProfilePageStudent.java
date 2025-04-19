@@ -24,6 +24,7 @@ import com.example.loginpage.adapters.StudentsExpandableListAdapter;
 import com.example.loginpage.models.Education;
 import com.example.loginpage.models.UserDetailsClass;
 import com.example.loginpage.models.UserInfoItem;
+import com.example.loginpage.models.UserSearchResult;
 import com.example.loginpage.models.UserWiseEducation;
 import com.example.loginpage.models.UserWiseGrades;
 
@@ -153,10 +154,13 @@ public class ProfilePageStudent extends AppCompatActivity {
         String email = getIntent().getStringExtra("USER_EMAIL");
         String selfReferralCode = getIntent().getStringExtra("USER_SELF_REFERRAL");
 
-        if (!imageName.isEmpty()) {
+        if (imageName != null && !imageName.isEmpty()) { // Added null check
             String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
             Log.d("ProfilePageStudent", "✅ Loaded Image from SharedPreferences: " + imageUrl);
             Glide.with(this).load(imageUrl).placeholder(R.drawable.generic_avatar).error(R.drawable.generic_avatar).into(profileImage);
+        } else {
+            // Handle case where imageName is null or empty.
+            Log.e("ProfilePageStudent", "Image name is null or empty");
         }
 
         tvAboutYourself.setText(aboutYourself);
@@ -204,14 +208,14 @@ public class ProfilePageStudent extends AppCompatActivity {
         gradeOptions.add("Loading...");
 
         List<String> skillsOptions = new ArrayList<>();
-        skillsOptions.add("View your Skills");
+        skillsOptions.add("Loading...");
 //        skillsOptions.add("Add Skills/Extracurriculars");
 
         // Correct Mapping
-        sectionItems.put(sectionTitles.get(1), academicDetailsOptions); // Academic Details -> Correct dropdown
-        sectionItems.put(sectionTitles.get(2), gradeOptions); // Academic Details -> Correct dropdown
-        sectionItems.put(sectionTitles.get(3), parentDetailsOptions); // Parent Guardian Details -> Correct dropdown
-        sectionItems.put(sectionTitles.get(4), skillsOptions); // Skills and Extracurriculars -> Correct dropdown
+        sectionItems.put(sectionTitles.get(0), academicDetailsOptions); // Academic Details -> Correct dropdown
+        sectionItems.put(sectionTitles.get(1), gradeOptions); // Academic Details -> Correct dropdown
+        sectionItems.put(sectionTitles.get(2), parentDetailsOptions); // Parent Guardian Details -> Correct dropdown
+        sectionItems.put(sectionTitles.get(3), skillsOptions); // Skills and Extracurriculars -> Correct dropdown
 
         // Sections with no dropdown (empty lists)
         for (int i = 4; i < sectionTitles.size(); i++) {
@@ -226,18 +230,74 @@ public class ProfilePageStudent extends AppCompatActivity {
         int userId = getIntent().getIntExtra("USER_ID", -1);
 
 
-        Log.d("ProfilePageStudent","UserId fetched through sharedpreferences: " + userId);
+        Log.d("ProfilePageStudent","UserId fetched through intent: " + userId);
         loadParentGuardianInfo(parentDetailsOptions);
         loadUserEducation(academicDetailsOptions);
         loadUserGradesTaught(gradeOptions);
+        loadSkillsData(skillsOptions); // Add this method.
+
+//        loadStudentInfoSections(gradeOptions, academicDetailsOptions, parentDetailsOptions, userId);
 
 //        getAllUserInfoDirect(userId);
     }
 
 
+    private void loadStudentInfoSections(
+            List<String> gradeOptions,
+            List<String> academicDetailsOptions,
+            List<String> parentDetailsOptions,
+            int userId
+    ) {
+        new Thread(() -> {
+            List<UserSearchResult> results = DatabaseHelper.getUserSearchResults("S", 0, 0, 0);
+
+            runOnUiThread(() -> {
+                if (results != null && !results.isEmpty()) {
+                    for (UserSearchResult result : results) {
+                        if (result.getUserId() == userId) {
+                            // Grade
+                            String grade = result.getGradeName();
+                            if (grade != null && !grade.isEmpty() && !gradeOptions.contains(grade)) {
+                                gradeOptions.clear();
+                                gradeOptions.add(grade);
+                            }
+
+                            // Academic Detail: Subject
+                            String subject = result.getSubjectName();
+                            if (subject != null && !subject.isEmpty() && !academicDetailsOptions.contains(subject)) {
+                                academicDetailsOptions.clear();
+                                academicDetailsOptions.add(subject);
+                            }
+
+                            // Parent/Guardian Detail: Institution
+                            String institution = result.getInstitutionName();
+                            if (institution != null && !institution.isEmpty() && !parentDetailsOptions.contains(institution)) {
+                                parentDetailsOptions.clear();
+                                parentDetailsOptions.add(institution);
+                            }
+
+                            break; // Exit once matched
+                        }
+                    }
+                } else {
+                    Log.e("ProfilePageStudent", "No results from getUserSearchResults()");
+                }
+
+                // Add fallback "Add" entries for UI
+                gradeOptions.add("Add");
+                academicDetailsOptions.add("Add");
+                parentDetailsOptions.add("Add");
+
+                adapter.notifyDataSetChanged();
+            });
+        }).start();
+    }
+
+
+
 
     private void getAllUserInfoDirect(int userId) {
-        Log.d("ProfilePageStudent", "getAllUserInfoDirect() called");
+        Log.d("StudentsInfo", "getAllUserInfoDirect() called");
 
         new Thread(() -> {
             List<UserInfoItem> userInfoList = DatabaseHelper.getAllUserInfo(userId);
@@ -246,7 +306,7 @@ public class ProfilePageStudent extends AppCompatActivity {
                 if (userInfoList != null) {
                     Map<String, List<String>> headingMap = new HashMap<>();
                     headingMap.put("Education", sectionItems.get("Academic Details"));
-                    headingMap.put("Grades", sectionItems.get("Grade"));
+                    headingMap.put("Grade", sectionItems.get("Grade"));
                     headingMap.put("Parent", sectionItems.get("Parent Guardian Details"));
                     headingMap.put("Skills", sectionItems.get("Skills and Extracurriculars"));
 
@@ -254,7 +314,7 @@ public class ProfilePageStudent extends AppCompatActivity {
                         String heading = item.getHeading();
                         String description = item.getDescription();
 
-                        Log.d("ProfilePageStudent", "Heading: " + heading + ", Description: " + description);
+                        Log.d("StudentsInfo", "Heading: " + heading + ", Description: " + description);
 
                         if (headingMap.containsKey(heading)) {
                             List<String> list = headingMap.get(heading);
@@ -263,64 +323,62 @@ public class ProfilePageStudent extends AppCompatActivity {
                         }
                     }
 
-                    // ✅ Add "Add" button/subsection entry to all mapped sections
                     for (Map.Entry<String, List<String>> entry : headingMap.entrySet()) {
-                        entry.getValue().add("Add");
+                        if (entry.getValue() != null) {
+                            entry.getValue().add("Add");
+                        } else {
+                            Log.e("ProfilePageStudent", "⚠️ List is null for heading: " + entry.getKey());
+                        }
                     }
 
                     adapter.notifyDataSetChanged();
                 } else {
-                    Log.e("ProfilePageStudent", "No data returned from database.");
+                    Log.e("StudentsInfo", "No data returned from database.");
                 }
             });
         }).start();
     }
 
 
+    private void loadSkillsData(List<String> skillsOptions){
+//        skillsOptions.clear();
+//        skillsOptions.add("View your Skills");
+//        skillsOptions.add("Add Skills/Extracurriculars");
+        adapter.notifyDataSetChanged();
+    }
     private void loadUserGradesTaught(List<String> gradesTaughtOptions) {
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//        int userId = sharedPreferences.getInt("USER_ID", -1);
-
         int userId = getIntent().getIntExtra("USER_ID", -1);
-
-
         Log.d("loadUserGradesTaught", "📌 Fetching Grades Taught for UserID: " + userId);
 
         DatabaseHelper.UserWiseGradesSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseGradesResultListener() {
             @Override
             public void onQueryResult(List<UserWiseGrades> userWiseGradesList) {
-                gradesTaughtOptions.clear(); // ✅ Clear previous data
+                Log.d("loadUserGradesTaught", "onQueryResult called. List size: " + (userWiseGradesList != null ? userWiseGradesList.size() : "null"));
+
+                gradesTaughtOptions.clear();
 
                 if (userWiseGradesList == null || userWiseGradesList.isEmpty()) {
                     Log.d("loadUserGradesTaught", "⚠️ No grades data found for UserID: " + userId);
-                    Toast.makeText(ProfilePageStudent.this, "No Grades Found!", Toast.LENGTH_SHORT).show();
-                    return;
+                    gradesTaughtOptions.add("No Grades Found");
+                } else {
+                    int count = 0;
+                    for (UserWiseGrades grade : userWiseGradesList) {
+                        if (count >= 6) break;
+                        gradesTaughtOptions.add("🎓 " + grade.getGradename() + " - " + grade.getSubjectName());
+                        count++;
+                    }
+                    if (userWiseGradesList.size() > 6) {
+                        gradesTaughtOptions.add("More...");
+                    }
+                    gradesTaughtOptions.add("Add grades taught");
                 }
+                Log.d("loadUserGradesTaught", "Grades options list: " + gradesTaughtOptions);
 
-                // ✅ Loop through the list and add up to 6 records
-                int count = 0;
-                for (UserWiseGrades grade : userWiseGradesList) {
-                    if (count >= 6) break; // ✅ Stop after adding 6 records
-
-                    gradesTaughtOptions.add("🎓 " + grade.getGradename() + " - " + grade.getSubjectName());
-                    count++;
-                }
-
-                // ✅ If there are more than 6 records, add a "More..." option
-                if (userWiseGradesList.size() > 6) {
-                    gradesTaughtOptions.add("More...");
-                }
-
-                // ✅ Always add the "View grades taught" option at the end
-                gradesTaughtOptions.add("Add grades taught");
-
-                Log.d("loadUserGradesTaught", "✅ Loaded " + count + " grade(s) taught.");
-
-                // ✅ Ensure UI is updated properly
                 runOnUiThread(() -> {
                     if (adapter instanceof BaseExpandableListAdapter) {
+                        Log.d("loadUserGradesTaught", "Notifying adapter of data change.");
                         ((BaseExpandableListAdapter) adapter).notifyDataSetChanged();
-                        Log.d("loadUserGradesTaught", "✅ Grades data updated in ExpandableListView.");
+                        Log.d("loadUserGradesTaught", "Adapter notified.");
                     }
                 });
             }
@@ -355,56 +413,50 @@ public class ProfilePageStudent extends AppCompatActivity {
 
 
     private void loadUserEducation(List<String> educationOptions) {
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//        int userId = sharedPreferences.getInt("USER_ID", -1);
-
         int userId = getIntent().getIntExtra("USER_ID", -1);
-
-
         Log.d(TAG, "📌 Fetching education entries for user: " + userId);
 
         DatabaseHelper.UserWiseEducationSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseEducationResultListener() {
             @Override
             public void onQueryResult(List<UserWiseEducation> userWiseEducationList) {
-                educationOptions.clear(); // ✅ Clear placeholder values before adding actual data
+                educationOptions.clear();
+                Log.d(TAG, "Education list cleared"); // Add Log
 
                 int totalRecords = userWiseEducationList.size();
+                Log.d(TAG, "Total records: " + totalRecords); // Add Log
 
                 if (totalRecords > 0) {
-                    // ✅ Show up to 6 records
                     int limit = Math.min(totalRecords, 6);
                     for (int i = 0; i < limit; i++) {
                         UserWiseEducation education = userWiseEducationList.get(i);
-                        educationOptions.add(education.getEducationLevelName() + "(" + education.getInstitutionName() + ")");
+                        if (education != null) { // Add null check
+                            educationOptions.add(education.getEducationLevelName() + "(" + education.getInstitutionName() + ")");
+                            Log.d(TAG, "Added education: " + education.getEducationLevelName()); // Add Log
+                        } else {
+                            Log.e(TAG, "Education object is null");
+                        }
                     }
 
-                    // ✅ If more than 6 records, add "More..."
                     if (totalRecords > 6) {
                         educationOptions.add("More...");
+                        Log.d(TAG, "Added More..."); // Add Log
                     }
-
-                    // ✅ Always add "View your education" at the end
-                    educationOptions.add("Add Education");
                 } else {
-                    // ✅ Show default message if no records exist
-                    educationOptions.add("Add Education");
+                    educationOptions.add("No Education records found");
                     Log.e(TAG, "⚠️ No education records found in DB!");
                 }
 
-                // ✅ Notify adapter of data change
                 runOnUiThread(() -> {
                     if (adapter instanceof BaseExpandableListAdapter) {
                         ((BaseExpandableListAdapter) adapter).notifyDataSetChanged();
 
-                        // ✅ Re-expand the last opened group **AFTER** notifying data change
                         expandableListView.postDelayed(() -> {
                             if (lastExpandedPosition != -1) {
                                 expandableListView.expandGroup(lastExpandedPosition);
                             }
-                        }, 300); // Slight delay ensures smooth UI
+                        }, 300);
                     }
                 });
-
             }
 
             public void onError(String error) {
@@ -457,12 +509,9 @@ public class ProfilePageStudent extends AppCompatActivity {
             return;
         }
 
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
-
         String storedImageName = getIntent().getStringExtra("USER_IMAGE");
 
-        if (!storedImageName.isEmpty()) {
+        if (storedImageName != null && !storedImageName.isEmpty()) {
             String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
             Log.d("ProfilePageStudent", "✅ Loaded Image from SharedPreferences: " + imageUrl);
             Glide.with(this)
@@ -475,27 +524,31 @@ public class ProfilePageStudent extends AppCompatActivity {
         DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
             if (!userList.isEmpty()) {
                 UserDetailsClass user = userList.get(0);
-                Log.d("ProfilePageStudent", "✅ Loaded Correct User: " + user.getName());
+                if (user != null) { // Add null check for user
+                    Log.d("ProfilePageStudent", "✅ Loaded Correct User: " + user.getName());
 
-                runOnUiThread(() -> {
-                    tvFullName.setText(user.getName());
-                    tvContact.setText(user.getMobileNo());
-                    tvEmail.setText(user.getEmailId());
+                    runOnUiThread(() -> {
+                        if (tvFullName != null) tvFullName.setText(user.getName());
+                        if (tvContact != null) tvContact.setText(user.getMobileNo());
+                        if (tvEmail != null) tvEmail.setText(user.getEmailId());
 
-                    String imageName = user.getUserImageName();
-                    if (imageName != null && !imageName.isEmpty()) {
-                        String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
-                        Log.d("ProfilePageStudent", "✅ Loaded Image from Intent: " + imageUrl);
-                        Glide.with(this)
-                                .load(imageUrl)
-                                .placeholder(R.drawable.generic_avatar)
-                                .error(R.drawable.generic_avatar)
-                                .into(profileImage);
-                    } else {
-                        Log.e("ProfilePageStudent", "❌ No image name found in intent.");
-                    }
+                        String imageName = user.getUserImageName();
+                        if (imageName != null && !imageName.isEmpty()) {
+                            String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+                            Log.d("ProfilePageStudent", "✅ Loaded Image from Intent: " + imageUrl);
+                            Glide.with(this)
+                                    .load(imageUrl)
+                                    .placeholder(R.drawable.generic_avatar)
+                                    .error(R.drawable.generic_avatar)
+                                    .into(profileImage);
+                        } else {
+                            Log.e("ProfilePageStudent", "❌ No image name found in intent.");
+                        }
 
-                });
+                    });
+                } else {
+                    Log.e("ProfilePageStudent", "❌ User object is null.");
+                }
             } else {
                 Log.e("ProfilePageStudent", "❌ No user found for phone: " + phoneNumber);
             }

@@ -12,26 +12,28 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="252dp"
         android:fontFamily="@font/work_sans_bold"
         android:text="Pathshaala"
         android:textColor="#FFFFFF"
         android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/work_sans_light"
-        android:text="Simplifying Learning,
-One Lesson at a Time."
+        android:gravity="center"
+        android:text="Simplifying Learning,\nOne Lesson at a Time."
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        app:layout_constraintWidth_percent="0.9" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

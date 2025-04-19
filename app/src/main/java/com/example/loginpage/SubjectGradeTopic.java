@@ -83,7 +83,7 @@ public class SubjectGradeTopic extends AppCompatActivity {
 
 
     private void loadGrades(String subjectID) {
-        String query = "SELECT GradesID, GradesName FROM Grades WHERE active = 'true' AND SubjectID = '" + subjectID + "' ORDER BY GradesName";
+        String query = "SELECT GradeID, GradeName FROM GradeS WHERE active = 'true' AND SubjectID = '" + subjectID + "' ORDER BY GradeName";
         Log.d(TAG, "Executing query: " + query);
 
         DatabaseHelper.loadDataFromDatabase(this, query, result -> {

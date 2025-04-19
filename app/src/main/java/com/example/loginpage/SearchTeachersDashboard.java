@@ -1,15 +1,14 @@
 package com.example.loginpage;
 
-import static im.zego.connection.internal.ZegoConnectionImpl.context;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,17 +18,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.fragments.FilterDialogFragment;
 import com.example.loginpage.models.UserDetailsClass;
+import com.example.loginpage.models.UserSearchResult;
 import com.example.loginpage.models.UserWiseEducation;
 
 import java.util.List;
-import java.util.Map;
 
-public class SearchTeachersDashboard extends AppCompatActivity {
+public class SearchTeachersDashboard extends AppCompatActivity implements FilterDialogFragment.OnFiltersSelectedListener{
+
+    private LinearLayout cardContainer;
+    private String gradeFilter;
+    private String subjectFilter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,103 +43,22 @@ public class SearchTeachersDashboard extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        int[] cardIds = {R.id.cardStudent1, R.id.cardStudent2, R.id.cardStudent3, R.id.cardStudent4, R.id.cardStudent5};
+//        int[] cardIds = {R.id.cardStudent1, R.id.cardStudent2, R.id.cardStudent3, R.id.cardStudent4, R.id.cardStudent5};
 
-        DatabaseHelper.UserDetailsSelect(this, "3", "", userList -> {
-            if (userList.size() > 0) {
-                int studentIndex = 0; // Track number of students displayed
+        cardContainer = findViewById(R.id.cardContainer);
+        // Retrieve Grade and Subject from Intent
+        Intent intent = getIntent();
+        gradeFilter = intent.getStringExtra("GRADE");
+        subjectFilter = intent.getStringExtra("SUBJECT");
 
-                for (UserDetailsClass student : userList) {
-                    if (!"S".equals(student.getUserType())) continue; // ✅ Show only students
-
-                    if (studentIndex >= cardIds.length) break; // ✅ Prevent array overflow
-
-                    View cardView = findViewById(cardIds[studentIndex]);
-
-                    TextView name = cardView.findViewById(R.id.tvStudentName);
-                    TextView grade = cardView.findViewById(R.id.tvGrade);
-                    TextView subjects = cardView.findViewById(R.id.tvSubjects);
-                    TextView email = cardView.findViewById(R.id.tvEmail);
-                    TextView referral = cardView.findViewById(R.id.tvSelfReferral);
-                    ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
-                    Button whatsAppButton = cardView.findViewById(R.id.whatsappButton);
-
-                    name.setText(student.getName());
-                    email.setText(student.getEmailId());
-                    referral.setText(student.getSelfReferralCode());
-
-
-
-                    profileIcon.setOnClickListener(v -> {
-                        Intent intent = new Intent(this, ProfilePageStudent.class);
-                        intent.putExtra("USER_PHONE", student.getMobileNo());
-                        intent.putExtra("USER_IMAGE", student.getUserImageName()); // 👈 pass image name
-                        intent.putExtra("USER_ID", student.getUserId()); // 👈 if you're passing userId too
-                        intent.putExtra("USER_FIRST_NAME", student.getName());
-                        intent.putExtra("USER_LAST_NAME", student.getLastName());
-                        intent.putExtra("USER_SELF_REFERRAL", student.getSelfReferralCode());
-                        intent.putExtra("USER_EMAIL", student.getEmailId());
-                        startActivity(intent);
-                    });
-
-                    // ✅ Fetch Grade & Institution from UserWiseEducation
-                    DatabaseHelper.UserWiseEducationSelect(this, "3", student.getUserId(), new DatabaseHelper.UserWiseEducationResultListener() {
-                        @Override
-                        public void onQueryResult(List<UserWiseEducation> educationList) {
-                            if (educationList != null && !educationList.isEmpty()) {
-                                Log.d("Education Fetch", "✅ Total Records Retrieved: " + educationList.size());
-
-                                // Check if the correct user data is being retrieved
-                                for (UserWiseEducation education : educationList) {
-                                    Log.d("Education Fetch", "🔍 UserID: " + student.getUserId() +
-                                            " | Education Level: " + education.getEducationLevelName() +
-                                            " | Institution: " + education.getInstitutionName());
-                                }
-
-                                // Find the record that matches the student ID
-                                UserWiseEducation matchingEducation = null;
-                                for (UserWiseEducation edu : educationList) {
-                                    if (edu.getUserId().equals(student.getUserId())) {
-                                        matchingEducation = edu;
-                                        break;
-                                    }
-                                }
-
-                                if (matchingEducation != null) {
-                                    grade.setText("Grade: " + matchingEducation.getEducationLevelName());
-                                    subjects.setText("Learning: " + matchingEducation.getInstitutionName());
-                                    Log.d("Education Fetch", "✅ Displayed: " + matchingEducation.getEducationLevelName() +
-                                            " | " + matchingEducation.getInstitutionName());
-                                } else {
-                                    grade.setText("Grade: N/A");
-                                    subjects.setText("Learning: N/A");
-                                    Log.e("Education Fetch", "❌ No matching record found for UserID: " + student.getUserId());
-                                }
-                            } else {
-                                grade.setText("Grade: N/A");
-                                subjects.setText("Learning: N/A");
-                                Log.e("Education Fetch", "❌ No education data found for UserID: " + student.getUserId());
-                            }
-                        }
-                    });
-
-
-
-                    // ✅ WhatsApp Button Click
-                    whatsAppButton.setOnClickListener(v -> MoveToWhatsAppScreen());
-
-                    studentIndex++; // ✅ Move to the next student card
-                }
-            }
-        });
-
-
+        fetchAndDisplaySearchResults();
 
         // Filter Button
         Button filterButton = findViewById(R.id.button36);
         filterButton.setOnClickListener(v -> {
             FragmentManager fm = getSupportFragmentManager();
             FilterDialogFragment filterDialog = new FilterDialogFragment();
+            filterDialog.setOnFiltersSelectedListener(this); // Set the listener
             filterDialog.show(fm, "filter_dialog");
         });
 
@@ -149,8 +70,87 @@ public class SearchTeachersDashboard extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onFiltersSelected(String grade, String subject) {
+        gradeFilter = grade;
+        subjectFilter = subject;
+        fetchAndDisplaySearchResults();
+    }
+
+    private void fetchAndDisplaySearchResults() {
+        // Modify the searchUsersForTS call if your database supports filtering by Grade and Subject
+        DatabaseHelper.searchUsersForTS(this, "S", 0, 0, 0, new DatabaseHelper.ProcedureResultCallback<List<UserSearchResult>>() {
+            @Override
+            public void onSuccess(List<UserSearchResult> userList) {
+                if (userList != null && !userList.isEmpty()) {
+                    cardContainer.removeAllViews();
+
+                    for (UserSearchResult student : userList) {
+                        // Apply filters
+                        if ((gradeFilter == null || gradeFilter.isEmpty() || student.getGradeName().equalsIgnoreCase(gradeFilter)) &&
+                                (subjectFilter == null || subjectFilter.isEmpty() || student.getSubjectName().equalsIgnoreCase(subjectFilter))) {
+
+                            View cardView = LayoutInflater.from(SearchTeachersDashboard.this).inflate(R.layout.student_card, cardContainer, false);
+
+                            // ... (Populate cardView as before) ...
+                            TextView name = cardView.findViewById(R.id.tvStudentName);
+                            TextView email = cardView.findViewById(R.id.tvEmail);
+                            TextView referral = cardView.findViewById(R.id.tvSelfReferral);
+                            TextView grade = cardView.findViewById(R.id.tvGrade);
+                            TextView subjects = cardView.findViewById(R.id.tvSubjects);
+                            ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
+//                            ImageView notificationButton = cardView.findViewById(R.id.tvNotificationButton);
+                            Button whatsAppButton = cardView.findViewById(R.id.whatsappButton);
+                            Button notificationButton = cardView.findViewById(R.id.tvNotificationButton);
+
+                            name.setText(student.getUsername());
+                            email.setText(student.getEmail());
+                            referral.setText(student.getSelfReferralCode());
+                            grade.setText("Grade: " + student.getGradeName());
+                            subjects.setText("Learning: " + student.getSubjectName());
+
+                            Log.d("SearchTeachersDashboard", "Card - Name: " + student.getUsername() + ", Email: " + student.getEmail());
+
+                            profileIcon.setOnClickListener(v -> {
+                                Intent intent = new Intent(SearchTeachersDashboard.this, ProfilePageStudent.class);
+                                intent.putExtra("USER_PHONE", student.getMobileNo());
+                                intent.putExtra("USER_ID", student.getUserId());
+                                intent.putExtra("USER_FIRST_NAME", student.getUsername());
+                                intent.putExtra("USER_SELF_REFERRAL", student.getSelfReferralCode());
+                                intent.putExtra("USER_EMAIL", student.getEmail());
+                                startActivity(intent);
+                            });
+
+                            whatsAppButton.setOnClickListener(v -> MoveToWhatsAppScreen());
+
+                            notificationButton.setOnClickListener(v -> {
+                                Intent intent = new Intent(SearchTeachersDashboard.this, NotificationTeachers.class);
+                                intent.putExtra("USER_PHONE", student.getMobileNo());
+                                intent.putExtra("USER_ID", student.getUserId());
+                                intent.putExtra("USER_FIRST_NAME", student.getUsername());
+                                Log.d("SearchTeachersDashboard","Intent passed for UserID: " + student.getUserId());
+                                startActivity(intent);
+                            });
+
+                            cardContainer.addView(cardView);
+                        }
+                    }
+                } else {
+                    Log.e("SearchTeachersDashboard", "No search results found.");
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("SearchTeachersDashboard", "Error fetching search results: " + errorMessage);
+            }
+        });
+    }
+
     private void MoveToWhatsAppScreen() {
         Intent intent = new Intent(this, WhatsAppScreen.class);
         startActivity(intent);
     }
 }
+
+

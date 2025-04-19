@@ -1,39 +1,34 @@
 package com.example.loginpage;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
-import android.widget.ImageView;
 
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.fragments.FilterDialogFragment;
-import com.example.loginpage.models.UserDetailsClass;
-import com.example.loginpage.models.UserWiseSubject;
-import com.example.loginpage.models.UserWiseWorkExperience;
+import com.example.loginpage.models.UserSearchResult;
 
 import java.util.List;
-import java.util.Map;
 
-public class SearchStudentsDashboard extends AppCompatActivity {
+public class SearchStudentsDashboard extends AppCompatActivity implements FilterDialogFragment.OnFiltersSelectedListener {
 
-    private ImageView profileIcon;
+    private LinearLayout cardContainer;
+    private String gradeFilter;
+    private String subjectFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,154 +36,25 @@ public class SearchStudentsDashboard extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_search_students_dashboard);
 
-        // Setup Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String[][] teachers = {
-                {"Mr. John Doe", "Experience: 10 years", "Math, Science", "Lucknow"},
-                {"Ms. Jane Smith", "Experience: 8 years", "English, History", "Delhi"},
-                {"Dr. Arjun Kumar", "Experience: 12 years", "Physics, Chemistry", "Mumbai"},
-                {"Prof. Jim Halert", "Experience: 15 years", "Biology, Geography", "Bangalore"},
-                {"Mr. Dwight Schrute", "Experience: 5 years", "Agriculture, Business", "Scranton"}
-        };
+        cardContainer = findViewById(R.id.cardContainer);
 
-        int[] cardIds = {R.id.cardTeacher1, R.id.cardTeacher2, R.id.cardTeacher3, R.id.cardTeacher4, R.id.cardTeacher5};
+        // Retrieve Grade and Subject from Intent
+        Intent intent = getIntent();
+        gradeFilter = intent.getStringExtra("GRADE");
+        subjectFilter = intent.getStringExtra("SUBJECT");
 
-        String query = "{call sp_UserDetailsInsertUpdate(3, 0, '', '', '', '', NULL, '', '', '', '', '', '', '', NULL, '', '', '', '', '')}";
-
-        profileIcon = findViewById(R.id.profileIcon);
-
-
-
-
-        DatabaseHelper.UserDetailsSelect(this, "3", "", userList -> {
-            if (userList.size() > 0) {
-                for (int i = 0; i < userList.size() && i < cardIds.length; i++) {
-                    View cardView = findViewById(cardIds[i]);
-
-                    TextView name = cardView.findViewById(R.id.tvTeacherName);
-                    TextView experience = cardView.findViewById(R.id.tvExperience);
-                    TextView subjects = cardView.findViewById(R.id.tvSubjects);
-                    TextView location = cardView.findViewById(R.id.tvLocation);
-
-                    UserDetailsClass teacher = userList.get(i);
-                    name.setText(teacher.getName());
-                    location.setText("Referral Code: " + teacher.getSelfReferralCode()); // Adjust field if needed
-
-                    ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
-
-                    // Fetch profile image name
-                    String profileImageName = teacher.getUserImageName();
-
-                    Log.d("ProfileImage", "✅ Retrieved Profile Image Name: " + profileImageName);
-
-                    if (profileImageName != null && !profileImageName.isEmpty()) {
-                        // Construct full image URL
-                        String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + profileImageName;
-                        Log.d("ProfileImage", "✅ Profile image URL: " + imageUrl);
-
-                        // Load image using Glide
-                        Glide.with(cardView.getContext())
-                                .load(imageUrl)
-                                .placeholder(R.drawable.generic_avatar) // Show default profile pic if empty
-                                .error(R.drawable.generic_avatar) // Show default if loading fails
-                                .apply(RequestOptions.circleCropTransform()) // Make the image round
-                                .into(profileIcon);
-                    } else {
-                        Log.e("ProfileImage", "❌ No profile image found for user.");
-                        profileIcon.setImageResource(R.drawable.generic_avatar); // Default avatar
-                    }
-
-                    profileIcon.setOnClickListener(view -> {
-                        Intent intent = new Intent(SearchStudentsDashboard.this, ProfilePageTeacher.class);
-                        intent.putExtra("USER_ID", teacher.getUserId()); // It's a string!
-                        intent.putExtra("USER_PHONE", teacher.getMobileNo());
-                        startActivity(intent);
-                    });
-
-                    // Fetch Experience for the teacher
-                    DatabaseHelper.UserWiseWorkExperienceSelect(this, "3", teacher.getUserId(), new DatabaseHelper.WorkExperienceCallback() {
-                        @Override
-                        public void onSuccess(List<UserWiseWorkExperience> workExperienceList) {
-                            if (workExperienceList != null && !workExperienceList.isEmpty()) {
-                                Log.d("DatabaseHelper", "Experience count: " + workExperienceList.size());
-                                UserWiseWorkExperience workExperience = workExperienceList.get(0);
-                                experience.setText("Experience: " + workExperience.getWorkExperience() + " years");
-                            } else {
-                                experience.setText("Experience: N/A");
-                            }
-                        }
-
-                        @Override
-                        public void onMessage(String message) {
-                            Log.d("Experience Fetch", "Message: " + message);
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            Log.e("Experience Fetch", "Error: " + error);
-                        }
-                    });
-
-                    //Fetch Subject Data
-                    DatabaseHelper.UserWiseSubjectSelect(this, "3", teacher.getUserId(), new DatabaseHelper.UserWiseSubjectResultListener() {
-                        @Override
-                        public void onQueryResult(List<UserWiseSubject> subjectsList) {
-                            Log.d("Subjects Fetch", "✅ Filtered Subjects Retrieved for UserID: " + teacher.getUserId() + " -> " + subjectsList.size());
-
-                            if (subjectsList != null && !subjectsList.isEmpty()) {
-                                StringBuilder subjectText = new StringBuilder("Subjects: ");
-                                int count = 0;
-
-                                for (UserWiseSubject subject : subjectsList) {
-                                    if (subject.getSubjectName() != null && !subject.getSubjectName().trim().isEmpty()) {
-                                        Log.d("Subjects Fetch", "Processing Subject: " + subject.getSubjectName() + " for UserID: " + teacher.getUserId());
-                                        subjectText.append(subject.getSubjectName());
-                                        count++;
-
-                                        if (count == 2) break;
-                                        subjectText.append(", ");
-                                    }
-                                }
-
-                                if (count > 0) {
-                                    subjects.setText(subjectText.toString());
-                                } else {
-                                    subjects.setText("Subjects: N/A");
-                                }
-                            } else {
-                                subjects.setText("Subjects: N/A");
-                            }
-                        }
-                    });
-                }
-            } else {
-                Log.d("SearchStudentsDashboard", "No teachers found.");
-            }
-        });
+        fetchAndDisplayTeachers();
 
         Button filterButton = findViewById(R.id.buttonFilter);
         filterButton.setOnClickListener(v -> {
             FragmentManager fm = getSupportFragmentManager();
             FilterDialogFragment filterDialog = new FilterDialogFragment();
+            filterDialog.setOnFiltersSelectedListener(this); // Set the listener
             filterDialog.show(fm, "filter_dialog");
         });
-
-        // Apply background colors
-        CardView cardTeacher1 = findViewById(R.id.cardTeacher1);
-        cardTeacher1.setCardBackgroundColor(Color.parseColor("#D3E2F1"));
-
-        CardView cardTeacher2 = findViewById(R.id.cardTeacher2);
-        cardTeacher2.setCardBackgroundColor(Color.parseColor("#D3E2F1"));
-
-        CardView cardTeacher3 = findViewById(R.id.cardTeacher3);
-        CardView cardTeacher4 = findViewById(R.id.cardTeacher4);
-        CardView cardTeacher5 = findViewById(R.id.cardTeacher5);
-
-        cardTeacher3.setCardBackgroundColor(Color.parseColor("#D3E2F1"));
-        cardTeacher4.setCardBackgroundColor(Color.parseColor("#D3E2F1"));
-        cardTeacher5.setCardBackgroundColor(Color.parseColor("#D3E2F1"));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -197,9 +63,89 @@ public class SearchStudentsDashboard extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onFiltersSelected(String grade, String subject) {
+        gradeFilter = grade;
+        subjectFilter = subject;
+        fetchAndDisplayTeachers();
+    }
 
-    private void MoveToPaymentGateway() {
-        Intent intent = new Intent(this, PaymentGatewayDemo.class);
-        startActivity(intent);
+    private void fetchAndDisplayTeachers() {
+        DatabaseHelper.searchUsersForTS(this, "T", 0, 0, 0, new DatabaseHelper.ProcedureResultCallback<List<UserSearchResult>>() {
+            @Override
+            public void onSuccess(List<UserSearchResult> userList) {
+                if (userList != null && !userList.isEmpty()) {
+                    if (cardContainer != null) {
+                        cardContainer.removeAllViews();
+                    } else {
+                        Log.e("SearchStudentsDashboard", "ERROR: cardContainer is NULL (inside onSuccess)!");
+                        return;
+                    }
+
+                    for (UserSearchResult teacher : userList) {
+                        // Apply filters
+                        if ((gradeFilter == null || gradeFilter.isEmpty() || teacher.getGradeName().equalsIgnoreCase(gradeFilter)) &&
+                                (subjectFilter == null || subjectFilter.isEmpty() || teacher.getSubjectName().equalsIgnoreCase(subjectFilter))) {
+
+                            View cardView = LayoutInflater.from(SearchStudentsDashboard.this).inflate(R.layout.teacher_card, cardContainer, false);
+
+                            TextView name = cardView.findViewById(R.id.tvTeacherName);
+                            TextView grade = cardView.findViewById(R.id.tvGrade);
+                            TextView subjects = cardView.findViewById(R.id.tvSubjects);
+                            TextView referralCode = cardView.findViewById(R.id.tvLocation);
+                            ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
+                            Button messageButton = cardView.findViewById(R.id.tvNotificationButton);
+
+                            messageButton.setOnClickListener(v -> {
+                                Intent intent = new Intent(SearchStudentsDashboard.this, NotificationStudentsMessage.class);
+                                intent.putExtra("USER_PHONE", teacher.getMobileNo());
+                                intent.putExtra("USER_ID", teacher.getUserId());
+                                intent.putExtra("USER_FIRST_NAME", teacher.getUsername());
+                                Log.d("SearchTeachersDashboard","Intent passed for UserID: " + teacher.getUserId());
+                                startActivity(intent);
+                            });
+
+
+                            profileIcon.setOnClickListener(v -> {
+                                Log.d("SearchStudentsDashboard", "Teacher UserID: " + teacher.getUserId());
+                                Intent intent = new Intent(SearchStudentsDashboard.this, ProfilePageTeacher.class);
+
+                                if (teacher.getMobileNo() != null) {
+                                    intent.putExtra("USER_PHONE", teacher.getMobileNo());
+                                }
+                                if (teacher.getUserId() != 0) {
+                                    intent.putExtra("USER_ID", teacher.getUserId());
+                                }
+                                if (teacher.getUsername() != null) {
+                                    intent.putExtra("USER_FIRST_NAME", teacher.getUsername());
+                                }
+                                if (teacher.getSelfReferralCode() != null) {
+                                    intent.putExtra("USER_SELF_REFERRAL", teacher.getSelfReferralCode());
+                                }
+                                if (teacher.getEmail() != null) {
+                                    intent.putExtra("USER_EMAIL", teacher.getEmail());
+                                }
+                                startActivity(intent);
+                            });
+
+
+                            name.setText(teacher.getUsername());
+                            grade.setText("Grade: " + teacher.getGradeName());
+                            subjects.setText("Subjects: " + teacher.getSubjectName());
+                            referralCode.setText("Referral Code: " + teacher.getSelfReferralCode());
+
+                            cardContainer.addView(cardView);
+                        }
+                    }
+                } else {
+                    Log.e("SearchStudentsDashboard", "No teachers found.");
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("SearchStudentsDashboard", "Error fetching teachers: " + errorMessage);
+            }
+        });
     }
 }

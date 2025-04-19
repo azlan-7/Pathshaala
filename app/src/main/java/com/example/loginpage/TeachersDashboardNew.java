@@ -1,5 +1,7 @@
 package com.example.loginpage;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Entity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +20,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -54,7 +58,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TeachersDashboardNew extends AppCompatActivity {
 
@@ -73,6 +79,11 @@ public class TeachersDashboardNew extends AppCompatActivity {
 
     // Bottom Navigation Bar Variables
     BottomNavigationView bottomNavigationView;
+    private static final String TAG = "TeachersDashboardNew";
+    Map<String, String> subjectMap = new HashMap<>();
+    AutoCompleteTextView subjectDropdown;
+    AutoCompleteTextView gradeDropdown;
+    Map<String, String> gradeMap = new HashMap<>();
 
 
     @Override
@@ -80,8 +91,10 @@ public class TeachersDashboardNew extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teachers_dashboard_new);
 
-        AutoCompleteTextView autoCompleteGrade = findViewById(R.id.autoCompleteGrade);
-        AutoCompleteTextView autoCompleteSubject = findViewById(R.id.autoCompleteSubject);
+//        AutoCompleteTextView autoCompleteGrade = findViewById(R.id.autoCompleteGrade);
+//        AutoCompleteTextView autoCompleteSubject = findViewById(R.id.autoCompleteSubject);
+        subjectDropdown = findViewById(R.id.autoCompleteSubject); // Assign the AutoCompleteTextView for subjects
+        gradeDropdown = findViewById(R.id.autoCompleteGrade); // Initialize grade dropdown
         AutoCompleteTextView autoCompleteLocation = findViewById(R.id.autoCompleteLocation);
         Button searchButton = findViewById(R.id.button37);
         welcomeText = findViewById(R.id.textViewHello); // Corrected TextView ID
@@ -99,20 +112,29 @@ public class TeachersDashboardNew extends AppCompatActivity {
         NavigationBarWorking();
 //        MoveToWhatsAppScreen();
         // Grade & Subject Data
-        String[] grades = {"Primary","Secondary","Middle School","9th", "10th", "11th", "12th"};
-        String[] subjects = {"Math", "Science", "English", "History", "Geography"};
+//        String[] grades = {"Primary","Secondary","Middle School","9th", "10th", "11th", "12th"};
+//        String[] subjects = {"Math", "Science", "English", "History", "Geography","Biology"};
 
-        autoCompleteGrade.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades));
-        autoCompleteSubject.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects));
+//        autoCompleteGrade.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades));
+//        autoCompleteSubject.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects));
 
-        autoCompleteGrade.setOnClickListener(v -> autoCompleteGrade.showDropDown());
-        autoCompleteSubject.setOnClickListener(v -> autoCompleteSubject.showDropDown());
+        loadSubjects();
+        loadGrades();
+
+        gradeDropdown.setOnClickListener(v -> gradeDropdown.showDropDown());
+        subjectDropdown.setOnClickListener(v -> subjectDropdown.showDropDown());
 
         // Fetch Cities from Database
         fetchCityData(autoCompleteLocation);
 
         searchButton.setOnClickListener(v -> {
+            String selectedGrade = gradeDropdown.getText().toString();
+//            String selectedSubject = autoCompleteSubject.getText().toString();
+            String selectedSubject = subjectDropdown.getText().toString();
+
             Intent intent = new Intent(this, SearchTeachersDashboard.class);
+            intent.putExtra("GRADE", selectedGrade);
+            intent.putExtra("SUBJECT", selectedSubject);
             startActivity(intent);
         });
 
@@ -127,7 +149,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
         });
 
         notificationButton.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersDashboardNew.this, NotificationTeachers.class);
+            Intent intent = new Intent(TeachersDashboardNew.this, NotificationTeachersMessage.class);
             startActivity(intent);
         });
 
@@ -141,6 +163,58 @@ public class TeachersDashboardNew extends AppCompatActivity {
 
         // bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+    }
+
+
+    private void loadGrades() {
+        String query = "SELECT GradeID, GradeName FROM Grades WHERE active = 'true' ORDER BY GradeName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No grades found!");
+                Toast.makeText(this, "No Grades Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> grades = new ArrayList<>();
+            gradeMap.clear();
+
+            for (Map<String, String> row : result) {
+                grades.add(row.get("GradeName"));
+                gradeMap.put(row.get("GradeName"), row.get("GradeID"));
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades);
+            gradeDropdown.setAdapter(adapter); // Use gradeDropdown here
+        });
+    }
+
+    private void loadSubjects() {
+        String query = "SELECT SubjectID, SubjectName FROM Subject WHERE active = 'true' ORDER BY SubjectName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No subjects found in the database.");
+                Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> subjects = new ArrayList<>();
+            subjectMap.clear();
+
+            for (Map<String, String> row : result) {
+                String id = row.get("SubjectID");
+                String name = row.get("SubjectName");
+                Log.d(TAG, "Subject Retrieved - ID: " + id + ", Name: " + name);
+                subjects.add(name);
+                subjectMap.put(name, id);
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects);
+            subjectDropdown.setAdapter(adapter);
+        });
     }
 
     private void fetchProfileImageFromDB() {
