@@ -87,7 +87,7 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                         if ((gradeFilter == null || gradeFilter.isEmpty() || teacher.getGradeName().equalsIgnoreCase(gradeFilter)) &&
                                 (subjectFilter == null || subjectFilter.isEmpty() || teacher.getSubjectName().equalsIgnoreCase(subjectFilter))) {
 
-                            View cardView = LayoutInflater.from(SearchStudentsDashboard.this).inflate(R.layout.teacher_card, cardContainer, false);
+                            View cardView = LayoutInflater.from(SearchStudentsDashboard.this).inflate(R.layout.teacher_card_payment, cardContainer, false);
 
                             TextView name = cardView.findViewById(R.id.tvTeacherName);
                             TextView grade = cardView.findViewById(R.id.tvGrade);
@@ -95,6 +95,12 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                             TextView referralCode = cardView.findViewById(R.id.tvLocation);
                             ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
                             Button messageButton = cardView.findViewById(R.id.tvNotificationButton);
+                            Button paymentButton = cardView.findViewById(R.id.PaymentBtn);
+
+                            paymentButton.setOnClickListener(v->{
+                                Intent intent = new Intent(SearchStudentsDashboard.this, PaymentGatewayDemo.class);
+                                startActivity(intent);
+                            });
 
                             messageButton.setOnClickListener(v -> {
                                 Intent intent = new Intent(SearchStudentsDashboard.this, NotificationStudentsMessage.class);

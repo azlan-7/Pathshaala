@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans"
-        android:text="Demo Payment using RazorPay"
+        android:text="Course Payment"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="9pt"
@@ -95,7 +95,7 @@
             android:background="@drawable/cornered_rectangle"
             android:ems="10"
             android:fontFamily="@font/work_sans"
-            android:hint="John Doe"
+            android:hint="Prof. Satish Jain"
             android:inputType="text" />
     </LinearLayout>
 
@@ -127,7 +127,7 @@
             android:textSize="8pt"
             android:textStyle="bold" />
 
-        <EditText
+        <TextView
             android:id="@+id/amountText"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
@@ -135,7 +135,9 @@
             android:background="@drawable/cornered_rectangle"
             android:ems="10"
             android:fontFamily="@font/work_sans"
-            android:hint="Amount in Rupees"
+            android:textSize="9pt"
+            android:textStyle="bold"
+            android:hint="500"
             android:inputType="number" />
     </LinearLayout>
 

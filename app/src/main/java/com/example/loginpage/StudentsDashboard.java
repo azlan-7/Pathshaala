@@ -76,10 +76,6 @@ public class StudentsDashboard extends AppCompatActivity {
         subjectDropdown = findViewById(R.id.autoCompleteSubject);
         gradeDropdown = findViewById(R.id.autoCompleteGrade); // Initialize gradeDropdown HERE
 
-//        Toolbar toolbar = findViewById(R.id.toolbar2);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle("Pathshaala");
-
         setupCharts();
         loadGrades(); // Load grades from the database
         loadSubjects(); // Load subjects from the database

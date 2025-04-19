@@ -49,14 +49,16 @@
         android:id="@+id/imageView7"
         android:layout_width="34dp"
         android:layout_height="27dp"
-        android:layout_marginStart="32dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextText4"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/numberInput"
+        app:layout_constraintHorizontal_bias="0.608"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextText4"
+        app:layout_constraintTop_toBottomOf="@+id/imageView9"
+        app:layout_constraintVertical_bias="0.744"
         app:srcCompat="@drawable/indianflag" />
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/numberInput"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="64dp"
@@ -64,12 +66,13 @@
         android:layout_marginEnd="64dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
-        android:fontFamily="@font/work_sans_light"
+        android:fontFamily="@font/work_sans"
+        android:textStyle="bold"
         android:hint="+91"
         android:inputType="phone"
         android:paddingStart="16dp"
         android:textColorHint="#1674AE"
-        android:textSize="15sp"
+        android:textSize="8pt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView11" />
@@ -89,7 +92,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
+        app:layout_constraintTop_toBottomOf="@+id/numberInput" />
 
     <ImageView
         android:id="@+id/imageView"

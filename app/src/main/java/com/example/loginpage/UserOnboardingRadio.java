@@ -72,11 +72,11 @@ public class UserOnboardingRadio extends AppCompatActivity {
         setContentView(R.layout.activity_user_onboarding_radio);
 
         // Initialize Views
-        etFirstName = findViewById(R.id.editTextFirstName);
-        etLastName = findViewById(R.id.editTextLastName);
-        etEmail = findViewById(R.id.editTextEmail);
-        etDOB = findViewById(R.id.editTextDOB);
-        etContact = findViewById(R.id.editTextContact);
+        etFirstName = findViewById(R.id.editTextText9);
+        etLastName = findViewById(R.id.editTextText11);
+        etEmail = findViewById(R.id.editTextText12);
+        etDOB = findViewById(R.id.editTextText13);
+        etContact = findViewById(R.id.editTextText10);
         autoCompleteCity = findViewById(R.id.autoCompleteCity);  // Ensure initialization here
         etUsername = findViewById(R.id.userName);
         etPassword = findViewById(R.id.password);
@@ -139,7 +139,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
         Log.d("UserOnboardingRadio", "Stored Phone Number: " + savedPhoneNumber);
 
         // Set the phone number in the contact field
-        EditText etContact = findViewById(R.id.editTextContact);
+        EditText etContact = findViewById(R.id.editTextText10);
         if (!savedPhoneNumber.isEmpty()) {
             etContact.setText(savedPhoneNumber);
             etContact.setEnabled(false); // Disable editing

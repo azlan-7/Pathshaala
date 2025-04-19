@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class PaymentGatewayDemo extends AppCompatActivity {
     private Button payNowBtn;
     private TextView referralCode;
-    private EditText amountText;
+    private TextView amountText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +46,7 @@ public class PaymentGatewayDemo extends AppCompatActivity {
 
         Checkout.preload(PaymentGatewayDemo.this);
         payNowBtn.setOnClickListener(v -> {
-            startPayment(Integer.parseInt(amountText.getText().toString()));
+            startPayment(Integer.parseInt("500"));
         });
     }
 

@@ -431,7 +431,9 @@ public class StudentsInfo extends AppCompatActivity {
             case "Add Details":
                 intent = new Intent(this, StudentsParentInfo.class);
                 break;
-
+            case "Communication Preferences":
+                intent = new Intent(this, LearningPreferences.class);
+                break;
             default:
                 Toast.makeText(this, "Invalid selection!", Toast.LENGTH_SHORT).show();
                 return;
