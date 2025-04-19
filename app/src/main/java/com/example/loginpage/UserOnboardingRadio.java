@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -64,6 +65,8 @@ public class UserOnboardingRadio extends AppCompatActivity {
     private Button buttonSave;
     private String userType = "Teacher"; // Default selection
     private AutoCompleteTextView autoCompleteCity;
+    private boolean isPasswordVisible = false;
+    private boolean isConfirmPasswordVisible = false;
 
 
     @Override
@@ -89,6 +92,46 @@ public class UserOnboardingRadio extends AppCompatActivity {
         autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
         autoCompleteCity.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) autoCompleteCity.showDropDown();
+        });
+
+        // Toggle password visibility for etPassword
+        etPassword.setOnTouchListener((v, event) -> {
+            final int DRAWABLE_RIGHT = 2;
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (etPassword.getRight() - etPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    isPasswordVisible = !isPasswordVisible;
+                    if (isPasswordVisible) {
+                        etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        etPassword.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(UserOnboardingRadio.this, R.drawable.visibility_24dp_0f4d73_fill0_wght400_grad0_opsz24), null);
+                    } else {
+                        etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        etPassword.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(UserOnboardingRadio.this, R.drawable.visibility_off_24dp_0f4d73_fill0_wght400_grad0_opsz24), null);
+                    }
+                    etPassword.setSelection(etPassword.getText().length()); // Keep cursor at the end
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        // Toggle password visibility for etConfirmPassword
+        etConfirmPassword.setOnTouchListener((v, event) -> {
+            final int DRAWABLE_RIGHT = 2;
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (etConfirmPassword.getRight() - etConfirmPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    isConfirmPasswordVisible = !isConfirmPasswordVisible;
+                    if (isConfirmPasswordVisible) {
+                        etConfirmPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                        etConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(UserOnboardingRadio.this, R.drawable.visibility_24dp_0f4d73_fill0_wght400_grad0_opsz24), null);
+                    } else {
+                        etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        etConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(UserOnboardingRadio.this, R.drawable.visibility_off_24dp_0f4d73_fill0_wght400_grad0_opsz24), null);
+                    }
+                    etConfirmPassword.setSelection(etConfirmPassword.getText().length()); // Keep cursor at the end
+                    return true;
+                }
+            }
+            return false;
         });
 
 

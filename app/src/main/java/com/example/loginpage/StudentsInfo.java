@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -76,7 +77,7 @@ public class StudentsInfo extends AppCompatActivity {
 
         setupExpandableList();
 
-        // Add the Group Expand Listener here
+        // Add the Group Expand Listener here (as you already have)
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
@@ -88,11 +89,44 @@ public class StudentsInfo extends AppCompatActivity {
             }
         });
 
+        // Add the OnGroupClickListener here
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                String groupTitle = sectionTitles.get(groupPosition);
+
+                switch (groupTitle) {
+                    case "Account Info":
+                        // Create an Intent to start the AccountInfoActivity
+                        Intent accountInfoIntent = new Intent(StudentsInfo.this, StudentsBasicInfo.class);
+                        startActivity(accountInfoIntent);
+                        return true; // Consume the click
+                    case "Dashboard":
+                        // Create an Intent to start the DashboardActivity
+                        Intent dashboardIntent = new Intent(StudentsInfo.this, StudentsDashboard.class);
+                        startActivity(dashboardIntent);
+                        return true; // Consume the click
+                    case "Communication Preferences":
+                        // Create an Intent to start the CommunicationPreferencesActivity
+                        Intent communicationIntent = new Intent(StudentsInfo.this, CommunicationPreferences.class);
+                        startActivity(communicationIntent);
+                        return true; // Consume the click
+                    case "Feedback and Ratings":
+                        // Create an Intent to start the FeedbackAndRatingsActivity
+                    default:
+                        // For other groups (with dropdowns), let the default expand/collapse happen
+                        return false;
+                }
+            }
+        });
+
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
             String selectedItem = sectionItems.get(sectionTitles.get(groupPosition)).get(childPosition);
             navigateToActivity(selectedItem);
             return true;
         });
+
+
 
         ImageView editAbout = findViewById(R.id.imageView44);
         ImageView payment = findViewById(R.id.imageView138);
@@ -127,7 +161,6 @@ public class StudentsInfo extends AppCompatActivity {
             aboutActivityLauncher.launch(intent);
             startActivity(intent);
         });
-
 
 
         // Initialize TextViews
