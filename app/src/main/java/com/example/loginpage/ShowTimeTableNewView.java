@@ -30,6 +30,7 @@ public class ShowTimeTableNewView extends AppCompatActivity {
 
     private ImageView addButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,7 @@ public class ShowTimeTableNewView extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerTimeSlots);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         ArrayList<TimeSlot> receivedList = (ArrayList<TimeSlot>) getIntent().getSerializableExtra("timeslot_list");
 

@@ -10,8 +10,8 @@
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="395dp"
+        android:layout_height="200dp"
         android:padding="12dp">
 
         <!-- Profile Icon -->
@@ -85,16 +85,14 @@
             android:id="@+id/linearLayout2"
             android:layout_width="98dp"
             android:layout_height="46dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/cornered_button"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingHorizontal="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.906"
-            app:layout_constraintStart_toEndOf="@+id/tvLocation"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.184">
+            app:layout_constraintEnd_toStartOf="@+id/linearLayoutNotification"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLocation">
 
             <ImageView
                 android:layout_width="18dp"
@@ -114,21 +112,20 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
+
         <LinearLayout
             android:id="@+id/linearLayoutNotification"
             android:layout_width="98dp"
             android:layout_height="46dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
             android:background="@drawable/cornered_button"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/tvSelfReferral"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.733"
-            app:layout_constraintStart_toEndOf="@+id/tvSubjects"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-            app:layout_constraintVertical_bias="0.466">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayoutTimeTable"
+            app:layout_constraintTop_toBottomOf="@+id/tvLocation"
+            app:layout_constraintVertical_bias="0.8">
 
             <ImageView
                 android:layout_width="24dp"
@@ -146,6 +143,39 @@
                 android:minHeight="48dp"
                 android:padding="0dp"
                 android:text="Message"
+                android:textColor="@color/white"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutTimeTable"
+            android:layout_width="98dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/cornered_button"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLocation">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/calendar_month_24dp_ffffff_fill0_wght400_grad0_opsz24" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tvTimeTableButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/work_sans_bold"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:padding="0dp"
+                android:text="Time Table"
                 android:textColor="@color/white"
                 android:textSize="9sp" />
         </LinearLayout>
