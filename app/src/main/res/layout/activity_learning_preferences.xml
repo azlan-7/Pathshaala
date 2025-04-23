@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="32dp"
     tools:context=".LearningPreferences">
 
     <ImageView
@@ -27,63 +33,91 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/detailonboardingbottom" />
 
+    <!-- ScrollView to handle multiple selected subjects -->
+
     <TextView
         android:id="@+id/subjectPreferenceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:fontFamily="@font/work_sans_bold"
         android:text="Subject Preference"
         android:textColor="#0F4D73"
-        android:textSize="22sp"
+        android:textSize="12pt"
         android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView124"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView124" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <!-- ScrollView to handle multiple selected subjects -->
-    <ScrollView
-        android:id="@+id/scrollViewSubjects"
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewSubjects"
+        android:layout_marginBottom="5dp"
+        android:layout_width="351dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:padding="8dp"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="16dp"
+        app:cardBackgroundColor="#EECECD"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/button34"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/subjectPreferenceText">
+        app:layout_constraintTop_toBottomOf="@id/subjectPreferenceText"
+        app:layout_constraintVertical_bias="0.0">
+
+            <TextView
+                android:id="@+id/selectedSubjectsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:fontFamily="@font/work_sans"
+                android:padding="8dp"
+                android:text="Selected Subjects: None"
+                android:textAlignment="center"
+                android:textColor="#D16D6A"
+                android:textSize="7pt"
+                android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/teacherRecommendationCard"
+        android:layout_width="351dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="16dp"
+        app:cardBackgroundColor="#AAC1F0"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewSubjects">
 
         <TextView
-            android:id="@+id/selectedSubjectsText"
+            android:id="@+id/teacherRecommendations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:fontFamily="@font/work_sans_light"
-            android:padding="8dp"
-            android:text="Selected Subjects: None"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/work_sans"
+            android:padding="16dp"
+            android:text="Recommended Teachers will appear here"
             android:textAlignment="center"
-            android:textColor="#0F4D73"
-            android:textSize="16sp"
-            android:textStyle="italic" />
-    </ScrollView>
-
-    <TextView
-        android:id="@+id/teacherRecommendations"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/work_sans"
-        android:padding="16dp"
-        android:text="Recommended Teachers will appear here"
-        android:textAlignment="center"
-        android:textSize="7pt"
-        app:layout_constraintBottom_toTopOf="@+id/editTextText47"
-        app:layout_constraintTop_toBottomOf="@+id/scrollViewSubjects" />
+            android:textColor="#4B77D1"
+            android:textSize="7pt"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
 
     <AutoCompleteTextView
         android:id="@+id/editTextText47"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/cornered_rectangle"
         android:clickable="true"
         android:drawableEnd="@drawable/dropdownicon"
@@ -98,62 +132,62 @@
         android:paddingEnd="16dp"
         android:textColorHint="#1674AE"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/button34"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.477"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollViewSubjects"
-        app:layout_constraintVertical_bias="0.204" />
+        app:layout_constraintTop_toBottomOf="@+id/teacherRecommendationCard" />
+
 
     <TextView
         android:id="@+id/textView95"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="56dp"
         android:fontFamily="@font/work_sans_bold"
         android:text="Learning Preference"
         android:textColor="#0F4D73"
         android:textSize="22sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.465"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextText47" />
 
-    <CheckBox
-        android:id="@+id/checkBoxVisual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Visual"
-        android:textColor="#0F4D73"
-        android:textSize="16sp"
+    <LinearLayout
+        android:id="@+id/linearLayoutCheckbox"
+        android:layout_width="195dp"
+        android:layout_height="61dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2"
         app:layout_constraintBottom_toTopOf="@+id/button34"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.656"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView95"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0">
 
-    <CheckBox
-        android:id="@+id/checkBoxAuditory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Auditory"
-        android:textColor="#0F4D73"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/button34"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.308"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView95"
-        app:layout_constraintVertical_bias="0.0" />
+        <CheckBox
+            android:id="@+id/checkBoxVisual"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Visual"
+            android:textColor="#0F4D73"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/checkBoxAuditory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Auditory"
+            android:textColor="#0F4D73"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button34"
         android:layout_width="170dp"
         android:layout_height="60dp"
+        android:layout_marginBottom="124dp"
         android:layout_weight="1"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
@@ -163,15 +197,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.798" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/clearPreferenceBtn"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/clear_button1"
         android:fontFamily="@font/work_sans_semibold"
         android:text="Clear Prefernce"
@@ -184,3 +218,4 @@
         app:layout_constraintVertical_bias="0.165" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

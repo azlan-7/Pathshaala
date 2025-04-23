@@ -91,7 +91,7 @@ public class LearningPreferences extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "No subjects selected!", Toast.LENGTH_SHORT).show();
             }
-            startActivity(new Intent(LearningPreferences.this, StudentsInfo.class));
+            startActivity(new Intent(LearningPreferences.this, StudentsDashboard.class));
             finish();
         });
 

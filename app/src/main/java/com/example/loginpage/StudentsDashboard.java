@@ -55,6 +55,7 @@ public class StudentsDashboard extends AppCompatActivity {
     private PieChart pieChart;
     BottomNavigationView bottomNavigationView;
     private static final String TAG = "StudentsDashboard";
+    Button learningPrefBtn, doubtSessionLiveBtn;
     AutoCompleteTextView subjectDropdown;
     AutoCompleteTextView gradeDropdown;
     Map<String, String> subjectMap = new HashMap<>();
@@ -73,6 +74,8 @@ public class StudentsDashboard extends AppCompatActivity {
         pieChart = findViewById(R.id.barChartStudentEnrolledMonth);
         profileIconTop = findViewById(R.id.imageView151);
         notificationBell = findViewById(R.id.imageView141);
+        learningPrefBtn = findViewById(R.id.learningPrefBtn);
+        doubtSessionLiveBtn = findViewById(R.id.DoubtSessionLiveBtn);
         subjectDropdown = findViewById(R.id.autoCompleteSubject);
         gradeDropdown = findViewById(R.id.autoCompleteGrade); // Initialize gradeDropdown HERE
 
@@ -105,6 +108,16 @@ public class StudentsDashboard extends AppCompatActivity {
             Intent intent = new Intent(this, SearchStudentsDashboard.class);
             intent.putExtra("GRADE", selectedGrade);
             intent.putExtra("SUBJECT", selectedSubject);
+            startActivity(intent);
+        });
+
+        learningPrefBtn.setOnClickListener(v->{
+            Intent intent = new Intent(StudentsDashboard.this, LearningPreferences.class);
+            startActivity(intent);
+        });
+
+        doubtSessionLiveBtn.setOnClickListener(v->{
+            Intent intent = new Intent(StudentsDashboard.this, SampleGoLiveZegoStudent.class);
             startActivity(intent);
         });
 
@@ -220,21 +233,27 @@ public class StudentsDashboard extends AppCompatActivity {
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
         String[] gradeLevels = {"Pre", "Pri", "Sec", "Mid", "9th", "10th", "11th", "12th", "UG"};
-        String[] subjects = {"Math", "Science", "English", "History", "Geography", "Physics", "Chemistry", "Biology", "Computer Science"};
+        String[] subjects = {"Math", "Physics", "Chemistry", "Biology", "CS"};
+        String[] subjectsPie = {"Math", "Science", "English", "History", "Geography", "Physics", "Chemistry", "Biology", "Computer Science"};
 
-        for (int i = 0; i < gradeLevels.length; i++) {
+        barEntries.add(new BarEntry(0, 35));
+        barEntries.add(new BarEntry(1, 25));
+        barEntries.add(new BarEntry(2, 30));
+        barEntries.add(new BarEntry(3, 32));
+        barEntries.add(new BarEntry(4, 43));
+
+        for (int i = 0; i < subjectsPie.length; i++) {
             float value = (float) ((i + 1) * 10.0);
-            barEntries.add(new BarEntry(i, value));
             if (i < subjects.length) {
-                pieEntries.add(new PieEntry(value, subjects[i]));
+                pieEntries.add(new PieEntry(value, subjectsPie[i]));
             }
         }
 
         // Bar Chart Setup
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Grade Levels");
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Subjects");
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         barDataSet.setDrawValues(true);
-        barDataSet.setValueTextSize(12f); // ✅ Decrease bar value text size
+        barDataSet.setValueTextSize(9f); // ✅ Decrease bar value text size
 
         BarData barData = new BarData(barDataSet);
         barData.setValueTextSize(12f); // ✅ Apply to the data object as well
@@ -244,9 +263,9 @@ public class StudentsDashboard extends AppCompatActivity {
         barChart.getDescription().setText("Student Distribution by Grade");
         barChart.getDescription().setTextColor(Color.BLACK);
 
-        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(gradeLevels));
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(subjects));
         barChart.getXAxis().setGranularity(1f);
-        barChart.getXAxis().setLabelCount(gradeLevels.length);
+        barChart.getXAxis().setLabelCount(subjects.length);
         barChart.getXAxis().setTextSize(12f); // ✅ X-axis label text size
 
         // Pie Chart Setup

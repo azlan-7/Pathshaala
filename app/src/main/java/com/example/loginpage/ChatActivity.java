@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +29,7 @@ import kotlin.coroutines.EmptyCoroutineContext;
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView chatRecyclerView;
     private EditText messageInput;
+    private ImageView botImage;
     private ImageButton sendButton;
     private ChatAdapter chatAdapter;
     private List<MessageModel> messageList;
@@ -42,12 +45,19 @@ public class ChatActivity extends AppCompatActivity {
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
         messageInput = findViewById(R.id.messageInput);
         sendButton = findViewById(R.id.sendButton);
-
+        botImage = findViewById(R.id.botImage);
         messageList = new ArrayList<>();
         chatAdapter = new ChatAdapter(messageList, this);
 
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatRecyclerView.setAdapter(chatAdapter);
+
+        if (!messageList.isEmpty()) {
+            botImage.setVisibility(View.GONE); // Hide the bot image
+        } else {
+            botImage.setVisibility(View.VISIBLE); // Show if empty
+        }
+
 
         messageInput.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus && chatRecyclerView.getAdapter() != null) {

@@ -10,132 +10,144 @@
     <TextView
         android:id="@+id/tvContact"
         android:layout_width="222dp"
-        android:layout_height="39dp"
-        android:fontFamily="@font/work_sans_light"
-        android:padding="8dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans"
         android:textColor="#0F4D73"
-        android:textSize="14sp"
+        android:textSize="7pt"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.423"
+        app:layout_constraintHorizontal_bias="0.701"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.171" />
+        app:layout_constraintVertical_bias="0.179" />
 
     <TextView
         android:id="@+id/tvFullName"
         android:layout_width="218dp"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans"
         android:textColor="#0F4D73"
-        android:textSize="22sp"
+        android:textSize="10pt"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.414"
+        app:layout_constraintHorizontal_bias="0.685"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.138" />
 
     <TextView
         android:id="@+id/tvEmail"
-        android:layout_width="226dp"
-        android:layout_height="45dp"
-        android:fontFamily="@font/work_sans_light"
-        android:padding="8dp"
+        android:layout_width="217dp"
+        android:layout_height="22dp"
+        android:fontFamily="@font/work_sans"
         android:textColor="#0F4D73"
-        android:textSize="14sp"
+        android:textSize="7pt"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintHorizontal_bias="0.681"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.215" />
+        app:layout_constraintVertical_bias="0.209" />
 
     <TextView
         android:id="@+id/textView42"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
+        android:layout_marginTop="36dp"
         android:fontFamily="@font/work_sans_extrabold"
         android:text="Student's Profile"
         android:textColor="#0F4D73"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvFullName"
+        android:textSize="12pt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.537"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.592" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ExpandableListView
-        android:id="@+id/expandableView"
-        android:layout_width="299dp"
-        android:layout_height="470dp"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"
-        android:indicatorRight="?android:attr/expandableListPreferredItemIndicatorLeft"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewExpandableList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_weight="1"
+        android:paddingBottom="16dp"
+        app:cardBackgroundColor="#AAC1F0"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView99" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView99">
 
-
+        <ExpandableListView
+            android:id="@+id/expandableView"
+            android:layout_width="match_parent"
+            android:layout_height="470dp"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
+            android:indicatorRight="?android:attr/expandableListPreferredItemIndicatorLeft"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView99" />
+    </androidx.cardview.widget.CardView>
 
 
     <ImageView
         android:id="@+id/imageView44"
         android:layout_width="26dp"
         android:layout_height="26dp"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="128dp"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.218"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tvFullName"
         app:layout_constraintTop_toBottomOf="@+id/textView42"
         app:srcCompat="@drawable/pencilvector" />
-
-
 
     <TextView
         android:id="@+id/textViewAboutYourself"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/work_sans_light"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/work_sans"
         android:text="Write about yourself"
+        android:textSize="7pt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
 
     <ImageView
         android:id="@+id/imageView55"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_width="66dp"
+        android:layout_height="76dp"
+        android:layout_marginTop="96dp"
         app:layout_constraintEnd_toStartOf="@+id/tvContact"
-        app:layout_constraintHorizontal_bias="0.379"
+        app:layout_constraintHorizontal_bias="0.754"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/generic_avatar" />
-
 
     <TextView
         android:id="@+id/uniqueIdTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="172dp"
-        android:fontFamily="@font/work_sans_light"
+        android:fontFamily="@font/work_sans"
         android:text="Unique ID"
         android:textColor="#0F4D73"
-        android:textSize="15sp"
+        android:textSize="7pt"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cardViewExpandableList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.712"
-        app:layout_constraintStart_toEndOf="@+id/textViewAccountInfo"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAboutYourself" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvEmail"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.731" />
 
     <ImageView
         android:id="@+id/imageView97"
@@ -158,26 +170,27 @@
         app:srcCompat="@drawable/detailonboardingbottom" />
 
 
-
     <ImageView
         android:id="@+id/imageView99"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.424"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAboutYourself"
         app:srcCompat="@drawable/full_width" />
 
     <ImageView
         android:id="@+id/imageView138"
-        android:layout_width="33dp"
+        android:layout_width="28dp"
         android:layout_height="26dp"
         app:layout_constraintBottom_toTopOf="@+id/imageView44"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tvEmail"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.901"
+        app:layout_constraintVertical_bias="0.644"
         app:srcCompat="@drawable/payments_24dp_78a75a_fill0_wght400_grad0_opsz24" />
 
 

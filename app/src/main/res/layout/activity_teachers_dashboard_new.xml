@@ -1,5 +1,4 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,17 +8,17 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:background="@drawable/toolbar_background">
+        android:background="@drawable/toolbar_background"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <LinearLayout
             android:id="@+id/linearLayout7"
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:orientation="horizontal"
-            android:padding="15dp"
             android:background="@drawable/toolbar_background"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="15dp">
 
             <!-- Notification Icon on Left -->
             <ImageView
@@ -35,20 +34,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/work_sans_bold"
                 android:gravity="center"
                 android:text="Dashboard"
-                android:textSize="32sp"
                 android:textColor="#FFFFFF"
-                android:fontFamily="@font/work_sans_bold" />
+                android:textSize="32sp" />
 
             <!-- Profile Icon on Right -->
             <ImageView
-                android:id="@+id/imageView151"
+                android:id="@+id/profileImage"
                 android:layout_width="57dp"
                 android:layout_height="57dp"
                 android:layout_marginStart="10dp"
                 android:contentDescription="@string/user_profile"
-                app:srcCompat="@drawable/profile_icon_no_bg" />
+                app:srcCompat="@drawable/profile" />
 
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -190,12 +189,10 @@
 
             </androidx.cardview.widget.CardView>
 
-
             <androidx.cardview.widget.CardView
+                android:id="@+id/DoubtSessionCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="80dp"
-                android:paddingBottom="20dp"
                 android:layout_marginTop="10dp"
                 app:cardBackgroundColor="#ffffff"
                 app:cardCornerRadius="12dp"
@@ -204,9 +201,80 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/statisticsCard">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
+                    <TextView
+                        android:id="@+id/DoubtSessionText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/work_sans"
+                        android:text="Doubt Clearing Session"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-                <!-- Grade Dropdown -->
+                    <TextView
+                        android:id="@+id/joinSessionText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/work_sans"
+                        android:text="Join the Live Session to clear the doubts of Previous Class"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="15dp">
+
+                        <Button
+                            android:id="@+id/DoubtSessionLiveBtn"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/cornered_button_green"
+                            android:fontFamily="@font/work_sans_semibold"
+                            android:text="Start Session Now"
+                            android:textAlignment="center"
+                            android:textSize="7pt"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/imageView104"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/doubt_session_img" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="80dp"
+                android:paddingBottom="20dp"
+                app:cardBackgroundColor="#ffffff"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/DoubtSessionCard">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -218,8 +286,8 @@
                         android:id="@+id/textView111"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/loc_stats"
                         android:fontFamily="@font/work_sans"
+                        android:text="@string/loc_stats"
                         android:textAlignment="center"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -269,16 +337,24 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
+                        android:layout_gravity="end"
                         android:background="@color/white"
-                        android:layout_gravity="end">
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/image231"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginEnd="16dp"
+                            android:src="@drawable/white_img_solo" />
 
                         <Button
                             android:id="@+id/button37"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="20dp"
                             android:background="@drawable/cornered_button"
                             android:backgroundTint="@android:color/transparent"
                             android:fontFamily="@font/work_sans"
@@ -289,43 +365,92 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/autoCompleteLocation" />
-
-<!--                        <ImageButton-->
-<!--                            android:id="@+id/whatsappButton"-->
-<!--                            android:layout_width="0dp"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:layout_weight="2"-->
-<!--                            android:layout_marginEnd="10dp"-->
-<!--                            android:paddingStart="100dp"-->
-<!--                            android:scaleType="fitCenter"-->
-<!--                            android:layout_gravity="end"-->
-<!--                            android:background="@color/white"-->
-<!--                            app:srcCompat="@drawable/wp_logo" />-->
                     </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CourseCreateModule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="#ffffff"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardViewDropdown">
 
-                    <ImageView
-                        android:id="@+id/imageView146"
-                        android:layout_width="55dp"
-                        android:layout_height="100dp"
-                        android:padding="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/autoCompleteLocation"
-                        app:srcCompat="@drawable/search_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/createNewCourseText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/work_sans"
+                        android:text="New Course Creation"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/createNewCourseSubText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/work_sans"
+                        android:text="Create the new courses according to your expertise"
+                        android:textAlignment="center"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/imageView103"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginEnd="16dp"
+                            android:src="@drawable/new_course_icon_clip" />
+
+                        <Button
+                            android:id="@+id/newCourseCreateBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/cornered_button_green"
+                            android:fontFamily="@font/work_sans_semibold"
+                            android:text="Crete New Course"
+                            android:textAlignment="center"
+                            android:textSize="7pt"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <!-- Subject Dropdown -->
-
-                <!-- Location Dropdown -->
-
-                <!-- Search Button -->
-
-
             </androidx.cardview.widget.CardView>
 
-
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:paddingBottom="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/CourseCreateModule">
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -341,16 +466,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:menu="@menu/bottom_navbar"
-            app:labelVisibilityMode="auto"
+            android:background="@drawable/toolbar_background"
+            app:itemActiveIndicatorStyle="@color/white"
             app:itemIconSize="30dp"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
-            app:itemActiveIndicatorStyle="@color/white"
-            android:background="@drawable/toolbar_background"
+            app:labelVisibilityMode="auto"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_navbar" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

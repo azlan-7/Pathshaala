@@ -85,6 +85,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
     AutoCompleteTextView gradeDropdown;
     Map<String, String> gradeMap = new HashMap<>();
 
+    Button doubtSession, newCourseCreation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +99,11 @@ public class TeachersDashboardNew extends AppCompatActivity {
         AutoCompleteTextView autoCompleteLocation = findViewById(R.id.autoCompleteLocation);
         Button searchButton = findViewById(R.id.button37);
         welcomeText = findViewById(R.id.textViewHello); // Corrected TextView ID
-        profileIcon = findViewById(R.id.imageView151);
-        profileIconTop = findViewById(R.id.imageView151);
+        profileIcon = findViewById(R.id.profileImage);
+        profileIconTop = findViewById(R.id.profileImage);
         notificationButton = findViewById(R.id.imageView141);
+        doubtSession = findViewById(R.id.DoubtSessionLiveBtn);
+        newCourseCreation = findViewById(R.id.newCourseCreateBtn);
 
         // ✅ Fetch Profile Image from Database
         fetchProfileImageFromDB();
@@ -139,7 +142,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
         });
 
         profileIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfoSubSection.class);
+            Intent intent = new Intent(TeachersDashboardNew.this, TeachersInfo.class);
             startActivity(intent);
         });
 
@@ -153,6 +156,15 @@ public class TeachersDashboardNew extends AppCompatActivity {
             startActivity(intent);
         });
 
+        doubtSession.setOnClickListener(v -> {
+           Intent intent = new Intent(TeachersDashboardNew.this, SampleGoLiveZego.class);
+           startActivity(intent);
+        });
+
+        newCourseCreation.setOnClickListener(v->{
+            Intent intent = new Intent(TeachersDashboardNew.this, NewCourseCreation.class);
+            startActivity(intent);
+        });
 
         // Handle insets for layout adjustments
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

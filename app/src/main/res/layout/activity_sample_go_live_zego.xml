@@ -60,6 +60,7 @@
 
     <!-- Main Content -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -68,8 +69,8 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans_bold"
             android:text="GO LIVE"
-            android:fontFamily="@font/work_sans "
             android:textColor="@color/black"
             android:textSize="18pt"
             android:textStyle="bold"
@@ -79,6 +80,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
+
+        <!-- Bottom Aligned Section -->
 
         <TextView
             android:id="@+id/textView2"
@@ -91,28 +94,26 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.247" />
+            app:layout_constraintVertical_bias="0.415" />
 
-        <!-- Bottom Aligned Section -->
+        <!-- Input Section -->
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
             android:text="Start a new live class or Enter the live ID to join."
             android:textColor="#0077b6"
-            android:fontFamily="@font/work_sans"
             android:textSize="6.2pt"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.615" />
+            app:layout_constraintVertical_bias="0.7" />
 
-        <!-- Input Section -->
         <LinearLayout
             android:id="@+id/linearLayout10"
             android:layout_width="match_parent"
@@ -135,10 +136,10 @@
                 android:hint="Enter the Live ID"
                 android:inputType="none"
                 android:maxLength="5"
-                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="8pt"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/yourClassNameInput"
@@ -169,6 +170,18 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView108"
+            android:layout_width="230dp"
+            android:layout_height="168dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/go_live_icon_clip" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

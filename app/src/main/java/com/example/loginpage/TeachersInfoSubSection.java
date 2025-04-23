@@ -55,7 +55,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
 
     private UserDetailsClass user;
 
-    private TextView tvFirstName, tvFullName, tvLastName, tvContact, tvEmail, tvDOB,uniqueIdTextView;
+    private TextView tvFirstName, tvFullName, tvLastName, tvContact, tvEmail, tvDOB, uniqueIdTextView;
 
     private ImageView profileImage, backButton;
     private TextView accountInfo, subjectExpertise, education, workExperience, gradesTaught, certifications, awards, promotionalActivities, location, dashboard;
@@ -71,7 +71,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
     private int userId;
     private int lastExpandedPosition = -1;
     private ApiInterface apiService;
-
 
 
     @Override
@@ -148,7 +147,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         });
 
 
-
         // Retrieve data from Intent
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("ABOUT_YOURSELF")) {
@@ -163,7 +161,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         }
 
 
-
         fetchUserDetailsFromDB();
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -172,7 +169,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
 
 
 //
-        Log.d("TeachersInfoSubSection","phoneNumber: " + phoneNumber);
+        Log.d("TeachersInfoSubSection", "phoneNumber: " + phoneNumber);
 
         if (phoneNumber == null) phoneNumber = sharedPreferences.getString("phoneNumber", "N/A");
 
@@ -196,7 +193,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
                                     String fetchedProfileImage = userList.get(0).getUserImageName();
                                     Log.d(TAG, "✅ Fetched Referral Code: " + fetchedReferralCode);
                                     Log.d(TAG, "✅ Fetched Profile Image: " + fetchedProfileImage);
-                                    uniqueIdTextView.setText(fetchedReferralCode);
+                                    uniqueIdTextView.setText("Teacher ID: "+fetchedReferralCode);
                                 } else {
                                     Log.e(TAG, "❌ No referral code found in DB!");
                                 }
@@ -244,7 +241,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         }
 
 
-
         String phoneNum = sharedPreferences.getString("phoneNumber", "");
 
 
@@ -282,17 +278,15 @@ public class TeachersInfoSubSection extends AppCompatActivity {
                         }
                         Log.d(TAG, "✅ Last Name Retrieved from DB: " + user.getLastName());
                         tvFullName.setText(user.getName() + " " + lastName);
-                        tvContact.setText(user.getMobileNo());
-                        tvEmail.setText(user.getEmailId());
-                        tvEmail.setText(user.getEmailId());
-                        uniqueIdTextView.setText(user.getSelfReferralCode());
+                        tvContact.setText("Phone: "+user.getMobileNo());
+                        tvEmail.setText("Email: "+user.getEmailId());
+                        uniqueIdTextView.setText("Teacher ID: "+user.getSelfReferralCode());
                     });
                 } else {
 //                    Log.e(TAG, "⚠️ No users found in DB for phone: " + phoneNumber);
                 }
             }
         });
-
 
 
         // Handle window insets
@@ -350,8 +344,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
     }
 
 
-
-
     private void setupExpandableList() {
         sectionTitles = new ArrayList<>();
         sectionItems = new HashMap<>();
@@ -387,7 +379,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         int userId = sharedPreferences.getInt("USER_ID", -1);
 
-        Log.d("TeachersInfoSubSection","UserId fetched through sharedpreferences: " + userId);
+        Log.d("TeachersInfoSubSection", "UserId fetched through sharedpreferences: " + userId);
         getAllUserInfoDirect(userId);
     }
 
@@ -434,9 +426,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
             });
         }).start();
     }
-
-
-
 
 
 //    private void loadUserSubjects(List<String> subjectList) {
@@ -526,8 +515,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
     }
 
 
-
-
     private void loadUserEducation(List<String> educationOptions) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         int userId = sharedPreferences.getInt("USER_ID", -1);
@@ -590,7 +577,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
             }
         });
     }
-
 
 
     private void loadUserWorkExperience(List<String> workExperienceOptions) {
@@ -846,7 +832,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
     }
 
 
-
     private void navigateToActivity(String selectedItem) {
         Intent intent = null;
         switch (selectedItem) {
@@ -981,8 +966,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
     }
 
 
-
-
     private void fetchReferralCodeFromDB(TextView uniqueIdTextView) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         int userId = sharedPreferences.getInt("USER_ID", -1); // ✅ Get updated USER_ID
@@ -1003,7 +986,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
                     String fetchedReferralCode = user.getSelfReferralCode();
 
                     Log.d(TAG, "✅ Fetched Referral Code from DB: " + fetchedReferralCode);
-                    uniqueIdTextView.setText(fetchedReferralCode);
+                    uniqueIdTextView.setText("Teacher ID: "+fetchedReferralCode);
                 } else {
                     Log.e(TAG, "❌ No referral code found in DB!");
                 }

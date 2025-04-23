@@ -187,13 +187,11 @@ public class StudentsInfo extends AppCompatActivity {
         String email = sharedPreferences.getString("EMAIL", "N/A");
         String selfreferralcode = sharedPreferences.getString("selfreferralcode", "N/A");
 
-//        tvFullName.setText(firstName + " " + lastName);
-//        tvContact.setText(contact);
-//        tvEmail.setText(email);
+//
         tvFullName.setText("Student " + "Test");
         tvContact.setText("2323232333");
         tvEmail.setText("student@Test.com");
-        uniqueIdTextView.setText(selfreferralcode);
+        uniqueIdTextView.setText("Student ID: "+selfreferralcode);
 
         // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -301,11 +299,11 @@ public class StudentsInfo extends AppCompatActivity {
         int userId = sharedPreferences.getInt("USER_ID", -1);
 
         if (userId == -1) {
-            Log.e("loadUserGradesTaught", "❌ User ID not found in SharedPreferences!");
+            Log.e("loadUserGradesTaught", "User ID not found in SharedPreferences!");
             return;
         }
 
-        Log.d("loadUserGradesTaught", "📌 Fetching Grades Taught for UserID: " + userId);
+        Log.d("loadUserGradesTaught", "Fetching Grades Taught for UserID: " + userId);
 
         DatabaseHelper.UserWiseGradesSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseGradesResultListener() {
             @Override
@@ -313,15 +311,15 @@ public class StudentsInfo extends AppCompatActivity {
                 gradesTaughtOptions.clear(); // ✅ Clear previous data
 
                 if (userWiseGradesList == null || userWiseGradesList.isEmpty()) {
-                    Log.d("loadUserGradesTaught", "⚠️ No grades data found for UserID: " + userId);
+                    Log.d("loadUserGradesTaught", "No grades data found for UserID: " + userId);
                     Toast.makeText(StudentsInfo.this, "No Grades Found!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // ✅ Loop through the list and add up to 6 records
+                // Loop through the list and add up to 6 records
                 int count = 0;
                 for (UserWiseGrades grade : userWiseGradesList) {
-                    if (count >= 6) break; // ✅ Stop after adding 6 records
+                    if (count >= 6) break; // Stop after adding 6 records
 
                     gradesTaughtOptions.add("🎓 " + grade.getGradename() + " - " + grade.getSubjectName());
                     count++;
@@ -506,8 +504,8 @@ public class StudentsInfo extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     tvFullName.setText(user.getName());
-                    tvContact.setText(user.getMobileNo());
-                    tvEmail.setText(user.getEmailId());
+                    tvContact.setText("Phone: "+user.getMobileNo());
+                    tvEmail.setText("Email: "+user.getEmailId());
 
                     String imageName = user.getUserImageName();
                     if (imageName != null && !imageName.isEmpty()) {
