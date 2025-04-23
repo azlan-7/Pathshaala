@@ -328,7 +328,7 @@ public class DatabaseHelper {
                         stmt.setString(3, "");
                         stmt.setString(4, "");
                         stmt.setString(5, "");
-                        stmt.setString(6, "");
+                        stmt.setString(6, ""); //lastName
                         stmt.setString(7, null); //dob
                         stmt.setString(8, "");
                         stmt.setString(9, "");
@@ -368,6 +368,7 @@ public class DatabaseHelper {
                             Log.d("DatabaseHelper", "✅ UserId Retrieved: " + userIdString);
 
                             UserDetailsClass user = new UserDetailsClass();
+                            user.setLastName(rs.getString("LastName"));
                             user.setUserId(rs.getString("UserId"));
                             user.setName(rs.getString("Name"));
                             user.setEmailId(rs.getString("emailId"));

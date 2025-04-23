@@ -80,7 +80,7 @@ public class TeachersBasicInfo extends AppCompatActivity {
         // ✅ Retrieve data from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String firstName = sharedPreferences.getString("USER_NAME", ""); // "" is the default value
-        String lastName = sharedPreferences.getString("LAST_NAME", "");
+        String lastNameFromPrefs = sharedPreferences.getString("lastName", ""); // Get from prefs
         String phoneNumber = sharedPreferences.getString("phoneNumber", "");
         String email = sharedPreferences.getString("USER_EMAIL", "");
         String dob = sharedPreferences.getString("DOB", "");
@@ -88,8 +88,8 @@ public class TeachersBasicInfo extends AppCompatActivity {
 
         fetchUserDetails(phoneNumber);
 
-        etFirstName.setText(firstName);
-        etLastName.setText(lastName);
+        etFirstName.setText(firstName.trim().split("\\s+")[0]);
+        etLastName.setText(lastNameFromPrefs);
         etContact.setText(phoneNumber);
         etEmail.setText(email);
         etDOB.setText(dob);

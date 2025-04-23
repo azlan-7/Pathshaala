@@ -1,5 +1,7 @@
 package com.example.loginpage;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,8 +29,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.models.UserDetailsClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +51,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
     private ImageView profileImageView;
     private ImageView cameraIcon;
     private AutoCompleteTextView autoCompleteCity; // City Dropdown
+    private UserDetailsClass user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +76,18 @@ public class StudentsBasicInfo extends AppCompatActivity {
         // Retrieve user details from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String firstName = sharedPreferences.getString("USER_NAME", ""); // "" is the default value
-        String lastName = sharedPreferences.getString("LAST_NAME", "");
+        String lastName = sharedPreferences.getString("lastName", "");
         String phoneNumber = sharedPreferences.getString("phoneNumber", "");
         String email = sharedPreferences.getString("USER_EMAIL", "");
         String dob = sharedPreferences.getString("DOB", "");
 
+        Log.d("StudentsBasicInfo","Info received through sharedpref: " + "FirstName: " + firstName + " " + "LastName: " + lastName + " " + "PhoneNumber " + phoneNumber + " Email: " + email);
+
+//        fetchUserDetails(phoneNumber);
+        fetchUserDetailsFromDB();
+
         etFirstName.setText(firstName);
+        etLastName.setText(lastName);
         etEmail.setText(email);
         etContactNo.setText(phoneNumber);
 
@@ -154,6 +166,116 @@ public class StudentsBasicInfo extends AppCompatActivity {
         autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
     }
 
+
+    private void fetchUserDetailsFromDB() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
+        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
+
+        if (!storedImageName.isEmpty()) {
+            String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
+            Log.d("StudentsInfo", "✅ Loaded Image from SharedPreferences: " + imageUrl);
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.generic_avatar)
+                    .error(R.drawable.generic_avatar)
+                    .into(profileImageView);
+        } else {
+            Log.e("StudentsInfo", "❌ No profile image found in SharedPreferences, checking DB...");
+        }
+
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            Log.e("StudentsInfo", "❌ ERROR: Phone number missing from SharedPreferences!");
+            return;
+        }
+
+        DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
+            if (!userList.isEmpty()) {
+                UserDetailsClass user = userList.get(0);
+                Log.d("StudentsInfo", "✅ Loaded Correct User: " + user.getName());
+
+                runOnUiThread(() -> {
+                    etFirstName.setText(user.getName());
+                    etContactNo.setText(user.getMobileNo());
+                    etEmail.setText(user.getEmailId());
+
+                    String imageName = user.getUserImageName();
+                    if (imageName != null && !imageName.isEmpty()) {
+                        String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+                        Log.d("StudentsInfo", "✅ Profile image URL: " + imageUrl);
+                        Glide.with(this)
+                                .load(imageUrl)
+                                .placeholder(R.drawable.generic_avatar)
+                                .error(R.drawable.generic_avatar)
+                                .into(profileImageView);
+
+                        // ✅ Save to SharedPreferences for future use
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("USER_PROFILE_IMAGE", imageName);
+                        editor.apply();
+                    } else {
+                        Log.e("StudentsInfo", "❌ No profile image found in DB or empty value.");
+                    }
+                });
+            } else {
+                Log.e("StudentsInfo", "❌ No user found in DB for phone: " + phoneNumber);
+            }
+        });
+    }
+
+    private void fetchUserDetails(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            Log.e("TeachersBasicInfo", "❌ ERROR: Phone number missing from Intent!");
+            return;
+        }
+
+        Log.d("TeachersBasicInfo", "📌 Fetching user details for phone number: 545" + phoneNumber);
+
+        DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
+            if (userList == null) {
+                Log.e("TeachersBasicInfo", "❌ ERROR: userList is NULL!");
+                return;
+            }
+
+            if (userList.isEmpty()) {
+                Log.e("TeachersBasicInfo", "❌ No user found in DB for phone: " + phoneNumber);
+                return;
+            }
+
+            user = userList.get(0);  // ✅ Store user object
+            Log.d("TeachersBasicInfo", "✅ Loaded Correct User: " + user.getName() + " " + user.getLastName());
+
+            runOnUiThread(() -> {
+//                etFirstName.setText(user.getName() != null ? user.getName() : "N/A");
+//                etLastName.setText(user.getLastName() != null ? user.getLastName() : "N/A");
+//                etContact.setText(user.getMobileNo() != null ? user.getMobileNo() : "N/A");
+//                etEmail.setText(user.getEmailId() != null ? user.getEmailId() : "N/A");
+//                etDOB.setText(user.getDateOfBirth());
+
+                String imageName = user.getUserImageName();
+//                String referralCode = user.getSelfReferralCode();
+
+
+                if (imageName != null && !imageName.isEmpty()) {
+                    String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
+                    Log.d(TAG, "✅ Profile image URL: " + imageUrl);
+
+                    runOnUiThread(() -> Glide.with(this)
+                            .load(imageUrl)
+                            .placeholder(R.drawable.generic_avatar) // Default profile image
+                            .error(R.drawable.generic_avatar) // Show default if error
+                            .apply(RequestOptions.circleCropTransform()) // Makes the image round
+                            .into(profileImageView));
+                } else {
+                    Log.e(TAG, "❌ No profile image found in DB or empty value.");
+                }
+
+
+                Log.d("TeachersBasicInfo", "✅ UI Updated Successfully with User Details");
+            });
+        });
+    }
+
     private void insertProfileImageIntoDB(Uri imageUri) {
         if (imageUri == null) {
             Log.e("StudentsBasicInfo", "⚠️ No image selected.");
@@ -197,9 +319,6 @@ public class StudentsBasicInfo extends AppCompatActivity {
 
     }
 
-
-
-    
 
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

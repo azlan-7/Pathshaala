@@ -281,7 +281,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
                             lastName = "";
                         }
                         Log.d(TAG, "✅ Last Name Retrieved from DB: " + user.getLastName());
-                        tvFullName.setText(user.getName() + " " + lastName);
+                        tvFullName.setText(user.getName() + " " + user.getLastName());
                         tvContact.setText(user.getMobileNo());
                         tvEmail.setText(user.getEmailId());
                         tvEmail.setText(user.getEmailId());

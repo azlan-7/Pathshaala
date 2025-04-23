@@ -190,9 +190,9 @@ public class StudentsInfo extends AppCompatActivity {
 //        tvFullName.setText(firstName + " " + lastName);
 //        tvContact.setText(contact);
 //        tvEmail.setText(email);
-        tvFullName.setText("Student " + "Test");
-        tvContact.setText("2323232333");
-        tvEmail.setText("student@Test.com");
+//        tvFullName.setText("Student " + "Test");
+//        tvContact.setText("2323232333");
+//        tvEmail.setText("student@Test.com");
         uniqueIdTextView.setText(selfreferralcode);
 
         // Handle window insets
@@ -503,7 +503,7 @@ public class StudentsInfo extends AppCompatActivity {
                 Log.d("StudentsInfo", "✅ Loaded Correct User: " + user.getName());
 
                 runOnUiThread(() -> {
-                    tvFullName.setText(user.getName());
+                    tvFullName.setText(user.getName() + " " + user.getLastName());
                     tvContact.setText(user.getMobileNo());
                     tvEmail.setText(user.getEmailId());
 
