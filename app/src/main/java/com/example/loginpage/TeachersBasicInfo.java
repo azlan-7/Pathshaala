@@ -77,21 +77,39 @@ public class TeachersBasicInfo extends AppCompatActivity {
 
         Log.d("TeachersBasicInfo", "📌 onCreate() Started!"); // Debug ✅
 
+        // ✅ Retrieve data from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String firstName = sharedPreferences.getString("USER_NAME", ""); // "" is the default value
+        String lastName = sharedPreferences.getString("LAST_NAME", "");
+        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
+        String email = sharedPreferences.getString("USER_EMAIL", "");
+        String dob = sharedPreferences.getString("DOB", "");
+        String profileImageName = sharedPreferences.getString("PROFILE_IMAGE_NAME", "");
+
+        fetchUserDetails(phoneNumber);
+
+        etFirstName.setText(firstName);
+        etLastName.setText(lastName);
+        etContact.setText(phoneNumber);
+        etEmail.setText(email);
+        etDOB.setText(dob);
+
+
         // ✅ Get data from Intent
-        Intent intent = getIntent();
-        if (intent != null) {
-            int userId = intent.getIntExtra("USER_ID", -1);
-            String phoneNumber = intent.getStringExtra("USER_CONTACT");
-
-
-            Log.d("TeachersBasicInfo", "📌 Received Data -> UserID: 11"
-                    + " | Phone: " + phoneNumber);
-
-            fetchUserDetails12(phoneNumber);
-
-        } else {
-            Log.e("TeachersBasicInfo", "❌ ERROR: Intent is null!");
-        }
+//        Intent intent = getIntent();
+//        if (intent != null) {
+//            int userId = intent.getIntExtra("USER_ID", -1);
+//            String phoneNumber = intent.getStringExtra("USER_CONTACT");
+//
+//
+//            Log.d("TeachersBasicInfo", "📌 Received Data -> UserID: 11"
+//                    + " | Phone: " + phoneNumber);
+//
+//            fetchUserDetails12(phoneNumber);
+//
+//        } else {
+//            Log.e("TeachersBasicInfo", "❌ ERROR: Intent is null!");
+//        }
 
         RadioButton radioMale = findViewById(R.id.radioMale);
         RadioButton radioFemale = findViewById(R.id.radioFemale);
@@ -129,6 +147,7 @@ public class TeachersBasicInfo extends AppCompatActivity {
 
         Button btnSave = findViewById(R.id.button12);
         btnSave.setOnClickListener(v -> {
+            Intent intent = getIntent();
             // Reuse the existing intent by setting a new destination
             intent.setClass(TeachersBasicInfo.this, TeachersInfoSubSection.class);
             startActivity(intent);
@@ -146,7 +165,7 @@ public class TeachersBasicInfo extends AppCompatActivity {
         autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
     }
 
-    private void fetchUserDetails12(String phoneNumber) {
+    private void fetchUserDetails(String phoneNumber) {
 
 
         if (phoneNumber == null || phoneNumber.isEmpty()) {
@@ -171,12 +190,11 @@ public class TeachersBasicInfo extends AppCompatActivity {
             Log.d("TeachersBasicInfo", "✅ Loaded Correct User: " + user.getName() + " " + user.getLastName());
 
             runOnUiThread(() -> {
-                etFirstName.setText(user.getName() != null ? user.getName() : "N/A");
-                etLastName.setText(user.getLastName() != null ? user.getLastName() : "N/A");
-                etContact.setText(user.getMobileNo() != null ? user.getMobileNo() : "N/A");
-                etEmail.setText(user.getEmailId() != null ? user.getEmailId() : "N/A");
-                etDOB.setText(user.getDateOfBirth());
-
+//                etFirstName.setText(user.getName() != null ? user.getName() : "N/A");
+//                etLastName.setText(user.getLastName() != null ? user.getLastName() : "N/A");
+//                etContact.setText(user.getMobileNo() != null ? user.getMobileNo() : "N/A");
+//                etEmail.setText(user.getEmailId() != null ? user.getEmailId() : "N/A");
+//                etDOB.setText(user.getDateOfBirth());
 
                 String imageName = user.getUserImageName();
 //                String referralCode = user.getSelfReferralCode();

@@ -2295,8 +2295,17 @@ public class DatabaseHelper {
             try (Connection conn = getConnection()) {
                 CallableStatement stmt = conn.prepareCall("{call sp_GetTimeTableByUserID(?)}");
                 stmt.setInt(1, userId);
+                Log.d("DatabaseHelper", "Executing stored procedure: sp_GetTimeTableByUserID with UserId = " + userId);
 
                 ResultSet rs = stmt.executeQuery();
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
+                Log.d("DatabaseHelper", "Number of columns in result set: " + columnCount);
+                for (int i = 1; i <= columnCount; i++) {
+                    Log.d("DatabaseHelper", "Column " + i + ": Name=" + metaData.getColumnName(i) + ", Type=" + metaData.getColumnTypeName(i));
+                }
+                int rowCount = 0;
+
                 while (rs.next()) {
                     TimeTableEntry entry = new TimeTableEntry();
                     entry.timeTableId = rs.getInt("TimeTableId");
@@ -2332,12 +2341,14 @@ public class DatabaseHelper {
 
                     timeTableEntries.add(entry);
                 }
+                Log.d("DatabaseHelper", "Number of rows returned for UserId " + userId + ": " + rowCount);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
                     callback.onSuccess(timeTableEntries);
                 });
 
             } catch (Exception e) {
+                Log.e("DatbaseHelper", "Error fetching timetable for UserId " + userId + ": " + e.getMessage());
                 new Handler(Looper.getMainLooper()).post(() -> {
                     callback.onError(e.getMessage());
                 });

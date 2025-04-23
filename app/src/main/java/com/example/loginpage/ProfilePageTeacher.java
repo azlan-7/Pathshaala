@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -322,11 +323,20 @@ public class ProfilePageTeacher extends AppCompatActivity {
         sectionItems.put("Promotional Activities", new ArrayList<>());
         sectionItems.put("Dashboard", new ArrayList<>());
 
-        adapter = new CustomExpandableListAdapter(this, sectionTitles, sectionItems);
+        adapter = new CustomExpandableListAdapter(this, sectionTitles, sectionItems) {
+            @Override
+            public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+                View view = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
+                ImageView itemIcon = view.findViewById(R.id.itemIcon);
+                itemIcon.setOnClickListener(null); // Disable the click listener
+                return view;
+            }
+        };
         expandableListView.setAdapter(adapter);
 
-
+        // Receiving the Intent Data
         String userIdStr = getIntent().getStringExtra("USER_ID");  // String from intent
+
 
         if (userIdStr == null || userIdStr.isEmpty()) {
             Toast.makeText(this, "Invalid user ID", Toast.LENGTH_SHORT).show();
@@ -375,9 +385,9 @@ public class ProfilePageTeacher extends AppCompatActivity {
                     }
 
                     // Add "Add" button
-                    for (Map.Entry<String, List<String>> entry : headingMap.entrySet()) {
-                        entry.getValue().add("Add");
-                    }
+//                    for (Map.Entry<String, List<String>> entry : headingMap.entrySet()) {
+//                        entry.getValue().add("Add");
+//                    }
 
                     adapter.notifyDataSetChanged();
                 } else {
@@ -413,9 +423,9 @@ public class ProfilePageTeacher extends AppCompatActivity {
                         }
                     }
 
-                    for (Map.Entry<String, List<String>> entry : headingMap.entrySet()) {
-                        entry.getValue().add("Add");
-                    }
+//                    for (Map.Entry<String, List<String>> entry : headingMap.entrySet()) {
+//                        entry.getValue().add("Add");
+//                    }
 
                     adapter.notifyDataSetChanged();
                 } else {

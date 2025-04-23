@@ -119,13 +119,14 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
 
                             profileIcon.setOnClickListener(v -> {
                                 Log.d("SearchStudentsDashboard", "Teacher UserID: " + teacher.getUserId());
+                                Log.d("SearchStudentsDashboard", "Teacher Name: " + teacher.getUsername() + ", Teacher UserID before Intent: " + teacher.getUserId());
                                 Intent intent = new Intent(SearchStudentsDashboard.this, ProfilePageTeacher.class);
 
                                 if (teacher.getMobileNo() != null) {
                                     intent.putExtra("USER_PHONE", teacher.getMobileNo());
                                 }
                                 if (teacher.getUserId() != 0) {
-                                    intent.putExtra("USER_ID", teacher.getUserId());
+                                    intent.putExtra("USER_ID", String.valueOf(teacher.getUserId())); // Convert to String
                                 }
                                 if (teacher.getUsername() != null) {
                                     intent.putExtra("USER_FIRST_NAME", teacher.getUsername());

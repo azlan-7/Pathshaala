@@ -273,16 +273,16 @@
                         android:background="@color/white"
                         android:layout_gravity="end">
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/button37"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginStart="10dp"
                             android:background="@drawable/cornered_button"
-                            android:backgroundTint="@android:color/transparent"
-                            android:fontFamily="@font/work_sans"
-                            android:text="@string/search"
+                            android:fontFamily="@font/work_sans_bold"
+                            android:text="Search"
+                            android:textColor="#FFFFFF"
                             android:textAlignment="center"
                             android:textSize="15sp"
                             android:textStyle="bold"
@@ -341,7 +341,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:menu="@menu/bottom_navbar"
+            app:menu="@menu/bottom_navbar_teacher"
             app:labelVisibilityMode="auto"
             app:itemIconSize="30dp"
             app:itemIconTint="@color/white"

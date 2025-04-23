@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,54 +18,48 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
-import com.example.loginpage.adapters.TimeSlotAdapter;
+import com.example.loginpage.adapters.TimeSlotAdapterTeacher; // Create a new Adapter for teachers
 import com.example.loginpage.models.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowTimeTableNewView extends AppCompatActivity {
+public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private TimeSlotAdapter adapter;
-    private ArrayList<TimeSlot> timeSlotList;
+    private RecyclerView recyclerViewTeacher; // Changed variable name
+    private TimeSlotAdapterTeacher adapterTeacher; // Changed adapter type and name
+    private ArrayList<TimeSlot> timeSlotListTeacher; // Changed variable name
 
-    private AppCompatButton continueButton;
+    private ImageView addButtonTeacher; // Changed variable name
 
+    private Button continueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_show_time_table_new_view);
+        setContentView(R.layout.activity_show_time_table_new_view_teacher); // Use the teacher's layout
 
-        continueButton = findViewById(R.id.button42);
+        addButtonTeacher = findViewById(R.id.imageView103Teacher); // Use teacher's ID
+        recyclerViewTeacher = findViewById(R.id.recyclerTimeSlotsTeacher); // Use teacher's ID
+        recyclerViewTeacher.setLayoutManager(new LinearLayoutManager(this));
+        continueButton = findViewById(R.id.button42Teacher);
 
-        recyclerView = findViewById(R.id.recyclerTimeSlots);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        continueButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ShowTimeTableNewView.this, SearchStudentsDashboard.class);
+        addButtonTeacher.setOnClickListener(v -> {
+            Intent intent = new Intent(ShowTimeTableNewViewTeacher.this, ShowTimeTable.class);
             startActivity(intent);
         });
 
-
-        ArrayList<TimeSlot> receivedList = (ArrayList<TimeSlot>) getIntent().getSerializableExtra("timeslot_list");
+        continueButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ShowTimeTableNewViewTeacher.this, TeachersDashboardNew.class);
+            startActivity(intent);
+        });
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userIdToFetch;
-        int userIdFromSharedPrefs = sharedPreferences.getInt("USER_ID", -1);
-        int userIdFromIntent = getIntent().getIntExtra("USER_ID", -1);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        Log.d("ShowTimeTableNewViewTeacher", "Fetching timetable for UserID: " + userId);
 
-        if (userIdFromIntent != -1) {
-            userIdToFetch = userIdFromIntent;
-            Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from Intent: " + userIdToFetch);
-        } else {
-            userIdToFetch = userIdFromSharedPrefs;
-            Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from SharedPreferences: " + userIdToFetch);
-        }
-
-        DatabaseHelper.getTimeTableByUserId(userIdToFetch, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
+        DatabaseHelper.getTimeTableByUserId(userId, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
             @Override
             public void onSuccess(List<DatabaseHelper.TimeTableEntry> result) {
                 List<TimeSlot> slotList = new ArrayList<>();
@@ -81,10 +74,10 @@ public class ShowTimeTableNewView extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (!slotList.isEmpty()) {
-                        TimeSlotAdapter adapter = new TimeSlotAdapter(slotList);
-                        recyclerView.setAdapter(adapter);
+                        TimeSlotAdapterTeacher adapter = new TimeSlotAdapterTeacher(slotList); // Use teacher's adapter
+                        recyclerViewTeacher.setAdapter(adapter);
                     } else {
-                        Toast.makeText(ShowTimeTableNewView.this, "No time slots received!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShowTimeTableNewViewTeacher.this, "No time slots received!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -92,14 +85,12 @@ public class ShowTimeTableNewView extends AppCompatActivity {
             @Override
             public void onError(String error) {
                 runOnUiThread(() -> {
-                    Toast.makeText(ShowTimeTableNewView.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ShowTimeTableNewViewTeacher.this, "Error: " + error, Toast.LENGTH_SHORT).show();
                 });
             }
         });
 
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainTeacher), (v, insets) -> { // Use teacher's ID
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

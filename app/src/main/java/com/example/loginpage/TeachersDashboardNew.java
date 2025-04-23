@@ -258,11 +258,10 @@ public class TeachersDashboardNew extends AppCompatActivity {
             }
             else if(itemId == R.id.goLive){
                 Intent intent = new Intent(TeachersDashboardNew.this, SampleGoLiveZego.class);
-
                 startActivity(intent);
             }
-            else if (itemId == R.id.profile) {
-                Intent intent = new Intent(TeachersDashboardNew.this, ShowTimeTable.class);
+            else if (itemId == R.id.timeTable) {
+                Intent intent = new Intent(TeachersDashboardNew.this, ShowTimeTableNewViewTeacher.class);
                 startActivity(intent);
             }
             return true;

@@ -187,7 +187,7 @@ public class StudentsDashboard extends AppCompatActivity {
                 startActivity(intent);
             }
             else if (itemId == R.id.profile) {
-                Intent intent = new Intent(StudentsDashboard.this, ShowTimeTableNewView.class);
+                Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
                 startActivity(intent);
             }
             return true;

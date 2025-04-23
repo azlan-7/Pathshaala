@@ -2,14 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
+    android:id="@+id/mainTeacher" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShowTimeTableNewView">
+    tools:context=".ShowTimeTableNewViewTeacher">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerTimeSlots"
-        android:layout_width="320dp"
+        android:id="@+id/recyclerTimeSlotsTeacher" android:layout_width="320dp"
         android:layout_height="463dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,21 +15,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvTitleTeacher" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans_bold"
-        android:text="View TimeTable"
+        android:text="View your TimeTable"
         android:textColor="#0F4D73"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerTimeSlots"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerTimeSlotsTeacher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button42"
-        android:layout_width="141dp"
+        android:id="@+id/button42Teacher" android:layout_width="141dp"
         android:layout_height="50dp"
         android:background="@drawable/cornered_button"
         android:fontFamily="@font/work_sans_semibold"
@@ -41,6 +37,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerTimeSlots" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerTimeSlotsTeacher" />
+
+    <ImageView
+        android:id="@+id/imageView103Teacher" android:layout_width="34dp"
+        android:layout_height="31dp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerTimeSlotsTeacher"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintStart_toEndOf="@+id/tvTitleTeacher"
+        app:layout_constraintTop_toTopOf="@+id/tvTitleTeacher"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/add_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

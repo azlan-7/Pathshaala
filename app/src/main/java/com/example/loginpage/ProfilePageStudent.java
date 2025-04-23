@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -222,7 +224,15 @@ public class ProfilePageStudent extends AppCompatActivity {
             sectionItems.put(sectionTitles.get(i), new ArrayList<>());
         }
 
-        adapter = new StudentsExpandableListAdapter(this, sectionTitles, sectionItems);
+        adapter = new StudentsExpandableListAdapter(this, sectionTitles, sectionItems) {
+            @Override
+            public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+                View view = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
+                ImageView itemIcon = view.findViewById(R.id.itemIcon);
+                itemIcon.setOnClickListener(null); // Disable the click listener
+                return view;
+            }
+        };
         expandableListView.setAdapter(adapter);
 
 //        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -284,9 +294,9 @@ public class ProfilePageStudent extends AppCompatActivity {
                 }
 
                 // Add fallback "Add" entries for UI
-                gradeOptions.add("Add");
-                academicDetailsOptions.add("Add");
-                parentDetailsOptions.add("Add");
+//                gradeOptions.add("Add");
+//                academicDetailsOptions.add("Add");
+//                parentDetailsOptions.add("Add");
 
                 adapter.notifyDataSetChanged();
             });
@@ -325,7 +335,7 @@ public class ProfilePageStudent extends AppCompatActivity {
 
                     for (Map.Entry<String, List<String>> entry : headingMap.entrySet()) {
                         if (entry.getValue() != null) {
-                            entry.getValue().add("Add");
+//                            entry.getValue().add("Add");
                         } else {
                             Log.e("ProfilePageStudent", "⚠️ List is null for heading: " + entry.getKey());
                         }
@@ -370,7 +380,7 @@ public class ProfilePageStudent extends AppCompatActivity {
                     if (userWiseGradesList.size() > 6) {
                         gradesTaughtOptions.add("More...");
                     }
-                    gradesTaughtOptions.add("Add grades taught");
+//                    gradesTaughtOptions.add("Add grades taught");
                 }
                 Log.d("loadUserGradesTaught", "Grades options list: " + gradesTaughtOptions);
 

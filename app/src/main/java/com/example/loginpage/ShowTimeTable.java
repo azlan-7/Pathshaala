@@ -93,7 +93,7 @@ public class ShowTimeTable extends AppCompatActivity {
 
 
                     SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                    int userId = sharedPreferences.getInt("USER_ID", 0);
+                    int userId = sharedPreferences.getInt("USER_ID", -1);
 
                     String startTime = classSlot.startTime;
                     String endTime = classSlot.endTime;
@@ -122,6 +122,7 @@ public class ShowTimeTable extends AppCompatActivity {
                                 public void onSuccess(String message) {
                                     Log.d("ShowTimeTable","Message from db:  " + message);
                                     Log.d("ShowTimeTable", "subjectId=" + subjectId + ", grade=" + selectedGrade + ", day=" + day + ", startTime=" + startTime + ", endTime=" + endTime);
+                                    Log.d("ShowTimeTable","Time table saved for userId: "+ createdByUserId);
                                     Toast.makeText(ShowTimeTable.this, "Saved successfully: " + message, Toast.LENGTH_SHORT).show();
                                 }
 
@@ -138,7 +139,7 @@ public class ShowTimeTable extends AppCompatActivity {
             }
 
             Toast.makeText(this, "Time Table saved successfully!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(ShowTimeTable.this, TeachersDashboardNew.class);
+            Intent intent = new Intent(ShowTimeTable.this, ShowTimeTableNewViewTeacher.class);
             startActivity(intent);
         });
 

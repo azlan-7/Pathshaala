@@ -41,7 +41,7 @@ import java.util.List;
 
 public class StudentsBasicInfo extends AppCompatActivity {
 
-    private EditText etDOB;
+    private EditText etDOB,etFirstName,etLastName,etContactNo,etEmail,etCity;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView profileImageView;
     private ImageView cameraIcon;
@@ -56,6 +56,11 @@ public class StudentsBasicInfo extends AppCompatActivity {
         profileImageView = findViewById(R.id.imageViewProfile);
         cameraIcon = findViewById(R.id.imageViewCamera);
         cameraIcon.setOnClickListener(v -> openGallery());
+        etFirstName = findViewById(R.id.editTextFirstName);
+        etLastName = findViewById(R.id.editTextLastName);
+        etContactNo = findViewById(R.id.editTextPhone);
+        etEmail = findViewById(R.id.editTextEmail);
+        etCity = findViewById(R.id.autoCompleteCity1);
 
         autoCompleteCity = findViewById(R.id.autoCompleteCity1); // Initialize city dropdown
 
@@ -64,6 +69,15 @@ public class StudentsBasicInfo extends AppCompatActivity {
 
         // Retrieve user details from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String firstName = sharedPreferences.getString("USER_NAME", ""); // "" is the default value
+        String lastName = sharedPreferences.getString("LAST_NAME", "");
+        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
+        String email = sharedPreferences.getString("USER_EMAIL", "");
+        String dob = sharedPreferences.getString("DOB", "");
+
+        etFirstName.setText(firstName);
+        etEmail.setText(email);
+        etContactNo.setText(phoneNumber);
 
         // Prepopulate city if saved
         String savedCity = sharedPreferences.getString("CITY", "");
@@ -83,7 +97,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
 
         // Load Phone Number if available
         EditText etContact = findViewById(R.id.editTextPhone);
-        String phoneNumber = getIntent().getStringExtra("phoneNumber");
+//        String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
         if (phoneNumber != null && !phoneNumber.isEmpty()) {
             etContact.setText(phoneNumber);

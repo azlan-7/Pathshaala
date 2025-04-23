@@ -20,8 +20,8 @@
         app:iconSize="30dp"/>
 
     <item
-        android:id="@+id/profile"
-        android:title="Profile"
-        android:icon="@drawable/profile_icon_no_bg"
+        android:id="@+id/timeTable"
+        android:title="TimeTable"
+        android:icon="@drawable/calendar_month_24dp_ffffff_fill0_wght400_grad0_opsz24"
         app:iconSize="30dp"/>
 </menu>

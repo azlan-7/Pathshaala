@@ -33,6 +33,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ShowTimeTableNewViewTeacher"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+        <activity
             android:name=".NotificationTeachersMessage"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight" />
