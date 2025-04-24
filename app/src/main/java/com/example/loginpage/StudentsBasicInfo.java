@@ -198,7 +198,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
                     etFirstName.setText(user.getName());
                     etContactNo.setText(user.getMobileNo());
                     etEmail.setText(user.getEmailId());
-                    etDOB.setText(user.getDateOfBirth());
+                    etDOB.setText(user.getDateOfBirth().split("\\s+")[0]);
 
                     String imageName = user.getUserImageName();
                     if (imageName != null && !imageName.isEmpty()) {

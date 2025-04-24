@@ -83,16 +83,24 @@ public class TeachersBasicInfo extends AppCompatActivity {
         String lastNameFromPrefs = sharedPreferences.getString("lastName", ""); // Get from prefs
         String phoneNumber = sharedPreferences.getString("phoneNumber", "");
         String email = sharedPreferences.getString("USER_EMAIL", "");
-        String dob = sharedPreferences.getString("DOB", "");
+        String dobWithTime = sharedPreferences.getString("DOB", "");
+        String dobOnly = "";
         String profileImageName = sharedPreferences.getString("PROFILE_IMAGE_NAME", "");
 
         fetchUserDetails(phoneNumber);
 
+        if (dobWithTime.contains(" ")) {
+            dobOnly = dobWithTime.split(" ")[0]; // Split at the space and take the first part
+        } else {
+            dobOnly = dobWithTime; // If there's no space, it might already be just the date
+        }
+
+        etDOB.setText(dobOnly);
         etFirstName.setText(firstName.trim().split("\\s+")[0]);
         etLastName.setText(lastNameFromPrefs);
         etContact.setText(phoneNumber);
         etEmail.setText(email);
-        etDOB.setText(dob);
+
 
 
         // ✅ Get data from Intent

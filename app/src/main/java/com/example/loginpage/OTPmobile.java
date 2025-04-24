@@ -111,8 +111,10 @@ public class OTPmobile extends AppCompatActivity {
                         sharedPreferences.edit().putString("selfreferralcode", user.getSelfReferralCode()).apply();
                         sharedPreferences.edit().putString("usertype", user.getUserType()).apply();
                         sharedPreferences.edit().putString("lastName", user.getLastName()).apply(); // Store lastName
+                        sharedPreferences.edit().putString("DOB", user.getDateOfBirth()).apply(); // Store DOB
                         Log.d(TAG, "✅ Stored User ID: " + userId + ", LastName: " + user.getLastName());
                         Log.d(TAG, "✅ Stored User ID: " + userId);
+                        Log.d(TAG, "✅ Stored Date of birth: " + user.getDateOfBirth());
 
                         Log.d(TAG, "UserType :" + user.getUserType());
 

@@ -376,6 +376,7 @@ public class DatabaseHelper {
                             user.setSelfReferralCode(rs.getString("selfreferralcode"));
                             user.setUserType(rs.getString("usertype"));
                             user.setUserImageName(rs.getString("UserImageName"));
+                            user.setDateOfBirth(rs.getString("DateofBirth")); // Retrieve Date of Birth
                             userList.add(user);
 
                             Log.d("DatabaseHelper", "✅ User Retrieved: " + user.getUserType() + " (ID: " + user.getUserId() + ")");
