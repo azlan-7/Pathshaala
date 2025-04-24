@@ -58,22 +58,13 @@ public class ProfilePageStudent extends AppCompatActivity {
     private static final String TAG = "ProfilePageStudent";
 
 
-    private final ActivityResultLauncher<Intent> aboutActivityLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                    result -> {
-                        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                            String updatedAbout = result.getData().getStringExtra("ABOUT_YOURSELF");
-                            if (updatedAbout != null) {
-                                tvAboutYourself.setText(updatedAbout);  // Update UI instantly
-                            }
-                        }
-                    });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_students_info);
+        setContentView(R.layout.activity_profile_page_student);
 
 
         String phoneNumber = getIntent().getStringExtra("USER_PHONE");
@@ -107,10 +98,7 @@ public class ProfilePageStudent extends AppCompatActivity {
             return true;
         });
 
-        ImageView editAbout = findViewById(R.id.imageView44);
-        ImageView payment = findViewById(R.id.imageView138);
 
-        tvAboutYourself = findViewById(R.id.textViewAboutYourself);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView2);
 
 
@@ -126,19 +114,6 @@ public class ProfilePageStudent extends AppCompatActivity {
 
         uniqueIdTextView.setText("[" + uniqueID + "]");
 
-        // Open About Student Page
-        editAbout.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfilePageStudent.this, AboutStudent.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
-
-
-        payment.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfilePageStudent.this, PaymentGatewayDemo.class);
-            aboutActivityLauncher.launch(intent);
-            startActivity(intent);
-        });
 
 
 
@@ -165,7 +140,6 @@ public class ProfilePageStudent extends AppCompatActivity {
             Log.e("ProfilePageStudent", "Image name is null or empty");
         }
 
-        tvAboutYourself.setText(aboutYourself);
         tvContact.setText(contactNumber);
 
 //        tvFullName.setText(firstName + " " + lastName);

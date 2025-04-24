@@ -79,10 +79,10 @@ public class ProfilePageTeacher extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teachers_info_sub_section);
+        setContentView(R.layout.activity_profile_page_teacher);
 
         // Initialize UI elements
-        TextView aboutText = findViewById(R.id.textView411);
+
         backButton = findViewById(R.id.imageView1401);
         accountInfo = findViewById(R.id.textView431);
         subjectExpertise = findViewById(R.id.textView441);
@@ -93,8 +93,6 @@ public class ProfilePageTeacher extends AppCompatActivity {
         promotionalActivities = findViewById(R.id.textView601);
         location = findViewById(R.id.textView481);
         gradesTaught = findViewById(R.id.textView581);
-        ImageView editAbout = findViewById(R.id.imageView441);
-        ImageView qrCode = findViewById(R.id.imageView1071);
         profileImage = findViewById(R.id.imageView551);
         dashboard = findViewById(R.id.textView481);
         tvFullName = findViewById(R.id.tvFullName1);

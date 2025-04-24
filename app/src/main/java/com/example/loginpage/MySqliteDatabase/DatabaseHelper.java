@@ -1975,8 +1975,8 @@ public class DatabaseHelper {
         try {
             conn = getConnection();
             stmt = conn.prepareCall("{call sp_UserWiseInfo(?)}");
-            stmt.setInt(1, 10);
-
+//            stmt.setInt(1, 10);
+            stmt.setInt(1,userId);
             rs = stmt.executeQuery();
             if(rs!=null)
             {

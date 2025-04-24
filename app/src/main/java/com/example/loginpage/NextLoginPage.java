@@ -187,7 +187,8 @@ public class NextLoginPage extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(String result) {
-                Toast.makeText(NextLoginPage.this, result, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NextLoginPage.this, result, Toast.LENGTH_SHORT).show();
+                Log.d("NextLoginPage","Result: " + result);
             }
         }.execute();
     }
@@ -219,119 +220,6 @@ public class NextLoginPage extends AppCompatActivity {
     }
 
 
-
-
-
-//    private void executeDatabaseQuery() {
-//        new AsyncTask<Void, Void, String>() {
-//            @Override
-//            protected String doInBackground(Void... voids) {
-//                Log.d("NextLoginPage", "SqlTest1");
-//                String s = "";
-//                try {
-//                    Connection_Class connect = new Connection_Class();
-//                    Connection con = connect.CONN();
-//                    if (con == null) {
-//                        s = "There is no Internet Connection";
-//                        Log.d("NextLoginPage", "Value of s1 =" + s);
-//                    } else {
-//                        String query = "SELECT countvalue FROM visitorcounter";
-//                        PreparedStatement ps = con.prepareStatement(query);
-//                        ResultSet count = ps.executeQuery();
-//
-//                        if (count.next()) {  // Move to first row
-//                            int visitorCount = count.getInt("countvalue");
-//                            Log.d("NextLoginPage", "Value of count = " + visitorCount);
-//                            s = "Visitor Count: " + visitorCount;
-//                        } else {
-//                            Log.d("NextLoginPage", "No data found in visitorcounter table.");
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    s = "Error retrieving data from table: " + e.getMessage();
-//                    Log.d("NextLoginPage", "SQL Error: " + s);
-//                }
-//                return s;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String result) {
-//                // Runs on UI Thread, update UI here if needed
-//                Toast.makeText(NextLoginPage.this, result, Toast.LENGTH_SHORT).show();
-//            }
-//        }.execute();
-//    }
-
-
-
-
-
-//    protected String doInBackground() {
-//        Log.d("NextLoginPage", "SqlTest1");
-//
-//        String s = "";
-//        try {
-//            Connection_Class connect = new Connection_Class();
-//            Connection con = connect.CONN();
-//            if (con == null) {
-//                s = "There is no Internet Connection";
-//                Log.d("NextLoginPage", "Value of s1 =" + s);
-//            } else {
-//                String query = "SELECT countvalue FROM visitorcounter";
-//                PreparedStatement ps = con.prepareStatement(query);
-//                ResultSet count = ps.executeQuery();
-//
-//                if (count.next()) {  // Move to the first row
-//                    int visitorCount = count.getInt("countvalue");  // Retrieve the integer value
-//                    Log.d("NextLoginPage", "Value of count = " + visitorCount);
-//                } else {
-//                    Log.d("NextLoginPage", "No data found in visitorcounter table.");
-//                }
-//
-//                Toast.makeText(NextLoginPage.this, "SQLTEST ", Toast.LENGTH_SHORT).show();
-//            }
-//        } catch (final Exception e) {
-//            s = "Error retrieving data from table: " + e.getMessage();
-//            Log.d("NextLoginPage", "SQL Error: " + s);
-//        }
-//
-//        return s;
-//    }
-
-
-
-//    protected String doInBackground(String... strings) {
-//        Log.d("NextLoginPage", "SqlTest1");
-//
-//        String s = "";
-//        try {
-//            Connection_Class connect = new Connection_Class();
-//            Connection con = connect.CONN();
-//            if (con == null) {
-//                s = "There is no Internet Connection";
-//                Log.d("NextLoginPage", "Value of" + "  s1 ="+s);
-//
-//            } else {
-//                String query = "select countvalue from visitorcounter";
-//                PreparedStatement ps = con.prepareStatement(query);
-//                ResultSet count = ps.executeQuery();
-//                Log.d("NextLoginPage", "Value of" + count + "  s2 ="+s);
-//
-//                Toast.makeText(NextLoginPage.this, "SQLTEST ", Toast.LENGTH_SHORT).show();
-//
-//                Integer i = 1;
-//            }
-//
-//        } catch (final Exception e) {
-//
-//            s = "Error retrieving data from table";
-//            Log.d("NextLoginPage", "Value of Count"  + "  s3 ="+s);
-//
-//        }
-//        Log.d("NextLoginPage", "Value of Count"  + "  s4 ="+s);
-//
-//        return s;
-//    }
 
     private void onClick(View v) {
         // Retrieve the phone number entered in the EditText

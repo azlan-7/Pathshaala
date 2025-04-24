@@ -96,10 +96,10 @@ public class TeachersBasicInfo extends AppCompatActivity {
         }
 
         etDOB.setText(dobOnly);
-        etFirstName.setText(firstName.trim().split("\\s+")[0]);
+//        etFirstName.setText(firstName.trim().split("\\s+")[0]);
         etLastName.setText(lastNameFromPrefs);
         etContact.setText(phoneNumber);
-        etEmail.setText(email);
+//        etEmail.setText(email);
 
 
 
@@ -198,10 +198,10 @@ public class TeachersBasicInfo extends AppCompatActivity {
             Log.d("TeachersBasicInfo", "✅ Loaded Correct User: " + user.getName() + " " + user.getLastName());
 
             runOnUiThread(() -> {
-//                etFirstName.setText(user.getName() != null ? user.getName() : "N/A");
+                etFirstName.setText(user.getName().trim().split("\\s+")[0]);
 //                etLastName.setText(user.getLastName() != null ? user.getLastName() : "N/A");
 //                etContact.setText(user.getMobileNo() != null ? user.getMobileNo() : "N/A");
-//                etEmail.setText(user.getEmailId() != null ? user.getEmailId() : "N/A");
+                etEmail.setText(user.getEmailId());
 //                etDOB.setText(user.getDateOfBirth());
 
                 String imageName = user.getUserImageName();
