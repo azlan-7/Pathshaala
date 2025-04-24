@@ -86,7 +86,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
 //        fetchUserDetails(phoneNumber);
         fetchUserDetailsFromDB();
 
-        etFirstName.setText(firstName);
+//        etFirstName.setText(firstName);
         etLastName.setText(lastName);
         etEmail.setText(email);
         etContactNo.setText(phoneNumber);
@@ -198,6 +198,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
                     etFirstName.setText(user.getName());
                     etContactNo.setText(user.getMobileNo());
                     etEmail.setText(user.getEmailId());
+                    etDOB.setText(user.getDateOfBirth());
 
                     String imageName = user.getUserImageName();
                     if (imageName != null && !imageName.isEmpty()) {

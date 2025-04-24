@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.bumptech.glide.Glide;
 import com.example.loginpage.models.UserDetailsClass;
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
@@ -77,13 +79,29 @@ public class SampleGoLiveZegoStudent extends AppCompatActivity {
         });
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String firstName = sharedPreferences.getString("FIRST_NAME", "User"); // Default "User"
+        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
+//        String firstName = sharedPreferences.getString("USER_NAME", ""); // "" is the default value
+
 
         goLiveBtn = findViewById(R.id.goLiveBtn);
         liveClassIdInput = findViewById(R.id.liveClassIdInput);
         yourNameInput = findViewById(R.id.yourClassNameInput);
 
-        yourNameInput.setText(firstName);
+        DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
+            if (!userList.isEmpty()) {
+                UserDetailsClass user = userList.get(0);
+                Log.d("StudentsInfo", "✅ Loaded Correct User: " + user.getName());
+
+                runOnUiThread(() -> {
+                    yourNameInput.setText(user.getName());
+                });
+            } else {
+                Log.e("StudentsInfo", "❌ No user found in DB for phone: " + phoneNumber);
+            }
+        });
+
+
+
 
 
         liveClassIdInput.addTextChangedListener(new TextWatcher() {
