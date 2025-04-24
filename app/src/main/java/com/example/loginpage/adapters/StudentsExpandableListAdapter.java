@@ -13,11 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.loginpage.GradesStudentAdd;
+import com.example.loginpage.GradesStudentView;
 import com.example.loginpage.R;
 import com.example.loginpage.StudentsAcademicDetails;
 import com.example.loginpage.StudentsAcademicDetailsView;
 import com.example.loginpage.StudentsGrade;
 import com.example.loginpage.StudentsParentInfo;
+import com.example.loginpage.StudentsParentInfoView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -168,7 +171,7 @@ public class StudentsExpandableListAdapter extends BaseExpandableListAdapter {
                             context.startActivity(new Intent(context, StudentsAcademicDetails.class));
                             break;
                         case "Grade":
-                            context.startActivity(new Intent(context, StudentsGrade.class));
+                            context.startActivity(new Intent(context, GradesStudentAdd.class));
                             break;
                         case "Parent Guardian Details":
                             context.startActivity(new Intent(context, StudentsParentInfo.class));
@@ -185,9 +188,20 @@ public class StudentsExpandableListAdapter extends BaseExpandableListAdapter {
         } else {
             itemIcon.setImageResource(R.drawable.dot_single_svgrepo_com);
             itemIcon.setOnClickListener(v -> {
-                if (context != null) {
-                    Intent intent = new Intent(context, StudentsAcademicDetailsView.class);
-                    context.startActivity(intent);
+                if (context != null) { // Add null check for context
+                    switch (sectionTitle) {
+                        case "Academic Details":
+                            context.startActivity(new Intent(context, StudentsAcademicDetailsView.class));
+                            break;
+                        case "Grade":
+                            context.startActivity(new Intent(context, GradesStudentView.class)); //changed to view
+                            break;
+                        case "Parent Guardian Details":
+                            context.startActivity(new Intent(context, StudentsParentInfoView.class));  //changed to view
+                            break;
+                        default:
+                            Toast.makeText(context, "View functionality not set for this section", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(context, "Context is null", Toast.LENGTH_SHORT).show();
                 }

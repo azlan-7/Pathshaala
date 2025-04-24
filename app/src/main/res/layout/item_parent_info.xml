@@ -11,13 +11,58 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView android:id="@+id/tvFatherName" android:textStyle="bold" />
-        <TextView android:id="@+id/tvFatherContact" />
-        <TextView android:id="@+id/tvMotherName" android:textStyle="bold" />
-        <TextView android:id="@+id/tvMotherContact" />
-        <TextView android:id="@+id/tvGuardianName" android:textStyle="bold" />
-        <TextView android:id="@+id/tvGuardianRelation" />
-        <TextView android:id="@+id/tvGuardianContact" />
+        <TextView
+            android:id="@+id/tvFatherName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Father's Name"
+            android:textColor="#0F4D73"
+            android:textStyle="bold"
+            android:fontFamily="@font/work_sans_bold"/>
+        <TextView
+            android:id="@+id/tvFatherContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#0F4D73"
+            android:text="Father's Contact No."
+            android:fontFamily="@font/work_sans"/>
+        <TextView
+            android:id="@+id/tvMotherName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="#0F4D73"
+            android:text="Mother's Name"
+            android:fontFamily="@font/work_sans_bold"/>
+        <TextView
+            android:id="@+id/tvMotherContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#0F4D73"
+            android:text="Mother's Contact No."
+            android:fontFamily="@font/work_sans"/>
+        <TextView
+            android:id="@+id/tvGuardianName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="#0F4D73"
+            android:text="Guardian's Name"
+            android:fontFamily="@font/work_sans_bold"/>
+        <TextView
+            android:id="@+id/tvGuardianRelation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Relation with Guardian"
+            android:textColor="#0F4D73"
+            android:fontFamily="@font/work_sans_light"/>
+        <TextView
+            android:id="@+id/tvGuardianContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#0F4D73"
+            android:text="Guardian's Contact No."
+            android:fontFamily="@font/work_sans"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

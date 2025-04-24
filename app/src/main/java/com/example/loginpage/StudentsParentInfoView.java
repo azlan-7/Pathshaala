@@ -2,6 +2,7 @@ package com.example.loginpage;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,10 @@ public class StudentsParentInfoView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_students_parent_info_view);
+
+        if(GuardianInfo == null){
+            Log.e("StudentsParentInfoView", "GuardianInfo LinearLayout is null in onCreate");
+        }
 
         RecyclerView recyclerView = findViewById(R.id.guardianRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -110,12 +115,12 @@ public class StudentsParentInfoView extends AppCompatActivity {
         guardianContactTextView.setText("Guardian Contact: " + info.GuardianContactNo);
 
         // Add TextViews to the LinearLayout
-        GuardianInfo.addView(fatherNameTextView);
-        GuardianInfo.addView(fatherContactTextView);
-        GuardianInfo.addView(motherNameTextView);
-        GuardianInfo.addView(motherContactTextView);
-        GuardianInfo.addView(guardianNameTextView);
-        GuardianInfo.addView(guardianRelationTextView);
-        GuardianInfo.addView(guardianContactTextView);
+        if (GuardianInfo != null) {
+
+        }
+        else{
+            Log.e("StudentsParentInfoView", "GuardianInfo LinearLayout is null in displayParentGuardianInfo");
+        }
     }
 }
+
