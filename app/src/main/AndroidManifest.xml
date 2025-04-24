@@ -114,7 +114,6 @@
         <activity
             android:name=".ChatActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PaymentGatewayDemo"
