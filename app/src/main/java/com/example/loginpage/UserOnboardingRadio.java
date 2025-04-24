@@ -212,58 +212,69 @@ public class UserOnboardingRadio extends AppCompatActivity {
 
 
         buttonSave.setOnClickListener(v -> {
-            createUser();  // ✅ Ensure User is Created First
+            // Get password and confirm password
+            String password = etPassword.getText().toString().trim();
+            String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-            new android.os.Handler().postDelayed(() -> {  // ✅ Wait before fetching data
-                DatabaseHelper.UserDetailsSelect(UserOnboardingRadio.this, "4", etContact.getText().toString(), new DatabaseHelper.UserResultListener() {
-                    @Override
-                    public void onQueryResult(List<UserDetailsClass> userList) {
-                        if (!userList.isEmpty()) {
-                            UserDetailsClass user = userList.get(0);
+            // Check if passwords match
+            if (password.equals(confirmPassword)) {
+                createUser();  // ✅ Ensure User is Created First
 
-                            // ✅ Save user details in SharedPreferences
-                            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                new android.os.Handler().postDelayed(() -> {  // ✅ Wait before fetching data
+                    DatabaseHelper.UserDetailsSelect(UserOnboardingRadio.this, "4", etContact.getText().toString(), new DatabaseHelper.UserResultListener() {
+                        @Override
+                        public void onQueryResult(List<UserDetailsClass> userList) {
+                            if (!userList.isEmpty()) {
+                                UserDetailsClass user = userList.get(0);
 
-                            editor.putString("USER_NAME", user.getName() + " " + user.getLastName()); // ✅ Save full name
-                            editor.putString("USER_EMAIL", user.getEmailId());  // ✅ Save email
-                            editor.putString("USER_PHONE", user.getMobileNo()); // ✅ Save phone number
-                            editor.putInt("USER_ID", Integer.parseInt(user.getUserId())); // ✅ Save user ID
-                            editor.putString("SELF_REFERRAL_CODE", user.getSelfReferralCode());
+                                // ✅ Save user details in SharedPreferences
+                                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                editor.putString("USER_NAME", user.getName() + " " + user.getLastName()); // ✅ Save full name
+                                editor.putString("USER_EMAIL", user.getEmailId());  // ✅ Save email
+                                editor.putString("USER_PHONE", user.getMobileNo()); // ✅ Save phone number
+                                editor.putInt("USER_ID", Integer.parseInt(user.getUserId())); // ✅ Save user ID
+                                editor.putString("SELF_REFERRAL_CODE", user.getSelfReferralCode());
 
 
-                            editor.apply(); // ✅ Save changes
-                            Log.d("UserOnboardingRadio", "✅ User Data Saved in SharedPreferences 123 ");
+                                editor.apply(); // ✅ Save changes
+                                Log.d("UserOnboardingRadio", "✅ User Data Saved in SharedPreferences 123 ");
 
 
 
-                            // ✅ Navigate to `TeachersInfo` **AFTER** saving data
-                            String userType = (radioGroup.getCheckedRadioButtonId() == R.id.radioTeacher) ? "T" : "S";
-                            Log.d("UserOnboardingRadio", "UserType: 123:  " + userType);
-                            if(userType == "T"){
+                                // ✅ Navigate to `TeachersInfo` **AFTER** saving data
+                                String userType = (radioGroup.getCheckedRadioButtonId() == R.id.radioTeacher) ? "T" : "S";
+                                Log.d("UserOnboardingRadio", "UserType: 123:  " + userType);
+                                if(userType == "T"){
 
-                                Intent intent = new Intent(UserOnboardingRadio.this, TeachersInfo.class);
-                                startActivity(intent);
-                                finish();
+                                    Intent intent = new Intent(UserOnboardingRadio.this, TeachersInfo.class);
+                                    startActivity(intent);
+                                    finish();
 
-                            }else if(userType == "S"){
+                                }else if(userType == "S"){
 
-                                Intent intent = new Intent(UserOnboardingRadio.this, StudentsInfo.class);
-                                startActivity(intent);
-                                finish();
+                                    Intent intent = new Intent(UserOnboardingRadio.this, StudentsInfo.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else{
+                                    Intent intent = new Intent(UserOnboardingRadio.this, NextLoginPage.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                            } else {
+                                Log.e("UserOnboardingRadio", "❌ No user found to retrieve details.");
                             }
-                            else{
-                                Intent intent = new Intent(UserOnboardingRadio.this, NextLoginPage.class);
-                                startActivity(intent);
-                                finish();
-                            }
-
-                        } else {
-                            Log.e("UserOnboardingRadio", "❌ No user found to retrieve details.");
                         }
-                    }
-                });
-            }, 2000);  // ✅ Wait for 2 seconds to allow DB to update
+                    });
+                }, 2000);  // ✅ Wait for 2 seconds to allow DB to update
+            } else {
+                // Passwords don't match, show a message
+                Toast.makeText(UserOnboardingRadio.this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
+                Log.e("UserOnboardingRadio", "❌ Passwords do not match!");
+            }
         });
 
 
