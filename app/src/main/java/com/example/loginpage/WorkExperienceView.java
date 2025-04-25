@@ -82,8 +82,8 @@ public class WorkExperienceView extends AppCompatActivity {
 
         // Continue button logic
         buttonContinue.setOnClickListener(v -> {
-            Toast.makeText(WorkExperienceView.this, "Proceeding to next section!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(WorkExperienceView.this, TeachersInfo.class));
+//            Toast.makeText(WorkExperienceView.this, "Proceeding to next section!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(WorkExperienceView.this, TeachersInfoSubSection.class));
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

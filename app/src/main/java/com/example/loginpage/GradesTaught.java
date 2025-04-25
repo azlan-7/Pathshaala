@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.models.UserWiseGrades;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,14 +20,15 @@ import java.util.Map;
 
 public class GradesTaught extends AppCompatActivity {
 
-    private static final String TAG = "GradesTaught";
-
-    private AutoCompleteTextView subjectsDropdown, gradesDropdown;
+    private AutoCompleteTextView subjectsDropdown, gradesDropdown, topicDropdown;
     private Button saveButton;
     private ImageView backButton;
+    private static final String TAG = "GradesTaught";
 
     private Map<String, String> subjectMap = new HashMap<>(); // SubjectName -> SubjectID
     private Map<String, String> gradeMap = new HashMap<>(); // GradeName -> GradeID
+    private Map<String, String> topicMap = new HashMap<>(); // TopicName -> TopicID
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,24 +37,32 @@ public class GradesTaught extends AppCompatActivity {
 
         subjectsDropdown = findViewById(R.id.subjectsDropdown);
         gradesDropdown = findViewById(R.id.gradesDropdown);
+//        topicDropdown = findViewById(R.id.topicsDropdown);
         saveButton = findViewById(R.id.button29);
         backButton = findViewById(R.id.imageView152);
 
-        // Clear dropdowns initially
-        clearDropdown(subjectsDropdown);
-        clearDropdown(gradesDropdown);
+        String selectedSubject = subjectsDropdown.getText().toString().trim();
+        String selectedGrade = gradesDropdown.getText().toString().trim();
+
+        String subjectID = subjectMap.get(selectedSubject);
+        String gradeID = gradeMap.get(selectedGrade);
+
+//        if (subjectID != null && gradeID != null) {
+//            loadTopics(subjectID, gradeID); // ✅ Correct: Pass subjectID and gradeID
+//        } else {
+//            Log.e(TAG, "❌ Subject ID or Grade ID is missing!");
+//        }
+
 
         // Load data into dropdowns
-        loadAndPopulateDropdowns();
+        loadSubjects();
+        loadGrades();
         fetchUserGradesTaught();
 
         saveButton.setOnClickListener(v -> insertUserGradesTaught());
-        backButton.setOnClickListener(v -> startActivity(new Intent(GradesTaught.this, TeachersInfoSubSection.class)));
-    }
 
-    private void loadAndPopulateDropdowns() {
-        loadSubjects();
-        loadGrades();
+        backButton.setOnClickListener(v -> startActivity(new Intent(GradesTaught.this, TeachersInfoSubSection.class)));
+
     }
 
     private void insertUserGradesTaught() {
@@ -94,6 +104,11 @@ public class GradesTaught extends AppCompatActivity {
                         Log.d(TAG, "✅ Database Response: " + message);
                         runOnUiThread(() -> {
                             Toast.makeText(GradesTaught.this, message, Toast.LENGTH_SHORT).show();
+
+                            // Navigate to GradesTaughtView after inserting successfully
+                            Intent intent = new Intent(GradesTaught.this, GradesTaughtView.class);
+                            startActivity(intent);
+                            finish();
                         });
                     }
 
@@ -107,6 +122,7 @@ public class GradesTaught extends AppCompatActivity {
                         Log.e(TAG, "❌ Database Error: " + error);
                     }
                 });
+
     }
 
     private void fetchUserGradesTaught() {
@@ -129,64 +145,41 @@ public class GradesTaught extends AppCompatActivity {
                     return;
                 }
 
-                // ✅ Clear previous entries before adding new ones
-                List<String> subjectNames = new ArrayList<>();
-                List<String> gradeNames = new ArrayList<>();
-
+                // ✅ Populate Dropdowns based on retrieved data
                 for (UserWiseGrades grade : userWiseGradesList) {
-                    Log.d(TAG, "✅ Retrieved Subject: " + grade.getSubjectName() + " | Grade: " + grade.getGradename() + " | UserID: " + grade.getUserId());
-                    // Add only the SubjectName to the list, and make sure to add each subject only once.
-                    if (!subjectNames.contains(grade.getSubjectName())) {
-                        subjectNames.add(grade.getSubjectName());
-                    }
-                    if (!gradeNames.contains(grade.getGradename())) {
-                        gradeNames.add(grade.getGradename());
-                    }
+                    Log.d(TAG, "✅ Retrieved Grade: " + grade.getGradename() + " | UserID: " + grade.getUserId());
+
+                    subjectsDropdown.setText(grade.getSubjectName(), false);
+                    gradesDropdown.setText(grade.getGradename(), false);
                 }
-                populateDropdown(subjectsDropdown, subjectNames);
-                populateDropdown(gradesDropdown, gradeNames);
             }
         });
     }
 
     private void loadSubjects() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("USER_ID", -1); // Fetch logged-in User ID
+        String query = "SELECT SubjectID, SubjectName FROM Subject WHERE active = 'true' ORDER BY SubjectName";
+        Log.d(TAG, "Executing query: " + query);
 
-        if (userId != -1) {
-            // Updated query to fetch subjects based on userid
-            String query = "SELECT UserWiseSubject.subjectid, subject.SubjectName as description " +
-                    "FROM UserWiseSubject " +
-                    "INNER JOIN subject ON UserWiseSubject.subjectid = subject.subjectid " +
-                    "WHERE userid = " + userId + " AND UserWiseSubject.Active = 1";
-            Log.d(TAG, "Executing query: " + query);
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No subjects found!");
+                Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            DatabaseHelper.loadDataFromDatabase(this, query, result -> {
-                if (result == null || result.isEmpty()) {
-                    Log.e(TAG, "No subjects found for user: " + userId);
-                    Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            List<String> subjects = new ArrayList<>();
+            subjectMap.clear();
 
-                List<String> subjects = new ArrayList<>();
-                subjectMap.clear();
+            for (Map<String, String> row : result) {
+                subjects.add(row.get("SubjectName"));
+                subjectMap.put(row.get("SubjectName"), row.get("SubjectID"));
+            }
 
-                for (int i = 0; i < result.size(); i++) {
-                    Map<String, String> row = result.get(i);
-                    String subjectName = row.get("description");
-                    String subjectId = row.get("subjectid");
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects);
+            subjectsDropdown.setAdapter(adapter);
+        });
 
-                    subjects.add(subjectName);
-                    subjectMap.put(subjectName, subjectId);
-                }
-
-                populateDropdown(subjectsDropdown, subjects);
-                subjectsDropdown.setOnClickListener(v -> subjectsDropdown.showDropDown());
-            });
-        } else {
-            Log.e(TAG, "User ID not found in SharedPreferences!");
-            Toast.makeText(this, "Please login to select subjects.", Toast.LENGTH_SHORT).show();
-        }
+        subjectsDropdown.setOnClickListener(v -> subjectsDropdown.showDropDown());
     }
 
     private void loadGrades() {
@@ -208,19 +201,48 @@ public class GradesTaught extends AppCompatActivity {
                 gradeMap.put(row.get("GradeName"), row.get("GradeID"));
             }
 
-            populateDropdown(gradesDropdown, grades);
-            gradesDropdown.setOnClickListener(v -> gradesDropdown.showDropDown());
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades);
+            gradesDropdown.setAdapter(adapter);
         });
+
+        gradesDropdown.setOnClickListener(v -> gradesDropdown.showDropDown());
     }
 
-    private void populateDropdown(AutoCompleteTextView dropdown, List<String> data) {
-        // Clear the adapter and the text before setting new data
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, data);
-        dropdown.setAdapter(adapter);
-    }
+//    private void loadTopics(String subjectID, String gradeID) {
+//        String query = "SELECT topicsID, topicsName FROM topics WHERE active = 'true' AND SubjectID = '" + subjectID + "' AND GradesID = '" + gradeID + "' ORDER BY topicsName";
+//        Log.d(TAG, "Executing query: " + query);
+//
+//        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+//            if (result == null || result.isEmpty()) {
+//                Log.e(TAG, "No topics found for Subject ID: " + subjectID + " and Grade ID: " + gradeID);
+//                Toast.makeText(this, "No Topics Found!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            List<String> topics = new ArrayList<>();
+//            topicMap.clear();
+//
+//            for (Map<String, String> row : result) {
+//                String id = row.get("topicsID");
+//                String name = row.get("topicsName");
+//                Log.d(TAG, "Topic Retrieved - ID: " + id + ", Name: " + name);
+//                topics.add(name);
+//                topicMap.put(name, id);
+//            }
+//
+//            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, topics);
+//            topicDropdown.setAdapter(adapter);
+//            topicDropdown.showDropDown();
+//        });
+//
+//        topicDropdown.setOnClickListener(v -> topicDropdown.showDropDown());
+//
+//        topicDropdown.setOnItemClickListener((parent, view, position, id) -> {
+//            String selectedTopic = (String) parent.getItemAtPosition(position);
+//            String topicID = topicMap.get(selectedTopic);
+//            Log.d(TAG, "Selected Topic: " + selectedTopic + " (ID: " + topicID + ")");
+//        });
+//    }
 
-    private void clearDropdown(AutoCompleteTextView dropdown) {
-        dropdown.setText(""); // Clear the text
-        dropdown.setAdapter(null); // Clear the adapter
-    }
+
 }

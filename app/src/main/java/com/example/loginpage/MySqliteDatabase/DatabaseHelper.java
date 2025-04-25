@@ -345,7 +345,7 @@ public class DatabaseHelper {
                         stmt.setString(16, "");
                         stmt.setString(17, "");
                         stmt.setString(18, "");
-                        stmt.setString(19, "");
+                        stmt.setString(19, ""); // userImageName
                         stmt.setInt(20, 0);
                         stmt.setInt(21, 0);
                         stmt.setString(22, "");
@@ -1240,26 +1240,31 @@ public class DatabaseHelper {
                         stmt.registerOutParameter(10, Types.VARCHAR); // Output Message
 
                         Log.d("DatabaseHelper", "🔍 Executing stored procedure for UserID: " + userId);
-                        ResultSet rs = stmt.executeQuery();
+                        stmt.execute();
+                        ResultSet rs = stmt.getResultSet();
 
-                        while (rs.next()) {
-                            Map<String, String> row = new HashMap<>();
-                            row.put("UserwiseCertificateId", rs.getString("UserwiseCertificateId"));
-                            row.put("CertificateName", rs.getString("CertificateName"));
-                            row.put("IssuingOrganization", rs.getString("IssueingOrganization"));
-                            row.put("CredentialURL", rs.getString("CredentialURL"));
-                            row.put("IssueYear", rs.getString("IssueYear"));
-                            row.put("UserId", rs.getString("UserId"));
-                            row.put("SelfReferralCode", rs.getString("selfreferralcode"));
-                            row.put("IsActive", rs.getString("isActive"));
 
-                            resultList.add(row);
+                        if (rs != null) { // Check if ResultSet is not null
+                            while (rs.next()) {
+                                Map<String, String> row = new HashMap<>();
+                                row.put("UserwiseCertificateId", rs.getString("UserwiseCertificateId"));
+                                row.put("CertificateName", rs.getString("CertificateName"));
+                                row.put("IssuingOrganization", rs.getString("IssueingOrganization"));
+                                row.put("CredentialURL", rs.getString("CredentialURL"));
+                                row.put("IssueYear", rs.getString("IssueYear"));
+                                row.put("UserId", rs.getString("UserId"));
+                                row.put("SelfReferralCode", rs.getString("selfreferralcode"));
+                                row.put("IsActive", rs.getString("isActive"));
+
+                                resultList.add(row);
+                            }
+                            rs.close();
                         }
 
                         String messageOutput = stmt.getString(10);
                         Log.d("DatabaseHelper", "✅ Select Response: " + messageOutput);
 
-                        rs.close();
+
                         stmt.close();
                         connection.close();
                     } else {
@@ -1274,7 +1279,7 @@ public class DatabaseHelper {
             @Override
             protected void onPostExecute(List<Map<String, String>> result) {
                 if (callback != null) {
-                    if (!result.isEmpty()) {
+                    if (result != null && !result.isEmpty()) { // Check if result is not null or empty
                         callback.onSuccess(result);
                     } else {
                         callback.onMessage("No certificates found for this user.");
@@ -1283,6 +1288,8 @@ public class DatabaseHelper {
             }
         }.execute();
     }
+
+
 
 
 
@@ -2367,9 +2374,9 @@ public class DatabaseHelper {
         }).start();
     }
 
-
     public interface ProcedureResultCallback<T> {
         void onSuccess(T result);
+
         void onError(String error);
     }
 
@@ -2412,6 +2419,7 @@ public class DatabaseHelper {
                     result.setSelfReferralCode(rs.getString("selfreferralcode"));
                     result.setCurrentProfession(rs.getInt("CurrentProfession"));
                     result.setCurrentProfessionRem(rs.getString("CurrentProfessionRem"));
+//                    result.setUserImageName(rs.getString("userimagename"));
 
                     resultList.add(result);
                 }

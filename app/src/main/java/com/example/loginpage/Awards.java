@@ -127,7 +127,7 @@ public class Awards extends AppCompatActivity {
 
         continueButton.setOnClickListener(v -> {
             Toast.makeText(Awards.this, "Proceeding to next section!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(Awards.this, TeachersInfo.class)); // Change to the actual next activity
+            startActivity(new Intent(Awards.this, TeachersInfoSubSection.class)); // Change to the actual next activity
             finish();
 
         });

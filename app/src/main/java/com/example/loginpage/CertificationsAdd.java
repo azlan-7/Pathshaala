@@ -41,6 +41,8 @@ public class CertificationsAdd extends AppCompatActivity {
     private Button btnSave, btnUpload;
     private SharedPreferences sharedPreferences;
     private Uri certificateImageUri = null; // Stores uploaded image URI
+    private static final int FILE_PICKER_REQUEST_CODE = 100;
+    private static final String TAG = "CertificationsAdd";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,7 @@ public class CertificationsAdd extends AppCompatActivity {
 
     }
 
-    private static final int FILE_PICKER_REQUEST_CODE = 100;
+
 
     private void openFilePicker() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -98,20 +100,23 @@ public class CertificationsAdd extends AppCompatActivity {
                 File cacheDir = getCacheDir();
                 file = new File(cacheDir, fileName);
 
-                InputStream inputStream = getContentResolver().openInputStream(uri);
-                OutputStream outputStream = new FileOutputStream(file);
+                // Check if the file already exists
+                if (!file.exists()) {
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
+                    OutputStream outputStream = new FileOutputStream(file);
 
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+
+                    inputStream.close();
+                    outputStream.close();
                 }
-
-                inputStream.close();
-                outputStream.close();
             }
         } catch (Exception e) {
-            Log.e("CertificationsAdd", "❌ Error getting file from URI: " + e.getMessage());
+            Log.e(TAG, "❌ Error getting file from URI: " + e.getMessage());
         }
         return file;
     }
@@ -158,7 +163,7 @@ public class CertificationsAdd extends AppCompatActivity {
 
         // Get the actual file from URI
         File originalFile = getFileFromUri(certificateImageUri);
-        if (originalFile == null || !originalFile.exists()) {
+        if (originalFile == null) {
             Toast.makeText(this, "File error. Please try again.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -261,84 +266,21 @@ public class CertificationsAdd extends AppCompatActivity {
         });
     }
 
-
-
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            certificateImageUri = data.getData();
+            if (certificateImageUri != null) {
+                Log.d(TAG, "✅ File URI: " + certificateImageUri.toString());
+                //OPTIONAL:  You can display the file name to the user here.
+                String fileName = getFileNameFromUri(certificateImageUri);
+                btnUpload.setText("File Selected: " + fileName); // change button text.
+            } else {
+                Log.e(TAG, "❌ File URI is null");
+                Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//package com.example.loginpage;
-//
-//import android.content.Intent;
-//import android.content.SharedPreferences;
-//import android.os.Bundle;
-//import android.widget.Button;
-//import android.widget.ImageView;
-//import androidx.activity.EdgeToEdge;
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.recyclerview.widget.LinearLayoutManager;
-//
-//import com.example.loginpage.adapters.CertificationsAdapter;
-//import com.example.loginpage.models.CertificationModel;
-//import com.google.gson.Gson;
-//import com.google.gson.reflect.TypeToken;
-//import java.lang.reflect.Type;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class CertificationsAdd extends AppCompatActivity {
-//
-//
-//    private CertificationsAdapter adapter;
-//    private List<CertificationModel> certificationList;
-//    private SharedPreferences sharedPreferences;
-//    private ImageView addCertification;
-//    private Button buttonContinue;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
-//        setContentView(R.layout.activity_certifications_view);
-//
-//        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//        addCertification = findViewById(R.id.imageView91);
-//        buttonContinue = findViewById(R.id.button27);
-//
-//        certificationList = loadCertificationData();
-//        adapter = new CertificationsAdapter(this, certificationList);
-//
-//        certificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        certificationRecyclerView.setAdapter(adapter);
-//
-//        addCertification.setOnClickListener(v -> startActivity(new Intent(this, CertificationsView.class)));
-//
-//        buttonContinue.setOnClickListener(v -> startActivity(new Intent(this, NextActivity.class)));
-//    }
-//
-//    private List<CertificationModel> loadCertificationData() {
-//        String json = sharedPreferences.getString("CERTIFICATION_LIST", null);
-//        if (json == null) return new ArrayList<>();
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<List<CertificationModel>>() {}.getType();
-//        return gson.fromJson(json, type);
-//    }
-//}

@@ -303,7 +303,7 @@ public class AddAwards extends AppCompatActivity {
                             if (success) {
                                 Toast.makeText(this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }).start();
@@ -384,7 +384,7 @@ public class AddAwards extends AppCompatActivity {
             public void onQueryResult(List<Map<String, String>> result) {
                 if (result == null || result.isEmpty()) {
                     Log.e(TAG, "No Awards records found!");
-                    Toast.makeText(AddAwards.this, "No Awards Found!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(AddAwards.this, "No Awards Found!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

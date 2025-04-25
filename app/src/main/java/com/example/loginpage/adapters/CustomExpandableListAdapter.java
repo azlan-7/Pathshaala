@@ -64,7 +64,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
         // 🔹 Initialize HashMap with subsections and their "View" activities
         viewActivityMap = new HashMap<>();
-        viewActivityMap.put("Subject Expertise", SubjectExpertiseNewOne.class);
+        viewActivityMap.put("Subject Expertise", SubjectExpertise.class);
         viewActivityMap.put("Education", TeachersEducationView.class);
         viewActivityMap.put("Work Experience", WorkExperienceView.class);
         viewActivityMap.put("Certifications", CertificationsView.class);

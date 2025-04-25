@@ -94,10 +94,13 @@ public class StudentsExpandableListAdapter extends BaseExpandableListAdapter {
             case "Academic Details":
                 groupIcon.setImageResource(R.drawable.school_24dp_0f4d73_fill0_wght400_grad0_opsz24);
                 break;
-            case "Learning Preference":
+            case "Grade":
                 groupIcon.setImageResource(R.drawable.local_library_24dp_0f4d73_fill0_wght400_grad0_opsz24);
                 break;
-            case "Parent/Guardian Details":
+            case "Learning Preference":
+                groupIcon.setImageResource(R.drawable.import_contacts_24dp_0f4d73_fill0_wght400_grad0_opsz24);
+                break;
+            case "Parent Guardian Details":
                 groupIcon.setImageResource(R.drawable.supervisor_account_24dp_0f4d73_fill0_wght400_grad0_opsz24);
                 break;
             case "Skills and Extracurriculars":

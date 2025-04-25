@@ -66,7 +66,7 @@ public class CertificationsView extends AppCompatActivity {
         });
 
         buttonContinue.setOnClickListener(v -> {
-            startActivity(new Intent(CertificationsView.this, TeachersInfo.class));
+            startActivity(new Intent(CertificationsView.this, TeachersInfoSubSection.class));
             finish();
         });
 

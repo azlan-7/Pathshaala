@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.StudentsExpandableListAdapter;
 import com.example.loginpage.models.Education;
@@ -134,7 +135,7 @@ public class StudentsInfo extends AppCompatActivity {
         tvAboutYourself = findViewById(R.id.textViewAboutYourself);
         uniqueIdTextView = findViewById(R.id.uniqueIdTextView2);
 
-        
+
         profileImage = findViewById(R.id.imageView55);
 
         fetchUserDetailsFromDB();
@@ -175,7 +176,12 @@ public class StudentsInfo extends AppCompatActivity {
         if (!storedImageName.isEmpty()) {
             String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
             Log.d("StudentsInfo", "✅ Loaded Image from SharedPreferences: " + imageUrl);
-            Glide.with(this).load(imageUrl).placeholder(R.drawable.generic_avatar).error(R.drawable.generic_avatar).into(profileImage);
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.generic_avatar)
+                    .error(R.drawable.generic_avatar)
+                    .apply(RequestOptions.circleCropTransform()) // Apply the circle transformation here
+                    .into(profileImage);
         }
 
         tvAboutYourself.setText(aboutYourself);
@@ -452,7 +458,7 @@ public class StudentsInfo extends AppCompatActivity {
             case "Add Academic Details":
                 intent = new Intent(this, StudentsAcademicDetails.class);
                 break;
-                case "View your Skills":
+            case "View your Skills":
                 intent = new Intent(this, AddExtracurriculars.class);
                 break;
             case "Add Skills/Extracurriculars":
@@ -487,6 +493,7 @@ public class StudentsInfo extends AppCompatActivity {
                     .load(imageUrl)
                     .placeholder(R.drawable.generic_avatar)
                     .error(R.drawable.generic_avatar)
+                    .apply(RequestOptions.circleCropTransform()) // Apply the circle transformation here
                     .into(profileImage);
         } else {
             Log.e("StudentsInfo", "❌ No profile image found in SharedPreferences, checking DB...");
@@ -515,6 +522,7 @@ public class StudentsInfo extends AppCompatActivity {
                                 .load(imageUrl)
                                 .placeholder(R.drawable.generic_avatar)
                                 .error(R.drawable.generic_avatar)
+                                .apply(RequestOptions.circleCropTransform()) // Apply circle transformation
                                 .into(profileImage);
 
                         // ✅ Save to SharedPreferences for future use
@@ -532,3 +540,4 @@ public class StudentsInfo extends AppCompatActivity {
     }
 
 }
+

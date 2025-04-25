@@ -55,12 +55,15 @@ public class StudentsBasicInfo extends AppCompatActivity {
     private AutoCompleteTextView autoCompleteCity; // City Dropdown
     private UserDetailsClass user;
     private Map<Integer, String> cityMap = new HashMap<>();
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_students_basic_info);
+
+        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
 
         profileImageView = findViewById(R.id.imageViewProfile);
         cameraIcon = findViewById(R.id.imageViewCamera);
@@ -75,7 +78,6 @@ public class StudentsBasicInfo extends AppCompatActivity {
         loadCitiesFromDatabase();
 
         // Retrieve user details from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String firstName = sharedPreferences.getString("USER_NAME", "");
         String lastName = sharedPreferences.getString("lastName", "");
         String phoneNumber = sharedPreferences.getString("phoneNumber", "");
@@ -84,11 +86,9 @@ public class StudentsBasicInfo extends AppCompatActivity {
 
         Log.d("StudentsBasicInfo", "Info received through sharedpref: " + "FirstName: " + firstName + " " + "LastName: " + lastName + " " + "PhoneNumber " + phoneNumber + " Email: " + email);
 
-//        fetchUserDetails(phoneNumber);
-        fetchUserDetailsFromDB();
+        fetchUserDetailsFromDB(phoneNumber);
 
-//        etFirstName.setText(firstName);
-//        etLastName.setText(lastName);
+
         etEmail.setText(email);
         etContactNo.setText(phoneNumber);
 
@@ -105,7 +105,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
 
         // Load Phone Number if available
         EditText etContact = findViewById(R.id.editTextPhone);
-//        String phoneNumber = getIntent().getStringExtra("phoneNumber");
+
 
         if (phoneNumber != null && !phoneNumber.isEmpty()) {
             etContact.setText(phoneNumber);
@@ -162,25 +162,9 @@ public class StudentsBasicInfo extends AppCompatActivity {
     }
 
 
-    private void fetchUserDetailsFromDB() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String phoneNumber = sharedPreferences.getString("phoneNumber", "");
-        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
-
-        if (!storedImageName.isEmpty()) {
-            String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
-            Log.d("StudentsInfo", "✅ Loaded Image from SharedPreferences: " + imageUrl);
-            Glide.with(this)
-                    .load(imageUrl)
-                    .placeholder(R.drawable.generic_avatar)
-                    .error(R.drawable.generic_avatar)
-                    .into(profileImageView);
-        } else {
-            Log.e("StudentsInfo", "❌ No profile image found in SharedPreferences, checking DB...");
-        }
-
+    private void fetchUserDetailsFromDB(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.isEmpty()) {
-            Log.e("StudentsInfo", "❌ ERROR: Phone number missing from SharedPreferences!");
+            Log.e("StudentsBasicInfo", "❌ ERROR: Phone number missing from SharedPreferences!");
             return;
         }
 
@@ -204,6 +188,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
                                 .load(imageUrl)
                                 .placeholder(R.drawable.generic_avatar)
                                 .error(R.drawable.generic_avatar)
+                                .apply(RequestOptions.circleCropTransform()) // Apply circle transformation
                                 .into(profileImageView);
 
                         // ✅ Save to SharedPreferences for future use
@@ -212,6 +197,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
                         editor.apply();
                     } else {
                         Log.e("StudentsInfo", "❌ No profile image found in DB or empty value.");
+                        profileImageView.setImageResource(R.drawable.generic_avatar); // Set default avatar
                     }
 
                     // Load city name
@@ -252,7 +238,6 @@ public class StudentsBasicInfo extends AppCompatActivity {
         int userId = sharedPreferences.getInt("USER_ID", -1);
         String selfReferralCode = sharedPreferences.getString("SELF_REFERRAL_CODE", "");
 
-//        if (userId == -1) {
         if (userId <= 0) {
             Log.e("StudentsBasicInfo", "⚠️ User ID not found in SharedPreferences.");
             return;
@@ -263,22 +248,38 @@ public class StudentsBasicInfo extends AppCompatActivity {
             return;
         }
 
-        File imageFile = FileUploader.renameFileForTeachers(this, imageUri, userId, "U_T");
+        File imageFile = FileUploader.renameFileForTeachers(this, imageUri, userId, "U_S"); // Changed to U_S
         if (imageFile == null) {
             Log.e("StudentsBasicInfo", "❌ Failed to copy and rename file.");
             return;
         }
 
         // Upload image asynchronously
-        FileUploader.uploadImage(imageFile, this, "U_S", new FileUploader.UploadCallback() {
+        FileUploader.uploadImage(imageFile, this, "U_S", new FileUploader.UploadCallback() { // Changed to U_S
             @Override
             public void onUploadComplete(boolean success) {
                 if (success) {
                     String uploadedFileName = imageFile.getName();
                     DatabaseHelper.updateUserProfileImage(userId, uploadedFileName);
-                    Log.d("StudentsBasicInfo", "✅ Image uploaded and DB updated successfully.");
+                    Log.d("StudentsBasicInfo", "✅ Image uploaded and DB updated successfully.  Filename: " + uploadedFileName); //Added Log
+                    // Update the image view after successful upload
+                    runOnUiThread(() -> {
+                        String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + uploadedFileName;
+                        Glide.with(StudentsBasicInfo.this)
+                                .load(imageUrl)
+                                .placeholder(R.drawable.generic_avatar)
+                                .error(R.drawable.generic_avatar)
+                                .apply(RequestOptions.circleCropTransform()) // Apply circle transformation
+                                .into(profileImageView);
+                        // Update shared preferences.
+                        sharedPreferences.edit().putString("USER_PROFILE_IMAGE", uploadedFileName).apply();
+
+                    });
                 } else {
                     Log.e("StudentsBasicInfo", "❌ Image upload failed.");
+                    runOnUiThread(()->{
+                        profileImageView.setImageResource(R.drawable.generic_avatar); // set default.
+                    });
                 }
             }
         });
@@ -297,17 +298,10 @@ public class StudentsBasicInfo extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri imageUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                profileImageView.setImageBitmap(bitmap);  // Set the chosen image as profile picture
-
-                // Upload and save image in DB
+            if(imageUri != null){
                 insertProfileImageIntoDB(imageUri);
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
         }
     }
 

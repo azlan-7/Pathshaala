@@ -22,6 +22,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.Connection_Class;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.github.mikephil.charting.charts.BarChart;
@@ -40,7 +42,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class StudentsDashboard extends AppCompatActivity {
 
     Handler mainTextHandler = new Handler();
     private TextView welcomeText;
-    private ImageView profileIcon,profileIconTop,notificationBell;
+    private ImageView profileIcon, profileIconTop, notificationBell;
     private Button searchButton;
     private BarChart barChart;
     private PieChart pieChart;
@@ -87,6 +88,9 @@ public class StudentsDashboard extends AppCompatActivity {
         loadUserName();
         NavigationBarWorking();
 
+        // Load profile picture
+        loadProfilePicture();
+
         profileIcon.setOnClickListener(v -> {
             Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
             startActivity(intent);
@@ -117,6 +121,32 @@ public class StudentsDashboard extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void loadProfilePicture() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String storedImageName = sharedPreferences.getString("USER_PROFILE_IMAGE", "");
+        if (!storedImageName.isEmpty()) {
+            String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + storedImageName;
+            Log.d(TAG, "✅ Loaded Image from SharedPreferences: " + imageUrl);
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.generic_avatar)
+                    .error(R.drawable.generic_avatar)
+                    .apply(RequestOptions.circleCropTransform()) // Apply the circle transformation here
+                    .into(profileIcon);
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.generic_avatar)
+                    .error(R.drawable.generic_avatar)
+                    .apply(RequestOptions.circleCropTransform()) // Apply the circle transformation here
+                    .into(profileIconTop);
+        } else {
+            Log.e(TAG, "❌ No profile image found in SharedPreferences");
+            // Set default images if no image is found.
+            profileIcon.setImageResource(R.drawable.generic_avatar);
+            profileIconTop.setImageResource(R.drawable.generic_avatar);
+        }
     }
 
     private void loadGrades() {
@@ -181,12 +211,10 @@ public class StudentsDashboard extends AppCompatActivity {
             } else if (itemId == R.id.home) {
                 Intent intent = new Intent(StudentsDashboard.this, StudentsDashboard.class);
                 startActivity(intent);
-            }
-            else if(itemId == R.id.goLive){
+            } else if (itemId == R.id.goLive) {
                 Intent intent = new Intent(StudentsDashboard.this, SampleGoLiveZegoStudent.class);
                 startActivity(intent);
-            }
-            else if (itemId == R.id.profile) {
+            } else if (itemId == R.id.profile) {
                 Intent intent = new Intent(StudentsDashboard.this, StudentsInfo.class);
                 startActivity(intent);
             }
@@ -211,7 +239,7 @@ public class StudentsDashboard extends AppCompatActivity {
                     char chr = text.charAt(i);
                     welcomeText.append(String.valueOf(chr));
                     i++;
-                    handler.postDelayed(this,150); // Delay between each letter
+                    handler.postDelayed(this, 150); // Delay between each letter
                 }
             }
         };
@@ -224,7 +252,7 @@ public class StudentsDashboard extends AppCompatActivity {
         ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
         // Define grade levels for the bar chart
-        String[] gradeLevels = {"Pre","Pri","Sec","Mid","9th","10th","11th","12th","UG"};
+        String[] gradeLevels = {"Pre", "Pri", "Sec", "Mid", "9th", "10th", "11th", "12th", "UG"};
 
         // Define subjects for the pie chart
         String[] subjects = {"Math", "Science", "English", "History", "Geography", "Physics", "Chemistry", "Biology", "Computer Science"};
@@ -264,51 +292,15 @@ public class StudentsDashboard extends AppCompatActivity {
     }
 
 
-
-
-
-//    private void setupCharts() {
-//        ArrayList<BarEntry> barEntries = new ArrayList<>();
-//        ArrayList<PieEntry> pieEntries = new ArrayList<>();
-//
-//        for (int i = 1; i < 10; i++) {
-//            float value = (float) (i * 10.0);
-//            barEntries.add(new BarEntry(i, value));
-//            pieEntries.add(new PieEntry(value, "Item " + i));
-//        }
-//
-//        BarDataSet barDataSet = new BarDataSet(barEntries, "Students Data");
-//        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-//        barDataSet.setDrawValues(false);
-//        barChart.setData(new BarData(barDataSet));
-//        barChart.animateY(2000);
-//        barChart.getDescription().setText("Students Chart");
-//        barChart.getDescription().setTextColor(Color.BLACK);
-//
-//        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Student Distribution");
-//        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-//        pieChart.setData(new PieData(pieDataSet));
-//        pieChart.animateXY(2000, 2000);
-//        pieChart.getDescription().setEnabled(false);
-//    }
-
     private void setupDropdowns() {
-//        List<String> grades = Arrays.asList("Primary","Secondary","Middle School","1-5","6-8","9th", "10th", "11th", "12th");
-//        List<String> subjects = Arrays.asList("Accountancy","Math", "Science", "English", "History", "Geography","Economics","Computer Science","Sociology","Business Studies");
-//        List<String> locations = Arrays.asList("New York", "Los Angeles", "Chicago", "Houston", "Phoenix");
-
         AutoCompleteTextView autoCompleteGrade = findViewById(R.id.autoCompleteGrade);
 
         AutoCompleteTextView autoCompleteSubject = findViewById(R.id.autoCompleteSubject);
         AutoCompleteTextView autoCompleteLocation = findViewById(R.id.autoCompleteLocation);
 
-//        autoCompleteGrade.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades));
-//        autoCompleteSubject.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects));
-//        autoCompleteLocation.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, locations));
 
         autoCompleteGrade.setOnClickListener(v -> autoCompleteGrade.showDropDown());
         autoCompleteSubject.setOnClickListener(v -> autoCompleteSubject.showDropDown());
-//        autoCompleteLocation.setOnClickListener(v -> autoCompleteLocation.showDropDown());
         fetchCityData(autoCompleteLocation);
     }
 
@@ -345,7 +337,8 @@ public class StudentsDashboard extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mainTextHandler.postDelayed(this::loadUserName, 10000);
+        loadProfilePicture();
         // loadUserName(); // Ensure name updates when returning to this activity
     }
-
 }
+

@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;  // Import Toast
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,11 +17,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
-
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.fragments.FilterDialogFragment;
 import com.example.loginpage.models.UserSearchResult;
-
 import java.util.List;
 
 public class SearchStudentsDashboard extends AppCompatActivity implements FilterDialogFragment.OnFiltersSelectedListener {
@@ -93,7 +91,7 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                             TextView grade = cardView.findViewById(R.id.tvGrade);
                             TextView subjects = cardView.findViewById(R.id.tvSubjects);
                             TextView referralCode = cardView.findViewById(R.id.tvLocation);
-                            ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
+                            ImageView profileIcon = cardView.findViewById(R.id.profileIcon);  // Corrected ID
                             Button messageButton = cardView.findViewById(R.id.tvNotificationButton);
                             Button timeTableButton = cardView.findViewById(R.id.tvTimeTableButton);
 
@@ -102,20 +100,18 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                                 intent.putExtra("USER_PHONE", teacher.getMobileNo());
                                 intent.putExtra("USER_ID", teacher.getUserId());
                                 intent.putExtra("USER_FIRST_NAME", teacher.getUsername());
-                                Log.d("SearchTeachersDashboard","Intent passed for UserID: " + teacher.getUserId());
+                                Log.d("SearchTeachersDashboard", "Intent passed for UserID: " + teacher.getUserId());
                                 startActivity(intent);
                             });
-
 
                             timeTableButton.setOnClickListener(v -> {
                                 Intent intent = new Intent(SearchStudentsDashboard.this, ShowTimeTableNewView.class);
                                 intent.putExtra("USER_PHONE", teacher.getMobileNo());
                                 intent.putExtra("USER_ID", teacher.getUserId());
                                 intent.putExtra("USER_FIRST_NAME", teacher.getUsername());
-                                Log.d("SearchTeachersDashboard","Intent passed for UserID: " + teacher.getUserId());
+                                Log.d("SearchTeachersDashboard", "Intent passed for UserID: " + teacher.getUserId());
                                 startActivity(intent);
                             });
-
 
                             profileIcon.setOnClickListener(v -> {
                                 Log.d("SearchStudentsDashboard", "Teacher UserID: " + teacher.getUserId());
@@ -140,7 +136,6 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                                 startActivity(intent);
                             });
 
-
                             name.setText(teacher.getUsername());
                             grade.setText("Grade: " + teacher.getGradeName());
                             subjects.setText("Subjects: " + teacher.getSubjectName());
@@ -157,7 +152,9 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
             @Override
             public void onError(String errorMessage) {
                 Log.e("SearchStudentsDashboard", "Error fetching teachers: " + errorMessage);
+                Toast.makeText(SearchStudentsDashboard.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();  // Show error
             }
         });
     }
 }
+
