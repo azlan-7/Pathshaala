@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.models.UserWiseGrades;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,11 +40,11 @@ public class GradesStudentAdd extends AppCompatActivity {
         saveButton = findViewById(R.id.button29);
         backButton = findViewById(R.id.imageView152);
 
-        String selectedSubject = subjectsDropdown.getText().toString().trim();
-        String selectedGrade = gradesDropdown.getText().toString().trim();
+        //String selectedSubject = subjectsDropdown.getText().toString().trim();
+        //String selectedGrade = gradesDropdown.getText().toString().trim();
 
-        String subjectID = subjectMap.get(selectedSubject);
-        String gradeID = gradeMap.get(selectedGrade);
+        //String subjectID = subjectMap.get(selectedSubject);
+        //String gradeID = gradeMap.get(selectedGrade);
 
 //        if (subjectID != null && gradeID != null) {
 //            loadTopics(subjectID, gradeID); // ✅ Correct: Pass subjectID and gradeID
@@ -59,8 +58,7 @@ public class GradesStudentAdd extends AppCompatActivity {
         loadGrades();
         fetchUserGradesTaught();
 
-        saveButton.setOnClickListener(v -> insertUserGradesTaught());
-
+        saveButton.setOnClickListener(v -> insertUserGradesTaught());  //setOnClickListener should be inside onCreate
         backButton.setOnClickListener(v -> startActivity(new Intent(GradesStudentAdd.this, StudentsInfo.class)));
 
     }
@@ -252,3 +250,4 @@ public class GradesStudentAdd extends AppCompatActivity {
 
 
 }
+

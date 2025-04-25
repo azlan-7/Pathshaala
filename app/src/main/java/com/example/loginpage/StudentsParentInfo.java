@@ -76,7 +76,7 @@ public class StudentsParentInfo extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
         if (message.startsWith("Success")) {
-            Intent intent = new Intent(StudentsParentInfo.this, StudentsInfo.class);
+            Intent intent = new Intent(StudentsParentInfo.this, StudentsParentInfoView.class);
             startActivity(intent);
         }
     }

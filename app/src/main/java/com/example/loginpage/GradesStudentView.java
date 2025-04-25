@@ -58,7 +58,7 @@ public class GradesStudentView extends AppCompatActivity {
         addGrades.setOnClickListener(v -> startActivity(new Intent(this, GradesStudentAdd.class)));
 
         buttonContinue.setOnClickListener(v -> {
-            startActivity(new Intent(this, TeachersInfo.class));
+            startActivity(new Intent(this, StudentsInfo.class));
             finish();
         });
 
