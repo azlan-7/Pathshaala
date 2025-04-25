@@ -42,16 +42,19 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentsBasicInfo extends AppCompatActivity {
 
-    private EditText etDOB,etFirstName,etLastName,etContactNo,etEmail,etCity;
+    private EditText etDOB, etFirstName, etLastName, etContactNo, etEmail, etCity;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView profileImageView;
     private ImageView cameraIcon;
     private AutoCompleteTextView autoCompleteCity; // City Dropdown
     private UserDetailsClass user;
+    private Map<Integer, String> cityMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,36 +69,29 @@ public class StudentsBasicInfo extends AppCompatActivity {
         etLastName = findViewById(R.id.editTextLastName);
         etContactNo = findViewById(R.id.editTextPhone);
         etEmail = findViewById(R.id.editTextEmail);
-        etCity = findViewById(R.id.autoCompleteCity1);
+        etCity = findViewById(R.id.autoCompleteCity1); // Correct ID to etCity
 
-        autoCompleteCity = findViewById(R.id.autoCompleteCity1); // Initialize city dropdown
-
-        // Load City Data
+        autoCompleteCity = findViewById(R.id.autoCompleteCity1); // Initialize city dropdown - CORRECT ID
         loadCitiesFromDatabase();
 
         // Retrieve user details from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String firstName = sharedPreferences.getString("USER_NAME", ""); // "" is the default value
+        String firstName = sharedPreferences.getString("USER_NAME", "");
         String lastName = sharedPreferences.getString("lastName", "");
         String phoneNumber = sharedPreferences.getString("phoneNumber", "");
         String email = sharedPreferences.getString("USER_EMAIL", "");
         String dob = sharedPreferences.getString("DOB", "");
 
-        Log.d("StudentsBasicInfo","Info received through sharedpref: " + "FirstName: " + firstName + " " + "LastName: " + lastName + " " + "PhoneNumber " + phoneNumber + " Email: " + email);
+        Log.d("StudentsBasicInfo", "Info received through sharedpref: " + "FirstName: " + firstName + " " + "LastName: " + lastName + " " + "PhoneNumber " + phoneNumber + " Email: " + email);
 
 //        fetchUserDetails(phoneNumber);
         fetchUserDetailsFromDB();
 
 //        etFirstName.setText(firstName);
-        etLastName.setText(lastName);
+//        etLastName.setText(lastName);
         etEmail.setText(email);
         etContactNo.setText(phoneNumber);
 
-        // Prepopulate city if saved
-        String savedCity = sharedPreferences.getString("CITY", "");
-        if (!savedCity.isEmpty()) {
-            autoCompleteCity.setText(savedCity, false);
-        }
 
         // Gender Selection
         RadioButton radioMale = findViewById(R.id.radioMale);
@@ -145,7 +141,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
             editor.putString("EMAIL", ((EditText) findViewById(R.id.editTextEmail)).getText().toString().trim());
             editor.putString("CONTACT", ((EditText) findViewById(R.id.editTextPhone)).getText().toString().trim());
             editor.putString("DOB", etDOB.getText().toString().trim());
-            editor.putString("CITY", autoCompleteCity.getText().toString().trim()); // Save city
+            editor.putString("CITY", autoCompleteCity.getText().toString().trim());  //changed to get the selected city from autocomplete
             editor.apply();
 
             // Retrieve the existing Unique ID if available
@@ -162,7 +158,6 @@ public class StudentsBasicInfo extends AppCompatActivity {
             return insets;
         });
 
-        // Show dropdown when clicked
         autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
     }
 
@@ -196,6 +191,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     etFirstName.setText(user.getName());
+                    etLastName.setText(user.getLastName());
                     etContactNo.setText(user.getMobileNo());
                     etEmail.setText(user.getEmailId());
                     etDOB.setText(user.getDateOfBirth().split("\\s+")[0]);
@@ -217,6 +213,20 @@ public class StudentsBasicInfo extends AppCompatActivity {
                     } else {
                         Log.e("StudentsInfo", "❌ No profile image found in DB or empty value.");
                     }
+
+                    // Load city name
+                    if (user.getCityId() != null) {
+                        String cityName = getCityNameFromId(user.getCityId());
+                        if (cityName != null) {
+                            etCity.setText(cityName);
+                        } else {
+                            etCity.setText("");
+                            Log.e(TAG, "❌ City Name not found for City ID: " + user.getCityId());
+                        }
+                    } else {
+                        etCity.setText("");
+                        Log.e(TAG, "❌ City ID is null");
+                    }
                 });
             } else {
                 Log.e("StudentsInfo", "❌ No user found in DB for phone: " + phoneNumber);
@@ -224,58 +234,13 @@ public class StudentsBasicInfo extends AppCompatActivity {
         });
     }
 
-    private void fetchUserDetails(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.isEmpty()) {
-            Log.e("TeachersBasicInfo", "❌ ERROR: Phone number missing from Intent!");
-            return;
+    private String getCityNameFromId(int cityId) {
+        if (cityMap.containsKey(cityId)) {
+            return cityMap.get(cityId);
         }
-
-        Log.d("TeachersBasicInfo", "📌 Fetching user details for phone number: 545" + phoneNumber);
-
-        DatabaseHelper.UserDetailsSelect(this, "4", phoneNumber, userList -> {
-            if (userList == null) {
-                Log.e("TeachersBasicInfo", "❌ ERROR: userList is NULL!");
-                return;
-            }
-
-            if (userList.isEmpty()) {
-                Log.e("TeachersBasicInfo", "❌ No user found in DB for phone: " + phoneNumber);
-                return;
-            }
-
-            user = userList.get(0);  // ✅ Store user object
-            Log.d("TeachersBasicInfo", "✅ Loaded Correct User: " + user.getName() + " " + user.getLastName());
-
-            runOnUiThread(() -> {
-//                etFirstName.setText(user.getName() != null ? user.getName() : "N/A");
-//                etLastName.setText(user.getLastName() != null ? user.getLastName() : "N/A");
-//                etContact.setText(user.getMobileNo() != null ? user.getMobileNo() : "N/A");
-//                etEmail.setText(user.getEmailId() != null ? user.getEmailId() : "N/A");
-//                etDOB.setText(user.getDateOfBirth());
-
-                String imageName = user.getUserImageName();
-//                String referralCode = user.getSelfReferralCode();
-
-
-                if (imageName != null && !imageName.isEmpty()) {
-                    String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + imageName;
-                    Log.d(TAG, "✅ Profile image URL: " + imageUrl);
-
-                    runOnUiThread(() -> Glide.with(this)
-                            .load(imageUrl)
-                            .placeholder(R.drawable.generic_avatar) // Default profile image
-                            .error(R.drawable.generic_avatar) // Show default if error
-                            .apply(RequestOptions.circleCropTransform()) // Makes the image round
-                            .into(profileImageView));
-                } else {
-                    Log.e(TAG, "❌ No profile image found in DB or empty value.");
-                }
-
-
-                Log.d("TeachersBasicInfo", "✅ UI Updated Successfully with User Details");
-            });
-        });
+        return null;
     }
+
 
     private void insertProfileImageIntoDB(Uri imageUri) {
         if (imageUri == null) {
@@ -355,12 +320,15 @@ public class StudentsBasicInfo extends AppCompatActivity {
                     Connection_Class connectionClass = new Connection_Class();
                     Connection connection = connectionClass.CONN();
                     if (connection != null) {
-                        String query = "SELECT city_nm FROM city";
+                        String query = "SELECT cityid, city_nm FROM city"; //changed the query to fetch both
                         Statement stmt = connection.createStatement();
                         ResultSet rs = stmt.executeQuery(query);
 
                         while (rs.next()) {
-                            cityList.add(rs.getString("city_nm"));
+                            int cityId = rs.getInt("cityid");  //changed to get the id and name
+                            String cityName = rs.getString("city_nm");
+                            cityList.add(cityName);
+                            cityMap.put(cityId, cityName); // Store in the map
                         }
                         rs.close();
                         stmt.close();
@@ -377,7 +345,7 @@ public class StudentsBasicInfo extends AppCompatActivity {
                 if (!cities.isEmpty()) {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(StudentsBasicInfo.this, android.R.layout.simple_dropdown_item_1line, cities);
                     autoCompleteCity.setAdapter(adapter);
-                    autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown()); // Show dropdown when clicked
+                    autoCompleteCity.setOnClickListener(v -> autoCompleteCity.showDropDown());
                 }
             }
         }.execute();
@@ -398,3 +366,4 @@ public class StudentsBasicInfo extends AppCompatActivity {
         datePickerDialog.show();
     }
 }
+

@@ -42,19 +42,22 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TeachersBasicInfo extends AppCompatActivity {
 
     private static final String TAG = "TeachersBasicInfo";
 
-    private EditText etDOB,etFirstName,etLastName,etContact,etEmail;
+    private EditText etDOB, etFirstName, etLastName, etContact, etEmail;
     private UserDetailsClass user;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView profileImageView;
-    private ImageView cameraIcon,backButton;
+    private ImageView cameraIcon, backButton;
 
     private AutoCompleteTextView autoCompleteCity;
+    private Map<Integer, String> cityMap = new HashMap<>(); // Store CityId -> CityName
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +99,10 @@ public class TeachersBasicInfo extends AppCompatActivity {
         }
 
         etDOB.setText(dobOnly);
-//        etFirstName.setText(firstName.trim().split("\\s+")[0]);
+        etFirstName.setText(firstName.trim().split("\\s+")[0]);
         etLastName.setText(lastNameFromPrefs);
         etContact.setText(phoneNumber);
-//        etEmail.setText(email);
+        etEmail.setText(email);
 
 
 
@@ -199,13 +202,12 @@ public class TeachersBasicInfo extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 etFirstName.setText(user.getName().trim().split("\\s+")[0]);
-//                etLastName.setText(user.getLastName() != null ? user.getLastName() : "N/A");
-//                etContact.setText(user.getMobileNo() != null ? user.getMobileNo() : "N/A");
+                etLastName.setText(user.getLastName() != null ? user.getLastName() : "N/A");
+                etContact.setText(user.getMobileNo() != null ? user.getMobileNo() : "N/A");
                 etEmail.setText(user.getEmailId());
-//                etDOB.setText(user.getDateOfBirth());
+                //etDOB.setText(user.getDateOfBirth());
 
                 String imageName = user.getUserImageName();
-//                String referralCode = user.getSelfReferralCode();
 
 
                 if (imageName != null && !imageName.isEmpty()) {
@@ -222,12 +224,32 @@ public class TeachersBasicInfo extends AppCompatActivity {
                     Log.e(TAG, "❌ No profile image found in DB or empty value.");
                 }
 
+                // Set the city name in the AutoCompleteTextView
+                if (user.getCityId() != null) {
+                    String cityName = getCityNameFromId(user.getCityId()); // Get City Name from ID
+                    if (cityName != null) {
+                        autoCompleteCity.setText(cityName);
+                    } else {
+                        autoCompleteCity.setText("");
+                        Log.e(TAG, "❌ City Name not found for City ID: " + user.getCityId());
+                    }
+                } else {
+                    autoCompleteCity.setText(""); // Or set to a default value or empty
+                    Log.e(TAG, "❌ City ID is  null.");
+                }
+
 
                 Log.d("TeachersBasicInfo", "✅ UI Updated Successfully with User Details");
             });
         });
     }
 
+    private String getCityNameFromId(int cityId) {
+        if (cityMap.containsKey(cityId)) {
+            return cityMap.get(cityId);
+        }
+        return null;
+    }
 
 
     private Uri pendingImageUri = null; // Store image if self-referral code isn't available yet
@@ -311,12 +333,15 @@ public class TeachersBasicInfo extends AppCompatActivity {
                     Connection_Class connectionClass = new Connection_Class();
                     Connection connection = connectionClass.CONN();
                     if (connection != null) {
-                        String query = "SELECT city_nm FROM city";
+                        String query = "SELECT cityid, city_nm FROM city"; //changed the query to fetch both
                         Statement stmt = connection.createStatement();
                         ResultSet rs = stmt.executeQuery(query);
 
                         while (rs.next()) {
-                            cityList.add(rs.getString("city_nm"));
+                            int cityId = rs.getInt("cityid");  //changed to get the id and name
+                            String cityName = rs.getString("city_nm");
+                            cityList.add(cityName);
+                            cityMap.put(cityId, cityName); // Store in the map
                         }
                         rs.close();
                         stmt.close();
@@ -369,3 +394,4 @@ public class TeachersBasicInfo extends AppCompatActivity {
     }
 
 }
+

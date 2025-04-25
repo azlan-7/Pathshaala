@@ -20,6 +20,11 @@ public class UserDetailsClass {
     private String longitude;
     private String userImageName;
 
+    private Integer stateId;
+
+    private Integer cityId;
+    private String pinCode;
+
     // Default Constructor
     public UserDetailsClass() {
     }
@@ -28,7 +33,7 @@ public class UserDetailsClass {
     public UserDetailsClass(String username, String password, String userType, String name, String lastName,
                             String dateOfBirth, String signUpType, String countryCode, String mobileNo,
                             String emailId, String securityKey, String selfReferralCode, String custReferralCode,
-                            String latitude, String longitude, String userImageName) {
+                            String latitude, String longitude, String userImageName, Integer stateId, Integer cityId, String pinCode) {
         this.UserId = UserId;
         this.username = username;
         this.password = password;
@@ -46,6 +51,9 @@ public class UserDetailsClass {
         this.latitude = latitude;
         this.longitude = longitude;
         this.userImageName = userImageName;
+        this.stateId = stateId;
+        this.cityId = cityId;
+        this.pinCode = pinCode;
     }
 
     // Getters and Setters
@@ -107,4 +115,15 @@ public class UserDetailsClass {
 
     public String getUserImageName() { return userImageName; }
     public void setUserImageName(String userImageName) { this.userImageName = userImageName; }
+
+    public Integer getStateId(){ return stateId; }
+
+    public void setStateId(Integer stateId) { this.stateId = stateId; }
+
+
+    public Integer getCityId(){ return cityId; }
+    public void setCityId(Integer cityId) { this.cityId = cityId; }
+
+    public String getPinCode(){ return pinCode; }
+    public void setPinCode(String pinCode) { this.pinCode = pinCode; }
 }

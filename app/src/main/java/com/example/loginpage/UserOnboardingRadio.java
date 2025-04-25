@@ -248,7 +248,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
                                 Log.d("UserOnboardingRadio", "UserType: 123:  " + userType);
                                 if(userType == "T"){
 
-                                    Intent intent = new Intent(UserOnboardingRadio.this, TeachersInfo.class);
+                                    Intent intent = new Intent(UserOnboardingRadio.this, TeachersInfoSubSection.class);
                                     startActivity(intent);
                                     finish();
 
@@ -407,6 +407,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
         String username = etUsername.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
+        Integer city = autoCompleteCity.getId();
 
         // Validate input fields (Optional)
         if (username.isEmpty() || contactNumber.isEmpty() || email.isEmpty()) {
@@ -434,6 +435,8 @@ public class UserOnboardingRadio extends AppCompatActivity {
         user.setLatitude("");
         user.setLongitude("");
         user.setUserImageName("");
+        user.setCityId(city);
+        user.setStateId(1); //STATE ID IS HARDCODED
 
         Log.d("UserOnboardingRadio", "First Name: " + user.getName());
         Log.d("UserOnboardingRadio", "Last Name: " + user.getLastName());
@@ -451,7 +454,7 @@ public class UserOnboardingRadio extends AppCompatActivity {
                 Connection_Class connectionClass = new Connection_Class();
                 Connection connection = connectionClass.CONN();
                 if (connection != null) {
-                    String query = "SELECT city_nm FROM city";
+                    String query = "SELECT city_nm FROM city WHERE stateid = 1"; // hardcoded STATE ID
                     Statement stmt = connection.createStatement();
                     ResultSet rs = stmt.executeQuery(query);
                     while (rs.next()) {

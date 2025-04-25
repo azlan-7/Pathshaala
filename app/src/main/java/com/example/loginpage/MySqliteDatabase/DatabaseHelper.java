@@ -242,7 +242,7 @@ public class DatabaseHelper {
                     Log.d("DatabaseHelper", "Calling function ResultSet rs 1 : " + connection);
 
                     if (connection != null) {
-                        String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+                        String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
                         CallableStatement stmt = connection.prepareCall(query);
 
                         Log.d("DatabaseHelper", "Executing stored procedure for user lookup with Value 3144  : " + user.getMobileNo());
@@ -258,30 +258,33 @@ public class DatabaseHelper {
                         stmt.setString(7, user.getDateOfBirth());
                         Log.d("DatabaseHelper", "Date of birth of the user: " + user.getDateOfBirth());
                         stmt.setString(8, user.getUserType());
-                        stmt.setString(9, "");
+                        stmt.setString(9, ""); // signuptype
                         stmt.setString(10, user.getCountryCode());
                         stmt.setString(11, user.getMobileNo());
                         stmt.setString(12, user.getEmailId());
                         stmt.setString(13, user.getSecurityKey());
                         Log.d("DatabaseHelper", "Email Id of the user 14: " + user.getEmailId());
-                        stmt.setString(14, "");
-                        stmt.setString(15, "");
-                        stmt.setString(16, "");
+                        stmt.setString(14, user.getSelfReferralCode()); //selfreferralcode
+                        stmt.setString(15, ""); // custReferralCode
+                        stmt.setString(16, ""); // loginStatus
                         stmt.setString(17, user.getLatitude());
                         stmt.setString(18, user.getLongitude());
                         stmt.setString(19, user.getUserImageName());
+                        stmt.setInt(20,user.getStateId());
+                        stmt.setInt(21,user.getCityId());
+                        stmt.setString(22,user.getPinCode());
 
                         Log.d("DatabaseHelper", "Executing stored procedure for user lookup with Value of mobile no.  : " + user.getMobileNo());
-                        stmt.registerOutParameter(20, Types.VARCHAR); // @selfreferralcodeOutput
-                        stmt.registerOutParameter(21, Types.VARCHAR); // @messageOutput
+                        stmt.registerOutParameter(23, Types.VARCHAR); // @selfreferralcodeOutput
+                        stmt.registerOutParameter(24, Types.VARCHAR); // @messageOutput
 
                         // Execute stored procedure
                         stmt.execute();
                         Log.d("DatabaseHelper", "Executing the code block after registerOutParameter 2234 " );
 
                         // Retrieve OUT parameter value
-                        String selfReferralCodeOutput = stmt.getString(20);
-                        messageOutput = stmt.getString(21); // Get the message from the stored procedure
+                        String selfReferralCodeOutput = stmt.getString(23);
+                        messageOutput = stmt.getString(24); // Get the message from the stored procedure
 
                         Log.d("DatabaseHelper", "Self Referral Code Output: " + selfReferralCodeOutput);
                         Log.d("DatabaseHelper", "Message output: 144 " + messageOutput);
@@ -319,7 +322,7 @@ public class DatabaseHelper {
                     Connection con = getConnection();
 
                     if (con != null) {
-                        String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+                        String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
                         PreparedStatement stmt = con.prepareStatement(query);
                         Log.d("DatabaseHelper", "📌 Executing query for phone: Query  " + query);
 
@@ -343,8 +346,11 @@ public class DatabaseHelper {
                         stmt.setString(17, "");
                         stmt.setString(18, "");
                         stmt.setString(19, "");
-                        stmt.setString(20, "");
-                        stmt.setString(21, "");
+                        stmt.setInt(20, 0);
+                        stmt.setInt(21, 0);
+                        stmt.setString(22, "");
+                        stmt.setString(23, "");
+                        stmt.setString(24, "");
 
 
                         ResultSet rs = stmt.executeQuery();
@@ -377,6 +383,9 @@ public class DatabaseHelper {
                             user.setUserType(rs.getString("usertype"));
                             user.setUserImageName(rs.getString("UserImageName"));
                             user.setDateOfBirth(rs.getString("DateofBirth")); // Retrieve Date of Birth
+                            user.setStateId(rs.getInt("StateId"));
+                            user.setCityId(rs.getInt("CityId"));
+                            user.setPinCode(rs.getString("PinCode"));
                             userList.add(user);
 
                             Log.d("DatabaseHelper", "✅ User Retrieved: " + user.getUserType() + " (ID: " + user.getUserId() + ")");
@@ -389,7 +398,7 @@ public class DatabaseHelper {
                         Log.e("DatabaseHelper", "❌ DB connection failed!");
                     }
                 } catch (SQLException e) {
-                    Log.e("DatabaseHelper", "❌ SQL Error: " + e.getMessage());
+                    Log.e("DatabaseHelper",  "❌ SQL Error: " + e.getMessage());
                 }
                 return userList;
             }
