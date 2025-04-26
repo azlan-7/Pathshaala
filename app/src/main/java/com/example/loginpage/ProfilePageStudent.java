@@ -21,6 +21,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.StudentsExpandableListAdapter;
 import com.example.loginpage.models.Education;
@@ -502,6 +503,7 @@ public class ProfilePageStudent extends AppCompatActivity {
                     .load(imageUrl)
                     .placeholder(R.drawable.generic_avatar)
                     .error(R.drawable.generic_avatar)
+                    .apply(RequestOptions.circleCropTransform()) // Apply circle transformation
                     .into(profileImage);
         }
 
@@ -524,6 +526,7 @@ public class ProfilePageStudent extends AppCompatActivity {
                                     .load(imageUrl)
                                     .placeholder(R.drawable.generic_avatar)
                                     .error(R.drawable.generic_avatar)
+                                    .apply(RequestOptions.circleCropTransform()) // Makes the image round
                                     .into(profileImage);
                         } else {
                             Log.e("ProfilePageStudent", "❌ No image name found in intent.");
