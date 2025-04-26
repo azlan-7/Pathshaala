@@ -17,6 +17,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.fragments.FilterDialogFragment;
 import com.example.loginpage.models.UserSearchResult;
@@ -100,7 +102,7 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                                 intent.putExtra("USER_PHONE", teacher.getMobileNo());
                                 intent.putExtra("USER_ID", teacher.getUserId());
                                 intent.putExtra("USER_FIRST_NAME", teacher.getUsername());
-                                Log.d("SearchTeachersDashboard", "Intent passed for UserID: " + teacher.getUserId());
+                                Log.d("SearchStudentsDashboard", "Intent passed for UserID: " + teacher.getUserId());
                                 startActivity(intent);
                             });
 
@@ -109,7 +111,7 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                                 intent.putExtra("USER_PHONE", teacher.getMobileNo());
                                 intent.putExtra("USER_ID", teacher.getUserId());
                                 intent.putExtra("USER_FIRST_NAME", teacher.getUsername());
-                                Log.d("SearchTeachersDashboard", "Intent passed for UserID: " + teacher.getUserId());
+                                Log.d("SearchStudentsDashboard", "Intent passed for UserID: " + teacher.getUserId());
                                 startActivity(intent);
                             });
 
@@ -140,6 +142,29 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                             grade.setText("Grade: " + teacher.getGradeName());
                             subjects.setText("Subjects: " + teacher.getSubjectName());
                             referralCode.setText("Referral Code: " + teacher.getSelfReferralCode());
+
+                            // --- Image Loading ---
+                            String profileImageName = teacher.getUserImageName();
+                            Log.d("SearchStudentsDashboard", "✅ Retrieved Profile Image Name: " + profileImageName);
+
+                            if (profileImageName != null && !profileImageName.isEmpty()) {
+                                String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + profileImageName;
+                                Log.d("SearchStudentsDashboard", "✅ Profile image URL: " + imageUrl);
+
+                                Glide.with(SearchStudentsDashboard.this)
+                                        .load(imageUrl)
+                                        .placeholder(R.drawable.generic_avatar)
+                                        .error(R.drawable.generic_avatar)
+                                        .apply(RequestOptions.circleCropTransform())
+                                        .into(profileIcon);
+                            } else {
+                                Log.e("SearchStudentsDashboard", "❌ No profile image found for user.");
+                                Glide.with(SearchStudentsDashboard.this)
+                                        .load(R.drawable.generic_avatar)
+                                        .apply(RequestOptions.circleCropTransform())
+                                        .into(profileIcon);
+                            }
+                            // --- End Image Loading ---
 
                             cardContainer.addView(cardView);
                         }

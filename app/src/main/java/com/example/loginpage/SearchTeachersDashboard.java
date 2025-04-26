@@ -18,20 +18,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.fragments.FilterDialogFragment;
-import com.example.loginpage.models.UserDetailsClass;
 import com.example.loginpage.models.UserSearchResult;
-import com.example.loginpage.models.UserWiseEducation;
 
 import java.util.List;
 
-public class SearchTeachersDashboard extends AppCompatActivity implements FilterDialogFragment.OnFiltersSelectedListener{
+public class SearchTeachersDashboard extends AppCompatActivity implements FilterDialogFragment.OnFiltersSelectedListener {
 
     private LinearLayout cardContainer;
     private String gradeFilter;
     private String subjectFilter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +41,6 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
         // Setup Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        int[] cardIds = {R.id.cardStudent1, R.id.cardStudent2, R.id.cardStudent3, R.id.cardStudent4, R.id.cardStudent5};
 
         cardContainer = findViewById(R.id.cardContainer);
         // Retrieve Grade and Subject from Intent
@@ -79,9 +76,9 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
 
     private void fetchAndDisplaySearchResults() {
         // Modify the searchUsersForTS call if your database supports filtering by Grade and Subject
-        DatabaseHelper.searchUsersForTS(this, "S", 0, 0, 0, new DatabaseHelper.ProcedureResultCallback<List<UserSearchResult>>() {
+        DatabaseHelper.searchUsersForTS(this, "S", 0, 0, 0, new DatabaseHelper.ProcedureResultCallback<List<UserSearchResult>>() {  // Corrected Parameter Type
             @Override
-            public void onSuccess(List<UserSearchResult> userList) {
+            public void onSuccess(List<UserSearchResult> userList) { // Corrected Override
                 if (userList != null && !userList.isEmpty()) {
                     cardContainer.removeAllViews();
 
@@ -99,7 +96,6 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
                             TextView grade = cardView.findViewById(R.id.tvGrade);
                             TextView subjects = cardView.findViewById(R.id.tvSubjects);
                             ImageView profileIcon = cardView.findViewById(R.id.profileIcon);
-//                            ImageView notificationButton = cardView.findViewById(R.id.tvNotificationButton);
                             Button whatsAppButton = cardView.findViewById(R.id.whatsappButton);
                             Button notificationButton = cardView.findViewById(R.id.tvNotificationButton);
 
@@ -110,6 +106,31 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
                             subjects.setText("Learning: " + student.getSubjectName());
 
                             Log.d("SearchTeachersDashboard", "Card - Name: " + student.getUsername() + ", Email: " + student.getEmail());
+
+                            // --- Image Loading ---
+                            String profileImageName = student.getUserImageName(); // Get the image name
+                            Log.d("SearchTeachersDashboard", "✅ Retrieved Profile Image Name: " + profileImageName);
+
+                            if (profileImageName != null && !profileImageName.isEmpty()) {
+                                // Construct full image URL
+                                String imageUrl = "http://129.154.238.214/Pathshaala/UploadedFiles/UserProfile/" + profileImageName;
+                                Log.d("SearchTeachersDashboard", "✅ Profile image URL: " + imageUrl);
+
+                                // Load image using Glide
+                                Glide.with(SearchTeachersDashboard.this)
+                                        .load(imageUrl)
+                                        .placeholder(R.drawable.generic_avatar) // Show default profile pic if empty
+                                        .error(R.drawable.generic_avatar) // Show default if loading fails
+                                        .apply(RequestOptions.circleCropTransform()) // Make the image round
+                                        .into(profileIcon);
+                            } else {
+                                Log.e("SearchTeachersDashboard", "❌ No profile image found for user.");
+                                Glide.with(SearchTeachersDashboard.this)
+                                        .load(R.drawable.generic_avatar)
+                                        .apply(RequestOptions.circleCropTransform())
+                                        .into(profileIcon);
+                            }
+                            // --- End Image Loading ---
 
                             profileIcon.setOnClickListener(v -> {
                                 Intent intent = new Intent(SearchTeachersDashboard.this, ProfilePageStudent.class);
@@ -128,7 +149,7 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
                                 intent.putExtra("USER_PHONE", student.getMobileNo());
                                 intent.putExtra("USER_ID", student.getUserId());
                                 intent.putExtra("USER_FIRST_NAME", student.getUsername());
-                                Log.d("SearchTeachersDashboard","Intent passed for UserID: " + student.getUserId());
+                                Log.d("SearchTeachersDashboard", "Intent passed for UserID: " + student.getUserId());
                                 startActivity(intent);
                             });
 
@@ -152,5 +173,3 @@ public class SearchTeachersDashboard extends AppCompatActivity implements Filter
         startActivity(intent);
     }
 }
-
-

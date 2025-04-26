@@ -5,6 +5,7 @@ package com.example.loginpage.MySqliteDatabase;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.nfc.Tag;
 import android.os.AsyncTask;
@@ -2374,6 +2375,7 @@ public class DatabaseHelper {
         }).start();
     }
 
+
     public interface ProcedureResultCallback<T> {
         void onSuccess(T result);
 
@@ -2419,7 +2421,7 @@ public class DatabaseHelper {
                     result.setSelfReferralCode(rs.getString("selfreferralcode"));
                     result.setCurrentProfession(rs.getInt("CurrentProfession"));
                     result.setCurrentProfessionRem(rs.getString("CurrentProfessionRem"));
-//                    result.setUserImageName(rs.getString("userimagename"));
+                    result.setUserImageName(rs.getString("UserImageName")); // ADDED THIS LINE
 
                     resultList.add(result);
                 }
