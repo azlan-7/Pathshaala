@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Time (HH:MM AM/PM)"
+            android:labelFor="@+id/editStartTime"
+            android:textColor="#0F4D73"
+            android:fontFamily="@font/work_sans"/>
+
+        <EditText
+            android:id="@+id/editStartTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="e.g., 09:00 AM"
+            android:textColor="#1674AE"
+            android:fontFamily="@font/work_sans"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="End Time (HH:MM AM/PM)"
+            android:labelFor="@+id/editEndTime"
+            android:textColor="#0F4D73"
+            android:fontFamily="@font/work_sans"/>
+
+        <EditText
+            android:id="@+id/editEndTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="e.g., 10:00 AM"
+            android:textColor="#1674AE"
+            android:fontFamily="@font/work_sans"/>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

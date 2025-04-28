@@ -49,6 +49,8 @@ public class ShowTimeTable extends AppCompatActivity {
     private Map<String, String> subjectMap = new HashMap<>(); // SubjectName -> SubjectID
     private Map<String, String> selectedTimeSlots = new HashMap<>();
 
+    private Map<String, String> gradeMap = new HashMap<>(); // GradeName -> GradeID
+
     private Button saveButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,14 +150,14 @@ public class ShowTimeTable extends AppCompatActivity {
 
         loadSubjects();
 
-        // Grade List
-        ArrayList<String> gradeList = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
-            gradeList.add("Grade " + i);
-        }
+        loadGrades();
 
-
-        gradeDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, gradeList));
+//        // Grade List
+//        ArrayList<String> gradeList = new ArrayList<>();
+//        for (int i = 1; i <= 12; i++) {
+//            gradeList.add("Grade " + i);
+//        }
+//        gradeDropdown.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, gradeList));
 
 
         setupExpandableList();
@@ -293,6 +295,33 @@ public class ShowTimeTable extends AppCompatActivity {
 
         subjectDropdown.setOnClickListener(v -> subjectDropdown.showDropDown());
 
+    }
+
+
+    private void loadGrades() {
+        String query = "SELECT GradeID, GradeName FROM Grades WHERE active = 'true' ORDER BY GradeName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No grades found!");
+                Toast.makeText(this, "No Grades Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> grades = new ArrayList<>();
+            gradeMap.clear();
+
+            for (Map<String, String> row : result) {
+                grades.add(row.get("GradeName"));
+                gradeMap.put(row.get("GradeName"), row.get("GradeID"));
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades);
+            gradeDropdown.setAdapter(adapter);
+        });
+
+        gradeDropdown.setOnClickListener(v -> gradeDropdown.showDropDown());
     }
 
 }
