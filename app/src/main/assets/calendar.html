@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Time Table</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.14.1/jquery.timepicker.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.14.1/jquery.timepicker.min.js"></script>
+    <style>
+        .fc-event {
+          cursor: pointer;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek', // Start with week view
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay' // Add day/week/month toggles
+                },
+                events: [], // Start with empty events.  Load from Android.
+                selectable: true,
+                select: function(selectionInfo) {
+                    // Call Android function to show dialog.
+                    var start = selectionInfo.startStr;
+                    var end = selectionInfo.endStr;
+                    if (android && android.showEventDialog) {
+                        android.showEventDialog(start, end, null); // null for new event
+                    } else {
+                        alert("Android interface not available.  Cannot add event.");
+                    }
+                },
+                eventClick: function(clickInfo) {
+                    var event = clickInfo.event;
+                    if (android && android.showEventDialog) {
+                        android.showEventDialog(event.startStr, event.endStr, event.id);
+                    } else {
+                        alert("Android interface not available. Cannot edit event.");
+                    }
+                },
+                eventContent: function(arg) {
+                    let content = document.createElement('div');
+                    content.innerHTML = arg.event.title;
+
+                    let time = document.createElement('div');
+                    time.style.fontSize = '0.8em';
+                    time.style.color = '#888';
+                    time.innerHTML = moment(arg.event.start).format('h:mm a') + ' - ' + moment(arg.event.end).format('h:mm a');
+                    content.appendChild(time);
+                    return { domNodes: [content] }
+                }
+            });
+            calendar.render();
+
+            // Expose a function to the Android activity to add events.
+            window.addEventsToCalendar = function(eventsJson) {
+                var events = JSON.parse(eventsJson);
+                calendar.removeAllEvents(); // Clear existing events
+                events.forEach(function(eventData) {
+                    calendar.addEvent({
+                        id: eventData.id,
+                        title: eventData.subject + ' (' + eventData.grade + ')',
+                        start: eventData.startTime,
+                        end: eventData.endTime,
+                        subject: eventData.subject, // Store custom data
+                        grade: eventData.grade
+                    });
+                });
+            };
+
+            // Expose a function to the Android activity to update an event.
+            window.updateEventInCalendar = function(eventId, updatedEventJson) {
+                var updatedEvent = JSON.parse(updatedEventJson);
+                var calendarEvent = calendar.getEventById(eventId);
+                if (calendarEvent) {
+                    calendarEvent.setProp('title', updatedEvent.subject + ' (' + updatedEvent.grade + ')');
+                    calendarEvent.setStart(updatedEvent.startTime);
+                    calendarEvent.setEnd(updatedEvent.endTime);
+                    calendarEvent.setExtendedProp('subject', updatedEvent.subject);
+                    calendarEvent.setExtendedProp('grade', updatedEvent.grade);
+                }
+            };
+
+             // Expose a function to the Android activity to delete an event.
+            window.deleteEventFromCalendar = function(eventId) {
+                var calendarEvent = calendar.getEventById(eventId);
+                if (calendarEvent) {
+                    calendarEvent.remove();
+                }
+            };
+
+            // Expose a function to refresh the calendar
+            window.refetchCalendarEvents = function() {
+                calendar.refetchEvents();
+            }
+        });
+    </script>
+</head>
+<body>
+<div id="calendar"></div>
+</body>
+</html>

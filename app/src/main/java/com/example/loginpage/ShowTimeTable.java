@@ -69,6 +69,8 @@ public class ShowTimeTable extends AppCompatActivity {
         expandableListView = findViewById(R.id.expandableListView);
         expandableListView.setBackground(ContextCompat.getDrawable(this, R.drawable.expandable_list_background));
         saveButton = findViewById(R.id.saveTimeTableBtn);
+
+        // Inside the saveButton.setOnClickListener in ShowTimeTable.java
         saveButton.setOnClickListener(v -> {
             String selectedSubject = subjectDropdown.getText().toString();
             String selectedGrade = gradeDropdown.getText().toString();
@@ -78,35 +80,28 @@ public class ShowTimeTable extends AppCompatActivity {
                 return;
             }
 
-            String subjectId = subjectMap.get(selectedSubject); // You'll need subject ID for DB
+            String subjectId = subjectMap.get(selectedSubject);
             if (subjectId == null) {
                 Toast.makeText(this, "Invalid subject selected", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Example: Insert timetable slots for each day
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            int userId = sharedPreferences.getInt("USER_ID", -1);
+
             for (String day : sectionTitles) {
-                List<DatabaseHelper.TimeTableEntry> classList = sectionItems.get(day);  // ✅ Correct
-
-
+                List<DatabaseHelper.TimeTableEntry> classList = sectionItems.get(day);
                 for (DatabaseHelper.TimeTableEntry classSlot : classList) {
                     if ("Edit Timetable".equals(classSlot.subjectName)) continue;
                     if (classSlot.remark == null || !classSlot.remark.contains("✓")) continue;
 
-
-                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                    int userId = sharedPreferences.getInt("USER_ID", -1);
-
                     String startTime = classSlot.startTime;
                     String endTime = classSlot.endTime;
-
                     int createdByUserId = userId;
-
                     int subjectIdInt = Integer.parseInt(subjectId.replaceAll("[^0-9]", ""));
                     int gradeId = Integer.parseInt(selectedGrade.replaceAll("[^0-9]", ""));
-                    int dayInt = convertDayToInt(day);  // assuming day = "Monday" etc.
+                    int dayInt = convertDayToInt(day);
 
-                    Log.d("DEBUG", "Context in callback: " + context);
                     DatabaseHelper.insertOrUpdateTimeTable(
                             context,
                             0,
@@ -126,6 +121,15 @@ public class ShowTimeTable extends AppCompatActivity {
                                     Log.d("ShowTimeTable", "subjectId=" + subjectId + ", grade=" + selectedGrade + ", day=" + day + ", startTime=" + startTime + ", endTime=" + endTime);
                                     Log.d("ShowTimeTable","Time table saved for userId: "+ createdByUserId);
                                     Toast.makeText(ShowTimeTable.this, "Saved successfully: " + message, Toast.LENGTH_SHORT).show();
+
+                                    // Create intent to ShowTimeTableTwo
+                                    Intent intent = new Intent(ShowTimeTable.this, ShowTimeTableTwo.class);
+                                    intent.putExtra("subjectName", selectedSubject);
+                                    intent.putExtra("gradeName", selectedGrade);
+                                    intent.putExtra("dayOfWeek", day);
+                                    intent.putExtra("timeSlot", startTime + " - " + endTime);
+                                    startActivity(intent);
+                                    finish(); // Optionally finish ShowTimeTable to prevent going back to the selection screen
                                 }
 
                                 @Override
@@ -135,15 +139,94 @@ public class ShowTimeTable extends AppCompatActivity {
                                 }
                             }
                     );
-
+                    // Since you want to show only the latest, and we're iterating through all selected,
+                    // you might want to restructure this if multiple selections can be saved at once.
+                    // If only one is saved per click, this structure works.
                 }
-
             }
 
             Toast.makeText(this, "Time Table saved successfully!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(ShowTimeTable.this, ShowTimeTableNewViewTeacher.class);
-            startActivity(intent);
+            // The Intent to ShowTimeTableTwo is now inside the onSuccess callback
         });
+
+
+
+//        saveButton.setOnClickListener(v -> {
+//            String selectedSubject = subjectDropdown.getText().toString();
+//            String selectedGrade = gradeDropdown.getText().toString();
+//
+//
+//            if (selectedSubject.isEmpty() || selectedGrade.isEmpty()) {
+//                Toast.makeText(this, "Please select both subject and grade", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            String subjectId = subjectMap.get(selectedSubject); // You'll need subject ID for DB
+//            if (subjectId == null) {
+//                Toast.makeText(this, "Invalid subject selected", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            // Example: Insert timetable slots for each day
+//            for (String day : sectionTitles) {
+//                List<DatabaseHelper.TimeTableEntry> classList = sectionItems.get(day);  // ✅ Correct
+//
+//
+//                for (DatabaseHelper.TimeTableEntry classSlot : classList) {
+//                    if ("Edit Timetable".equals(classSlot.subjectName)) continue;
+//                    if (classSlot.remark == null || !classSlot.remark.contains("✓")) continue;
+//
+//
+//                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//                    int userId = sharedPreferences.getInt("USER_ID", -1);
+//
+//                    String startTime = classSlot.startTime;
+//                    String endTime = classSlot.endTime;
+//
+//                    int createdByUserId = userId;
+//
+//                    int subjectIdInt = Integer.parseInt(subjectId.replaceAll("[^0-9]", ""));
+//                    int gradeId = Integer.parseInt(selectedGrade.replaceAll("[^0-9]", ""));
+//                    int dayInt = convertDayToInt(day);  // assuming day = "Monday" etc.
+//
+//                    Log.d("DEBUG", "Context in callback: " + context);
+//                    DatabaseHelper.insertOrUpdateTimeTable(
+//                            context,
+//                            0,
+//                            userId,
+//                            subjectIdInt,
+//                            gradeId,
+//                            dayInt,
+//                            startTime,
+//                            endTime,
+//                            "",
+//                            "",
+//                            createdByUserId,
+//                            new DatabaseHelper.ProcedureCallback() {
+//                                @Override
+//                                public void onSuccess(String message) {
+//                                    Log.d("ShowTimeTable","Message from db:  " + message);
+//                                    Log.d("ShowTimeTable", "subjectId=" + subjectId + ", grade=" + selectedGrade + ", day=" + day + ", startTime=" + startTime + ", endTime=" + endTime);
+//                                    Log.d("ShowTimeTable","Time table saved for userId: "+ createdByUserId);
+//                                    Toast.makeText(ShowTimeTable.this, "Saved successfully: " + message, Toast.LENGTH_SHORT).show();
+//                                }
+//
+//                                @Override
+//                                public void onError(String error) {
+//                                    Toast.makeText(ShowTimeTable.this, "Failed to save: " + error, Toast.LENGTH_LONG).show();
+//                                    Log.e("SP_ERROR", error);
+//                                }
+//                            }
+//                    );
+//
+//                }
+//
+//            }
+//
+//            Toast.makeText(this, "Time Table saved successfully!", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(ShowTimeTable.this, ShowTimeTableNewViewTeacher.class);
+//            startActivity(intent);
+//        });
 
 
         gradeDropdown.setOnClickListener(v -> gradeDropdown.showDropDown());

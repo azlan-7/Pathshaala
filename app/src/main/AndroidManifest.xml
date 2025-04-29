@@ -33,13 +33,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".GradesStudentView"
+            android:name=".ShowTimeTableTwo"
             android:exported="true"
             android:theme="@style/Theme.MyApp.FullScreenLight"/>
         <activity
+            android:name=".CalendarActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
+            android:name=".GradesStudentView"
+            android:exported="true"
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
+        <activity
             android:name=".GradesStudentAdd"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight"/>
+            android:theme="@style/Theme.MyApp.FullScreenLight" />
         <activity
             android:name=".ShowTimeTableNewViewTeacher"
             android:exported="true"
