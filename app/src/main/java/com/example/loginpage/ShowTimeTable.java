@@ -204,7 +204,7 @@ public class ShowTimeTable extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(String message) {
                                     Log.d("ShowTimeTable", "Saved successfully: " + message);
-                                    Intent intent = new Intent(ShowTimeTable.this, ShowTimeTableTwo.class);
+                                    Intent intent = new Intent(ShowTimeTable.this, ShowTimeTableNewViewTeacher.class);
                                     intent.putExtra("subjectName", selectedSubject);
                                     intent.putExtra("gradeName", selectedGrade);
                                     intent.putExtra("dayOfWeek", day);

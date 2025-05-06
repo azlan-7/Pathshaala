@@ -177,7 +177,7 @@
             android:focusable="true"
             android:ems="10"
             android:fontFamily="@font/work_sans_light"
-            android:hint="Day"
+            android:hint="Day/Hours"
             android:inputType="none"
             android:textColorHint="#1674AE"
             android:textSize="16sp"
