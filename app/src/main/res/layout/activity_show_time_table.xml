@@ -63,36 +63,6 @@
             app:layout_constraintTop_toBottomOf="@+id/pageHeading"
             app:layout_constraintVertical_bias="0.0" />
 
-        <ExpandableListView
-            android:id="@+id/expandableListView"
-            android:layout_width="299dp"
-            android:layout_height="352dp"
-            android:layout_margin="20dp"
-            android:background="@drawable/expandable_list_background"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp"
-            android:groupIndicator="@null"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.633"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText53" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/saveTimeTableBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/cornered_button"
-            android:fontFamily="@font/work_sans_bold"
-            android:text="SAVE"
-            android:textColor="@color/white"
-            android:textSize="8pt"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/expandableListView" />
-
         <AutoCompleteTextView
             android:id="@+id/editTextText52"
             android:layout_width="299dp"
@@ -115,7 +85,7 @@
             android:id="@+id/editTextText53"
             android:layout_width="299dp"
             android:layout_height="46dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/cornered_rectangle"
             android:drawableEnd="@drawable/dropdownicon"
             android:ems="10"
@@ -127,6 +97,126 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/referenceText" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextText52" />
+
+        <ExpandableListView
+            android:id="@+id/expandableListView"
+            android:layout_width="299dp"
+            android:layout_height="352dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/expandable_list_background"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
+            android:groupIndicator="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextText53" />
+
+        <EditText
+            android:id="@+id/editTextNumber"
+            android:layout_width="299dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/cornered_rectangle"
+            android:ems="10"
+            android:fontFamily="@font/work_sans_light"
+            android:hint="No. of Students/Batch"
+            android:inputType="number"
+            android:textColorHint="#1674AE"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextCourseFee" />
+
+        <CheckBox
+            android:id="@+id/disableSliderCheckBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/work_sans_bold"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="Is this a demo class?"
+            android:textColor="#0F4D73"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/editTextDuration"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editTextDuration"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/cornered_rectangle"
+            android:drawableEnd="@drawable/dropdownicon"
+            android:ems="10"
+            android:focusable="true"
+            android:fontFamily="@font/work_sans_light"
+            android:hint="Duration"
+            android:inputType="none"
+            android:textColorHint="#1674AE"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/disableSliderCheckBox"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editTextTime"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/cornered_rectangle"
+            android:drawableEnd="@drawable/dropdownicon"
+            android:focusable="true"
+            android:ems="10"
+            android:fontFamily="@font/work_sans_light"
+            android:hint="Day"
+            android:inputType="none"
+            android:textColorHint="#1674AE"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/disableSliderCheckBox"
+            app:layout_constraintTop_toBottomOf="@+id/editTextDuration" />
+
+        <EditText
+            android:id="@+id/editTextCourseFee"
+            android:layout_width="299dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/cornered_rectangle"
+            android:ems="10"
+            android:fontFamily="@font/work_sans_light"
+            android:hint="   Set Course Fee"
+            android:drawableLeft="@drawable/indianflag"
+            android:inputType="number"
+            android:textColorHint="#1674AE"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/expandableListView" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/saveTimeTableBtn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/cornered_button"
+            android:fontFamily="@font/work_sans_bold"
+            android:text="SAVE"
+            android:textColor="@color/white"
+            android:textSize="8pt"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTime" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
