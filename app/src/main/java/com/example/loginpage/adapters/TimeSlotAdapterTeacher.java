@@ -42,6 +42,9 @@ public class TimeSlotAdapterTeacher extends RecyclerView.Adapter<TimeSlotAdapter
         holder.gradeTextTeacher.setText("Grade: " + slot.getGrade());
         holder.dayTextTeacher.setText("Day: " + slot.getDay());
         holder.timeTextTeacher.setText("Time: " + slot.getTime());
+        holder.courseFeeTextTeacher.setText("Fee: " + slot.getCourseFee());
+        holder.batchCapacityTextTeacher.setText("Students: " + slot.getBatchCapacity());
+        holder.durationTextTeacher.setText("Duration: " + slot.getDuration());
 
         holder.deleteIconTeacher.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {
@@ -56,7 +59,7 @@ public class TimeSlotAdapterTeacher extends RecyclerView.Adapter<TimeSlotAdapter
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectTextTeacher, gradeTextTeacher, dayTextTeacher, timeTextTeacher;
+        TextView subjectTextTeacher, gradeTextTeacher, dayTextTeacher, timeTextTeacher, courseFeeTextTeacher, batchCapacityTextTeacher, durationTextTeacher;
         ImageView deleteIconTeacher;
 
         public ViewHolder(View itemView) {
@@ -65,11 +68,13 @@ public class TimeSlotAdapterTeacher extends RecyclerView.Adapter<TimeSlotAdapter
             gradeTextTeacher = itemView.findViewById(R.id.tvGradeTeacher);
             dayTextTeacher = itemView.findViewById(R.id.tvDayTeacher);
             timeTextTeacher = itemView.findViewById(R.id.tvTimeTeacher);
+            courseFeeTextTeacher = itemView.findViewById(R.id.tvCourseFeeTeacher);
+            batchCapacityTextTeacher = itemView.findViewById(R.id.tvBatchCapacityTeacher);
+            durationTextTeacher = itemView.findViewById(R.id.tvDurationTeacher);
             deleteIconTeacher = itemView.findViewById(R.id.imageView108);
         }
     }
 
-    // Interface to communicate delete events to the activity
     public interface OnDeleteClickListener {
         void onDeleteClick(int position);
     }

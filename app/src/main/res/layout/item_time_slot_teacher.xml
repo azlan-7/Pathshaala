@@ -14,37 +14,68 @@
         android:padding="12dp">
 
         <TextView
-            android:id="@+id/tvSubjectTeacher" android:layout_width="wrap_content"
+            android:id="@+id/tvSubjectTeacher"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans_bold"
             android:text="Subject: English"
-            android:textStyle="bold"
+            android:textColor="#0F4D73"
             android:textSize="18sp"
-            android:textColor="#0F4D73"
-            android:fontFamily="@font/work_sans_bold" />
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvGradeTeacher" android:layout_width="wrap_content"
+            android:id="@+id/tvGradeTeacher"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
             android:text="Grade: 6"
-            android:textSize="16sp"
             android:textColor="#0F4D73"
-            android:fontFamily="@font/work_sans" />
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvDayTeacher" android:layout_width="wrap_content"
+            android:id="@+id/tvDayTeacher"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
             android:text="Day: Monday"
-            android:textSize="16sp"
             android:textColor="#0F4D73"
-            android:fontFamily="@font/work_sans" />
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvTimeTeacher" android:layout_width="wrap_content"
+            android:id="@+id/tvTimeTeacher"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
             android:text="Time: 6:00 AM - 7:00 AM"
-            android:textSize="16sp"
             android:textColor="#0F4D73"
-            android:fontFamily="@font/work_sans" />
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvCourseFeeTeacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
+            android:text="Fee: INR 500"
+            android:textColor="#0F4D73"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvBatchCapacityTeacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
+            android:text="Students: 10"
+            android:textColor="#0F4D73"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvDurationTeacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
+            android:text="Duration: 1 hour"
+            android:textColor="#0F4D73"
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/imageView108"
@@ -53,7 +84,6 @@
             android:clickable="true"
             android:focusable="true"
             app:srcCompat="@drawable/delete_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
-
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
