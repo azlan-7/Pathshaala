@@ -29,6 +29,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.TimeTableExpandableListAdapter;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,7 +56,7 @@ public class TimeTableInsert extends AppCompatActivity {
     private Button saveButton;
     private EditText editTextNumber, etCourseFee, editTextStartTime, editTextEndTime;
     private RadioGroup durationRadioGroupYearsDaysHoursDemo, durationRadioGroupDaysHoursRegular;
-    private RadioButton radioButtonYearsDemo, radioButtonDaysDemo, radioButtonHoursDemo, radioButtonDurationDaysRegular, radioButtonDurationHoursRegular;
+    private RadioButton radioButtonYearsDemo, radioButtonDaysDemo, radioButtonHoursDemo, radioButtonDurationYearsRegular, radioButtonDurationHoursRegular;
 
     private Map<String, String> subjectMap = new HashMap<>(); // SubjectName -> SubjectID
     private Map<String, String> gradeMap = new HashMap<>(); // GradeName -> GradeID
@@ -64,6 +65,7 @@ public class TimeTableInsert extends AppCompatActivity {
     private Calendar calendarStart = Calendar.getInstance();
     private Calendar calendarEnd = Calendar.getInstance();
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    MaterialCheckBox checkBoxMon, checkBoxTue, checkBoxWed, checkBoxThu, checkBoxFri, checkBoxSat, checkBoxSun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,13 +98,24 @@ public class TimeTableInsert extends AppCompatActivity {
         radioButtonHoursDemo = findViewById(R.id.radioButton3);
 
         durationRadioGroupDaysHoursRegular = findViewById(R.id.radioGroupDaysHours);
-        radioButtonDurationDaysRegular = findViewById(R.id.radioButton4);
+        radioButtonDurationYearsRegular = findViewById(R.id.radioButton4);
         radioButtonDurationHoursRegular = findViewById(R.id.radioButton5);
+        radioButtonDaysDemo = findViewById(R.id.radioButton6);
+
 
         editTextStartTime.setOnClickListener(v -> showTimePickerDialog(true));
         analogClockStartTime.setOnClickListener(v -> showTimePickerDialog(true));
         editTextEndTime.setOnClickListener(v -> showTimePickerDialog(false));
         analogClockEndTime.setOnClickListener(v -> showTimePickerDialog(false));
+
+
+        checkBoxMon = findViewById(R.id.checkBoxMon);
+        checkBoxTue = findViewById(R.id.checkBoxTue);
+        checkBoxWed = findViewById(R.id.checkBoxWed);
+        checkBoxThu = findViewById(R.id.checkBoxThu);
+        checkBoxFri = findViewById(R.id.checkBoxFri);
+        checkBoxSat = findViewById(R.id.checkBoxSat);
+        checkBoxSun = findViewById(R.id.checkBoxSun);
 
         // Populate Day Dropdown with an array
         String[] daysOfWeek = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
@@ -117,10 +130,12 @@ public class TimeTableInsert extends AppCompatActivity {
         // Disable Regular Duration Dropdown and Radio Buttons initially
         durationDropdownRegular.setEnabled(false);
         durationDropdownRegular.setAlpha(0.5f);
-        radioButtonDurationDaysRegular.setEnabled(false);
+        radioButtonDurationYearsRegular.setEnabled(false);
         radioButtonDurationHoursRegular.setEnabled(false);
-        radioButtonDurationDaysRegular.setAlpha(0.5f);
+        radioButtonDaysDemo.setEnabled(false);
+        radioButtonDurationYearsRegular.setAlpha(0.5f);
         radioButtonDurationHoursRegular.setAlpha(0.5f);
+        radioButtonDaysDemo.setAlpha(0.5f);
 
         // Populate Regular Duration Dropdown initially (not needed anymore)
 
@@ -128,10 +143,12 @@ public class TimeTableInsert extends AppCompatActivity {
         disableSliderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             durationDropdownRegular.setEnabled(isChecked);
             durationDropdownRegular.setAlpha(isChecked ? 1.0f : 0.5f);
-            radioButtonDurationDaysRegular.setEnabled(isChecked);
+            radioButtonDurationYearsRegular.setEnabled(isChecked);
             radioButtonDurationHoursRegular.setEnabled(isChecked);
-            radioButtonDurationDaysRegular.setAlpha(isChecked ? 1.0f : 0.5f);
+            radioButtonDaysDemo.setEnabled(isChecked);
+            radioButtonDurationYearsRegular.setAlpha(isChecked ? 1.0f : 0.5f);
             radioButtonDurationHoursRegular.setAlpha(isChecked ? 1.0f : 0.5f);
+            radioButtonDaysDemo.setAlpha(isChecked ? 1.0f : 0.5f);
 
             // Set listener for the regular duration radio group only when the checkbox is checked
             if (isChecked) {
@@ -201,13 +218,6 @@ public class TimeTableInsert extends AppCompatActivity {
             String endTimeStr = editTextEndTime.getText().toString();
 
             // Get references to the day checkboxes
-            CheckBox checkBoxMon = findViewById(R.id.checkBoxMon);
-            CheckBox checkBoxTue = findViewById(R.id.checkBoxTue);
-            CheckBox checkBoxWed = findViewById(R.id.checkBoxWed);
-            CheckBox checkBoxThu = findViewById(R.id.checkBoxThu);
-            CheckBox checkBoxFri = findViewById(R.id.checkBoxFri);
-            CheckBox checkBoxSat = findViewById(R.id.checkBoxSat);
-            CheckBox checkBoxSun = findViewById(R.id.checkBoxSun);
 
             // Build a string of selected days
             StringBuilder selectedDaysBuilder = new StringBuilder();
@@ -234,10 +244,12 @@ public class TimeTableInsert extends AppCompatActivity {
 
 
             if (disableSliderCheckBox.isChecked()) {
-                if (radioButtonDurationDaysRegular.isChecked()) {
+                if (radioButtonDurationYearsRegular.isChecked()) {
                     selectedDuration = durationDropdownRegular.getText().toString(); // Get text from EditText
                 } else if (radioButtonDurationHoursRegular.isChecked()) {
                     selectedDuration = durationDropdownRegular.getText().toString(); // Get text from EditText
+                } else if(radioButtonDaysDemo.isChecked()){
+                    selectedDuration = durationDropdownRegular.getText().toString();
                 } else {
                     Toast.makeText(this, "Please select a duration (Days/Hours) for regular class", Toast.LENGTH_SHORT).show();
                     return;

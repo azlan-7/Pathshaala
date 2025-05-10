@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -52,7 +51,7 @@
             android:id="@+id/editTextText52"
             android:layout_width="299dp"
             android:layout_height="46dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/cornered_rectangle"
             android:drawableEnd="@drawable/dropdownicon"
             android:ems="10"
@@ -89,95 +88,150 @@
 
         <LinearLayout
             android:id="@+id/daysOfWeekLayoutTop"
-            android:layout_width="363dp"
-            android:layout_height="27dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextText53">
-
-            <CheckBox
-                android:id="@+id/checkBoxMon"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/checkbox_round"
-                android:fontFamily="@font/work_sans_bold"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="Mon"
-                android:textSize="11sp" />
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
 
-            <CheckBox
-                android:id="@+id/checkBoxTue"
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxMon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="M"
+                    android:textColor="@color/gray"
+                    app:buttonTint="#0F4D73"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:checked="false" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxTue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="Tu"
+                    android:textColor="@color/gray"
+                    app:buttonTint="#0F4D73"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:checked="false"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxWed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="W"
+                    android:textColor="@color/gray"
+                    app:buttonTint="#0F4D73"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:checked="false"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxThu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="Th"
+                    android:textColor="@color/gray"
+                    app:buttonTint="#0F4D73"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:checked="false"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:button="@drawable/checkbox_round"
-                android:fontFamily="@font/work_sans_bold"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="Tue"
-                android:textSize="11sp" />
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxFri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="F"
+                    android:textColor="@color/gray"
+                    app:buttonTint="#0F4D73"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:checked="false"/>
 
-            <CheckBox
-                android:id="@+id/checkBoxWed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:button="@drawable/checkbox_round"
-                android:fontFamily="@font/work_sans_bold"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="Wed"
-                android:textSize="11sp" />
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxSat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="Sa"
+                    android:textColor="@color/gray"
+                    app:buttonTint="#0F4D73"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:checked="false"/>
 
-            <CheckBox
-                android:id="@+id/checkBoxThu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:button="@drawable/checkbox_round"
-                android:fontFamily="@font/work_sans_bold"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="Thu"
-                android:textSize="11sp" />
-
-            <CheckBox
-                android:id="@+id/checkBoxFri"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/checkbox_round"
-                android:fontFamily="@font/work_sans_bold"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="Fri"
-                android:textSize="11sp" />
-
-            <CheckBox
-                android:id="@+id/checkBoxSat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:button="@drawable/checkbox_round"
-                android:fontFamily="@font/work_sans_bold"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="Sat"
-                android:textSize="11sp" />
-
-            <CheckBox
-                android:id="@+id/checkBoxSun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:button="@drawable/checkbox_round"
-                android:fontFamily="@font/work_sans_bold"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="Sun"
-                android:textSize="11sp" />
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxSun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="Su"
+                    android:textColor="@color/gray"
+                    app:buttonTint="#0F4D73"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:checked="false"/>
+            </LinearLayout>
         </LinearLayout>
 
         <EditText
@@ -270,8 +324,8 @@
             android:id="@+id/editTextText61"
             android:layout_width="92dp"
             android:layout_height="45dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/cornered_rectangle"
             android:ems="10"
             android:focusable="true"
@@ -285,8 +339,8 @@
 
         <RadioGroup
             android:id="@+id/radioGroupYearsDaysHours"
-            android:layout_width="196dp"
-            android:layout_height="45dp"
+            android:layout_width="203dp"
+            android:layout_height="51dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toEndOf="@+id/editTextText61"
             app:layout_constraintTop_toTopOf="@+id/editTextText61">
@@ -295,22 +349,31 @@
                 android:id="@+id/radioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/work_sans_bold"
                 android:text="Yearly"
-                android:textSize="11sp" />
+                android:textColor="#0F4D73"
+                android:textSize="11sp"
+                app:buttonTint="#1674AE"/>
 
             <RadioButton
                 android:id="@+id/radioButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/work_sans_bold"
                 android:text="Weekly"
-                android:textSize="11sp" />
+                android:textColor="#0F4D73"
+                android:textSize="11sp"
+                app:buttonTint="#1674AE"/>
 
             <RadioButton
                 android:id="@+id/radioButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/work_sans_bold"
                 android:text="Daily"
-                android:textSize="11sp" />
+                android:textColor="#0F4D73"
+                android:textSize="11sp"
+                app:buttonTint="#1674AE"/>
 
         </RadioGroup>
 
@@ -318,15 +381,21 @@
             android:id="@+id/disableSliderCheckBox"
             android:layout_width="149dp"
             android:layout_height="25dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/work_sans_bold"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="Demo Classes"
             android:textColor="#0F4D73"
             android:textSize="16sp"
+            app:buttonTint="#0F4D73"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.217"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/radioGroupYearsDaysHours" />
 
@@ -334,7 +403,7 @@
             android:id="@+id/editTextText59"
             android:layout_width="87dp"
             android:layout_height="44dp"
-            android:layout_marginStart="64dp"
+            android:layout_marginStart="56dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/cornered_rectangle"
             android:ems="10"
@@ -349,9 +418,11 @@
 
         <RadioGroup
             android:id="@+id/radioGroupDaysHours"
-            android:layout_width="241dp"
-            android:layout_height="44dp"
+            android:layout_width="242dp"
+            android:layout_height="45dp"
             android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/editTextText59"
             app:layout_constraintTop_toTopOf="@+id/editTextText59">
 
@@ -359,25 +430,31 @@
                 android:id="@+id/radioButton4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:fontFamily="@font/work_sans_bold"
                 android:text="Yearly"
-                android:textSize="11sp" />
+                android:textColor="#0F4D73"
+                android:textSize="11sp"
+                app:buttonTint="#1674AE"/>
 
             <RadioButton
                 android:id="@+id/radioButton5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:fontFamily="@font/work_sans_bold"
                 android:text="Weekly"
-                android:textSize="11sp" />
+                android:textColor="#0F4D73"
+                android:textSize="11sp"
+                app:buttonTint="#1674AE"/>
 
             <RadioButton
                 android:id="@+id/radioButton6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:fontFamily="@font/work_sans_bold"
                 android:text="Daily"
-                android:textSize="11sp" />
+                android:textColor="#0F4D73"
+                android:textSize="11sp"
+                app:buttonTint="#1674AE"/>
 
         </RadioGroup>
 
