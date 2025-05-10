@@ -59,10 +59,11 @@ public class CalendarActivity extends AppCompatActivity {
         JSONArray eventsJson = new JSONArray();
         SharedPreferences sp = getSharedPreferences("TimeTableData", MODE_PRIVATE);
         Map<String, ?> allEntries = sp.getAll();
-
         SimpleDateFormat timeParser = new SimpleDateFormat("HH:mm", Locale.getDefault());
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        String hardcodedYear = "2025";
+        int hardcodedMonth = Calendar.MAY;
 
         try {
             for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
@@ -71,12 +72,14 @@ public class CalendarActivity extends AppCompatActivity {
                     String[] parts = key.split("_");
                     if (parts.length == 4) {
                         try {
-                            int subjectId = Integer.parseInt(parts[1]);
+                            long timestamp = Long.parseLong(parts[1]);
                             int dayOfWeekInt = Integer.parseInt(parts[2]);
                             String startTimeStr = parts[3];
-                            String grade = sp.getString("grade_" + parts[1] + "_" + parts[2] + "_" + startTimeStr, "");
+                            String grade = sp.getString("grade_" + timestamp + "_" + parts[2] + "_" + startTimeStr, "");
                             String subject = sp.getString(key, "");
-                            String timeRange = sp.getString("time_" + parts[2] + "_" + startTimeStr, "");
+                            String timeRange = sp.getString("time_" + timestamp + "_" + parts[2] + "_" + startTimeStr, "");
+                            String savedYear = sp.getString("year_" + timestamp + "_" + parts[2] + "_" + startTimeStr, hardcodedYear);
+                            int savedMonth = sp.getInt("month_" + timestamp + "_" + parts[2] + "_" + startTimeStr, hardcodedMonth);
 
                             if (timeRange != null && !timeRange.isEmpty()) {
                                 String[] times = timeRange.split(" - ");
@@ -84,16 +87,27 @@ public class CalendarActivity extends AppCompatActivity {
                                     Date startTime = timeParser.parse(times[0]);
                                     Date endTime = timeParser.parse(times[1]);
 
-                                    // Set the calendar to the correct day of the week
-                                    calendar.set(Calendar.DAY_OF_WEEK, getCalendarDay(dayOfWeekInt));
-                                    String dateStr = dateFormatter.format(calendar.getTime());
+                                    Calendar startCal = Calendar.getInstance();
+                                    startCal.set(Calendar.YEAR, Integer.parseInt(savedYear));
+                                    startCal.set(Calendar.MONTH, savedMonth);
+                                    startCal.set(Calendar.DAY_OF_WEEK, getCalendarDay(dayOfWeekInt));
+                                    startCal.set(Calendar.HOUR_OF_DAY, new SimpleDateFormat("HH", Locale.getDefault()).parse(times[0]).getHours());
+                                    startCal.set(Calendar.MINUTE, new SimpleDateFormat("mm", Locale.getDefault()).parse(times[0]).getMinutes());
+                                    startCal.set(Calendar.SECOND, 0);
+
+                                    Calendar endCal = Calendar.getInstance();
+                                    endCal.set(Calendar.YEAR, Integer.parseInt(savedYear));
+                                    endCal.set(Calendar.MONTH, savedMonth);
+                                    endCal.set(Calendar.DAY_OF_WEEK, getCalendarDay(dayOfWeekInt));
+                                    endCal.set(Calendar.HOUR_OF_DAY, new SimpleDateFormat("HH", Locale.getDefault()).parse(times[1]).getHours());
+                                    endCal.set(Calendar.MINUTE, new SimpleDateFormat("mm", Locale.getDefault()).parse(times[1]).getMinutes());
+                                    endCal.set(Calendar.SECOND, 0);
 
                                     JSONObject eventJson = new JSONObject();
-                                    // Create a unique ID - you might need a better way in a real app
                                     eventJson.put("id", key);
                                     eventJson.put("title", subject + " (" + grade + ")");
-                                    eventJson.put("startTime", dateStr + "T" + new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(startTime));
-                                    eventJson.put("endTime", dateStr + "T" + new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(endTime));
+                                    eventJson.put("startTime", dateFormat.format(startCal.getTime()));
+                                    eventJson.put("endTime", dateFormat.format(endCal.getTime()));
                                     eventJson.put("subject", subject);
                                     eventJson.put("grade", grade);
                                     eventsJson.put(eventJson);
@@ -133,7 +147,7 @@ public class CalendarActivity extends AppCompatActivity {
         loadEvents();
     }
 
-    // Inner class for TimeSlot (not directly used with SharedPreferences)
+    // The TimeSlot inner class remains the same
     private static class TimeSlot {
         private int id;
         private Date startTime;

@@ -49,7 +49,8 @@ public class TimeTableInsert extends AppCompatActivity {
     private List<String> sectionTitles;
     private HashMap<String, List<DatabaseHelper.TimeTableEntry>> sectionItems;
 
-    private AutoCompleteTextView subjectDropdown, gradeDropdown, dayDropdown, durationDropdownDemo, durationDropdownRegular;
+    private AutoCompleteTextView subjectDropdown, gradeDropdown;
+    private EditText durationDropdownDemo, durationDropdownRegular; // Changed to EditText
     private CheckBox disableSliderCheckBox;
     private Button saveButton;
     private EditText editTextNumber, etCourseFee, editTextStartTime, editTextEndTime;
@@ -76,15 +77,14 @@ public class TimeTableInsert extends AppCompatActivity {
         });
 
         // Initialize views
-        durationDropdownRegular = findViewById(R.id.editTextText59);
+        durationDropdownRegular = findViewById(R.id.editTextText59); // Now EditText
         disableSliderCheckBox = findViewById(R.id.disableSliderCheckBox);
         subjectDropdown = findViewById(R.id.editTextText52);
         gradeDropdown = findViewById(R.id.editTextText53);
         saveButton = findViewById(R.id.saveTimeTableBtn);
         editTextNumber = findViewById(R.id.editTextNumber);
         etCourseFee = findViewById(R.id.editTextCourseFee);
-        dayDropdown = findViewById(R.id.editTextText56);
-        durationDropdownDemo = findViewById(R.id.editTextText61);
+        durationDropdownDemo = findViewById(R.id.editTextText61); // Now EditText
         editTextStartTime = findViewById(R.id.editTextTimeSlot);
         editTextEndTime = findViewById(R.id.editTextEndTime);
         analogClockStartTime = findViewById(R.id.analogClockStartTime);
@@ -107,12 +107,11 @@ public class TimeTableInsert extends AppCompatActivity {
         // Populate Day Dropdown with an array
         String[] daysOfWeek = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         ArrayAdapter<String> dayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, daysOfWeek);
-        dayDropdown.setAdapter(dayAdapter);
-        dayDropdown.setOnClickListener(v -> dayDropdown.showDropDown());
+
 
         // Logic for single selection in Demo Duration radio group
         durationRadioGroupYearsDaysHoursDemo.setOnCheckedChangeListener((group, checkedId) -> {
-            populateDemoDurationDropdown(checkedId);
+            // No need to populate a dropdown anymore, the value will be in the EditText
         });
 
         // Disable Regular Duration Dropdown and Radio Buttons initially
@@ -123,11 +122,7 @@ public class TimeTableInsert extends AppCompatActivity {
         radioButtonDurationDaysRegular.setAlpha(0.5f);
         radioButtonDurationHoursRegular.setAlpha(0.5f);
 
-        // Populate Regular Duration Dropdown initially (might not be needed if disabled)
-        List<String> regularDurationListInitial = new ArrayList<>();
-        ArrayAdapter<String> regularDurationAdapterInitial = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, regularDurationListInitial);
-        durationDropdownRegular.setAdapter(regularDurationAdapterInitial);
-        durationDropdownRegular.setOnClickListener(v -> durationDropdownRegular.showDropDown());
+        // Populate Regular Duration Dropdown initially (not needed anymore)
 
         // Set CheckBox Listener to Enable/Disable Regular Duration elements and set listener for radio group
         disableSliderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -141,18 +136,14 @@ public class TimeTableInsert extends AppCompatActivity {
             // Set listener for the regular duration radio group only when the checkbox is checked
             if (isChecked) {
                 durationRadioGroupDaysHoursRegular.setOnCheckedChangeListener((group, checkedId) -> {
-                    populateRegularDurationDropdown(checkedId);
+                    // No need to populate a dropdown anymore, the value will be in the EditText
                 });
-                // Initial population if a radio button is already checked
-                if (durationRadioGroupDaysHoursRegular.getCheckedRadioButtonId() != -1) {
-                    populateRegularDurationDropdown(durationRadioGroupDaysHoursRegular.getCheckedRadioButtonId());
-                }
+                // Initial population if a radio button is already checked (not needed)
             } else {
                 // Remove the listener when the checkbox is unchecked to avoid unexpected behavior
                 durationRadioGroupDaysHoursRegular.setOnCheckedChangeListener(null);
-                // Optionally clear the dropdown when disabled
-                ArrayAdapter<String> emptyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
-                durationDropdownRegular.setAdapter(emptyAdapter);
+                // Optionally clear the text when disabled (if you want)
+                durationDropdownRegular.setText("");
             }
         });
 
@@ -205,22 +196,54 @@ public class TimeTableInsert extends AppCompatActivity {
         saveButton.setOnClickListener(v -> {
             String selectedSubject = subjectDropdown.getText().toString();
             String selectedGrade = gradeDropdown.getText().toString();
-            String selectedDay = dayDropdown.getText().toString();
             final String selectedDuration; // Declare as final
             String startTimeStr = editTextStartTime.getText().toString();
             String endTimeStr = editTextEndTime.getText().toString();
 
+            // Get references to the day checkboxes
+            CheckBox checkBoxMon = findViewById(R.id.checkBoxMon);
+            CheckBox checkBoxTue = findViewById(R.id.checkBoxTue);
+            CheckBox checkBoxWed = findViewById(R.id.checkBoxWed);
+            CheckBox checkBoxThu = findViewById(R.id.checkBoxThu);
+            CheckBox checkBoxFri = findViewById(R.id.checkBoxFri);
+            CheckBox checkBoxSat = findViewById(R.id.checkBoxSat);
+            CheckBox checkBoxSun = findViewById(R.id.checkBoxSun);
+
+            // Build a string of selected days
+            StringBuilder selectedDaysBuilder = new StringBuilder();
+            if (checkBoxMon.isChecked()) selectedDaysBuilder.append("Mon,");
+            if (checkBoxTue.isChecked()) selectedDaysBuilder.append("Tue,");
+            if (checkBoxWed.isChecked()) selectedDaysBuilder.append("Wed,");
+            if (checkBoxThu.isChecked()) selectedDaysBuilder.append("Thu,");
+            if (checkBoxFri.isChecked()) selectedDaysBuilder.append("Fri,");
+            if (checkBoxSat.isChecked()) selectedDaysBuilder.append("Sat,");
+            if (checkBoxSun.isChecked()) selectedDaysBuilder.append("Sun,");
+
+            final String selectedDays; // Declare as final
+            if (selectedDaysBuilder.length() > 0) {
+                selectedDays = selectedDaysBuilder.substring(0, selectedDaysBuilder.length() - 1); // Remove the trailing comma
+            } else {
+                selectedDays = ""; // Initialize even if no days are selected
+            }
+
+            String subjectId = subjectMap.get(selectedSubject);
+            if (subjectId == null) {
+                Toast.makeText(this, "Invalid subject selected", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
             if (disableSliderCheckBox.isChecked()) {
                 if (radioButtonDurationDaysRegular.isChecked()) {
-                    selectedDuration = durationDropdownRegular.getText().toString();
+                    selectedDuration = durationDropdownRegular.getText().toString(); // Get text from EditText
                 } else if (radioButtonDurationHoursRegular.isChecked()) {
-                    selectedDuration = durationDropdownRegular.getText().toString();
+                    selectedDuration = durationDropdownRegular.getText().toString(); // Get text from EditText
                 } else {
-                    Toast.makeText(this, "Please select a duration (Days/Hours) for demo class", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please select a duration (Days/Hours) for regular class", Toast.LENGTH_SHORT).show();
                     return;
                 }
             } else {
-                selectedDuration = durationDropdownRegular.getText().toString();
+                selectedDuration = durationDropdownRegular.getText().toString(); // Get text from EditText
             }
 
             if (selectedSubject.isEmpty() || selectedGrade.isEmpty()) {
@@ -267,20 +290,20 @@ public class TimeTableInsert extends AppCompatActivity {
                 return;
             }
 
-            String subjectId = subjectMap.get(selectedSubject);
-            if (subjectId == null) {
-                Toast.makeText(this, "Invalid subject selected", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             int userId = sharedPreferences.getInt("USER_ID", -1);
 
             int createdByUserId = userId;
             int subjectIdInt = Integer.parseInt(subjectId.replaceAll("[^0-9]", ""));
             int gradeId = Integer.parseInt(selectedGrade.replaceAll("[^0-9]", ""));
-            int dayInt = convertDayToInt(selectedDay); // Use the selectedDay
 
+            int dayInt = -1;
+            if (!selectedDays.isEmpty()) {
+                String firstDay = selectedDays.split(",")[0];
+                dayInt = convertDayToInt(firstDay);
+            }
+
+            // Database insertion
             DatabaseHelper.insertOrUpdateTimeTable(
                     context,
                     0,
@@ -288,9 +311,9 @@ public class TimeTableInsert extends AppCompatActivity {
                     subjectIdInt,
                     gradeId,
                     dayInt,
-                    startTimeStr, // Use the selected times directly
+                    startTimeStr,
                     endTimeStr,
-                    selectedDay,
+                    selectedDays,
                     selectedDuration,
                     createdByUserId,
                     new DatabaseHelper.ProcedureCallback() {
@@ -301,19 +324,20 @@ public class TimeTableInsert extends AppCompatActivity {
                             // Save to SharedPreferences
                             SharedPreferences sp = getSharedPreferences("TimeTableData", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sp.edit();
-                            editor.putString("subject_" + subjectIdInt + "_" + dayInt + "_" + startTimeStr.replace(":", ""), selectedSubject);
-                            editor.putString("grade_" + gradeId + "_" + dayInt + "_" + startTimeStr.replace(":", ""), selectedGrade);
-                            editor.putString("day_" + dayInt + "_" + startTimeStr.replace(":", ""), selectedDay);
-                            editor.putString("time_" + dayInt + "_" + startTimeStr.replace(":", ""), startTimeStr + " - " + endTimeStr);
-                            editor.putString("courseFee_" + subjectIdInt + "_" + dayInt + "_" + startTimeStr.replace(":", ""), etCourseFee.getText().toString());
-                            editor.putString("batchCapacity_" + subjectIdInt + "_" + dayInt + "_" + startTimeStr.replace(":", ""), editTextNumber.getText().toString());
-                            editor.putString("duration_" + subjectIdInt + "_" + dayInt + "_" + startTimeStr.replace(":", ""), selectedDuration);
+
+                            editor.putString("subject_" + subjectIdInt + "_" + startTimeStr.replace(":", ""), selectedSubject);
+                            editor.putString("grade_" + gradeId + "_" + startTimeStr.replace(":", ""), selectedGrade);
+                            editor.putString("days_" + startTimeStr.replace(":", ""), selectedDays);
+                            editor.putString("time_" + startTimeStr.replace(":", ""), startTimeStr + " - " + endTimeStr);
+                            editor.putString("courseFee_" + subjectIdInt + "_" + startTimeStr.replace(":", ""), etCourseFee.getText().toString());
+                            editor.putString("batchCapacity_" + subjectIdInt + "_" + startTimeStr.replace(":", ""), editTextNumber.getText().toString());
+                            editor.putString("duration_" + subjectIdInt + "_" + startTimeStr.replace(":", ""), selectedDuration);
                             editor.apply();
 
                             Intent intent = new Intent(TimeTableInsert.this, ShowTimeTableNewViewTeacher.class);
                             intent.putExtra("subjectName", selectedSubject);
                             intent.putExtra("gradeName", selectedGrade);
-                            intent.putExtra("dayOfWeek", selectedDay);
+                            intent.putExtra("dayOfWeek", selectedDays);
                             intent.putExtra("timeSlot", startTimeStr + " - " + endTimeStr);
                             startActivity(intent);
                             finish();
@@ -336,52 +360,9 @@ public class TimeTableInsert extends AppCompatActivity {
 
         // Initial population for Demo Duration (Years selected by default)
         radioButtonYearsDemo.setChecked(true);
-        populateDemoDurationDropdown(R.id.radioButton);
+        // No need to call populateDemoDurationDropdown to set adapter
     }
 
-    private void populateDemoDurationDropdown(int checkedId) {
-        List<String> durations = new ArrayList<>();
-        if (checkedId == R.id.radioButton) { // Years
-            durations.add("1 Year");
-            durations.add("2 Years");
-            durations.add("3 Years");
-            durations.add("4 Years");
-            durations.add("5 Years");
-        } else if (checkedId == R.id.radioButton2) { // Days
-            durations.add("30 Days");
-            durations.add("60 Days");
-            durations.add("90 Days");
-        } else if (checkedId == R.id.radioButton3) { // Hours
-            durations.add("1 Hour");
-            durations.add("2 Hours");
-            durations.add("3 Hours");
-            durations.add("5 Hours");
-            durations.add("10+ Hours");
-        }
-        ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, durations);
-        durationDropdownDemo.setAdapter(durationAdapter);
-        durationDropdownDemo.setOnClickListener(v -> durationDropdownDemo.showDropDown());
-    }
-
-    private void populateRegularDurationDropdown(int checkedId) {
-        List<String> durations = new ArrayList<>();
-        if (checkedId == R.id.radioButton4) { // Days
-            durations.add("1 Day");
-            durations.add("2 Days");
-            durations.add("3 Days");
-            durations.add("4 Days");
-            durations.add("5 Days");
-        } else if (checkedId == R.id.radioButton5) { // Hours
-            durations.add("1 Hour");
-            durations.add("2 Hours");
-            durations.add("3 Hours");
-            durations.add("5 Hours");
-            durations.add("10+ Hours");
-        }
-        ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, durations);
-        durationDropdownRegular.setAdapter(durationAdapter);
-        durationDropdownRegular.setOnClickListener(v -> durationDropdownRegular.showDropDown());
-    }
 
     public static int convertDayToInt(String day) {
         String numericPart = day.split(" ")[0];
