@@ -29,6 +29,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -2209,47 +2210,73 @@ public class DatabaseHelper {
 
     public static void insertOrUpdateTimeTable(
             Context context,
+            int qryStatus, // 1 for insert, 2 for update
             int timeTableId,
             int userId,
             int subjectId,
             int gradeId,
-            int dayOfWeek,
+            boolean mon,
+            boolean tue,
+            boolean wed,
+            boolean thur,
+            boolean fri,
+            boolean sat,
+            boolean sun,
             String startTime,
             String endTime,
+            int noOfStudents,
+            int courseFee,
+            int durationNo,
+            String durationType, // Changed to String
+            boolean demoYN,
+            int demoDurationNo,
+            String demoDurationType, // Changed to String
             String roomNo,
             String remark,
             int createdBy,
-            DatabaseHelper.ProcedureCallback callback) {
+            ProcedureCallback callback) {
 
         new Thread(() -> {
             try (Connection conn = getConnection()) {
-                CallableStatement stmt = conn.prepareCall("{call sp_TimeTableInsertUpdate(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+                CallableStatement stmt = conn.prepareCall("{call sp_TimeTableInsertUpdate(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 
-                stmt.setInt(1, timeTableId); // 0 for insert
-                stmt.setInt(2, userId);
-                stmt.setInt(3, subjectId);
-                stmt.setInt(4, gradeId);
-                stmt.setInt(5, dayOfWeek);
-                stmt.setString(6, startTime);
-                stmt.setString(7, endTime);
-                stmt.setString(8, roomNo);
-                stmt.setString(9, remark);
-                stmt.setInt(10, createdBy);
-                stmt.registerOutParameter(11, java.sql.Types.VARCHAR);
+                stmt.setInt(1, qryStatus);
+                stmt.setInt(2, timeTableId);
+                stmt.setInt(3, userId);
+                stmt.setInt(4, subjectId);
+                stmt.setInt(5, gradeId);
+                stmt.setBoolean(6, mon);
+                stmt.setBoolean(7, tue);
+                stmt.setBoolean(8, wed);
+                stmt.setBoolean(9, thur);
+                stmt.setBoolean(10, fri);
+                stmt.setBoolean(11, sat);
+                stmt.setBoolean(12, sun);
+                stmt.setString(13, startTime);
+                stmt.setString(14, endTime);
+                stmt.setInt(15, noOfStudents);
+                stmt.setInt(16, courseFee);
+                stmt.setInt(17, durationNo);
+                stmt.setString(18, durationType); // Set as String
+                stmt.setBoolean(19, demoYN);
+                stmt.setInt(20, demoDurationNo);
+                stmt.setString(21, demoDurationType); // Set as String
+                stmt.setString(22, roomNo);
+                stmt.setString(23, remark);
+                stmt.setInt(24, createdBy);
+                stmt.registerOutParameter(25, java.sql.Types.VARCHAR);
 
                 stmt.execute();
 
-                String message = stmt.getString(11);
+                String message = stmt.getString(25);
                 Log.d("TimeTableInsertUpdate", "Stored procedure executed. Message: " + message);
-
-                // Log the message returned from the stored procedure
-                Log.d("TimeTableInsertUpdate", "DB Message: " + message);
 
                 new Handler(Looper.getMainLooper()).post(() -> {
                     if (callback != null) callback.onSuccess(message);
                 });
 
             } catch (Exception e) {
+                Log.e("TimeTableInsertUpdate", "Error executing stored procedure: " + e.getMessage());
                 new Handler(Looper.getMainLooper()).post(() -> {
                     if (callback != null) callback.onError(e.getMessage());
                 });
@@ -2259,45 +2286,58 @@ public class DatabaseHelper {
 
 
     public static class TimeTableEntry {
+        public int timeTableId;
+        public int userId;
+        public int subjectId;
         public String subjectName;
+        public int gradeId;
+        public String gradeName;
+        public boolean mon;
+        public boolean tue;
+        public boolean wed;
+        public boolean thur;
+        public boolean fri;
+        public boolean sat;
+        public boolean sun;
         public String startTime;
         public String endTime;
+        public int noOfStudents;
+        public int courseFee;
+        public int durationNo;
+        public String durationType; // Yearly / Monthly / Daily
+        public boolean demoYN;
+        public int demoDurationNo;
+        public String demoDurationType; // Yearly / Monthly / Daily
+        public String roomNo;
         public String remark;
-        public String room;
+        public String entryDate;
+        public String createdDate;
+        public int createdBy;
+        public boolean isActive;
+        public String deletedDate;
+        public int deletedBy;
 
         public TimeTableEntry() {
             this.subjectName = "";
             this.startTime = "";
             this.endTime = "";
             this.remark = "";
-            this.room = "";
+            this.roomNo = "";
+            this.gradeName = "";
         }
 
 
-        public TimeTableEntry(String subjectName, String startTime, String endTime, String remark, String room) {
+        public TimeTableEntry(String subjectName, String startTime, String endTime, String remark, String roomNo) {
             this.subjectName = subjectName != null ? subjectName : "";
             this.startTime = startTime != null ? startTime : "";
             this.endTime = endTime != null ? endTime : "";
             this.remark = remark != null ? remark : "";
-            this.room = room != null ? room : "";
+            this.roomNo = roomNo != null ? roomNo : "";
         }
         @Override
         public String toString() {
             return startTime + " - " + endTime; // So when converted to String, it shows the time slot
         }
-        public int timeTableId;
-        public int userId;
-        public int subjectId;
-        public int gradeId;
-        public int dayOfWeek;
-//        public String subjectName;
-        public String gradeName;
-        public String weekDay;
-//        public String startTime;
-//        public String endTime;
-        public String roomNo;
-//        public String remark;
-        public String entryDate;
 
         public String getStartTime() {
             return startTime;
@@ -2312,9 +2352,35 @@ public class DatabaseHelper {
         new Thread(() -> {
             List<TimeTableEntry> timeTableEntries = new ArrayList<>();
             try (Connection conn = getConnection()) {
-                CallableStatement stmt = conn.prepareCall("{call sp_GetTimeTableByUserID(?)}");
-                stmt.setInt(1, userId);
-                Log.d("DatabaseHelper", "Executing stored procedure: sp_GetTimeTableByUserID with UserId = " + userId);
+                CallableStatement stmt = conn.prepareCall("{call sp_TimeTableInsertUpdate(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+                Log.d("DatabaseHelper","UserId retrieved inside getTimeTableByUserId: " + userId);
+                stmt.setInt(1, 3); // Set @qryStatus to 3 for retrieval
+                stmt.setInt(2, 0); // Dummy value for @TimeTableId
+                stmt.setInt(3, userId);
+                stmt.setInt(4, 0); // Dummy value for @SubjectId
+                stmt.setInt(5, 0); // Dummy value for @GradeID
+                stmt.setBoolean(6, false); // Dummy value for @Mon
+                stmt.setBoolean(7, false); // Dummy value for @Tue
+                stmt.setBoolean(8, false); // Dummy value for @Wed
+                stmt.setBoolean(9, false); // Dummy value for @Thur
+                stmt.setBoolean(10, false); // Dummy value for @Fri
+                stmt.setBoolean(11, false); // Dummy value for @Sat
+                stmt.setBoolean(12, false); // Dummy value for @Sun
+                stmt.setString(13, null); // Dummy value for @StartTime
+                stmt.setString(14, null); // Dummy value for @EndTime
+                stmt.setInt(15, 0);       // Dummy value for @NoofStudents
+                stmt.setInt(16, 0);       // Dummy value for @CoureFee
+                stmt.setInt(17, 0);       // Dummy value for @DurationNo
+                stmt.setString(18, null);       // Dummy value for @DurationType
+                stmt.setBoolean(19, false); // Dummy value for @DemoYN
+                stmt.setInt(20, 0);       // Dummy value for @DemoDurationNo
+                stmt.setString(21, null);       // Dummy value for @DemoDurationType
+                stmt.setString(22, null); // Dummy value for @RoomNo
+                stmt.setString(23, null); // Dummy value for @Remark
+                stmt.setInt(24, 0);       // Dummy value for @CreatedBy
+                stmt.registerOutParameter(25, java.sql.Types.VARCHAR); // Register the output parameter
+
+                Log.d("DatabaseHelper", "Executing stored procedure: sp_TimeTableInsertUpdate with qryStatus = 3 and UserId = " + userId);
 
                 ResultSet rs = stmt.executeQuery();
                 ResultSetMetaData metaData = rs.getMetaData();
@@ -2323,18 +2389,28 @@ public class DatabaseHelper {
                 for (int i = 1; i <= columnCount; i++) {
                     Log.d("DatabaseHelper", "Column " + i + ": Name=" + metaData.getColumnName(i) + ", Type=" + metaData.getColumnTypeName(i));
                 }
-                int rowCount = 0;
 
                 while (rs.next()) {
                     TimeTableEntry entry = new TimeTableEntry();
-                    entry.timeTableId = rs.getInt("TimeTableId");
+//                    entry.timeTableId = rs.getInt("TimeTableId");
                     entry.userId = rs.getInt("UserId");
                     entry.subjectId = rs.getInt("SubjectId");
                     entry.subjectName = rs.getString("SubjectName");
                     entry.gradeId = rs.getInt("GradeID");
                     entry.gradeName = rs.getString("GradeName");
-                    entry.dayOfWeek = rs.getInt("DayOfWeek");
-                    entry.weekDay = rs.getString("WeekDay");
+                    entry.courseFee = rs.getInt("CourseFee");
+                    entry.noOfStudents = rs.getInt("NoofStudents");
+                    // Retrieve the boolean day flags
+                    entry.mon = rs.getBoolean("Mon");
+                    entry.tue = rs.getBoolean("Tue");
+                    entry.wed = rs.getBoolean("Wed");
+                    entry.thur = rs.getBoolean("Thur");
+                    entry.fri = rs.getBoolean("Fri");
+                    entry.sat = rs.getBoolean("Sat");
+                    entry.sun = rs.getBoolean("Sun");
+
+                    entry.durationNo = rs.getInt("DurationNo");
+                    entry.durationType = rs.getString("DurationType");
                     String rawStart = rs.getString("StartTime");
                     String rawEnd = rs.getString("EndTime");
 
@@ -2354,28 +2430,35 @@ public class DatabaseHelper {
                         entry.endTime = rawEnd;
                     }
 
+                    entry.demoYN = rs.getBoolean("DemoYN");
+                    entry.demoDurationNo = rs.getInt("DemoDurationNo");
+                    entry.demoDurationType = rs.getString("DemoDurationType");
                     entry.roomNo = rs.getString("RoomNo");
                     entry.remark = rs.getString("Remark");
-                    entry.entryDate = rs.getString("entrydate");
+//                    entry.entryDate = rs.getString("entrydate");
+//                    entry.createdDate = rs.getString("CreatedDate");
+//                    entry.createdBy = rs.getInt("CreatedBy");
+//                    entry.isActive = rs.getBoolean("IsActive");
+//                    entry.deletedDate = rs.getString("DeletedDate");
+//                    entry.deletedBy = rs.getInt("DeletedBy");
 
                     timeTableEntries.add(entry);
                 }
-                Log.d("DatabaseHelper", "Number of rows returned for UserId " + userId + ": " + rowCount);
+
+                Log.d("DatabaseHelper", "Number of rows returned for UserId " + userId + ": " + timeTableEntries.size());
 
                 new Handler(Looper.getMainLooper()).post(() -> {
                     callback.onSuccess(timeTableEntries);
                 });
 
             } catch (Exception e) {
-                Log.e("DatbaseHelper", "Error fetching timetable for UserId " + userId + ": " + e.getMessage());
+                Log.e("DatabaseHelper", "Error fetching timetable for UserId " + userId + ": " + e.getMessage());
                 new Handler(Looper.getMainLooper()).post(() -> {
                     callback.onError(e.getMessage());
                 });
             }
         }).start();
     }
-
-
     public interface ProcedureResultCallback<T> {
         void onSuccess(T result);
 

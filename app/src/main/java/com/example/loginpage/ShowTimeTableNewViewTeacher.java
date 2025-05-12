@@ -21,8 +21,11 @@ import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.TimeSlotAdapterTeacher;
 import com.example.loginpage.models.TimeSlot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
 
@@ -63,24 +66,52 @@ public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
             @Override
             public void onSuccess(List<DatabaseHelper.TimeTableEntry> result) {
                 List<TimeSlot> slotList = new ArrayList<>();
-                SharedPreferences sharedPreferences = getSharedPreferences("TimeTableData", MODE_PRIVATE);
+                // SharedPreferences sharedPreferences = getSharedPreferences("TimeTableData", MODE_PRIVATE);
+                SimpleDateFormat outputDayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+                Calendar calendar = Calendar.getInstance();
 
                 for (DatabaseHelper.TimeTableEntry e : result) {
                     if (!e.subjectName.toLowerCase().contains("demo")) {
-                        String keyPrefix = "subject_" + e.subjectId + "_" + e.dayOfWeek + "_" + e.startTime.replace(":", "");
+                        StringBuilder daysBuilder = new StringBuilder();
+                        if (e.mon) daysBuilder.append("Monday, ");
+                        if (e.tue) daysBuilder.append("Tuesday, ");
+                        if (e.wed) daysBuilder.append("Wednesday, ");
+                        if (e.thur) daysBuilder.append("Thursday, ");
+                        if (e.fri) daysBuilder.append("Friday, ");
+                        if (e.sat) daysBuilder.append("Saturday, ");
+                        if (e.sun) daysBuilder.append("Sunday, ");
 
-                        String subject = e.subjectName; // Get from the (potentially incomplete) DB data
+                        String dayString = "";
+                        if (daysBuilder.length() > 0) {
+                            dayString = daysBuilder.substring(0, daysBuilder.length() - 2); // Remove trailing ", "
+                        }
+
+                        // You can directly use the values from the TimeTableEntry object
+                        String subject = e.subjectName;
                         String grade = e.gradeName;
-                        String day = e.weekDay;
                         String time = e.startTime + " - " + e.endTime;
-                        String courseFee = sharedPreferences.getString("courseFee_" + e.subjectId + "_" + e.dayOfWeek + "_" + e.startTime.replace(":", ""), "");
-                        String batchCapacity = sharedPreferences.getString("batchCapacity_" + e.subjectId + "_" + e.dayOfWeek + "_" + e.startTime.replace(":", ""), "");
-                        String duration = sharedPreferences.getString("duration_" + e.subjectId + "_" + e.dayOfWeek + "_" + e.startTime.replace(":", ""), "");
+                        String courseFee = String.valueOf(e.courseFee); // Assuming courseFee is now in the TimeTableEntry
+                        String batchCapacity = String.valueOf(e.noOfStudents); // Assuming noOfStudents is now in the TimeTableEntry
+                        String duration = String.valueOf(e.demoDurationNo) + " "; // demoDurationNo and durationNo got mixed up for now demoDurationNo is durationNo and vice-versa
+                        switch (e.durationType) {
+                            case "Yearly":
+                                duration += "Yearly";
+                                break;
+                            case "Weekly":
+                                duration += "Weekly";
+                                break;
+                            case "Daily":
+                                duration += "Daily";
+                                break;
+                            default:
+                                duration += "";
+                                break;
+                        }
 
                         slotList.add(new TimeSlot(
                                 subject,
                                 grade,
-                                day,
+                                dayString,
                                 time,
                                 courseFee,
                                 batchCapacity,

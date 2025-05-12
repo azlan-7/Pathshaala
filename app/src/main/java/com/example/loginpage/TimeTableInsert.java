@@ -208,149 +208,157 @@ public class TimeTableInsert extends AppCompatActivity {
             }
         });
 
-
         // Save button listener
         saveButton.setOnClickListener(v -> {
-            String selectedSubject = subjectDropdown.getText().toString();
-            String selectedGrade = gradeDropdown.getText().toString();
-            final String selectedDuration; // Declare as final
+            String selectedSubjectName = subjectDropdown.getText().toString();
+            String selectedGradeName = gradeDropdown.getText().toString();
             String startTimeStr = editTextStartTime.getText().toString();
             String endTimeStr = editTextEndTime.getText().toString();
+            String roomNoStr = ""; // You might have a field for Room No. in your layout
+            String remarkStr = ""; // You might have a field for Remarks in your layout
+            String noOfStudentsStr = editTextNumber.getText().toString();
+            String courseFeeStr = etCourseFee.getText().toString().replace("INR ", "").replace(" -/", "").trim();
 
-            // Get references to the day checkboxes
+            boolean monChecked = checkBoxMon.isChecked();
+            boolean tueChecked = checkBoxTue.isChecked();
+            boolean wedChecked = checkBoxWed.isChecked();
+            boolean thuChecked = checkBoxThu.isChecked();
+            boolean friChecked = checkBoxFri.isChecked();
+            boolean satChecked = checkBoxSat.isChecked();
+            boolean sunChecked = checkBoxSun.isChecked();
 
-            // Build a string of selected days
-            StringBuilder selectedDaysBuilder = new StringBuilder();
-            if (checkBoxMon.isChecked()) selectedDaysBuilder.append("Mon,");
-            if (checkBoxTue.isChecked()) selectedDaysBuilder.append("Tue,");
-            if (checkBoxWed.isChecked()) selectedDaysBuilder.append("Wed,");
-            if (checkBoxThu.isChecked()) selectedDaysBuilder.append("Thu,");
-            if (checkBoxFri.isChecked()) selectedDaysBuilder.append("Fri,");
-            if (checkBoxSat.isChecked()) selectedDaysBuilder.append("Sat,");
-            if (checkBoxSun.isChecked()) selectedDaysBuilder.append("Sun,");
+            String subjectIdStr = subjectMap.get(selectedSubjectName);
+            String gradeIdStr = gradeMap.get(selectedGradeName);
 
-            final String selectedDays; // Declare as final
-            if (selectedDaysBuilder.length() > 0) {
-                selectedDays = selectedDaysBuilder.substring(0, selectedDaysBuilder.length() - 1); // Remove the trailing comma
-            } else {
-                selectedDays = ""; // Initialize even if no days are selected
-            }
-
-            String subjectId = subjectMap.get(selectedSubject);
-            if (subjectId == null) {
-                Toast.makeText(this, "Invalid subject selected", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-
-            if (disableSliderCheckBox.isChecked()) {
-                if (radioButtonDurationYearsRegular.isChecked()) {
-                    selectedDuration = durationDropdownRegular.getText().toString(); // Get text from EditText
-                } else if (radioButtonDurationHoursRegular.isChecked()) {
-                    selectedDuration = durationDropdownRegular.getText().toString(); // Get text from EditText
-                } else if(radioButtonDaysDemo.isChecked()){
-                    selectedDuration = durationDropdownRegular.getText().toString();
-                } else {
-                    Toast.makeText(this, "Please select a duration (Days/Hours) for regular class", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            } else {
-                selectedDuration = durationDropdownRegular.getText().toString(); // Get text from EditText
-            }
-
-            if (selectedSubject.isEmpty() || selectedGrade.isEmpty()) {
+            if (selectedSubjectName.isEmpty() || selectedGradeName.isEmpty()) {
                 Toast.makeText(this, "Please select both subject and grade", Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            if (subjectIdStr == null || gradeIdStr == null) {
+                Toast.makeText(this, "Invalid subject or grade selected", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (startTimeStr.isEmpty() || endTimeStr.isEmpty()) {
                 Toast.makeText(this, "Please select both start and end times", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                Date startTime = sdf.parse(startTimeStr);
-                Date endTime = sdf.parse(endTimeStr);
-
-                if (startTime != null && endTime != null) {
-                    long diffInMillis = endTime.getTime() - startTime.getTime();
-                    long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis);
-                    long diffInHours = TimeUnit.MILLISECONDS.toHours(diffInMillis);
-
-                    if (startTime.equals(endTime)) {
-                        Toast.makeText(this, "Start and end time cannot be the same.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (diffInMinutes < 30) {
-                        Toast.makeText(this, "Start and end time must have at least 30 minutes difference.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (diffInHours >= 5) {
-                        Toast.makeText(this, "The maximum time difference allowed is less than 5 hours.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                } else {
-                    Toast.makeText(this, "Invalid time format.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Error parsing time.", Toast.LENGTH_SHORT).show();
+            if (noOfStudentsStr.isEmpty()) {
+                Toast.makeText(this, "Please enter the number of students", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (courseFeeStr.isEmpty()) {
+                Toast.makeText(this, "Please enter the course fee", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            int noOfStudents;
+            try {
+                noOfStudents = Integer.parseInt(noOfStudentsStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Invalid number of students", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int courseFee;
+            try {
+                courseFee = Integer.parseInt(courseFeeStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Invalid course fee", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int durationNoRegular = 0;
+            String durationTypeRegularStr = "";
+            if (disableSliderCheckBox.isChecked()) {
+                String durationRegularStr = durationDropdownRegular.getText().toString().trim();
+                if (!durationRegularStr.isEmpty()) {
+                    try {
+                        durationNoRegular = Integer.parseInt(durationRegularStr);
+                        if (radioButtonDurationYearsRegular.isChecked()) {
+                            durationTypeRegularStr = "Yearly";
+                        } else if (radioButtonDaysDemo.isChecked()) {
+                            durationTypeRegularStr = "Daily";
+                        } else if (radioButtonDurationHoursRegular.isChecked()) {
+                            durationTypeRegularStr = "Weekly";
+                        } else {
+                            Toast.makeText(this, "Please select a duration type for regular class", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(this, "Invalid regular duration number", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else if (disableSliderCheckBox.isChecked()) {
+                    Toast.makeText(this, "Please enter the duration for regular class", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            String demoDurationTypeStr = "";
+            boolean demoYN = radioButtonYearsDemo.isChecked() || radioButtonDaysDemo.isChecked() || radioButtonHoursDemo.isChecked();
+            int demoDurationNo = 0;
+            String durationDemoStr = durationDropdownDemo.getText().toString().trim();
+            if (demoYN && !durationDemoStr.isEmpty()) {
+                try {
+                    demoDurationNo = Integer.parseInt(durationDemoStr);
+                    if (radioButtonYearsDemo.isChecked()) {
+                        demoDurationTypeStr = "Yearly";
+                    } else if (radioButtonDaysDemo.isChecked()) {
+                        demoDurationTypeStr = "Daily";
+                    } else if (radioButtonHoursDemo.isChecked()) {
+                        demoDurationTypeStr = "Weekly";
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Invalid demo duration number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } else if (demoYN && durationDemoStr.isEmpty()) {
+                Toast.makeText(this, "Please enter the demo duration", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             int userId = sharedPreferences.getInt("USER_ID", -1);
-
             int createdByUserId = userId;
-            int subjectIdInt = Integer.parseInt(subjectId.replaceAll("[^0-9]", ""));
-            int gradeId = Integer.parseInt(selectedGrade.replaceAll("[^0-9]", ""));
+            int subjectIdInt = Integer.parseInt(subjectIdStr.replaceAll("[^0-9]", ""));
+            int gradeIdInt = Integer.parseInt(gradeIdStr.replaceAll("[^0-9]", ""));
 
-            int dayInt = -1;
-            if (!selectedDays.isEmpty()) {
-                String firstDay = selectedDays.split(",")[0];
-                dayInt = convertDayToInt(firstDay);
-            }
+            Log.d(TAG, "Inserting Time Table for UserId: " + userId); // Added log here
 
             // Database insertion
             DatabaseHelper.insertOrUpdateTimeTable(
-                    context,
-                    0,
+                    TimeTableInsert.this,
+                    1, // qryStatus = 1 for insert
+                    0, // timeTableId = 0 for insert
                     userId,
                     subjectIdInt,
-                    gradeId,
-                    dayInt,
+                    gradeIdInt,
+                    monChecked,
+                    tueChecked,
+                    wedChecked,
+                    thuChecked,
+                    friChecked,
+                    satChecked,
+                    sunChecked,
                     startTimeStr,
                     endTimeStr,
-                    selectedDays,
-                    selectedDuration,
+                    noOfStudents,
+                    courseFee,
+                    durationNoRegular,
+                    durationTypeRegularStr, // Send String
+                    demoYN,
+                    demoDurationNo,
+                    demoDurationTypeStr, // Send String
+                    roomNoStr,
+                    remarkStr,
                     createdByUserId,
                     new DatabaseHelper.ProcedureCallback() {
                         @Override
                         public void onSuccess(String message) {
                             Log.d("TimeTableInsert", "Saved successfully: " + message);
-
-                            // Save to SharedPreferences
-                            SharedPreferences sp = getSharedPreferences("TimeTableData", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-
-                            editor.putString("subject_" + subjectIdInt + "_" + startTimeStr.replace(":", ""), selectedSubject);
-                            editor.putString("grade_" + gradeId + "_" + startTimeStr.replace(":", ""), selectedGrade);
-                            editor.putString("days_" + startTimeStr.replace(":", ""), selectedDays);
-                            editor.putString("time_" + startTimeStr.replace(":", ""), startTimeStr + " - " + endTimeStr);
-                            editor.putString("courseFee_" + subjectIdInt + "_" + startTimeStr.replace(":", ""), etCourseFee.getText().toString());
-                            editor.putString("batchCapacity_" + subjectIdInt + "_" + startTimeStr.replace(":", ""), editTextNumber.getText().toString());
-                            editor.putString("duration_" + subjectIdInt + "_" + startTimeStr.replace(":", ""), selectedDuration);
-                            editor.apply();
-
+                            Toast.makeText(TimeTableInsert.this, "Time Table saved successfully!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(TimeTableInsert.this, ShowTimeTableNewViewTeacher.class);
-                            intent.putExtra("subjectName", selectedSubject);
-                            intent.putExtra("gradeName", selectedGrade);
-                            intent.putExtra("dayOfWeek", selectedDays);
-                            intent.putExtra("timeSlot", startTimeStr + " - " + endTimeStr);
                             startActivity(intent);
                             finish();
                         }

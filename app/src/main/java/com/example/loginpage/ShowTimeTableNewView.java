@@ -22,8 +22,11 @@ import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.TimeSlotAdapter;
 import com.example.loginpage.models.TimeSlot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class ShowTimeTableNewView extends AppCompatActivity {
 
@@ -70,11 +73,28 @@ public class ShowTimeTableNewView extends AppCompatActivity {
             @Override
             public void onSuccess(List<DatabaseHelper.TimeTableEntry> result) {
                 List<TimeSlot> slotList = new ArrayList<>();
+                SimpleDateFormat outputDayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+                Calendar calendar = Calendar.getInstance();
+
                 for (DatabaseHelper.TimeTableEntry e : result) {
+                    StringBuilder daysBuilder = new StringBuilder();
+                    if (e.mon) daysBuilder.append("Monday, ");
+                    if (e.tue) daysBuilder.append("Tuesday, ");
+                    if (e.wed) daysBuilder.append("Wednesday, ");
+                    if (e.thur) daysBuilder.append("Thursday, ");
+                    if (e.fri) daysBuilder.append("Friday, ");
+                    if (e.sat) daysBuilder.append("Saturday, ");
+                    if (e.sun) daysBuilder.append("Sunday, ");
+
+                    String dayString = "";
+                    if (daysBuilder.length() > 0) {
+                        dayString = daysBuilder.substring(0, daysBuilder.length() - 2); // Remove trailing ", "
+                    }
+
                     slotList.add(new TimeSlot(
                             e.subjectName,
                             e.gradeName,
-                            e.weekDay,
+                            dayString,
                             e.startTime + " - " + e.endTime
                     ));
                 }
@@ -84,7 +104,7 @@ public class ShowTimeTableNewView extends AppCompatActivity {
                         TimeSlotAdapter adapter = new TimeSlotAdapter(slotList);
                         recyclerView.setAdapter(adapter);
                     } else {
-                        Toast.makeText(ShowTimeTableNewView.this, "No time slots received!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShowTimeTableNewView.this, "No time slots available for this user!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
