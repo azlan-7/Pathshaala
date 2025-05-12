@@ -1383,7 +1383,7 @@ public class DatabaseHelper {
                         CallableStatement stmt = connection.prepareCall(query);
 
                         stmt.setInt(1, 4); // Query Type: Select by UserID
-                        stmt.setNull(2, Types.INTEGER); // UserwiseAwardId
+                        stmt.setNull(2, Types.INTEGER); // UserwiseAwar dId
                         stmt.setNull(3, Types.INTEGER); // AwardTitleID
                         stmt.setNull(4, Types.VARCHAR); // AwardingOrganization
                         stmt.setNull(5, Types.INTEGER); // IssueYear
