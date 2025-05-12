@@ -91,11 +91,36 @@ public class ShowTimeTableNewView extends AppCompatActivity {
                         dayString = daysBuilder.substring(0, daysBuilder.length() - 2); // Remove trailing ", "
                     }
 
+                    // Retrieve the additional information directly from the TimeTableEntry
+                    String subject = e.subjectName;
+                    String grade = e.gradeName;
+                    String time = e.startTime + " - " + e.endTime;
+                    String courseFee = String.valueOf(e.courseFee);
+                    String batchCapacity = String.valueOf(e.noOfStudents);
+                    String duration = String.valueOf(e.durationNo) + " "; // Use the regular durationNo
+                    String durationType = "";
+                    switch (e.durationType) { // Use the regular durationType
+                        case "Yearly":
+                            durationType = "Yearly";
+                            break;
+                        case "Weekly":
+                            durationType = "Weekly";
+                            break;
+                        case "Daily":
+                            durationType = "Daily";
+                            break;
+                    }
+
+                    String fullDuration = duration + durationType; // Combine number and type
+
                     slotList.add(new TimeSlot(
-                            e.subjectName,
-                            e.gradeName,
+                            subject,
+                            grade,
                             dayString,
-                            e.startTime + " - " + e.endTime
+                            time,
+                            courseFee,
+                            batchCapacity,
+                            fullDuration // Use the combined duration string
                     ));
                 }
 

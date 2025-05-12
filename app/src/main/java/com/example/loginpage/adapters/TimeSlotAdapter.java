@@ -51,6 +51,9 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
         holder.gradeText.setText("Grade: " + slot.getGrade());
         holder.dayText.setText("Day: " + slot.getDay());
         holder.timeText.setText("Time: " + slot.getTime());
+        holder.courseFeeText.setText("Course Fee: " + slot.getCourseFee());
+        holder.noOfStudentsText.setText("Batch Capacity: " + slot.getBatchCapacity());
+        holder.durationTypeText.setText("Duration: " + slot.getDuration().substring(2));
 
         Drawable checkedDrawable = ContextCompat.getDrawable(context, R.drawable.check_box_24dp_ffffff_fill0_wght400_grad0_opsz24);
         Drawable uncheckedDrawable = ContextCompat.getDrawable(context, R.drawable.check_box_outline_blank_24dp_ffffff_fill0_wght400_grad0_opsz24);
@@ -98,7 +101,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectText, gradeText, dayText, timeText;
+        TextView subjectText, gradeText, dayText, timeText,courseFeeText,noOfStudentsText,durationTypeText;
         AppCompatButton tvOptTimeTable;
         ImageView ivOptTimeTable;
         LinearLayout linearLayoutOptTimeTable;
@@ -109,6 +112,9 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
             gradeText = itemView.findViewById(R.id.tvGrade);
             dayText = itemView.findViewById(R.id.tvDay);
             timeText = itemView.findViewById(R.id.tvTime);
+            courseFeeText = itemView.findViewById(R.id.tvCourseFee);
+            noOfStudentsText = itemView.findViewById(R.id.tvBatchCapacity);
+            durationTypeText = itemView.findViewById(R.id.tvDuration);
             tvOptTimeTable = itemView.findViewById(R.id.tvOptTimeTable);
             ivOptTimeTable = itemView.findViewById(R.id.imageView);
             linearLayoutOptTimeTable = itemView.findViewById(R.id.linearLayoutOptTimeTable);

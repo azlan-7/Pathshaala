@@ -50,6 +50,33 @@
             android:textColor="#0F4D73"
             android:fontFamily="@font/work_sans" />
 
+        <TextView
+            android:id="@+id/tvCourseFee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            android:fontFamily="@font/work_sans"
+            android:text="Course Fee: " />
+
+        <TextView
+            android:id="@+id/tvBatchCapacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            android:fontFamily="@font/work_sans"
+            android:text="No. of Students: " />
+
+        <TextView
+            android:id="@+id/tvDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#0F4D73"
+            android:fontFamily="@font/work_sans"
+            android:text="Duration: " />
+
         <LinearLayout
             android:id="@+id/linearLayoutOptTimeTable"
             android:layout_width="wrap_content"
