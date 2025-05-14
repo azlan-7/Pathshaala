@@ -338,7 +338,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
 
         <RadioGroup
-            android:id="@+id/radioGroupYearsDaysHours"
+            android:id="@+id/radioGroupDemo"
             android:layout_width="203dp"
             android:layout_height="51dp"
             android:orientation="horizontal"
@@ -395,7 +395,7 @@
             app:buttonTint="#0F4D73"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupDaysHours" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupRegular" />
 
         <EditText
             android:id="@+id/editTextText59"
@@ -415,7 +415,7 @@
             app:layout_constraintTop_toBottomOf="@+id/disableSliderCheckBox" />
 
         <RadioGroup
-            android:id="@+id/radioGroupDaysHours"
+            android:id="@+id/radioGroupRegular"
             android:layout_width="242dp"
             android:layout_height="45dp"
             android:orientation="horizontal"
@@ -469,7 +469,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.528"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupYearsDaysHours" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupDemo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

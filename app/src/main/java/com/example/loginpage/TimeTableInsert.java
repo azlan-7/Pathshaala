@@ -80,8 +80,7 @@ public class TimeTableInsert extends AppCompatActivity {
             return insets;
         });
 
-
-        // Initialize views
+// Initialize views
         subjectDropdown = findViewById(R.id.editTextText52);
         gradeDropdown = findViewById(R.id.editTextText53);
 
@@ -111,7 +110,7 @@ public class TimeTableInsert extends AppCompatActivity {
 
 
         durationDropdownRegular = findViewById(R.id.editTextText61); // Now EditText
-        durationRadioGroupDaysHoursRegular = findViewById(R.id.radioGroupDaysHours); // Correct ID
+        durationRadioGroupDaysHoursRegular = findViewById(R.id.radioGroupRegular); // Correct ID
         radioButtonDurationYearsRegular = findViewById(R.id.radioButton4);
         radioButtonDurationHoursRegular = findViewById(R.id.radioButton5);
         radioButtonDaysRegular = findViewById(R.id.radioButton6);      // Correct ID
@@ -121,10 +120,19 @@ public class TimeTableInsert extends AppCompatActivity {
         durationDropdownDemo = findViewById(R.id.editTextText59); // Now EditText
 
 
-        durationRadioGroupYearsDaysHoursDemo = findViewById(R.id.radioGroupYearsDaysHours);  // Correct ID
+        durationRadioGroupYearsDaysHoursDemo = findViewById(R.id.radioGroupDemo);  // Correct ID
         radioButtonYearsDemo = findViewById(R.id.radioButton);        // Correct ID
         radioButtonDaysDemo = findViewById(R.id.radioButton2);          // Correct ID
         radioButtonHoursDemo = findViewById(R.id.radioButton3);          // Correct ID
+
+        // Disable demo duration fields by default
+        durationDropdownDemo.setEnabled(false);
+        durationDropdownDemo.setAlpha(0.5f);
+        durationRadioGroupYearsDaysHoursDemo.setEnabled(false);
+        for (int i = 0; i < durationRadioGroupYearsDaysHoursDemo.getChildCount(); i++) {
+            durationRadioGroupYearsDaysHoursDemo.getChildAt(i).setEnabled(false);
+            durationRadioGroupYearsDaysHoursDemo.getChildAt(i).setAlpha(0.5f);
+        }
 
 
         saveButton = findViewById(R.id.saveTimeTableBtn);
@@ -236,25 +244,24 @@ public class TimeTableInsert extends AppCompatActivity {
             int durationNoRegular = 0;
             int durationTypeRegular = 0;
             String durationRegularStr = durationDropdownRegular.getText().toString().trim();
-            if (!durationRegularStr.isEmpty()) {
-                try {
-                    durationNoRegular = Integer.parseInt(durationRegularStr);
-                    if (radioButtonDurationYearsRegular.isChecked()) {
-                        durationTypeRegular = 1; // Yearly
-                    } else if (radioButtonDaysRegular.isChecked()) {
-                        durationTypeRegular = 3; // Daily
-                    } else if (radioButtonDurationHoursRegular.isChecked()) {
-                        durationTypeRegular = 2; // Weekly
-                    } else {
-                        Toast.makeText(this, "Please select a duration type for regular class", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                } catch (NumberFormatException e) {
-                    Toast.makeText(this, "Invalid regular duration number", Toast.LENGTH_SHORT).show();
+            if (durationRegularStr.isEmpty()) {
+                Toast.makeText(this, "Please enter the duration for regular class", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                durationNoRegular = Integer.parseInt(durationRegularStr);
+                if (radioButtonDurationYearsRegular.isChecked()) {
+                    durationTypeRegular = 1; // Yearly
+                } else if (radioButtonDaysRegular.isChecked()) {
+                    durationTypeRegular = 3; // Daily
+                } else if (radioButtonDurationHoursRegular.isChecked()) {
+                    durationTypeRegular = 2; // Weekly
+                } else {
+                    Toast.makeText(this, "Please select a duration type for regular class", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            }  else {
-                Toast.makeText(this, "Please enter the duration for regular class", Toast.LENGTH_SHORT).show();
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Invalid regular duration number", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -263,26 +270,25 @@ public class TimeTableInsert extends AppCompatActivity {
             boolean demoYN = disableSliderCheckBox.isChecked(); // demoYN is true if checkbox is checked
             int demoDurationNo = 0;
             String durationDemoStr = durationDropdownDemo.getText().toString().trim();
-            if (demoYN) { //  if the slider is disabled
-                if (!durationDemoStr.isEmpty()) {
-                    try {
-                        demoDurationNo = Integer.parseInt(durationDemoStr);
-                        if (radioButtonYearsDemo.isChecked()) {
-                            demoDurationType = 1;
-                        } else if (radioButtonDaysDemo.isChecked()) {
-                            demoDurationType = 3;
-                        } else if (radioButtonHoursDemo.isChecked()) {
-                            demoDurationType = 2;
-                        } else {
-                            Toast.makeText(this, "Please select a duration type for demo class", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(this, "Invalid demo duration number", Toast.LENGTH_SHORT).show();
+            if (demoYN) { // Only validate and get demo duration if the checkbox is checked
+                if (durationDemoStr.isEmpty()) {
+                    Toast.makeText(this, "Please enter the demo duration", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    demoDurationNo = Integer.parseInt(durationDemoStr);
+                    if (radioButtonYearsDemo.isChecked()) {
+                        demoDurationType = 1;
+                    } else if (radioButtonDaysDemo.isChecked()) {
+                        demoDurationType = 3;
+                    } else if (radioButtonHoursDemo.isChecked()) {
+                        demoDurationType = 2;
+                    } else {
+                        Toast.makeText(this, "Please select a duration type for demo class", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                } else {
-                    Toast.makeText(this, "Please enter the demo duration", Toast.LENGTH_SHORT).show();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Invalid demo duration number", Toast.LENGTH_SHORT).show();
                     return;
                 }
             } else {
@@ -347,37 +353,17 @@ public class TimeTableInsert extends AppCompatActivity {
         });
 
 
-        // Set CheckBox Listener to Enable/Disable Regular Duration elements and set listener for radio group
+
+        // Set CheckBox Listener to Enable/Disable Demo Duration elements
         disableSliderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            durationDropdownDemo.setEnabled(!isChecked); // Corrected: Disable when checked
-            durationDropdownDemo.setAlpha(isChecked ? 0.5f : 1.0f);
-            durationRadioGroupYearsDaysHoursDemo.setEnabled(!isChecked); // Corrected: Disable when checked
+            durationDropdownDemo.setEnabled(isChecked);
+            durationDropdownDemo.setAlpha(isChecked ? 1.0f : 0.5f);
+            durationRadioGroupYearsDaysHoursDemo.setEnabled(isChecked);
             for (int i = 0; i < durationRadioGroupYearsDaysHoursDemo.getChildCount(); i++) {
-                durationRadioGroupYearsDaysHoursDemo.getChildAt(i).setEnabled(!isChecked);
-                durationRadioGroupYearsDaysHoursDemo.getChildAt(i).setAlpha(isChecked ? 0.5f : 1.0f);
+                durationRadioGroupYearsDaysHoursDemo.getChildAt(i).setEnabled(isChecked);
+                durationRadioGroupYearsDaysHoursDemo.getChildAt(i).setAlpha(isChecked ? 1.0f : 0.5f);
             }
 
-            durationDropdownRegular.setEnabled(isChecked);
-            durationDropdownRegular.setAlpha(isChecked ? 1.0f : 0.5f);
-            durationRadioGroupDaysHoursRegular.setEnabled(isChecked); // Corrected: Enable when checked
-            for (int i = 0; i < durationRadioGroupDaysHoursRegular.getChildCount(); i++) {
-                durationRadioGroupDaysHoursRegular.getChildAt(i).setEnabled(isChecked);
-                durationRadioGroupDaysHoursRegular.getChildAt(i).setAlpha(isChecked ? 1.0f : 0.5f);
-            }
-
-
-            // Set listener for the regular duration radio group only when the checkbox is checked
-            if (isChecked) {
-                durationRadioGroupDaysHoursRegular.setOnCheckedChangeListener((group, checkedId) -> {
-                    // No need to populate a dropdown anymore, the value will be in the EditText
-                });
-                // Initial population if a radio button is already checked (not needed)
-            } else {
-                // Remove the listener when the checkbox is unchecked to avoid unexpected behavior
-                durationRadioGroupDaysHoursRegular.setOnCheckedChangeListener(null);
-                // Optionally clear the text when disabled (if you want)
-                durationDropdownRegular.setText("");
-            }
         });
 
 
