@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.models.UserWiseGrades;
+import com.example.loginpage.models.UserWiseSubject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,29 +158,42 @@ public class GradesTaught extends AppCompatActivity {
     }
 
     private void loadSubjects() {
-        String query = "SELECT SubjectID, SubjectName FROM Subject WHERE active = 'true' ORDER BY SubjectName";
-        Log.d(TAG, "Executing query: " + query);
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        if (userId == -1) {
+            Log.e(TAG, "Cannot load subjects: User ID not found.");
+            return;
+        }
 
-        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
-            if (result == null || result.isEmpty()) {
-                Log.e(TAG, "No subjects found!");
-                Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
-                return;
+        Log.d(TAG, "Fetching subjects for User ID: " + userId + " using UserWiseSubjectSelect");
+
+        DatabaseHelper.UserWiseSubjectSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseSubjectResultListener() {
+            @Override
+            public void onQueryResult(List<UserWiseSubject> userSubjects) { // Ensure this matches the interface
+                if (userSubjects == null || userSubjects.isEmpty()) {
+                    Log.d(TAG, "⚠️ No subjects found for the user.");
+                    Toast.makeText(GradesTaught.this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
+                    subjectMap.clear();
+                    subjectsDropdown.setAdapter(new ArrayAdapter<>(GradesTaught.this, android.R.layout.simple_dropdown_item_1line, new ArrayList<>()));
+                    subjectsDropdown.setOnClickListener(null);
+                    return;
+                }
+
+                List<String> subjects = new ArrayList<>();
+                subjectMap.clear();
+                for (UserWiseSubject subject : userSubjects) {
+                    String id = subject.getSubjectId();  // Use getSubjectId()
+                    String name = subject.getSubjectName();
+                    Log.d(TAG, "Subject Retrieved - ID: " + id + ", Name: " + name);
+                    subjects.add(name);
+                    subjectMap.put(name, id);
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(GradesTaught.this, android.R.layout.simple_dropdown_item_1line, subjects);
+                subjectsDropdown.setAdapter(adapter);
+                subjectsDropdown.setOnClickListener(v -> subjectsDropdown.showDropDown());
             }
-
-            List<String> subjects = new ArrayList<>();
-            subjectMap.clear();
-
-            for (Map<String, String> row : result) {
-                subjects.add(row.get("SubjectName"));
-                subjectMap.put(row.get("SubjectName"), row.get("SubjectID"));
-            }
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects);
-            subjectsDropdown.setAdapter(adapter);
         });
-
-        subjectsDropdown.setOnClickListener(v -> subjectsDropdown.showDropDown());
     }
 
     private void loadGrades() {

@@ -1091,16 +1091,16 @@ public class DatabaseHelper {
                         String query = "{call sp_UserGradesInsertUpdateSelect(?,?,?,?,?,?,?,?)}"; // ✅ Adjusted parameter count
                         CallableStatement stmt = connection.prepareCall(query);
 
-                        stmt.setString(1, QryStatus); // Query Type (4 = Select by UserId)
-                        stmt.setNull(2, Types.INTEGER); // UserwiseGradesId
+                        stmt.setInt(1, 4); // Query Type (4 = Select by UserId)
+                        stmt.setNull(2, 0); // UserwiseGradesId
                         stmt.setString(3, UserID); // UserId
-                        stmt.setNull(4, Types.INTEGER); // CurrentProfession (Dropped)
-                        stmt.setNull(5, Types.INTEGER); // GradeID
-                        stmt.setNull(6, Types.INTEGER); // SubjectID
-                        stmt.setNull(7, Types.VARCHAR); // SelfReferralCode
+                        stmt.setInt(4, 0); // CurrentProfession (Dropped)
+                        stmt.setInt(5, 0); // GradeID
+                        stmt.setInt(6, 0); // SubjectID
+                        stmt.setString(7, ""); // SelfReferralCode
                         stmt.registerOutParameter(8, Types.VARCHAR); // ✅ Output parameter
 
-                        Log.d("DatabaseHelper", "🔍 Executing query for UserID: " + UserID);
+                        Log.d("DatabaseHelper", "🔍 Executing query for UserID: 1123 " + UserID + " " + QryStatus);
                         ResultSet rs = stmt.executeQuery();
 
                         if (!rs.isBeforeFirst()) { // ✅ No data found
@@ -2227,10 +2227,10 @@ public class DatabaseHelper {
             int noOfStudents,
             int courseFee,
             int durationNo,
-            String durationType, // Changed to String
+            int durationType,
             boolean demoYN,
             int demoDurationNo,
-            String demoDurationType, // Changed to String
+            int demoDurationType,
             String roomNo,
             String remark,
             int createdBy,
@@ -2257,10 +2257,10 @@ public class DatabaseHelper {
                 stmt.setInt(15, noOfStudents);
                 stmt.setInt(16, courseFee);
                 stmt.setInt(17, durationNo);
-                stmt.setString(18, durationType); // Set as String
+                stmt.setInt(18, durationType);
                 stmt.setBoolean(19, demoYN);
                 stmt.setInt(20, demoDurationNo);
-                stmt.setString(21, demoDurationType); // Set as String
+                stmt.setInt(21, demoDurationType);
                 stmt.setString(22, roomNo);
                 stmt.setString(23, remark);
                 stmt.setInt(24, createdBy);
@@ -2284,7 +2284,6 @@ public class DatabaseHelper {
         }).start();
     }
 
-
     public static class TimeTableEntry {
         public int timeTableId;
         public int userId;
@@ -2304,10 +2303,10 @@ public class DatabaseHelper {
         public int noOfStudents;
         public int courseFee;
         public int durationNo;
-        public String durationType; // Yearly / Monthly / Daily
+        public int durationType; // Yearly / Monthly / Daily
         public boolean demoYN;
         public int demoDurationNo;
-        public String demoDurationType; // Yearly / Monthly / Daily
+        public int demoDurationType; // Yearly / Monthly / Daily
         public String roomNo;
         public String remark;
         public String entryDate;
@@ -2371,10 +2370,10 @@ public class DatabaseHelper {
                 stmt.setInt(15, 0);       // Dummy value for @NoofStudents
                 stmt.setInt(16, 0);       // Dummy value for @CoureFee
                 stmt.setInt(17, 0);       // Dummy value for @DurationNo
-                stmt.setString(18, null);       // Dummy value for @DurationType
+                stmt.setInt(18, 0);       // Dummy value for @DurationType
                 stmt.setBoolean(19, false); // Dummy value for @DemoYN
                 stmt.setInt(20, 0);       // Dummy value for @DemoDurationNo
-                stmt.setString(21, null);       // Dummy value for @DemoDurationType
+                stmt.setInt(21, 0);       // Dummy value for @DemoDurationType
                 stmt.setString(22, null); // Dummy value for @RoomNo
                 stmt.setString(23, null); // Dummy value for @Remark
                 stmt.setInt(24, 0);       // Dummy value for @CreatedBy
@@ -2410,7 +2409,7 @@ public class DatabaseHelper {
                     entry.sun = rs.getBoolean("Sun");
 
                     entry.durationNo = rs.getInt("DurationNo");
-                    entry.durationType = rs.getString("DurationType");
+                    entry.durationType = rs.getInt("DurationType");
                     String rawStart = rs.getString("StartTime");
                     String rawEnd = rs.getString("EndTime");
 
@@ -2432,7 +2431,7 @@ public class DatabaseHelper {
 
                     entry.demoYN = rs.getBoolean("DemoYN");
                     entry.demoDurationNo = rs.getInt("DemoDurationNo");
-                    entry.demoDurationType = rs.getString("DemoDurationType");
+                    entry.demoDurationType = rs.getInt("DemoDurationType");
                     entry.roomNo = rs.getString("RoomNo");
                     entry.remark = rs.getString("Remark");
 //                    entry.entryDate = rs.getString("entrydate");

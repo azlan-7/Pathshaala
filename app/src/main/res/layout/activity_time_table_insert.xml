@@ -342,8 +342,8 @@
             android:layout_width="203dp"
             android:layout_height="51dp"
             android:orientation="horizontal"
-            app:layout_constraintStart_toEndOf="@+id/editTextText61"
-            app:layout_constraintTop_toTopOf="@+id/editTextText61">
+            app:layout_constraintStart_toEndOf="@+id/editTextText59"
+            app:layout_constraintTop_toTopOf="@+id/editTextText59">
 
             <RadioButton
                 android:id="@+id/radioButton"
@@ -353,7 +353,7 @@
                 android:text="Yearly"
                 android:textColor="#0F4D73"
                 android:textSize="11sp"
-                app:buttonTint="#1674AE"/>
+                app:buttonTint="#1674AE" />
 
             <RadioButton
                 android:id="@+id/radioButton2"
@@ -363,7 +363,7 @@
                 android:text="Weekly"
                 android:textColor="#0F4D73"
                 android:textSize="11sp"
-                app:buttonTint="#1674AE"/>
+                app:buttonTint="#1674AE" />
 
             <RadioButton
                 android:id="@+id/radioButton3"
@@ -373,31 +373,29 @@
                 android:text="Daily"
                 android:textColor="#0F4D73"
                 android:textSize="11sp"
-                app:buttonTint="#1674AE"/>
+                app:buttonTint="#1674AE" />
 
         </RadioGroup>
 
         <CheckBox
             android:id="@+id/disableSliderCheckBox"
-            android:layout_width="149dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/work_sans_bold"
+            android:layout_width="290dp"
+            android:layout_height="29dp"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/work_sans_light"
+            android:gravity="center_vertical"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="Demo Classes"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:text="Need Demo Classes?"
             android:textColor="#0F4D73"
             android:textSize="16sp"
             app:buttonTint="#0F4D73"
-            android:layout_margin="8dp"
-            android:background="@android:color/transparent"
-            android:gravity="center_vertical"
-            android:paddingStart="0dp"
-            android:paddingEnd="0dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.217"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupYearsDaysHours" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupDaysHours" />
 
         <EditText
             android:id="@+id/editTextText59"
@@ -422,9 +420,8 @@
             android:layout_height="45dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/editTextText59"
-            app:layout_constraintTop_toTopOf="@+id/editTextText59">
+            app:layout_constraintStart_toEndOf="@+id/editTextText61"
+            app:layout_constraintTop_toTopOf="@+id/editTextText61">
 
             <RadioButton
                 android:id="@+id/radioButton4"
@@ -434,7 +431,7 @@
                 android:text="Yearly"
                 android:textColor="#0F4D73"
                 android:textSize="11sp"
-                app:buttonTint="#1674AE"/>
+                app:buttonTint="#1674AE" />
 
             <RadioButton
                 android:id="@+id/radioButton5"
@@ -444,7 +441,7 @@
                 android:text="Weekly"
                 android:textColor="#0F4D73"
                 android:textSize="11sp"
-                app:buttonTint="#1674AE"/>
+                app:buttonTint="#1674AE" />
 
             <RadioButton
                 android:id="@+id/radioButton6"
@@ -454,7 +451,7 @@
                 android:text="Daily"
                 android:textColor="#0F4D73"
                 android:textSize="11sp"
-                app:buttonTint="#1674AE"/>
+                app:buttonTint="#1674AE" />
 
         </RadioGroup>
 
@@ -463,7 +460,6 @@
             android:layout_width="215dp"
             android:layout_height="59dp"
             android:layout_margin="20dp"
-            android:layout_marginTop="24dp"
             android:background="@drawable/cornered_button"
             android:fontFamily="@font/work_sans_bold"
             android:text="Create Batch"
@@ -473,7 +469,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.528"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText59" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupYearsDaysHours" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -90,21 +90,21 @@ public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
                         String subject = e.subjectName;
                         String grade = e.gradeName;
                         String time = e.startTime + " - " + e.endTime;
-                        String courseFee = String.valueOf(e.courseFee); // Assuming courseFee is now in the TimeTableEntry
-                        String batchCapacity = String.valueOf(e.noOfStudents); // Assuming noOfStudents is now in the TimeTableEntry
-                        String duration = String.valueOf(e.demoDurationNo) + " "; // demoDurationNo and durationNo got mixed up for now demoDurationNo is durationNo and vice-versa
+                        String courseFee = String.valueOf(e.courseFee);
+                        String batchCapacity = String.valueOf(e.noOfStudents);
+                        String duration = ""; // Initialize as empty
                         switch (e.durationType) {
-                            case "Yearly":
-                                duration += "Yearly";
+                            case 1:
+                                duration = e.durationNo + " Yearly";
                                 break;
-                            case "Weekly":
-                                duration += "Weekly";
+                            case 2:
+                                duration = e.durationNo + " Weekly";
                                 break;
-                            case "Daily":
-                                duration += "Daily";
+                            case 3:
+                                duration = e.durationNo + " Daily";
                                 break;
                             default:
-                                duration += "";
+                                duration = String.valueOf(e.durationNo); //just show the number
                                 break;
                         }
 
@@ -144,3 +144,4 @@ public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
         });
     }
 }
+

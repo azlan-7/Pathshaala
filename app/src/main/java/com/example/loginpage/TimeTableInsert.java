@@ -1,7 +1,6 @@
 package com.example.loginpage;
 
 import static android.content.ContentValues.TAG;
-import static im.zego.connection.internal.ZegoConnectionImpl.context;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -29,6 +28,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.adapters.TimeTableExpandableListAdapter;
+import com.example.loginpage.models.UserWiseGrades;
+import com.example.loginpage.models.UserWiseSubject;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.text.ParseException;
@@ -40,7 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TimeTableInsert extends AppCompatActivity {
 
@@ -56,7 +58,7 @@ public class TimeTableInsert extends AppCompatActivity {
     private Button saveButton;
     private EditText editTextNumber, etCourseFee, editTextStartTime, editTextEndTime;
     private RadioGroup durationRadioGroupYearsDaysHoursDemo, durationRadioGroupDaysHoursRegular;
-    private RadioButton radioButtonYearsDemo, radioButtonDaysDemo, radioButtonHoursDemo, radioButtonDurationYearsRegular, radioButtonDurationHoursRegular;
+    private RadioButton radioButtonYearsDemo, radioButtonDaysDemo, radioButtonHoursDemo, radioButtonDurationYearsRegular, radioButtonDurationHoursRegular, radioButtonDaysRegular;
 
     private Map<String, String> subjectMap = new HashMap<>(); // SubjectName -> SubjectID
     private Map<String, String> gradeMap = new HashMap<>(); // GradeName -> GradeID
@@ -78,35 +80,10 @@ public class TimeTableInsert extends AppCompatActivity {
             return insets;
         });
 
+
         // Initialize views
-        durationDropdownRegular = findViewById(R.id.editTextText59); // Now EditText
-        disableSliderCheckBox = findViewById(R.id.disableSliderCheckBox);
         subjectDropdown = findViewById(R.id.editTextText52);
         gradeDropdown = findViewById(R.id.editTextText53);
-        saveButton = findViewById(R.id.saveTimeTableBtn);
-        editTextNumber = findViewById(R.id.editTextNumber);
-        etCourseFee = findViewById(R.id.editTextCourseFee);
-        durationDropdownDemo = findViewById(R.id.editTextText61); // Now EditText
-        editTextStartTime = findViewById(R.id.editTextTimeSlot);
-        editTextEndTime = findViewById(R.id.editTextEndTime);
-        analogClockStartTime = findViewById(R.id.analogClockStartTime);
-        analogClockEndTime = findViewById(R.id.analogClockEndTime);
-
-        durationRadioGroupYearsDaysHoursDemo = findViewById(R.id.radioGroupYearsDaysHours);
-        radioButtonYearsDemo = findViewById(R.id.radioButton);
-        radioButtonDaysDemo = findViewById(R.id.radioButton2);
-        radioButtonHoursDemo = findViewById(R.id.radioButton3);
-
-        durationRadioGroupDaysHoursRegular = findViewById(R.id.radioGroupDaysHours);
-        radioButtonDurationYearsRegular = findViewById(R.id.radioButton4);
-        radioButtonDurationHoursRegular = findViewById(R.id.radioButton5);
-        radioButtonDaysDemo = findViewById(R.id.radioButton6);
-
-
-        editTextStartTime.setOnClickListener(v -> showTimePickerDialog(true));
-        analogClockStartTime.setOnClickListener(v -> showTimePickerDialog(true));
-        editTextEndTime.setOnClickListener(v -> showTimePickerDialog(false));
-        analogClockEndTime.setOnClickListener(v -> showTimePickerDialog(false));
 
 
         checkBoxMon = findViewById(R.id.checkBoxMon);
@@ -117,52 +94,40 @@ public class TimeTableInsert extends AppCompatActivity {
         checkBoxSat = findViewById(R.id.checkBoxSat);
         checkBoxSun = findViewById(R.id.checkBoxSun);
 
-        // Populate Day Dropdown with an array
-        String[] daysOfWeek = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-        ArrayAdapter<String> dayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, daysOfWeek);
+        editTextStartTime = findViewById(R.id.editTextTimeSlot);
+        editTextEndTime = findViewById(R.id.editTextEndTime);
+        analogClockStartTime = findViewById(R.id.analogClockStartTime);
+        analogClockEndTime = findViewById(R.id.analogClockEndTime);
+
+        editTextStartTime.setOnClickListener(v -> showTimePickerDialog(true));
+        analogClockStartTime.setOnClickListener(v -> showTimePickerDialog(true));
+        editTextEndTime.setOnClickListener(v -> showTimePickerDialog(false));
+        analogClockEndTime.setOnClickListener(v -> showTimePickerDialog(false));
+
+        etCourseFee = findViewById(R.id.editTextCourseFee);
+
+        editTextNumber = findViewById(R.id.editTextNumber); //No. of Students/Batch
 
 
-        // Logic for single selection in Demo Duration radio group
-        durationRadioGroupYearsDaysHoursDemo.setOnCheckedChangeListener((group, checkedId) -> {
-            // No need to populate a dropdown anymore, the value will be in the EditText
-        });
 
-        // Disable Regular Duration Dropdown and Radio Buttons initially
-        durationDropdownRegular.setEnabled(false);
-        durationDropdownRegular.setAlpha(0.5f);
-        radioButtonDurationYearsRegular.setEnabled(false);
-        radioButtonDurationHoursRegular.setEnabled(false);
-        radioButtonDaysDemo.setEnabled(false);
-        radioButtonDurationYearsRegular.setAlpha(0.5f);
-        radioButtonDurationHoursRegular.setAlpha(0.5f);
-        radioButtonDaysDemo.setAlpha(0.5f);
+        durationDropdownRegular = findViewById(R.id.editTextText61); // Now EditText
+        durationRadioGroupDaysHoursRegular = findViewById(R.id.radioGroupDaysHours); // Correct ID
+        radioButtonDurationYearsRegular = findViewById(R.id.radioButton4);
+        radioButtonDurationHoursRegular = findViewById(R.id.radioButton5);
+        radioButtonDaysRegular = findViewById(R.id.radioButton6);      // Correct ID
 
-        // Populate Regular Duration Dropdown initially (not needed anymore)
+        disableSliderCheckBox = findViewById(R.id.disableSliderCheckBox);
 
-        // Set CheckBox Listener to Enable/Disable Regular Duration elements and set listener for radio group
-        disableSliderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            durationDropdownRegular.setEnabled(isChecked);
-            durationDropdownRegular.setAlpha(isChecked ? 1.0f : 0.5f);
-            radioButtonDurationYearsRegular.setEnabled(isChecked);
-            radioButtonDurationHoursRegular.setEnabled(isChecked);
-            radioButtonDaysDemo.setEnabled(isChecked);
-            radioButtonDurationYearsRegular.setAlpha(isChecked ? 1.0f : 0.5f);
-            radioButtonDurationHoursRegular.setAlpha(isChecked ? 1.0f : 0.5f);
-            radioButtonDaysDemo.setAlpha(isChecked ? 1.0f : 0.5f);
+        durationDropdownDemo = findViewById(R.id.editTextText59); // Now EditText
 
-            // Set listener for the regular duration radio group only when the checkbox is checked
-            if (isChecked) {
-                durationRadioGroupDaysHoursRegular.setOnCheckedChangeListener((group, checkedId) -> {
-                    // No need to populate a dropdown anymore, the value will be in the EditText
-                });
-                // Initial population if a radio button is already checked (not needed)
-            } else {
-                // Remove the listener when the checkbox is unchecked to avoid unexpected behavior
-                durationRadioGroupDaysHoursRegular.setOnCheckedChangeListener(null);
-                // Optionally clear the text when disabled (if you want)
-                durationDropdownRegular.setText("");
-            }
-        });
+
+        durationRadioGroupYearsDaysHoursDemo = findViewById(R.id.radioGroupYearsDaysHours);  // Correct ID
+        radioButtonYearsDemo = findViewById(R.id.radioButton);        // Correct ID
+        radioButtonDaysDemo = findViewById(R.id.radioButton2);          // Correct ID
+        radioButtonHoursDemo = findViewById(R.id.radioButton3);          // Correct ID
+
+
+        saveButton = findViewById(R.id.saveTimeTableBtn);
 
 
         etCourseFee.setOnFocusChangeListener((v, hasFocus) -> {
@@ -207,6 +172,7 @@ public class TimeTableInsert extends AppCompatActivity {
                 }
             }
         });
+
 
         // Save button listener
         saveButton.setOnClickListener(v -> {
@@ -268,53 +234,60 @@ public class TimeTableInsert extends AppCompatActivity {
             }
 
             int durationNoRegular = 0;
-            String durationTypeRegularStr = "";
-            if (disableSliderCheckBox.isChecked()) {
-                String durationRegularStr = durationDropdownRegular.getText().toString().trim();
-                if (!durationRegularStr.isEmpty()) {
+            int durationTypeRegular = 0;
+            String durationRegularStr = durationDropdownRegular.getText().toString().trim();
+            if (!durationRegularStr.isEmpty()) {
+                try {
+                    durationNoRegular = Integer.parseInt(durationRegularStr);
+                    if (radioButtonDurationYearsRegular.isChecked()) {
+                        durationTypeRegular = 1; // Yearly
+                    } else if (radioButtonDaysRegular.isChecked()) {
+                        durationTypeRegular = 3; // Daily
+                    } else if (radioButtonDurationHoursRegular.isChecked()) {
+                        durationTypeRegular = 2; // Weekly
+                    } else {
+                        Toast.makeText(this, "Please select a duration type for regular class", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Invalid regular duration number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }  else {
+                Toast.makeText(this, "Please enter the duration for regular class", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            int demoDurationType = 0;
+            boolean demoYN = disableSliderCheckBox.isChecked(); // demoYN is true if checkbox is checked
+            int demoDurationNo = 0;
+            String durationDemoStr = durationDropdownDemo.getText().toString().trim();
+            if (demoYN) { //  if the slider is disabled
+                if (!durationDemoStr.isEmpty()) {
                     try {
-                        durationNoRegular = Integer.parseInt(durationRegularStr);
-                        if (radioButtonDurationYearsRegular.isChecked()) {
-                            durationTypeRegularStr = "Yearly";
+                        demoDurationNo = Integer.parseInt(durationDemoStr);
+                        if (radioButtonYearsDemo.isChecked()) {
+                            demoDurationType = 1;
                         } else if (radioButtonDaysDemo.isChecked()) {
-                            durationTypeRegularStr = "Daily";
-                        } else if (radioButtonDurationHoursRegular.isChecked()) {
-                            durationTypeRegularStr = "Weekly";
+                            demoDurationType = 3;
+                        } else if (radioButtonHoursDemo.isChecked()) {
+                            demoDurationType = 2;
                         } else {
-                            Toast.makeText(this, "Please select a duration type for regular class", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please select a duration type for demo class", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     } catch (NumberFormatException e) {
-                        Toast.makeText(this, "Invalid regular duration number", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Invalid demo duration number", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                } else if (disableSliderCheckBox.isChecked()) {
-                    Toast.makeText(this, "Please enter the duration for regular class", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Please enter the demo duration", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            }
-
-            String demoDurationTypeStr = "";
-            boolean demoYN = radioButtonYearsDemo.isChecked() || radioButtonDaysDemo.isChecked() || radioButtonHoursDemo.isChecked();
-            int demoDurationNo = 0;
-            String durationDemoStr = durationDropdownDemo.getText().toString().trim();
-            if (demoYN && !durationDemoStr.isEmpty()) {
-                try {
-                    demoDurationNo = Integer.parseInt(durationDemoStr);
-                    if (radioButtonYearsDemo.isChecked()) {
-                        demoDurationTypeStr = "Yearly";
-                    } else if (radioButtonDaysDemo.isChecked()) {
-                        demoDurationTypeStr = "Daily";
-                    } else if (radioButtonHoursDemo.isChecked()) {
-                        demoDurationTypeStr = "Weekly";
-                    }
-                } catch (NumberFormatException e) {
-                    Toast.makeText(this, "Invalid demo duration number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            } else if (demoYN && durationDemoStr.isEmpty()) {
-                Toast.makeText(this, "Please enter the demo duration", Toast.LENGTH_SHORT).show();
-                return;
+            } else {
+                demoDurationNo = 0;
+                demoDurationType = 0;
             }
 
 
@@ -345,11 +318,11 @@ public class TimeTableInsert extends AppCompatActivity {
                     endTimeStr,
                     noOfStudents,
                     courseFee,
-                    durationNoRegular,
-                    durationTypeRegularStr, // Send String
+                    durationNoRegular,  // Pass the value from the EditText
+                    durationTypeRegular, // Pass the selected radio button value
                     demoYN,
-                    demoDurationNo,
-                    demoDurationTypeStr, // Send String
+                    demoDurationNo, // Pass the value from the EditText
+                    demoDurationType, // Pass the selected radio button value
                     roomNoStr,
                     remarkStr,
                     createdByUserId,
@@ -372,6 +345,42 @@ public class TimeTableInsert extends AppCompatActivity {
             );
             Toast.makeText(this, "Time Table saved successfully!", Toast.LENGTH_SHORT).show();
         });
+
+
+        // Set CheckBox Listener to Enable/Disable Regular Duration elements and set listener for radio group
+        disableSliderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            durationDropdownDemo.setEnabled(!isChecked); // Corrected: Disable when checked
+            durationDropdownDemo.setAlpha(isChecked ? 0.5f : 1.0f);
+            durationRadioGroupYearsDaysHoursDemo.setEnabled(!isChecked); // Corrected: Disable when checked
+            for (int i = 0; i < durationRadioGroupYearsDaysHoursDemo.getChildCount(); i++) {
+                durationRadioGroupYearsDaysHoursDemo.getChildAt(i).setEnabled(!isChecked);
+                durationRadioGroupYearsDaysHoursDemo.getChildAt(i).setAlpha(isChecked ? 0.5f : 1.0f);
+            }
+
+            durationDropdownRegular.setEnabled(isChecked);
+            durationDropdownRegular.setAlpha(isChecked ? 1.0f : 0.5f);
+            durationRadioGroupDaysHoursRegular.setEnabled(isChecked); // Corrected: Enable when checked
+            for (int i = 0; i < durationRadioGroupDaysHoursRegular.getChildCount(); i++) {
+                durationRadioGroupDaysHoursRegular.getChildAt(i).setEnabled(isChecked);
+                durationRadioGroupDaysHoursRegular.getChildAt(i).setAlpha(isChecked ? 1.0f : 0.5f);
+            }
+
+
+            // Set listener for the regular duration radio group only when the checkbox is checked
+            if (isChecked) {
+                durationRadioGroupDaysHoursRegular.setOnCheckedChangeListener((group, checkedId) -> {
+                    // No need to populate a dropdown anymore, the value will be in the EditText
+                });
+                // Initial population if a radio button is already checked (not needed)
+            } else {
+                // Remove the listener when the checkbox is unchecked to avoid unexpected behavior
+                durationRadioGroupDaysHoursRegular.setOnCheckedChangeListener(null);
+                // Optionally clear the text when disabled (if you want)
+                durationDropdownRegular.setText("");
+            }
+        });
+
+
 
         gradeDropdown.setOnClickListener(v -> gradeDropdown.showDropDown());
 
@@ -426,46 +435,85 @@ public class TimeTableInsert extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+
     private void loadSubjects() {
-        String query = "SELECT SubjectID, SubjectName FROM Subject WHERE active = 'true' ORDER BY SubjectName";
-        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
-            if (result != null && !result.isEmpty()) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        if (userId == -1) {
+            Log.e(TAG, "Cannot load subjects: User ID not found.");
+            return;
+        }
+
+        Log.d(TAG, "Fetching subjects for User ID: " + userId + " using UserWiseSubjectSelect");
+
+        DatabaseHelper.UserWiseSubjectSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseSubjectResultListener() {
+            @Override
+            public void onQueryResult(List<UserWiseSubject> userSubjects) { // Ensure this matches the interface
+                if (userSubjects == null || userSubjects.isEmpty()) {
+                    Log.d(TAG, "⚠️ No subjects found for the user.");
+                    Toast.makeText(TimeTableInsert.this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
+                    subjectMap.clear();
+                    subjectDropdown.setAdapter(new ArrayAdapter<>(TimeTableInsert.this, android.R.layout.simple_dropdown_item_1line, new ArrayList<>()));
+                    subjectDropdown.setOnClickListener(null);
+                    return;
+                }
+
                 List<String> subjects = new ArrayList<>();
                 subjectMap.clear();
-                for (Map<String, String> row : result) {
-                    String id = row.get("SubjectID");
-                    String name = row.get("SubjectName");
+                for (UserWiseSubject subject : userSubjects) {
+                    String id = subject.getSubjectId();  // Use getSubjectId()
+                    String name = subject.getSubjectName();
                     Log.d(TAG, "Subject Retrieved - ID: " + id + ", Name: " + name);
                     subjects.add(name);
                     subjectMap.put(name, id);
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(TimeTableInsert.this, android.R.layout.simple_dropdown_item_1line, subjects);
                 subjectDropdown.setAdapter(adapter);
                 subjectDropdown.setOnClickListener(v -> subjectDropdown.showDropDown());
-            } else {
-                Log.e(TAG, "No subjects found in the database.");
-                Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
     private void loadGrades() {
-        String query = "SELECT GradeID, GradeName FROM Grades WHERE active = 'true' ORDER BY GradeName";
-        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
-            if (result != null && !result.isEmpty()) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        if (userId == -1) {
+            Log.e(TAG, "Cannot load grades: User ID not found.");
+            return;
+        }
+
+        Log.d(TAG, "Fetching grades for User ID: " + userId + " using UserWiseGradesSelect");
+
+        DatabaseHelper.UserWiseGradesSelect(this, "4", String.valueOf(userId), new DatabaseHelper.UserWiseGradesResultListener() {
+            @Override
+            public void onQueryResult(List<UserWiseGrades> userGrades) {
+                if (userGrades == null || userGrades.isEmpty()) {
+                    Log.d(TAG, "⚠️ No grades found for the user.");
+                    Toast.makeText(TimeTableInsert.this, "No Grades Found!", Toast.LENGTH_SHORT).show();
+                    gradeMap.clear();
+                    gradeDropdown.setAdapter(new ArrayAdapter<>(TimeTableInsert.this, android.R.layout.simple_dropdown_item_1line, new ArrayList<>()));
+                    gradeDropdown.setOnClickListener(null);
+                    return;
+                }
+
                 List<String> grades = new ArrayList<>();
                 gradeMap.clear();
-                for (Map<String, String> row : result) {
-                    grades.add(row.get("GradeName"));
-                    gradeMap.put(row.get("GradeName"), row.get("GradeID"));
+                for (UserWiseGrades grade : userGrades) {
+                    String gradeId = grade.getSubjectId();
+                    String gradeName = grade.getGradename();
+                    Log.d(TAG, "Grade Retrieved - ID: " + gradeId + ", Name: " + gradeName);
+                    grades.add(gradeName);
+                    gradeMap.put(gradeName, gradeId);
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(TimeTableInsert.this, android.R.layout.simple_dropdown_item_1line, grades);
                 gradeDropdown.setAdapter(adapter);
                 gradeDropdown.setOnClickListener(v -> gradeDropdown.showDropDown());
-            } else {
-                Log.e(TAG, "No grades found!");
-                Toast.makeText(this, "No Grades Found!", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }
+

@@ -100,13 +100,13 @@ public class ShowTimeTableNewView extends AppCompatActivity {
                     String duration = String.valueOf(e.durationNo) + " "; // Use the regular durationNo
                     String durationType = "";
                     switch (e.durationType) { // Use the regular durationType
-                        case "Yearly":
+                        case 1:
                             durationType = "Yearly";
                             break;
-                        case "Weekly":
+                        case 2:
                             durationType = "Weekly";
                             break;
-                        case "Daily":
+                        case 3:
                             durationType = "Daily";
                             break;
                     }
