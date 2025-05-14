@@ -53,7 +53,10 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
         holder.timeText.setText("Time: " + slot.getTime());
         holder.courseFeeText.setText("Course Fee: " + slot.getCourseFee());
         holder.noOfStudentsText.setText("Batch Capacity: " + slot.getBatchCapacity());
-        holder.durationTypeText.setText("Duration: " + slot.getDuration().substring(2));
+
+        // Corrected Duration Display
+        String duration = slot.getDuration(); // Get the String duration
+        holder.durationTypeText.setText("Duration: " + duration);
 
         Drawable checkedDrawable = ContextCompat.getDrawable(context, R.drawable.check_box_24dp_ffffff_fill0_wght400_grad0_opsz24);
         Drawable uncheckedDrawable = ContextCompat.getDrawable(context, R.drawable.check_box_outline_blank_24dp_ffffff_fill0_wght400_grad0_opsz24);
@@ -101,7 +104,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectText, gradeText, dayText, timeText,courseFeeText,noOfStudentsText,durationTypeText;
+        TextView subjectText, gradeText, dayText, timeText, courseFeeText, noOfStudentsText, durationTypeText;
         AppCompatButton tvOptTimeTable;
         ImageView ivOptTimeTable;
         LinearLayout linearLayoutOptTimeTable;

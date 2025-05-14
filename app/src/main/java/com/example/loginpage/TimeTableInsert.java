@@ -50,7 +50,7 @@ public class TimeTableInsert extends AppCompatActivity {
     private TimeTableExpandableListAdapter adapter;
 
     private List<String> sectionTitles;
-    private HashMap<String, List<DatabaseHelper.TimeTableEntry>> sectionItems;
+
 
     private AutoCompleteTextView subjectDropdown, gradeDropdown;
     private EditText durationDropdownDemo, durationDropdownRegular; // Changed to EditText
@@ -80,7 +80,7 @@ public class TimeTableInsert extends AppCompatActivity {
             return insets;
         });
 
-// Initialize views
+        // Initialize views
         subjectDropdown = findViewById(R.id.editTextText52);
         gradeDropdown = findViewById(R.id.editTextText53);
 

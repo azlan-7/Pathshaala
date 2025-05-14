@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -33,9 +31,7 @@ public class ShowTimeTableNewView extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TimeSlotAdapter adapter;
     private ArrayList<TimeSlot> timeSlotList;
-
     private AppCompatButton continueButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +40,6 @@ public class ShowTimeTableNewView extends AppCompatActivity {
         setContentView(R.layout.activity_show_time_table_new_view);
 
         continueButton = findViewById(R.id.button42);
-
         recyclerView = findViewById(R.id.recyclerTimeSlots);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -52,9 +47,6 @@ public class ShowTimeTableNewView extends AppCompatActivity {
             Intent intent = new Intent(ShowTimeTableNewView.this, SearchStudentsDashboard.class);
             startActivity(intent);
         });
-
-
-        ArrayList<TimeSlot> receivedList = (ArrayList<TimeSlot>) getIntent().getSerializableExtra("timeslot_list");
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         int userIdToFetch;
@@ -78,40 +70,26 @@ public class ShowTimeTableNewView extends AppCompatActivity {
 
                 for (DatabaseHelper.TimeTableEntry e : result) {
                     StringBuilder daysBuilder = new StringBuilder();
-                    if (e.mon) daysBuilder.append("Monday, ");
-                    if (e.tue) daysBuilder.append("Tuesday, ");
-                    if (e.wed) daysBuilder.append("Wednesday, ");
-                    if (e.thur) daysBuilder.append("Thursday, ");
-                    if (e.fri) daysBuilder.append("Friday, ");
-                    if (e.sat) daysBuilder.append("Saturday, ");
-                    if (e.sun) daysBuilder.append("Sunday, ");
+                    if ("true".equalsIgnoreCase(e.mon)) daysBuilder.append("Monday, ");
+                    if ("true".equalsIgnoreCase(e.tue)) daysBuilder.append("Tuesday, ");
+                    if ("true".equalsIgnoreCase(e.wed)) daysBuilder.append("Wednesday, ");
+                    if ("true".equalsIgnoreCase(e.thur)) daysBuilder.append("Thursday, ");
+                    if ("true".equalsIgnoreCase(e.fri)) daysBuilder.append("Friday, ");
+                    if ("true".equalsIgnoreCase(e.sat)) daysBuilder.append("Saturday, ");
+                    if ("true".equalsIgnoreCase(e.sun)) daysBuilder.append("Sunday, ");
 
                     String dayString = "";
                     if (daysBuilder.length() > 0) {
                         dayString = daysBuilder.substring(0, daysBuilder.length() - 2); // Remove trailing ", "
                     }
 
-                    // Retrieve the additional information directly from the TimeTableEntry
+                    // You can directly use the values from the TimeTableEntry object
                     String subject = e.subjectName;
                     String grade = e.gradeName;
                     String time = e.startTime + " - " + e.endTime;
                     String courseFee = String.valueOf(e.courseFee);
                     String batchCapacity = String.valueOf(e.noOfStudents);
-                    String duration = String.valueOf(e.durationNo) + " "; // Use the regular durationNo
-                    String durationType = "";
-                    switch (e.durationType) { // Use the regular durationType
-                        case 1:
-                            durationType = "Yearly";
-                            break;
-                        case 2:
-                            durationType = "Weekly";
-                            break;
-                        case 3:
-                            durationType = "Daily";
-                            break;
-                    }
-
-                    String fullDuration = duration + durationType; // Combine number and type
+                    String duration = e.durationType;
 
                     slotList.add(new TimeSlot(
                             subject,
@@ -120,7 +98,7 @@ public class ShowTimeTableNewView extends AppCompatActivity {
                             time,
                             courseFee,
                             batchCapacity,
-                            fullDuration // Use the combined duration string
+                            duration
                     ));
                 }
 
@@ -141,8 +119,6 @@ public class ShowTimeTableNewView extends AppCompatActivity {
                 });
             }
         });
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -73,17 +73,20 @@ public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
                 for (DatabaseHelper.TimeTableEntry e : result) {
                     if (!e.subjectName.toLowerCase().contains("demo")) {
                         StringBuilder daysBuilder = new StringBuilder();
-                        if (e.mon) daysBuilder.append("Monday, ");
-                        if (e.tue) daysBuilder.append("Tuesday, ");
-                        if (e.wed) daysBuilder.append("Wednesday, ");
-                        if (e.thur) daysBuilder.append("Thursday, ");
-                        if (e.fri) daysBuilder.append("Friday, ");
-                        if (e.sat) daysBuilder.append("Saturday, ");
-                        if (e.sun) daysBuilder.append("Sunday, ");
+                        if ("Monday".equalsIgnoreCase(e.mon)) daysBuilder.append("Monday, ");
+                        if ("Tuesday".equalsIgnoreCase(e.tue)) daysBuilder.append("Tuesday, ");
+                        if ("Wednessday".equalsIgnoreCase(e.wed)) daysBuilder.append("Wednesday, ");
+                        if ("Thru".equalsIgnoreCase(e.thur)) daysBuilder.append("Thursday, ");
+                        if ("Friday".equalsIgnoreCase(e.fri)) daysBuilder.append("Friday, ");
+                        if ("Saturday".equalsIgnoreCase(e.sat)) daysBuilder.append("Saturday, ");
+                        if ("Sunday".equalsIgnoreCase(e.sun)) daysBuilder.append("Sunday, ");
 
                         String dayString = "";
                         if (daysBuilder.length() > 0) {
                             dayString = daysBuilder.substring(0, daysBuilder.length() - 2); // Remove trailing ", "
+                        }
+                        if (dayString.isEmpty()) {
+                            dayString = "No Days Selected";
                         }
 
                         // You can directly use the values from the TimeTableEntry object
@@ -92,22 +95,8 @@ public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
                         String time = e.startTime + " - " + e.endTime;
                         String courseFee = String.valueOf(e.courseFee);
                         String batchCapacity = String.valueOf(e.noOfStudents);
-                        String duration = ""; // Initialize as empty
-                        switch (e.durationType) {
-                            case 1:
-                                duration = e.durationNo + " Yearly";
-                                break;
-                            case 2:
-                                duration = e.durationNo + " Weekly";
-                                break;
-                            case 3:
-                                duration = e.durationNo + " Daily";
-                                break;
-                            default:
-                                duration = String.valueOf(e.durationNo); //just show the number
-                                break;
-                        }
-
+                        //Integer duration = e.durationNo;  // Get the integer value from the database
+                        String duration = e.durationType; // Use the String value
                         slotList.add(new TimeSlot(
                                 subject,
                                 grade,
@@ -143,5 +132,5 @@ public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
             return insets;
         });
     }
-}
 
+}

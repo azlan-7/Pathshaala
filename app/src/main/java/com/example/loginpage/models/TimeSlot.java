@@ -7,7 +7,7 @@ public class TimeSlot {
     private String time;
     private String courseFee;
     private String batchCapacity;
-    private String duration;
+    private String duration; // Changed to String
 
     public TimeSlot(String subject, String grade, String day, String time) {
         this.subject = subject;
@@ -16,10 +16,10 @@ public class TimeSlot {
         this.time = time;
         this.courseFee = "";
         this.batchCapacity = "";
-        this.duration = "";
+        this.duration = null;
     }
 
-    public TimeSlot(String subject, String grade, String day, String time, String courseFee, String batchCapacity, String duration) {
+    public TimeSlot(String subject, String grade, String day, String time, String courseFee, String batchCapacity, String duration) { // Changed to String
         this.subject = subject;
         this.grade = grade;
         this.day = day;
@@ -78,11 +78,12 @@ public class TimeSlot {
         this.batchCapacity = batchCapacity;
     }
 
-    public String getDuration() {
+    public String getDuration() { // Changed to String
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(String duration) { // Changed to String
         this.duration = duration;
     }
 }
+
