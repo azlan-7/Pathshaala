@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/notificationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_bold"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#0F4D73"
+        android:text="Notification Title" />
+
+    <TextView
+        android:id="@+id/notificationMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans_bold"
+        android:textSize="16sp"
+        android:textColor="#0F4D73"
+        android:text="Notification Message" />
+
+    <TextView
+        android:id="@+id/notificationSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans"
+        android:textSize="16sp"
+        android:textColor="#0F4D73"
+        android:text="Subject: "
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/notificationDays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans"
+        android:textSize="16sp"
+        android:textColor="#0F4D73"
+        android:text="Days: "
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/notificationTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans"
+        android:textSize="16sp"
+        android:textColor="#0F4D73"
+        android:text="Time: "
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/notificationGrade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/work_sans"
+        android:textSize="16sp"
+        android:textColor="#0F4D73"
+        android:text="Grade: "
+        android:layout_marginTop="4dp" />
+
+</LinearLayout>

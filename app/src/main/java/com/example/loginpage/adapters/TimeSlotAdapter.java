@@ -25,6 +25,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
     private List<TimeSlot> timeSlots;
     private Context context;
     private List<TimeSlot> optedInTimeSlots = new ArrayList<>(); // To keep track of opted-in slots
+    private OnOptInOutListener onOptInOutListener;
 
     public TimeSlotAdapter(List<TimeSlot> timeSlots) {
         this.timeSlots = timeSlots;
@@ -33,6 +34,10 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
     // Method to get the list of opted-in time slots
     public List<TimeSlot> getOptedInTimeSlots() {
         return optedInTimeSlots;
+    }
+
+    public void setOnOptInOutListener(OnOptInOutListener listener) {
+        this.onOptInOutListener = listener;
     }
 
     @NonNull
@@ -127,11 +132,5 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
     // Interface to communicate opt-in/opt-out events to the activity
     public interface OnOptInOutListener {
         void onOptInOut(TimeSlot timeSlot, boolean isOptedIn);
-    }
-
-    private OnOptInOutListener onOptInOutListener;
-
-    public void setOnOptInOutListener(OnOptInOutListener listener) {
-        this.onOptInOutListener = listener;
     }
 }

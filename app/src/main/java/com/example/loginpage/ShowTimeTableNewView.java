@@ -26,12 +26,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class ShowTimeTableNewView extends AppCompatActivity {
+public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotAdapter.OnOptInOutListener {
 
     private RecyclerView recyclerView;
     private TimeSlotAdapter adapter;
     private ArrayList<TimeSlot> timeSlotList;
     private AppCompatButton continueButton;
+    private int currentUserId; // To store the current student's ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,26 +44,24 @@ public class ShowTimeTableNewView extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerTimeSlots);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
         continueButton.setOnClickListener(v -> {
             Intent intent = new Intent(ShowTimeTableNewView.this, SearchStudentsDashboard.class);
             startActivity(intent);
         });
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userIdToFetch;
         int userIdFromSharedPrefs = sharedPreferences.getInt("USER_ID", -1);
         int userIdFromIntent = getIntent().getIntExtra("USER_ID", -1);
 
         if (userIdFromIntent != -1) {
-            userIdToFetch = userIdFromIntent;
-            Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from Intent: " + userIdToFetch);
+            currentUserId = userIdFromIntent;
+            Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from Intent: " + currentUserId);
         } else {
-            userIdToFetch = userIdFromSharedPrefs;
-            Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from SharedPreferences: " + userIdToFetch);
+            currentUserId = userIdFromSharedPrefs;
+            Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from SharedPreferences: " + currentUserId);
         }
 
-        DatabaseHelper.getTimeTableByUserId(userIdToFetch, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
+        DatabaseHelper.getTimeTableByUserId(currentUserId, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
             @Override
             public void onSuccess(List<DatabaseHelper.TimeTableEntry> result) {
                 List<TimeSlot> slotList = new ArrayList<>();
@@ -83,12 +82,10 @@ public class ShowTimeTableNewView extends AppCompatActivity {
                     if (daysBuilder.length() > 0) {
                         dayString = daysBuilder.substring(0, daysBuilder.length() - 2); // Remove trailing ", "
                     }
-                    if (dayString.isEmpty())
-                    {
+                    if (dayString.isEmpty()) {
                         dayString = "No Days Selected";
                     }
 
-                    // You can directly use the values from the TimeTableEntry object
                     String subject = e.subjectName;
                     String grade = e.gradeName;
                     String time = e.startTime + " - " + e.endTime;
@@ -109,7 +106,8 @@ public class ShowTimeTableNewView extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (!slotList.isEmpty()) {
-                        TimeSlotAdapter adapter = new TimeSlotAdapter(slotList);
+                        adapter = new TimeSlotAdapter(slotList);
+                        adapter.setOnOptInOutListener(ShowTimeTableNewView.this); // Set the listener
                         recyclerView.setAdapter(adapter);
                     } else {
                         Toast.makeText(ShowTimeTableNewView.this, "No time slots available for this user!", Toast.LENGTH_SHORT).show();
@@ -130,5 +128,46 @@ public class ShowTimeTableNewView extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    public void onOptInOut(TimeSlot timeSlot, boolean isOptedIn) {
+        if (isOptedIn) {
+            // Student opted in, send notification to the teacher
+            sendTimetableOptInNotification(timeSlot);
+        } else {
+            // Student opted out, you might want to handle this differently
+            // For now, we'll just log it.
+            Log.d("ShowTimeTableNewView", "Student opted out of: " + timeSlot.getSubject() + " - " + timeSlot.getTime());
+        }
+    }
+
+    private void sendTimetableOptInNotification(TimeSlot timeSlot) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String studentName = sharedPreferences.getString("firstName", "Unknown"); // Get student's name
+        String studentGrade = sharedPreferences.getString("grade", "Unknown");   // Get student's grade
+
+        // **Important:** We need to determine the teacher's ID here.
+        // For now, let's hardcode a teacher's ID for testing.
+        // **You will need to replace this with the actual logic to get the relevant teacher's ID.**
+        int teacherId = 1; // Replace with the actual teacher's User ID
+
+        String title = studentName + " (Grade: " + studentGrade + ") - Timetable Opt-In";
+        String message = "Student " + studentName + " (Grade " + studentGrade + ") has opted for the following timetable: " +
+                "Subject: " + timeSlot.getSubject() + ", " +
+                "Day(s): " + timeSlot.getDay() + ", " +
+                "Time: " + timeSlot.getTime() + ", " +
+                "Grade: " + timeSlot.getGrade(); // Include the timetable's grade as well
+
+        int notificationId = DatabaseHelper.insertNotification(currentUserId, title, message, "info");
+
+        if (notificationId != -1) {
+            DatabaseHelper.insertNotificationRead(notificationId, teacherId);
+            Toast.makeText(this, "Notification sent to teacher.", Toast.LENGTH_SHORT).show();
+            Log.d("ShowTimeTableNewView", "Timetable opt-in notification sent. Notification ID: " + notificationId + ", Teacher ID: " + teacherId);
+        } else {
+            Toast.makeText(this, "Failed to send notification.", Toast.LENGTH_SHORT).show();
+            Log.e("ShowTimeTableNewView", "Failed to insert timetable opt-in notification.");
+        }
     }
 }
