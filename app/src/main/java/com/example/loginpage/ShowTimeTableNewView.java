@@ -43,6 +43,7 @@ public class ShowTimeTableNewView extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerTimeSlots);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
         continueButton.setOnClickListener(v -> {
             Intent intent = new Intent(ShowTimeTableNewView.this, SearchStudentsDashboard.class);
             startActivity(intent);
@@ -70,17 +71,21 @@ public class ShowTimeTableNewView extends AppCompatActivity {
 
                 for (DatabaseHelper.TimeTableEntry e : result) {
                     StringBuilder daysBuilder = new StringBuilder();
-                    if ("true".equalsIgnoreCase(e.mon)) daysBuilder.append("Monday, ");
-                    if ("true".equalsIgnoreCase(e.tue)) daysBuilder.append("Tuesday, ");
-                    if ("true".equalsIgnoreCase(e.wed)) daysBuilder.append("Wednesday, ");
-                    if ("true".equalsIgnoreCase(e.thur)) daysBuilder.append("Thursday, ");
-                    if ("true".equalsIgnoreCase(e.fri)) daysBuilder.append("Friday, ");
-                    if ("true".equalsIgnoreCase(e.sat)) daysBuilder.append("Saturday, ");
-                    if ("true".equalsIgnoreCase(e.sun)) daysBuilder.append("Sunday, ");
+                    if ("Monday".equalsIgnoreCase(e.mon)) daysBuilder.append("Monday, ");
+                    if ("Tuesday".equalsIgnoreCase(e.tue)) daysBuilder.append("Tuesday, ");
+                    if ("Wednessday".equalsIgnoreCase(e.wed)) daysBuilder.append("Wednesday, ");
+                    if ("Thru".equalsIgnoreCase(e.thur)) daysBuilder.append("Thursday, ");
+                    if ("Friday".equalsIgnoreCase(e.fri)) daysBuilder.append("Friday, ");
+                    if ("Saturday".equalsIgnoreCase(e.sat)) daysBuilder.append("Saturday, ");
+                    if ("Sunday".equalsIgnoreCase(e.sun)) daysBuilder.append("Sunday, ");
 
                     String dayString = "";
                     if (daysBuilder.length() > 0) {
                         dayString = daysBuilder.substring(0, daysBuilder.length() - 2); // Remove trailing ", "
+                    }
+                    if (dayString.isEmpty())
+                    {
+                        dayString = "No Days Selected";
                     }
 
                     // You can directly use the values from the TimeTableEntry object
