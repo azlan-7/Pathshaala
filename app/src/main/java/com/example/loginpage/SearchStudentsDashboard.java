@@ -111,6 +111,7 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
                                 intent.putExtra("USER_PHONE", teacher.getMobileNo());
                                 intent.putExtra("USER_ID", teacher.getUserId());
                                 intent.putExtra("USER_FIRST_NAME", teacher.getUsername());
+                                intent.putExtra("USER_SELF_REFERRAL_CODE",teacher.getSelfReferralCode());
                                 Log.d("SearchStudentsDashboard", "Intent passed for UserID: " + teacher.getUserId());
                                 startActivity(intent);
                             });

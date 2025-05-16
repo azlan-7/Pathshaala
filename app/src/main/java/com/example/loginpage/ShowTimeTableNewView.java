@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -34,6 +35,8 @@ public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotA
     private AppCompatButton continueButton;
     private int currentUserId; // To store the current student's ID
 
+    private TextView tvTeachersInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +56,26 @@ public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotA
 
         continueButton = findViewById(R.id.button42);
         recyclerView = findViewById(R.id.recyclerTimeSlots);
+        tvTeachersInfo = findViewById(R.id.tvTeachersInfo);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        // Retrieve teacher's full name and referral code from Intent
+        Intent intentNameRef = getIntent();
+        String teacherFullName = intentNameRef.getStringExtra("USER_FIRST_NAME");
+        String teacherReferralCode = intentNameRef.getStringExtra("USER_SELF_REFERRAL_CODE");
+
+        // Set the text for tvTeachersInfo if the data is available
+        if (teacherFullName != null && teacherReferralCode != null) {
+            String teacherInfoText = teacherFullName + " (" + teacherReferralCode + ")";
+            tvTeachersInfo.setText(teacherInfoText);
+            Log.d("ShowTimeTableNewView", "Teacher Info set: " + teacherInfoText);
+        } else {
+            // Handle the case where the data might not be passed
+            tvTeachersInfo.setText("Teacher Info Not Available");
+            Log.w("ShowTimeTableNewView", "Teacher Full Name or Referral Code not found in Intent.");
+        }
+
 
         continueButton.setOnClickListener(v -> {
             Intent intent = new Intent(ShowTimeTableNewView.this, SearchStudentsDashboard.class);
