@@ -62,56 +62,43 @@ public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
         Log.d("ShowTimeTableNewViewTeacher", "Fetching timetable for UserID: " + userId);
 
         DatabaseHelper.getTimeTableByUserId(userId, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
-            // Inside the onSuccess callback of getTimeTableByUserId in ShowTimeTableNewViewTeacher.java
             @Override
             public void onSuccess(List<DatabaseHelper.TimeTableEntry> result) {
                 List<TimeSlot> slotList = new ArrayList<>();
-                // SharedPreferences sharedPreferences = getSharedPreferences("TimeTableData", MODE_PRIVATE);
                 SimpleDateFormat outputDayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
                 Calendar calendar = Calendar.getInstance();
 
                 for (DatabaseHelper.TimeTableEntry e : result) {
-                    if (!e.subjectName.toLowerCase().contains("demo")) {
-                        StringBuilder daysBuilder = new StringBuilder();
-                        if ("Monday".equalsIgnoreCase(e.mon)) daysBuilder.append("Monday, ");
-                        if ("Tuesday".equalsIgnoreCase(e.tue)) daysBuilder.append("Tuesday, ");
-                        if ("Wednessday".equalsIgnoreCase(e.wed)) daysBuilder.append("Wednesday, ");
-                        if ("Thru".equalsIgnoreCase(e.thur)) daysBuilder.append("Thursday, ");
-                        if ("Friday".equalsIgnoreCase(e.fri)) daysBuilder.append("Friday, ");
-                        if ("Saturday".equalsIgnoreCase(e.sat)) daysBuilder.append("Saturday, ");
-                        if ("Sunday".equalsIgnoreCase(e.sun)) daysBuilder.append("Sunday, ");
+                    StringBuilder daysBuilder = new StringBuilder();
+                    if ("Monday".equalsIgnoreCase(e.mon)) daysBuilder.append("Monday, ");
+                    if ("Tuesday".equalsIgnoreCase(e.tue)) daysBuilder.append("Tuesday, ");
+                    if ("Wednessday".equalsIgnoreCase(e.wed)) daysBuilder.append("Wednesday, ");
+                    if ("Thru".equalsIgnoreCase(e.thur)) daysBuilder.append("Thursday, ");
+                    if ("Friday".equalsIgnoreCase(e.fri)) daysBuilder.append("Friday, ");
+                    if ("Saturday".equalsIgnoreCase(e.sat)) daysBuilder.append("Saturday, ");
+                    if ("Sunday".equalsIgnoreCase(e.sun)) daysBuilder.append("Sunday, ");
 
-                        String dayString = "";
-                        if (daysBuilder.length() > 0) {
-                            dayString = daysBuilder.substring(0, daysBuilder.length() - 2); // Remove trailing ", "
-                        }
-                        if (dayString.isEmpty()) {
-                            dayString = "No Days Selected";
-                        }
-
-                        // You can directly use the values from the TimeTableEntry object
-                        String subject = e.subjectName;
-                        String grade = e.gradeName;
-                        String time = e.startTime + " - " + e.endTime;
-                        String courseFee = String.valueOf(e.courseFee);
-                        String batchCapacity = String.valueOf(e.noOfStudents);
-                        //Integer duration = e.durationNo;  // Get the integer value from the database
-                        String duration = e.durationType; // Use the String value
-                        slotList.add(new TimeSlot(
-                                subject,
-                                grade,
-                                dayString,
-                                time,
-                                courseFee,
-                                batchCapacity,
-                                duration
-                        ));
+                    String dayString = "";
+                    if (daysBuilder.length() > 0) {
+                        dayString = daysBuilder.substring(0, daysBuilder.length() - 2);
                     }
+                    if (dayString.isEmpty()) {
+                        dayString = "No Days Selected";
+                    }
+
+                    String subject = e.subjectName;
+                    String grade = e.gradeName;
+                    String time = e.startTime + " - " + e.endTime;
+                    String courseFee = String.valueOf(e.courseFee);
+                    String batchCapacity = String.valueOf(e.noOfStudents);
+                    String duration = e.durationType;
+                    slotList.add(new TimeSlot(subject, grade, dayString, time, courseFee, batchCapacity, duration));
                 }
 
                 runOnUiThread(() -> {
                     if (!slotList.isEmpty()) {
-                        TimeSlotAdapterTeacher adapter = new TimeSlotAdapterTeacher(slotList);
+                        // Pass both slotList and result to the adapter
+                        TimeSlotAdapterTeacher adapter = new TimeSlotAdapterTeacher(slotList, result);
                         recyclerViewTeacher.setAdapter(adapter);
                     } else {
                         Toast.makeText(ShowTimeTableNewViewTeacher.this, "No time slots available!", Toast.LENGTH_SHORT).show();

@@ -77,13 +77,21 @@
             android:textColor="#0F4D73"
             android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/imageView108"
-            android:layout_width="48dp"
+        <TextView
+            android:id="@+id/tvDemoInfoTeacher"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            app:srcCompat="@drawable/delete_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
+            android:fontFamily="@font/work_sans"
+            android:text="Demo: No Classes"
+            android:textColor="#4CAF50"
+            android:textSize="16sp"
+            android:visibility="gone" /> <ImageView
+        android:id="@+id/imageView108"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@drawable/delete_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

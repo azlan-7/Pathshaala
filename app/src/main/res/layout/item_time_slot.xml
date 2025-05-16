@@ -77,6 +77,16 @@
             android:fontFamily="@font/work_sans"
             android:text="Duration: " />
 
+        <TextView
+            android:id="@+id/tvDemoInfoStudent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/work_sans"
+            android:text="Demo: No Classes"
+            android:textColor="#4CAF50"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/linearLayoutOptTimeTable"
             android:layout_width="wrap_content"

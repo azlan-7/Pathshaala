@@ -139,7 +139,8 @@ public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotA
 
                 runOnUiThread(() -> {
                     if (!slotList.isEmpty()) {
-                        adapter = new TimeSlotAdapter(slotList);
+                        // Pass both slotList and result to the adapter
+                        adapter = new TimeSlotAdapter(slotList, result);
                         adapter.setOnOptInOutListener(ShowTimeTableNewView.this); // Set the listener
                         recyclerView.setAdapter(adapter);
                     } else {

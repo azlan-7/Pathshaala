@@ -11,16 +11,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginpage.R;
 import com.example.loginpage.models.TimeSlot;
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper.TimeTableEntry; // Import TimeTableEntry
 
 import java.util.List;
 
 public class TimeSlotAdapterTeacher extends RecyclerView.Adapter<TimeSlotAdapterTeacher.ViewHolder> {
 
     private List<TimeSlot> timeSlots;
+    private List<TimeTableEntry> timeTableEntries; // Add this list
     private OnDeleteClickListener onDeleteClickListener;
 
-    public TimeSlotAdapterTeacher(List<TimeSlot> timeSlots) {
+    // Modify the constructor to accept the list of TimeTableEntry
+    public TimeSlotAdapterTeacher(List<TimeSlot> timeSlots, List<TimeTableEntry> timeTableEntries) {
         this.timeSlots = timeSlots;
+        this.timeTableEntries = timeTableEntries;
     }
 
     public void setOnDeleteClickListener(OnDeleteClickListener listener) {
@@ -38,6 +42,8 @@ public class TimeSlotAdapterTeacher extends RecyclerView.Adapter<TimeSlotAdapter
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TimeSlot slot = timeSlots.get(position);
+        TimeTableEntry entry = timeTableEntries.get(position); // Get the corresponding entry
+
         holder.subjectTextTeacher.setText("Subject: " + slot.getSubject());
         holder.gradeTextTeacher.setText("Grade: " + slot.getGrade());
         holder.dayTextTeacher.setText("Day: " + slot.getDay());
@@ -45,6 +51,14 @@ public class TimeSlotAdapterTeacher extends RecyclerView.Adapter<TimeSlotAdapter
         holder.courseFeeTextTeacher.setText("Fee: " + slot.getCourseFee());
         holder.batchCapacityTextTeacher.setText("Students: " + slot.getBatchCapacity());
         holder.durationTextTeacher.setText("Duration: " + slot.getDuration());
+
+        // Handle Demo Class Information
+        if (entry.demoYN) {
+            holder.demoInfoTextTeacher.setVisibility(View.VISIBLE);
+            holder.demoInfoTextTeacher.setText("Demo: " + entry.demoDurationNo + " " + entry.demoDurationType);
+        } else {
+            holder.demoInfoTextTeacher.setVisibility(View.GONE);
+        }
 
         holder.deleteIconTeacher.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {
@@ -59,7 +73,7 @@ public class TimeSlotAdapterTeacher extends RecyclerView.Adapter<TimeSlotAdapter
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectTextTeacher, gradeTextTeacher, dayTextTeacher, timeTextTeacher, courseFeeTextTeacher, batchCapacityTextTeacher, durationTextTeacher;
+        TextView subjectTextTeacher, gradeTextTeacher, dayTextTeacher, timeTextTeacher, courseFeeTextTeacher, batchCapacityTextTeacher, durationTextTeacher, demoInfoTextTeacher;
         ImageView deleteIconTeacher;
 
         public ViewHolder(View itemView) {
@@ -71,6 +85,7 @@ public class TimeSlotAdapterTeacher extends RecyclerView.Adapter<TimeSlotAdapter
             courseFeeTextTeacher = itemView.findViewById(R.id.tvCourseFeeTeacher);
             batchCapacityTextTeacher = itemView.findViewById(R.id.tvBatchCapacityTeacher);
             durationTextTeacher = itemView.findViewById(R.id.tvDurationTeacher);
+            demoInfoTextTeacher = itemView.findViewById(R.id.tvDemoInfoTeacher); // Initialize the new TextView
             deleteIconTeacher = itemView.findViewById(R.id.imageView108);
         }
     }

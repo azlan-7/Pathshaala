@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 import com.example.loginpage.R;
 import com.example.loginpage.models.TimeSlot;
 
@@ -23,12 +24,15 @@ import java.util.List;
 public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHolder> {
 
     private List<TimeSlot> timeSlots;
+    private List<DatabaseHelper.TimeTableEntry> timeTableEntries; // Add this list
     private Context context;
-    private List<TimeSlot> optedInTimeSlots = new ArrayList<>(); // To keep track of opted-in slots
+    private List<TimeSlot> optedInTimeSlots = new ArrayList<>();
     private OnOptInOutListener onOptInOutListener;
 
-    public TimeSlotAdapter(List<TimeSlot> timeSlots) {
+    // Modify the constructor to accept the list of TimeTableEntry
+    public TimeSlotAdapter(List<TimeSlot> timeSlots, List<DatabaseHelper.TimeTableEntry> timeTableEntries) {
         this.timeSlots = timeSlots;
+        this.timeTableEntries = timeTableEntries;
     }
 
     // Method to get the list of opted-in time slots
@@ -52,6 +56,8 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TimeSlot slot = timeSlots.get(position);
+        DatabaseHelper.TimeTableEntry entry = timeTableEntries.get(position); // Get corresponding entry
+
         holder.subjectText.setText("Subject: " + slot.getSubject());
         holder.gradeText.setText("Grade: " + slot.getGrade());
         holder.dayText.setText("Day: " + slot.getDay());
@@ -59,14 +65,20 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
         holder.courseFeeText.setText("Course Fee: " + slot.getCourseFee());
         holder.noOfStudentsText.setText("Batch Capacity: " + slot.getBatchCapacity());
 
-        // Corrected Duration Display
-        String duration = slot.getDuration(); // Get the String duration
+        String duration = slot.getDuration();
         holder.durationTypeText.setText("Duration: " + duration);
+
+        // Handle Demo Class Information
+        if (entry.demoYN) {
+            holder.demoInfoTextView.setVisibility(View.VISIBLE);
+            holder.demoInfoTextView.setText("Demo: " + entry.demoDurationNo + " " + entry.demoDurationType);
+        } else {
+            holder.demoInfoTextView.setVisibility(View.GONE);
+        }
 
         Drawable checkedDrawable = ContextCompat.getDrawable(context, R.drawable.check_box_24dp_ffffff_fill0_wght400_grad0_opsz24);
         Drawable uncheckedDrawable = ContextCompat.getDrawable(context, R.drawable.check_box_outline_blank_24dp_ffffff_fill0_wght400_grad0_opsz24);
 
-        // Set initial state based on whether it was previously opted in (if you persist this data)
         boolean isOptedIn = optedInTimeSlots.contains(slot);
         if (isOptedIn) {
             holder.ivOptTimeTable.setImageDrawable(checkedDrawable);
@@ -83,22 +95,19 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
             boolean currentlyChecked = (currentDrawable != null && currentDrawable.getConstantState().equals(checkedDrawable.getConstantState()));
 
             if (currentlyChecked) {
-                // User wants to opt out
                 holder.ivOptTimeTable.setImageDrawable(uncheckedDrawable);
                 holder.tvOptTimeTable.setText("Choose Time");
                 holder.tvOptTimeTable.setTextColor(ContextCompat.getColor(context, android.R.color.white));
-                optedInTimeSlots.remove(slot); // Remove from the opted-in list
+                optedInTimeSlots.remove(slot);
             } else {
-                // User wants to opt in
                 holder.ivOptTimeTable.setImageDrawable(checkedDrawable);
                 holder.tvOptTimeTable.setText("Chosen");
                 holder.tvOptTimeTable.setTextColor(ContextCompat.getColor(context, android.R.color.white));
-                optedInTimeSlots.add(slot); // Add to the opted-in list
+                optedInTimeSlots.add(slot);
             }
 
-            // You might want to notify your activity about the change here
             if (onOptInOutListener != null) {
-                onOptInOutListener.onOptInOut(slot, !currentlyChecked); // Send the new opt-in status
+                onOptInOutListener.onOptInOut(slot, !currentlyChecked);
             }
         });
     }
@@ -109,7 +118,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectText, gradeText, dayText, timeText, courseFeeText, noOfStudentsText, durationTypeText;
+        TextView subjectText, gradeText, dayText, timeText, courseFeeText, noOfStudentsText, durationTypeText, demoInfoTextView;
         AppCompatButton tvOptTimeTable;
         ImageView ivOptTimeTable;
         LinearLayout linearLayoutOptTimeTable;
@@ -126,10 +135,10 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.ViewHo
             tvOptTimeTable = itemView.findViewById(R.id.tvOptTimeTable);
             ivOptTimeTable = itemView.findViewById(R.id.imageView);
             linearLayoutOptTimeTable = itemView.findViewById(R.id.linearLayoutOptTimeTable);
+            demoInfoTextView = itemView.findViewById(R.id.tvDemoInfoStudent); // Initialize the new TextView
         }
     }
 
-    // Interface to communicate opt-in/opt-out events to the activity
     public interface OnOptInOutListener {
         void onOptInOut(TimeSlot timeSlot, boolean isOptedIn);
     }
