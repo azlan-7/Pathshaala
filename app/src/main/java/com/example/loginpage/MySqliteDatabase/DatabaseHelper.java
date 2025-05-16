@@ -2518,7 +2518,7 @@ public class DatabaseHelper {
                     result.setSubjectName(rs.getString("SubjectName"));
                     result.setDesignationName(rs.getString("DesignationName"));
                     result.setInstitutionName(rs.getString("InstitutionName"));
-                    result.setUsername(rs.getString("username"));
+                    result.setUsername(rs.getString("name"));
                     result.setMobileNo(rs.getString("mobileno"));
                     result.setSelfReferralCode(rs.getString("selfreferralcode"));
                     result.setCurrentProfession(rs.getInt("CurrentProfession"));

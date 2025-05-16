@@ -40,6 +40,17 @@ public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotA
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_show_time_table_new_view);
 
+        Intent intentTeacher = getIntent();
+        int teacherUserIdFromIntent = intentTeacher.getIntExtra("USER_ID", -1); // Retrieve the teacher's UserId
+
+        if (teacherUserIdFromIntent != -1) {
+            Log.d("ShowTimeTableNewView", "Teacher UserID received from Intent: " + teacherUserIdFromIntent);
+            // Now you can use teacherUserIdFromIntent when sending the notification
+        } else {
+            Log.e("ShowTimeTableNewView", "Teacher UserID not received from Intent.");
+            // Handle the error appropriately, maybe finish the activity or load a default value
+        }
+
         continueButton = findViewById(R.id.button42);
         recyclerView = findViewById(R.id.recyclerTimeSlots);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -144,30 +155,33 @@ public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotA
 
     private void sendTimetableOptInNotification(TimeSlot timeSlot) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String studentName = sharedPreferences.getString("firstName", "Unknown"); // Get student's name
-        String studentGrade = sharedPreferences.getString("grade", "Unknown");   // Get student's grade
+        String studentName = sharedPreferences.getString("firstName", "Unknown");
+        String studentGrade = sharedPreferences.getString("grade", "Unknown");
 
-        // **Important:** We need to determine the teacher's ID here.
-        // For now, let's hardcode a teacher's ID for testing.
-        // **You will need to replace this with the actual logic to get the relevant teacher's ID.**
-        int teacherId = 1; // Replace with the actual teacher's User ID
+        Intent intentTeacher = getIntent();
+        int teacherId = intentTeacher.getIntExtra("USER_ID", -1); // Retrieve teacher's UserId here
 
-        String title = studentName + " (Grade: " + studentGrade + ") - Timetable Opt-In";
-        String message = "Student " + studentName + " (Grade " + studentGrade + ") has opted for the following timetable: " +
-                "Subject: " + timeSlot.getSubject() + ", " +
-                "Day(s): " + timeSlot.getDay() + ", " +
-                "Time: " + timeSlot.getTime() + ", " +
-                "Grade: " + timeSlot.getGrade(); // Include the timetable's grade as well
+        if (teacherId != -1) {
+            String title = studentName + " (Grade: " + studentGrade + ") - Timetable Opt-In";
+            String message = "Student " + studentName + " (Grade " + studentGrade + ") has opted for the following timetable: " +
+                    "Subject: " + timeSlot.getSubject() + ", " +
+                    "Day(s): " + timeSlot.getDay() + ", " +
+                    "Time: " + timeSlot.getTime() + ", " +
+                    "Grade: " + timeSlot.getGrade();
 
-        int notificationId = DatabaseHelper.insertNotification(currentUserId, title, message, "info");
+            int notificationId = DatabaseHelper.insertNotification(currentUserId, title, message, "info");
 
-        if (notificationId != -1) {
-            DatabaseHelper.insertNotificationRead(notificationId, teacherId);
-            Toast.makeText(this, "Notification sent to teacher.", Toast.LENGTH_SHORT).show();
-            Log.d("ShowTimeTableNewView", "Timetable opt-in notification sent. Notification ID: " + notificationId + ", Teacher ID: " + teacherId);
+            if (notificationId != -1) {
+                DatabaseHelper.insertNotificationRead(notificationId, teacherId);
+                Toast.makeText(this, "Notification sent to teacher.", Toast.LENGTH_SHORT).show();
+                Log.d("ShowTimeTableNewView", "Timetable opt-in notification sent. Notification ID: " + notificationId + ", Teacher ID: " + teacherId);
+            } else {
+                Toast.makeText(this, "Failed to send notification.", Toast.LENGTH_SHORT).show();
+                Log.e("ShowTimeTableNewView", "Failed to insert timetable opt-in notification.");
+            }
         } else {
-            Toast.makeText(this, "Failed to send notification.", Toast.LENGTH_SHORT).show();
-            Log.e("ShowTimeTableNewView", "Failed to insert timetable opt-in notification.");
+            Toast.makeText(this, "Error: Teacher ID not available.", Toast.LENGTH_SHORT).show();
+            Log.e("ShowTimeTableNewView", "Teacher ID not available from Intent.");
         }
     }
 }
