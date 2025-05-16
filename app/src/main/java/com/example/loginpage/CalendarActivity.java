@@ -7,124 +7,146 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-    private List<TimeSlot> timeSlots = new ArrayList<>(); // Not directly used now, using SharedPreferences
-
     private WebView calendarWebView;
+    private int currentTeacherId; // To store the logged-in teacher's ID
+    private final String HARDCODED_YEAR = "2025";
+    private final int HARDCODED_MONTH = Calendar.MAY; // Month is 0-indexed (0 for January, 4 for May)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        Log.d("CalendarActivity", "onCreate() called");
 
         calendarWebView = findViewById(R.id.calendarWebView);
         WebSettings webSettings = calendarWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
-        calendarWebView.addJavascriptInterface(this, "Android"); // Make CalendarActivity methods accessible in JS
+        calendarWebView.addJavascriptInterface(this, "Android");
         calendarWebView.loadUrl("file:///android_asset/calendar.html");
+        Log.d("CalendarActivity", "WebView loaded calendar.html");
 
-        // No need to initialize sample data anymore
+        // Get the logged-in teacher's ID from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        currentTeacherId = sharedPreferences.getInt("USER_ID", -1);
+        Log.d("CalendarActivity", "onCreate() - Retrieved Teacher ID: " + currentTeacherId);
+
+        // Load events when the activity is created
+        loadTeacherTimetable();
     }
 
-    @JavascriptInterface
-    public void showEventDialog(String start, String end, String eventId) {
-        // For now, let's just toast the info. You'd build a proper UI for adding/editing.
-        final String message;
-        if (eventId == null || eventId.isEmpty()) {
-            message = "Add Event: Start: " + start + ", End: " + end;
-        } else {
-            message = "Edit Event: ID: " + eventId + ", Start: " + start + ", End: " + end;
-        }
-        runOnUiThread(() -> Toast.makeText(CalendarActivity.this, message, Toast.LENGTH_LONG).show());
-    }
-
-    private void loadEvents() {
-        JSONArray eventsJson = new JSONArray();
-        SharedPreferences sp = getSharedPreferences("TimeTableData", MODE_PRIVATE);
-        Map<String, ?> allEntries = sp.getAll();
-        SimpleDateFormat timeParser = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        String hardcodedYear = "2025";
-        int hardcodedMonth = Calendar.MAY;
-
-        try {
-            for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-                String key = entry.getKey();
-                if (key.startsWith("subject_")) {
-                    String[] parts = key.split("_");
-                    if (parts.length == 4) {
-                        try {
-                            long timestamp = Long.parseLong(parts[1]);
-                            int dayOfWeekInt = Integer.parseInt(parts[2]);
-                            String startTimeStr = parts[3];
-                            String grade = sp.getString("grade_" + timestamp + "_" + parts[2] + "_" + startTimeStr, "");
-                            String subject = sp.getString(key, "");
-                            String timeRange = sp.getString("time_" + timestamp + "_" + parts[2] + "_" + startTimeStr, "");
-                            String savedYear = sp.getString("year_" + timestamp + "_" + parts[2] + "_" + startTimeStr, hardcodedYear);
-                            int savedMonth = sp.getInt("month_" + timestamp + "_" + parts[2] + "_" + startTimeStr, hardcodedMonth);
-
-                            if (timeRange != null && !timeRange.isEmpty()) {
-                                String[] times = timeRange.split(" - ");
-                                if (times.length == 2) {
-                                    Date startTime = timeParser.parse(times[0]);
-                                    Date endTime = timeParser.parse(times[1]);
-
-                                    Calendar startCal = Calendar.getInstance();
-                                    startCal.set(Calendar.YEAR, Integer.parseInt(savedYear));
-                                    startCal.set(Calendar.MONTH, savedMonth);
-                                    startCal.set(Calendar.DAY_OF_WEEK, getCalendarDay(dayOfWeekInt));
-                                    startCal.set(Calendar.HOUR_OF_DAY, new SimpleDateFormat("HH", Locale.getDefault()).parse(times[0]).getHours());
-                                    startCal.set(Calendar.MINUTE, new SimpleDateFormat("mm", Locale.getDefault()).parse(times[0]).getMinutes());
-                                    startCal.set(Calendar.SECOND, 0);
-
-                                    Calendar endCal = Calendar.getInstance();
-                                    endCal.set(Calendar.YEAR, Integer.parseInt(savedYear));
-                                    endCal.set(Calendar.MONTH, savedMonth);
-                                    endCal.set(Calendar.DAY_OF_WEEK, getCalendarDay(dayOfWeekInt));
-                                    endCal.set(Calendar.HOUR_OF_DAY, new SimpleDateFormat("HH", Locale.getDefault()).parse(times[1]).getHours());
-                                    endCal.set(Calendar.MINUTE, new SimpleDateFormat("mm", Locale.getDefault()).parse(times[1]).getMinutes());
-                                    endCal.set(Calendar.SECOND, 0);
-
-                                    JSONObject eventJson = new JSONObject();
-                                    eventJson.put("id", key);
-                                    eventJson.put("title", subject + " (" + grade + ")");
-                                    eventJson.put("startTime", dateFormat.format(startCal.getTime()));
-                                    eventJson.put("endTime", dateFormat.format(endCal.getTime()));
-                                    eventJson.put("subject", subject);
-                                    eventJson.put("grade", grade);
-                                    eventsJson.put(eventJson);
-                                }
-                            }
-                        } catch (NumberFormatException | ParseException e) {
-                            Log.e("CalendarActivity", "Error parsing SharedPreferences key: " + key, e);
-                        }
-                    }
+    private void loadTeacherTimetable() {
+        Log.d("CalendarActivity", "loadTeacherTimetable() called for Teacher ID: " + currentTeacherId);
+        if (currentTeacherId != -1) {
+            DatabaseHelper.getTimeTableByUserId(currentTeacherId, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
+                @Override
+                public void onSuccess(List<DatabaseHelper.TimeTableEntry> timeTableEntries) {
+                    Log.d("CalendarActivity", "loadTeacherTimetable() - onSuccess: Retrieved " + timeTableEntries.size() + " timetable entries.");
+                    JSONArray eventsJson = formatTimetableToCalendarEvents(timeTableEntries);
+                    final String js = "javascript:addEventsToCalendar('" + eventsJson.toString() + "');";
+                    runOnUiThread(() -> {
+                        calendarWebView.evaluateJavascript(js, null);
+                        Log.d("CalendarActivity", "loadTeacherTimetable() - onSuccess: Evaluated JavaScript: " + js);
+                    });
                 }
+
+                @Override
+                public void onError(String error) {
+                    Log.e("CalendarActivity", "loadTeacherTimetable() - onError: Error fetching teacher timetable: " + error);
+                    runOnUiThread(() -> Toast.makeText(CalendarActivity.this, "Error loading timetable", Toast.LENGTH_SHORT).show());
+                }
+            });
+        } else {
+            Log.e("CalendarActivity", "loadTeacherTimetable() - Error: Teacher ID not available.");
+            runOnUiThread(() -> Toast.makeText(CalendarActivity.this, "Teacher ID not available", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private JSONArray formatTimetableToCalendarEvents(List<DatabaseHelper.TimeTableEntry> entries) {
+        Log.d("CalendarActivity", "formatTimetableToCalendarEvents() called with " + entries.size() + " entries.");
+        JSONArray eventsArray = new JSONArray();
+        SimpleDateFormat timeParser = new SimpleDateFormat("hh:mm a", Locale.getDefault()); // Corrected format
+        SimpleDateFormat outputTimeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+
+        for (DatabaseHelper.TimeTableEntry entry : entries) {
+            Log.d("CalendarActivity", "formatTimetableToCalendarEvents() - Processing entry: Subject=" + entry.subjectName + ", StartTime=" + entry.startTime + ", EndTime=" + entry.endTime);
+            try {
+                // Process each day of the week
+                processDay(eventsArray, entry, "Monday", entry.mon, timeParser, outputTimeFormat, 1);
+                processDay(eventsArray, entry, "Tuesday", entry.tue, timeParser, outputTimeFormat, 2);
+                processDay(eventsArray, entry, "Wednesday", entry.wed, timeParser, outputTimeFormat, 3);
+                processDay(eventsArray, entry, "Thursday", entry.thur, timeParser, outputTimeFormat, 4);
+                processDay(eventsArray, entry, "Friday", entry.fri, timeParser, outputTimeFormat, 5);
+                processDay(eventsArray, entry, "Saturday", entry.sat, timeParser, outputTimeFormat, 6);
+                processDay(eventsArray, entry, "Sunday", entry.sun, timeParser, outputTimeFormat, 7);
+
+            } catch (ParseException | JSONException e) {
+                Log.e("CalendarActivity", "formatTimetableToCalendarEvents() - Error formatting timetable entry: " + entry.subjectName, e);
             }
+        }
+        Log.d("CalendarActivity", "formatTimetableToCalendarEvents() - Returning JSON array: " + eventsArray.toString());
+        return eventsArray;
+    }
 
-            final String js = "javascript:addEventsToCalendar('" + eventsJson.toString() + "');";
-            runOnUiThread(() -> calendarWebView.evaluateJavascript(js, null));
+    private void processDay(JSONArray eventsArray, DatabaseHelper.TimeTableEntry entry, String dayName, String dayFlag,
+                            SimpleDateFormat timeParser, SimpleDateFormat outputTimeFormat, int dayOfWeek)
+            throws ParseException, JSONException {
+        if (dayFlag != null && (dayFlag.equalsIgnoreCase(dayName.substring(0, 3)) || dayFlag.equalsIgnoreCase(dayName))) {
+            Log.d("CalendarActivity", "processDay() - Processing day: " + dayName + " for subject: " + entry.subjectName);
+            Date startTime = timeParser.parse(entry.startTime);
+            Date endTime = timeParser.parse(entry.endTime);
+            Log.d("CalendarActivity", "processDay() - Parsed Start Time: " + startTime + ", End Time: " + endTime);
 
-        } catch (JSONException e) {
-            Log.e("CalendarActivity", "Error creating JSON for calendar events", e);
+            Calendar startCal = Calendar.getInstance();
+            startCal.set(Calendar.YEAR, Integer.parseInt(HARDCODED_YEAR));
+            startCal.set(Calendar.MONTH, HARDCODED_MONTH);
+            startCal.set(Calendar.DAY_OF_WEEK, getCalendarDay(dayOfWeek));
+            startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(outputTimeFormat.format(startTime).split(":")[0]));
+            startCal.set(Calendar.MINUTE, Integer.parseInt(outputTimeFormat.format(startTime).split(":")[1]));
+            startCal.set(Calendar.SECOND, 0);
+            Log.d("CalendarActivity", "processDay() - Start Calendar Time: " + dateFormat.format(startCal.getTime()));
+
+            Calendar endCal = Calendar.getInstance();
+            endCal.set(Calendar.YEAR, Integer.parseInt(HARDCODED_YEAR));
+            endCal.set(Calendar.MONTH, HARDCODED_MONTH);
+            endCal.set(Calendar.DAY_OF_WEEK, getCalendarDay(dayOfWeek));
+            endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(outputTimeFormat.format(endTime).split(":")[0]));
+            endCal.set(Calendar.MINUTE, Integer.parseInt(outputTimeFormat.format(endTime).split(":")[1]));
+            endCal.set(Calendar.SECOND, 0);
+            Log.d("CalendarActivity", "processDay() - End Calendar Time: " + dateFormat.format(endCal.getTime()));
+
+            JSONObject eventJson = new JSONObject();
+            eventJson.put("id", "timetable_" + entry.timeTableId + "_" + dayOfWeek); // Unique ID
+            eventJson.put("title", entry.subjectName + " (" + entry.gradeName + ")");
+            eventJson.put("startTime", dateFormat.format(startCal.getTime()));
+            eventJson.put("endTime", dateFormat.format(endCal.getTime()));
+            eventJson.put("subject", entry.subjectName);
+            eventJson.put("grade", entry.gradeName);
+            eventsArray.put(eventJson);
+            Log.d("CalendarActivity", "processDay() - Added event to JSON array: " + eventJson.toString());
+        } else {
+            Log.d("CalendarActivity", "processDay() - Day " + dayName + " is not active for subject: " + entry.subjectName);
         }
     }
 
@@ -137,70 +159,27 @@ public class CalendarActivity extends AppCompatActivity {
             case 5: return Calendar.FRIDAY;
             case 6: return Calendar.SATURDAY;
             case 7: return Calendar.SUNDAY;
-            default: return Calendar.MONDAY; // Default to Monday if the number is invalid
+            default: return Calendar.MONDAY;
         }
+    }
+
+    @JavascriptInterface
+    public void showEventDialog(String start, String end, String eventId) {
+        Log.d("CalendarActivity", "showEventDialog() from JS - Start: " + start + ", End: " + end + ", Event ID: " + eventId);
+        final String message;
+        if (eventId == null || eventId.startsWith("timetable_")) {
+            // Prevent editing of timetable events from the calendar for now
+            message = "Timetable events cannot be edited here.";
+        } else {
+            message = "Edit Event: ID: " + eventId + ", Start: " + start + ", End: " + end;
+        }
+        runOnUiThread(() -> Toast.makeText(CalendarActivity.this, message, Toast.LENGTH_LONG).show());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadEvents();
-    }
-
-    // The TimeSlot inner class remains the same
-    private static class TimeSlot {
-        private int id;
-        private Date startTime;
-        private Date endTime;
-        private String subject;
-        private String grade;
-
-        public TimeSlot(int id, Date startTime, Date endTime, String subject, String grade) {
-            this.id = id;
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.subject = subject;
-            this.grade = grade;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public Date getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(Date startTime) {
-            this.startTime = startTime;
-        }
-
-        public Date getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(Date endTime) {
-            this.endTime = endTime;
-        }
-
-        public String getSubject() {
-            return subject;
-        }
-
-        public void setSubject(String subject) {
-            this.subject = subject;
-        }
-
-        public String getGrade() {
-            return grade;
-        }
-
-        public void setGrade(String grade) {
-            this.grade = grade;
-        }
+        Log.d("CalendarActivity", "onResume() called - Reloading teacher timetable.");
+        loadTeacherTimetable(); // Reload timetable when the activity resumes
     }
 }

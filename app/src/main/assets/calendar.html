@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.14.1/jquery.timepicker.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.14.1/jquery.timepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <style>
         .fc-event {
           cursor: pointer;
@@ -22,24 +23,25 @@
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay' // Add day/week/month toggles
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay' // Add day/week/month toggles (these are also buttons)
                 },
                 events: [], // Start with empty events.  Load from Android.
                 selectable: true,
                 select: function(selectionInfo) {
-                    // Call Android function to show dialog.
                     var start = selectionInfo.startStr;
                     var end = selectionInfo.endStr;
                     if (android && android.showEventDialog) {
                         android.showEventDialog(start, end, null); // null for new event
+                        console.log("JS: showEventDialog (select) called with start:", start, "end:", end);
                     } else {
-                        alert("Android interface not available.  Cannot add event.");
+                        alert("Android interface not available. Cannot add event.");
                     }
                 },
                 eventClick: function(clickInfo) {
                     var event = clickInfo.event;
                     if (android && android.showEventDialog) {
                         android.showEventDialog(event.startStr, event.endStr, event.id);
+                        console.log("JS: showEventDialog (eventClick) called with start:", event.startStr, "end:", event.endStr, "id:", event.id);
                     } else {
                         alert("Android interface not available. Cannot edit event.");
                     }
@@ -50,59 +52,100 @@
 
                     let time = document.createElement('div');
                     time.style.fontSize = '0.8em';
-                    time.style.color = '#888';
+                    time.style.color = '#999999';
                     time.innerHTML = moment(arg.event.start).format('h:mm a') + ' - ' + moment(arg.event.end).format('h:mm a');
                     content.appendChild(time);
                     return { domNodes: [content] }
                 }
             });
             calendar.render();
+            console.log("JS: Calendar rendered.");
+
+            // Button click listeners (alternative to headerToolbar for separate buttons)
+            $('#monthViewButton').on('click', function() {
+                calendar.changeView('dayGridMonth');
+                console.log("JS: Month View button clicked.");
+            });
+
+            $('#weekViewButton').on('click', function() {
+                calendar.changeView('timeGridWeek');
+                console.log("JS: Week View button clicked.");
+            });
+
+            $('#dayViewButton').on('click', function() {
+                calendar.changeView('timeGridDay');
+                console.log("JS: Day View button clicked.");
+            });
 
             // Expose a function to the Android activity to add events.
             window.addEventsToCalendar = function(eventsJson) {
-                var events = JSON.parse(eventsJson);
-                calendar.removeAllEvents(); // Clear existing events
-                events.forEach(function(eventData) {
-                    calendar.addEvent({
-                        id: eventData.id,
-                        title: eventData.subject + ' (' + eventData.grade + ')',
-                        start: eventData.startTime,
-                        end: eventData.endTime,
-                        subject: eventData.subject, // Store custom data
-                        grade: eventData.grade
+                console.log("JS: addEventsToCalendar called with JSON:", eventsJson);
+                try {
+                    var events = JSON.parse(eventsJson);
+                    calendar.removeAllEvents(); // Clear existing events
+                    events.forEach(function(eventData) {
+                        console.log("JS: Adding event - ID:", eventData.id, "Title:", eventData.title, "Start:", eventData.startTime, "End:", eventData.endTime);
+                        calendar.addEvent({
+                            id: eventData.id,
+                            title: eventData.title,
+                            start: eventData.startTime,
+                            end: eventData.endTime,
+                            subject: eventData.subject, // Store custom data
+                            grade: eventData.grade
+                        });
                     });
-                });
+                    calendar.refetchEvents(); // Re-render to show new events
+                    console.log("JS: Events added to calendar.");
+                } catch (e) {
+                    console.error("JS: Error parsing events JSON:", e);
+                }
             };
 
             // Expose a function to the Android activity to update an event.
             window.updateEventInCalendar = function(eventId, updatedEventJson) {
-                var updatedEvent = JSON.parse(updatedEventJson);
-                var calendarEvent = calendar.getEventById(eventId);
-                if (calendarEvent) {
-                    calendarEvent.setProp('title', updatedEvent.subject + ' (' + updatedEvent.grade + ')');
-                    calendarEvent.setStart(updatedEvent.startTime);
-                    calendarEvent.setEnd(updatedEvent.endTime);
-                    calendarEvent.setExtendedProp('subject', updatedEvent.subject);
-                    calendarEvent.setExtendedProp('grade', updatedEvent.grade);
+                console.log("JS: updateEventInCalendar called with ID:", eventId, "JSON:", updatedEventJson);
+                try {
+                    var updatedEvent = JSON.parse(updatedEventJson);
+                    var calendarEvent = calendar.getEventById(eventId);
+                    if (calendarEvent) {
+                        calendarEvent.setProp('title', updatedEvent.subject + ' (' + updatedEvent.grade + ')');
+                        calendarEvent.setStart(updatedEvent.startTime);
+                        calendarEvent.setEnd(updatedEvent.endTime);
+                        calendarEvent.setExtendedProp('subject', updatedEvent.subject);
+                        calendarEvent.setExtendedProp('grade', updatedEvent.grade);
+                        console.log("JS: Event with ID:", eventId, "updated.");
+                    } else {
+                        console.warn("JS: Event with ID:", eventId, "not found for update.");
+                    }
+                } catch (e) {
+                    console.error("JS: Error parsing updated event JSON:", e);
                 }
             };
 
              // Expose a function to the Android activity to delete an event.
             window.deleteEventFromCalendar = function(eventId) {
+                console.log("JS: deleteEventFromCalendar called with ID:", eventId);
                 var calendarEvent = calendar.getEventById(eventId);
                 if (calendarEvent) {
                     calendarEvent.remove();
+                    console.log("JS: Event with ID:", eventId, "deleted.");
+                } else {
+                    console.warn("JS: Event with ID:", eventId, "not found for deletion.");
                 }
             };
 
             // Expose a function to refresh the calendar
             window.refetchCalendarEvents = function() {
+                console.log("JS: refetchCalendarEvents called.");
                 calendar.refetchEvents();
             }
         });
     </script>
 </head>
 <body>
+<button id="monthViewButton">Month View</button>
+<button id="weekViewButton">Week View</button>
+<button id="dayViewButton">Day View</button>
 <div id="calendar"></div>
 </body>
 </html>
