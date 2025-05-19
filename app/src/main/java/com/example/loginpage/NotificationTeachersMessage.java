@@ -2,9 +2,6 @@ package com.example.loginpage;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,14 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
-import com.example.loginpage.adapters.NotificationAdapter;
+import com.example.loginpage.adapters.NotificationAdapter; // Keep this import
+import com.example.loginpage.adapters.NotificationWithSenderAdapter; // Import the new adapter
 import com.example.loginpage.models.Notification;
+import com.example.loginpage.models.NotificationWithSender;
 
 import java.util.List;
 
 public class NotificationTeachersMessage extends AppCompatActivity {
-
-    private LinearLayout notificationsLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +37,19 @@ public class NotificationTeachersMessage extends AppCompatActivity {
         }
 
         new Thread(() -> {
-            Log.d("NotificationTeacher", "Fetching notifications for user ID: " + userId);
-            List<Notification> notifications = DatabaseHelper.getNotificationsForUser(userId);
+            Log.d("NotificationTeacher", "Fetching notifications for user ID: " + userId + " with sender info");
+            List<NotificationWithSender> notifications = DatabaseHelper.getNotificationsWithSender(userId);
             Log.d("NotificationTeacher", "Number of notifications fetched: " + (notifications != null ? notifications.size() : 0));
             if (notifications != null) {
-                for (Notification notif : notifications) {
-                    Log.d("NotificationTeacher", "Fetched Notification - ID: " + notif.getId() + ", Title: " + notif.getTitle() + ", Type: " + notif.getType());
+                for (NotificationWithSender notif : notifications) {
+                    Log.d("NotificationTeacher", "Fetched Notification - ID: " + notif.getId() + ", Title: " + notif.getTitle() + ", Type: " + notif.getType() + ", Sender: " + notif.getSenderName());
                 }
             }
             runOnUiThread(() -> {
                 if (notifications != null && !notifications.isEmpty()) {
-                    NotificationAdapter adapter = new NotificationAdapter(notifications);
+                    NotificationWithSenderAdapter adapter = new NotificationWithSenderAdapter(notifications); // Use the new adapter
                     recyclerView.setAdapter(adapter);
-                    Log.d("NotificationTeacher", "Adapter set with " + notifications.size() + " notifications.");
+                    Log.d("NotificationTeacher", "Adapter set with " + notifications.size() + " notifications (with sender info).");
                 } else {
                     Toast.makeText(this, "No notifications found.", Toast.LENGTH_SHORT).show();
                     Log.d("NotificationTeacher", "No notifications found for user ID: " + userId);

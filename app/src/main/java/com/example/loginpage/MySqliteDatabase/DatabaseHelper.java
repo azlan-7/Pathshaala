@@ -37,6 +37,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.example.loginpage.models.NotificationWithSender;
 import com.example.loginpage.models.UserDetailsClass;
 import com.example.loginpage.models.UserInfoItem;
 import com.example.loginpage.models.UserSearchResult;
@@ -1935,8 +1937,7 @@ public class DatabaseHelper {
     }
 
     public static void markNotificationRead(int notificationId, int userId) {
-        String sql = "UPDATE Notification_Reads SET read_at = DATEADD(minute, 750, GETDATE()) " +
-                "WHERE notification_id = ? AND user_id = ?";
+        String sql = "{call markNotificationRead(?, ?)}"; // SQL to call the stored procedure
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -1976,6 +1977,37 @@ public class DatabaseHelper {
             Log.d("DatabaseHelper", "User ID: " + userId);
         } catch (SQLException e) {
             Log.e("DatabaseHelper", "getNotificationsForUser Error: " + e.getMessage());
+        }
+        return notifications;
+    }
+
+    public static List<NotificationWithSender> getNotificationsWithSender(int userId) {
+        List<NotificationWithSender> notifications = new ArrayList<>();
+        String sql = "{call SelectNotifications(?)}"; // SQL to call the stored procedure
+
+        try (Connection conn = getConnection();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                notifications.add(new NotificationWithSender(
+                        rs.getInt("id"),
+                        rs.getInt("sender_id"),
+                        rs.getString("title"),
+                        rs.getString("message"),
+                        rs.getString("type"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("read_at"),
+                        rs.getString("sendername"),
+                        rs.getString("selfreferralcode")
+                ));
+
+            }
+
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "getNotificationsWithSender Error: " + e.getMessage());
         }
         return notifications;
     }

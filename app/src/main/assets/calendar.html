@@ -11,6 +11,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.14.1/jquery.timepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <style>
+        html, body {
+            height: 100%; /* Make html and body take full height of the viewport */
+            margin: 0; /* Remove default body margin */
+            padding: 0; /* Remove default body padding */
+        }
+        #calendar {
+            width: 100%; /* Make the calendar container take full width */
+            height: calc(100% - 0px); /* Adjust height to account for any top/bottom elements if needed */
+            /* If you have buttons or other elements above the calendar, adjust the subtraction accordingly. */
+        }
         .fc-event {
           cursor: pointer;
         }
@@ -52,7 +62,7 @@
 
                     let time = document.createElement('div');
                     time.style.fontSize = '0.8em';
-                    time.style.color = '#999999';
+                    time.style.color = '#A9C3C8'; // Changed the color here
                     time.innerHTML = moment(arg.event.start).format('h:mm a') + ' - ' + moment(arg.event.end).format('h:mm a');
                     content.appendChild(time);
                     return { domNodes: [content] }
@@ -143,9 +153,6 @@
     </script>
 </head>
 <body>
-<button id="monthViewButton">Month View</button>
-<button id="weekViewButton">Week View</button>
-<button id="dayViewButton">Day View</button>
 <div id="calendar"></div>
 </body>
 </html>

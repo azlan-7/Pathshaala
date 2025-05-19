@@ -86,15 +86,12 @@ public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotA
         int userIdFromSharedPrefs = sharedPreferences.getInt("USER_ID", -1);
         int userIdFromIntent = getIntent().getIntExtra("USER_ID", -1);
 
-        if (userIdFromIntent != -1) {
-            currentUserId = userIdFromIntent;
-            Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from Intent: " + currentUserId);
-        } else {
-            currentUserId = userIdFromSharedPrefs;
-            Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from SharedPreferences: " + currentUserId);
-        }
+        currentUserId = userIdFromSharedPrefs;
+        Log.d("ShowTimeTableNewView", "Fetching UserId(currentUserId) " + currentUserId);
+        Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from Intent: " + userIdFromIntent);
 
-        DatabaseHelper.getTimeTableByUserId(currentUserId, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
+
+        DatabaseHelper.getTimeTableByUserId(userIdFromIntent, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
             @Override
             public void onSuccess(List<DatabaseHelper.TimeTableEntry> result) {
                 List<TimeSlot> slotList = new ArrayList<>();

@@ -45,6 +45,8 @@ public class NotificationStudentsMessage extends AppCompatActivity implements Da
         receiverUserId = intent.getIntExtra("USER_ID", -1);
         receiverFirstName = intent.getStringExtra("USER_FIRST_NAME");
 
+        Log.d("NotificationStudentsMessage","Teachers Id received through Intent: " + receiverUserId);
+
         if (receiverPhoneNumber == null || receiverUserId == -1) {
             Toast.makeText(this, "Recipient details not found.", Toast.LENGTH_SHORT).show();
             finish();
@@ -115,7 +117,7 @@ public class NotificationStudentsMessage extends AppCompatActivity implements Da
         int notificationId = DatabaseHelper.insertNotification(senderId, title, message, userType);
 
         if (notificationId != -1) {
-            DatabaseHelper.insertNotificationRead(notificationId, receiverUserId); // Insert into Notification_Reads for user 10
+            DatabaseHelper.insertNotificationRead(notificationId, receiverUserId); // Insert into Notification_Reads for user
             Toast.makeText(this, "Message sent successfully. Notification ID: " + notificationId + " for Teacher's UserId: " + receiverUserId, Toast.LENGTH_SHORT).show();
             messageNotification.setText("");
             messageTitle.setText("");
