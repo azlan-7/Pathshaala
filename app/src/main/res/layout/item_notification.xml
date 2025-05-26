@@ -22,6 +22,16 @@
             android:layout_marginTop="4dp" />
 
         <TextView
+            android:id="@+id/tvTimeStamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Created At...."
+            android:fontFamily="@font/work_sans"
+            android:textSize="15sp"
+            android:textColor="#0F4D73"
+            android:layout_marginTop="4dp" />
+
+        <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

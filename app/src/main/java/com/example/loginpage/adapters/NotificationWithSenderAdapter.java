@@ -69,7 +69,15 @@ public class NotificationWithSenderAdapter extends RecyclerView.Adapter<Recycler
             MessageViewHolder viewHolder = (MessageViewHolder) holder;
             viewHolder.titleTextView.setText(notification.getTitle());
             viewHolder.messageTextView.setText((notification.getMessage()));
-            viewHolder.sendersName.setText((notification.getSenderName()));
+            viewHolder.sendersName.setText(notification.getSenderName());
+            String fullTimestamp = "" + notification.getCreatedAt();
+            if (fullTimestamp.length() >= 16) {
+                String trimmedTimestamp = fullTimestamp.substring(0, 16);
+                viewHolder.timeStamp.setText(trimmedTimestamp);
+            } else {
+                // Handle the case where the timestamp string is shorter than expected
+                viewHolder.timeStamp.setText(fullTimestamp); // Or some other error handling
+            }
             Log.d("NotificationWSA", "Message - Sender: " + notification.getSenderName());
         }
     }
@@ -116,12 +124,14 @@ public class NotificationWithSenderAdapter extends RecyclerView.Adapter<Recycler
         public TextView titleTextView;
         public TextView messageTextView;
         public TextView sendersName;
+        public TextView timeStamp;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.tvTitle);
             messageTextView = itemView.findViewById(R.id.tvMessage);
             sendersName = itemView.findViewById(R.id.tvSender);
+            timeStamp = itemView.findViewById(R.id.tvTimeStamp);
         }
     }
 
