@@ -68,7 +68,8 @@ public class NotificationWithSenderAdapter extends RecyclerView.Adapter<Recycler
         } else if (holder instanceof MessageViewHolder) {
             MessageViewHolder viewHolder = (MessageViewHolder) holder;
             viewHolder.titleTextView.setText(notification.getTitle());
-            viewHolder.messageTextView.setText((notification.getMessage() + " From: " + notification.getSenderName())); // Display sender name
+            viewHolder.messageTextView.setText((notification.getMessage()));
+            viewHolder.sendersName.setText((notification.getSenderName()));
             Log.d("NotificationWSA", "Message - Sender: " + notification.getSenderName());
         }
     }
@@ -114,11 +115,13 @@ public class NotificationWithSenderAdapter extends RecyclerView.Adapter<Recycler
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         public TextView titleTextView;
         public TextView messageTextView;
+        public TextView sendersName;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.tvTitle);
             messageTextView = itemView.findViewById(R.id.tvMessage);
+            sendersName = itemView.findViewById(R.id.tvSender);
         }
     }
 
