@@ -84,6 +84,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
     AutoCompleteTextView subjectDropdown;
     AutoCompleteTextView gradeDropdown;
     Map<String, String> gradeMap = new HashMap<>();
+    private TextView notificationCountTextView;
 
 
     @Override
@@ -101,6 +102,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
         profileIcon = findViewById(R.id.imageView151);
         profileIconTop = findViewById(R.id.imageView151);
         notificationButton = findViewById(R.id.imageView141);
+        notificationCountTextView = findViewById(R.id.notificationCount);
 
         // ✅ Fetch Profile Image from Database
         fetchProfileImageFromDB();
@@ -120,6 +122,8 @@ public class TeachersDashboardNew extends AppCompatActivity {
 
         loadSubjects();
         loadGrades();
+
+        loadUnreadNotificationCount();
 
         gradeDropdown.setOnClickListener(v -> gradeDropdown.showDropDown());
         subjectDropdown.setOnClickListener(v -> subjectDropdown.showDropDown());
@@ -149,6 +153,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
         });
 
         notificationButton.setOnClickListener(v -> {
+            notificationCountTextView.setVisibility(View.GONE);
             Intent intent = new Intent(TeachersDashboardNew.this, NotificationTeachersMessage.class);
             startActivity(intent);
         });
@@ -162,7 +167,6 @@ public class TeachersDashboardNew extends AppCompatActivity {
         });
 
         // bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
     }
 
 
@@ -268,12 +272,38 @@ public class TeachersDashboardNew extends AppCompatActivity {
         });
     }
 
+    private void loadUnreadNotificationCount() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("USER_ID", -1);
+        Log.d(TAG, "loadUnreadNotificationCount - User ID from SharedPreferences: " + userId); // Add this log
+
+        if (userId != -1) {
+            new Thread(() -> {
+                int unreadCount = DatabaseHelper.getUnreadNotificationCount(userId);
+                runOnUiThread(() -> {
+                    Log.d(TAG, "Unread count received: " + unreadCount);
+                    if (unreadCount > 0) {
+                        notificationCountTextView.setText(String.valueOf(unreadCount));
+                        notificationCountTextView.setVisibility(View.VISIBLE);
+                        Log.d(TAG, "Notification count TextView is now visible with count: " + unreadCount);
+                    } else {
+                        notificationCountTextView.setVisibility(View.GONE);
+                        Log.d(TAG, "Notification count TextView is now gone.");
+                    }
+                });
+            }).start();
+        } else {
+            Log.e(TAG, "User ID not found in SharedPreferences.");
+        }
+    } 
+
 
     @Override
     protected void onResume() {
         super.onResume();
         mainTextHandler.postDelayed(this::loadUserName, 10000);
         // loadUserName(); // Ensure name updates when returning to this activity
+        loadUnreadNotificationCount();
     }
 
     // Function to get the username of the logged in user
@@ -512,6 +542,4 @@ public class TeachersDashboardNew extends AppCompatActivity {
             });
         }).start();
     }
-
-
 }

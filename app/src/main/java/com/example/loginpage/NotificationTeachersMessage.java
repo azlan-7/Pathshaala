@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
-import com.example.loginpage.adapters.NotificationAdapter; // Keep this import
-import com.example.loginpage.adapters.NotificationWithSenderAdapter; // Import the new adapter
-import com.example.loginpage.models.Notification;
+import com.example.loginpage.adapters.NotificationWithSenderAdapter;
 import com.example.loginpage.models.NotificationWithSender;
 
 import java.util.List;
@@ -44,10 +42,15 @@ public class NotificationTeachersMessage extends AppCompatActivity {
                 for (NotificationWithSender notif : notifications) {
                     Log.d("NotificationTeacher", "Fetched Notification - ID: " + notif.getId() + ", Title: " + notif.getTitle() + ", Type: " + notif.getType() + ", Sender: " + notif.getSenderName());
                 }
+                // **MARK AS READ FOR TEACHER (HERE)**
+                for (NotificationWithSender notification : notifications) {
+                    DatabaseHelper.markNotificationRead(notification.getId(), userId); // Assuming markNotificationRead works for teachers too
+                    Log.d("NotificationTeacher", "Marked notification as read - ID: " + notification.getId());
+                }
             }
             runOnUiThread(() -> {
                 if (notifications != null && !notifications.isEmpty()) {
-                    NotificationWithSenderAdapter adapter = new NotificationWithSenderAdapter(notifications); // Use the new adapter
+                    NotificationWithSenderAdapter adapter = new NotificationWithSenderAdapter(notifications);
                     recyclerView.setAdapter(adapter);
                     Log.d("NotificationTeacher", "Adapter set with " + notifications.size() + " notifications (with sender info).");
                 } else {

@@ -1950,6 +1950,32 @@ public class DatabaseHelper {
         }
     }
 
+    // In DatabaseHelper.java
+    public static int getUnreadNotificationCount(int userId) {
+        String sql = "SELECT COUNT(*) FROM Notification_Reads WHERE readbyuserid IS NULL AND user_id = ?";
+        int unreadCount = 0;
+
+        Log.d("DatabaseHelper", "getUnreadNotificationCount called for userId: " + userId);
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId); // Set the userId dynamically in the query
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                unreadCount = rs.getInt(1);
+                Log.d("DatabaseHelper", "Unread notification count found: " + unreadCount);
+            } else {
+                Log.d("DatabaseHelper", "No unread notification count found.");
+            }
+
+        } catch (SQLException e) {
+            Log.e("DatabaseHelper", "getUnreadNotificationCount Error: " + e.getMessage());
+        }
+        return unreadCount;
+    }
+
     public static List<Notification> getNotificationsForUser(int userId) {
         List<Notification> notifications = new ArrayList<>();
         String sql = "SELECT n.id, n.title, n.message, n.type, n.created_at, r.read_at " +
@@ -1980,6 +2006,9 @@ public class DatabaseHelper {
         }
         return notifications;
     }
+
+
+
 
     public static List<NotificationWithSender> getNotificationsWithSender(int userId) {
         List<NotificationWithSender> notifications = new ArrayList<>();
@@ -2379,7 +2408,7 @@ public class DatabaseHelper {
         }
     }
 
-    public static void getTimeTableByUserId(int userId, ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>> callback) {
+    public static void getTimeTableByUserId(int userId, int SubjectId, int GradeID, ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>> callback) {
         new Thread(() -> {
             List<TimeTableEntry> timeTableEntries = new ArrayList<>();
             try (Connection conn = getConnection()) {
@@ -2388,8 +2417,8 @@ public class DatabaseHelper {
                 stmt.setInt(1, 3); // Set @qryStatus to 3 for retrieval
                 stmt.setInt(2, 0); // Dummy value for @TimeTableId
                 stmt.setInt(3, userId);
-                stmt.setInt(4, 0); // Dummy value for @SubjectId
-                stmt.setInt(5, 0); // Dummy value for @GradeID
+                stmt.setInt(4, SubjectId); // Dummy value for @SubjectId
+                stmt.setInt(5, GradeID); // Dummy value for @GradeID
                 stmt.setString(6, null); // Dummy value for @Mon
                 stmt.setString(7, null); // Dummy value for @Tue
                 stmt.setString(8, null); // Dummy value for @Wed

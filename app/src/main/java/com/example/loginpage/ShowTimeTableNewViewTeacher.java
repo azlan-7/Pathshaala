@@ -61,7 +61,7 @@ public class ShowTimeTableNewViewTeacher extends AppCompatActivity {
         int userId = sharedPreferences.getInt("USER_ID", -1);
         Log.d("ShowTimeTableNewViewTeacher", "Fetching timetable for UserID: " + userId);
 
-        DatabaseHelper.getTimeTableByUserId(userId, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
+        DatabaseHelper.getTimeTableByUserId(userId, 0,0,new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
             @Override
             public void onSuccess(List<DatabaseHelper.TimeTableEntry> result) {
                 List<TimeSlot> slotList = new ArrayList<>();

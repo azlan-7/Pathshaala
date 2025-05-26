@@ -63,7 +63,7 @@ public class SubjectExpertise extends AppCompatActivity {
 
         // Navigate to TeachersInfoSubSection
         saveButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SubjectExpertise.this, TeachersInfo.class);
+            Intent intent = new Intent(SubjectExpertise.this, TeachersInfoSubSection.class);
             startActivity(intent);
             finish();
         });

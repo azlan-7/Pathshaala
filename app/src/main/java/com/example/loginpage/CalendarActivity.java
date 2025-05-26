@@ -54,11 +54,10 @@ public class CalendarActivity extends AppCompatActivity {
         // Load events when the activity is created
         loadTeacherTimetable();
     }
-
     private void loadTeacherTimetable() {
         Log.d("CalendarActivity", "loadTeacherTimetable() called for Teacher ID: " + currentTeacherId);
         if (currentTeacherId != -1) {
-            DatabaseHelper.getTimeTableByUserId(currentTeacherId, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
+            DatabaseHelper.getTimeTableByUserId(currentTeacherId, 0,0,new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
                 @Override
                 public void onSuccess(List<DatabaseHelper.TimeTableEntry> timeTableEntries) {
                     Log.d("CalendarActivity", "loadTeacherTimetable() - onSuccess: Retrieved " + timeTableEntries.size() + " timetable entries.");

@@ -24,7 +24,7 @@ import com.example.loginpage.GradesTaught;
 import com.example.loginpage.GradesTaughtView;
 import com.example.loginpage.R;
 import com.example.loginpage.SubjectExpertise;
-import com.example.loginpage.SubjectExpertiseNewOne;
+import com.example.loginpage.TeachersAddSubject;
 import com.example.loginpage.TeachersBasicInfo;
 import com.example.loginpage.TeachersDashboardNew;
 import com.example.loginpage.TeachersEducation;
@@ -53,7 +53,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
         // 🔹 Initialize HashMap with subsections and their "Add" activities
         addActivityMap = new HashMap<>();
-        addActivityMap.put("Subject Expertise", SubjectExpertiseNewOne.class);
+        addActivityMap.put("Subject Expertise", TeachersAddSubject.class);
         addActivityMap.put("Education", TeachersEducation.class);
         addActivityMap.put("Work Experience", WorkExperience.class);
         addActivityMap.put("Certifications", CertificationsAdd.class);

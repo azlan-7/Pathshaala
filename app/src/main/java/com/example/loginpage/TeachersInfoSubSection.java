@@ -225,7 +225,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
 
         editAbout.setOnClickListener(v -> startActivity(new Intent(TeachersInfoSubSection.this, AboutTeacher.class)));
         qrCode.setOnClickListener(v -> startActivity(new Intent(TeachersInfoSubSection.this, QRCode.class)));
-        subjectExpertise.setOnClickListener(v -> startActivity(new Intent(TeachersInfoSubSection.this, SubjectExpertiseNewOne.class)));
+        subjectExpertise.setOnClickListener(v -> startActivity(new Intent(TeachersInfoSubSection.this, TeachersAddSubject.class)));
         education.setOnClickListener(v -> startActivity(new Intent(TeachersInfoSubSection.this, TeachersEducation.class)));
         workExperience.setOnClickListener(v -> startActivity(new Intent(TeachersInfoSubSection.this, WorkExperience.class)));
         gradesTaught.setOnClickListener(v -> startActivity(new Intent(TeachersInfoSubSection.this, GradesTaught.class)));
@@ -851,7 +851,7 @@ public class TeachersInfoSubSection extends AppCompatActivity {
         Intent intent = null;
         switch (selectedItem) {
             case "View your Subject Expertise":
-                intent = new Intent(this, SubjectExpertiseNewOne.class);
+                intent = new Intent(this, TeachersAddSubject.class);
                 break;
             case "Add Subject Expertise":
                 intent = new Intent(this, SubjectExpertise.class);

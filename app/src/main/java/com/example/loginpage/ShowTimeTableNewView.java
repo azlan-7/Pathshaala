@@ -64,6 +64,8 @@ public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotA
         Intent intentNameRef = getIntent();
         String teacherFullName = intentNameRef.getStringExtra("USER_FIRST_NAME");
         String teacherReferralCode = intentNameRef.getStringExtra("USER_SELF_REFERRAL_CODE");
+        Integer teacherSubjectId = intentNameRef.getIntExtra("Subject_ID",-1);
+        Integer teacherGradeId = intentNameRef.getIntExtra("Grade_ID",-1);
 
         // Set the text for tvTeachersInfo if the data is available
         if (teacherFullName != null && teacherReferralCode != null) {
@@ -91,7 +93,7 @@ public class ShowTimeTableNewView extends AppCompatActivity implements TimeSlotA
         Log.d("ShowTimeTableNewView", "Fetching timetable for UserID from Intent: " + userIdFromIntent);
 
 
-        DatabaseHelper.getTimeTableByUserId(userIdFromIntent, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
+        DatabaseHelper.getTimeTableByUserId(userIdFromIntent,teacherSubjectId,teacherGradeId, new DatabaseHelper.ProcedureResultCallback<List<DatabaseHelper.TimeTableEntry>>() {
             @Override
             public void onSuccess(List<DatabaseHelper.TimeTableEntry> result) {
                 List<TimeSlot> slotList = new ArrayList<>();

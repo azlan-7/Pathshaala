@@ -1,4 +1,6 @@
 package com.example.loginpage;
+
+// In NotificationStudents.java
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,12 +11,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
-import com.example.loginpage.adapters.NotificationWithSenderAdapter; // Import the new adapter
-import com.example.loginpage.models.NotificationWithSender; // Import the correct model
+import com.example.loginpage.R;
+import com.example.loginpage.adapters.NotificationWithSenderAdapter;
+import com.example.loginpage.models.NotificationWithSender;
 
 import java.util.List;
 
 public class NotificationStudents extends AppCompatActivity {
+
+    private List<NotificationWithSender> currentNotifications; // To hold the fetched notifications
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +31,7 @@ public class NotificationStudents extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("USER_ID", -1);
+        userId = sharedPreferences.getInt("USER_ID", -1);
 
         if (userId == -1) {
             Toast.makeText(this, "User ID not found.", Toast.LENGTH_SHORT).show();
@@ -35,23 +41,35 @@ public class NotificationStudents extends AppCompatActivity {
 
         new Thread(() -> {
             Log.d("NotificationStudent", "Fetching notifications for user ID: " + userId + " with sender info");
-            List<NotificationWithSender> notifications = DatabaseHelper.getNotificationsWithSender(userId); // Use the method that fetches sender info
-            Log.d("NotificationStudent", "Number of notifications fetched: " + (notifications != null ? notifications.size() : 0));
-            if (notifications != null) {
-                for (NotificationWithSender notif : notifications) {
+            currentNotifications = DatabaseHelper.getNotificationsWithSender(userId); // Fetch notifications
+            Log.d("NotificationStudent", "Number of notifications fetched: " + (currentNotifications != null ? currentNotifications.size() : 0));
+            if (currentNotifications != null) {
+                for (NotificationWithSender notif : currentNotifications) {
                     Log.d("NotificationStudent", "Fetched Notification - ID: " + notif.getId() + ", Title: " + notif.getTitle() + ", Type: " + notif.getType() + ", Sender: " + notif.getSenderName());
+                }
+                // Mark all fetched notifications as read
+                for (NotificationWithSender notification : currentNotifications) {
+                    DatabaseHelper.markNotificationRead(notification.getId(), userId);
+                    Log.d("NotificationStudent", "Marked notification as read - ID: " + notification.getId());
                 }
             }
             runOnUiThread(() -> {
-                if (notifications != null && !notifications.isEmpty()) {
-                    NotificationWithSenderAdapter adapter = new NotificationWithSenderAdapter(notifications); // Use the adapter for notifications with sender
+                if (currentNotifications != null && !currentNotifications.isEmpty()) {
+                    NotificationWithSenderAdapter adapter = new NotificationWithSenderAdapter(currentNotifications);
                     recyclerView.setAdapter(adapter);
-                    Log.d("NotificationStudent", "Adapter set with " + notifications.size() + " notifications (with sender info).");
+                    Log.d("NotificationStudent", "Adapter set with " + currentNotifications.size() + " notifications (with sender info).");
                 } else {
                     Toast.makeText(this, "No notifications found.", Toast.LENGTH_SHORT).show();
                     Log.d("NotificationStudent", "No notifications found for user ID: " + userId);
                 }
             });
         }).start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Optionally, you might want to refresh the notification list here if new ones could have arrived.
+        // If so, you'd need to call the fetching and marking logic again.
     }
 }
