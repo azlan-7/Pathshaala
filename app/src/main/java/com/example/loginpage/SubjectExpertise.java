@@ -133,7 +133,7 @@ public class SubjectExpertise extends AppCompatActivity {
         chip.setTextAppearance(R.style.ChipTextStyle);
         chip.setText(subjectName);
         chip.setCheckable(false);
-        chip.setChipBackgroundColorResource(R.color.blue);
+        chip.setChipBackgroundColorResource(R.color.blueGradientEnd);
         chip.setTextColor(ContextCompat.getColor(this, R.color.white));
         selectedContainer.addView(chip);
     }

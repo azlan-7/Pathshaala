@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView; // Keep ImageView for the background/decorative images
 import android.widget.TextView;
@@ -186,49 +187,77 @@ public class TeachersAddSubject extends AppCompatActivity {
      * by whether the subject is already saved for the user.
      */
     private void createSelectableSubjectChips() {
-        subjectContainer.removeAllViews(); // Clear existing chips before re-populating
-        tempSelectedSubjects.clear(); // Ensure tempSelectedSubjects is aligned with UI state
+        subjectContainer.removeAllViews(); // Clear existing chips
+        tempSelectedSubjects.clear();
 
-        for (String subject : allAvailableSubjects) {
+        final int leftMargin = (int) getResources().getDimension(R.dimen.subject_left_margin); // Define in dimens.xml
+        final int chipSpacing = (int) getResources().getDimension(R.dimen.chip_spacing); // Define in dimens.xml
+        final int rowSpacing = (int) getResources().getDimension(R.dimen.row_spacing); // Define in dimens.xml
+
+        for (int i = 0; i < allAvailableSubjects.size(); i++) {
+            String subject = allAvailableSubjects.get(i);
             Chip chip = new Chip(this);
             chip.setText(subject);
             chip.setTextSize(16);
             chip.setPadding(15, 10, 15, 10);
             chip.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            chip.setChipStrokeWidth(0f); // Removes the border
-            chip.setTextAppearance(R.style.ChipTextStyle); // Assuming this style exists
+            chip.setChipStrokeWidth(0f);
+            chip.setTextAppearance(R.style.ChipTextStyle);
             chip.setCheckable(true);
             chip.setClickable(true);
-            chip.setTypeface(ResourcesCompat.getFont(this, R.font.work_sans_bold)); // Use bold font
+            chip.setTypeface(ResourcesCompat.getFont(this, R.font.work_sans_bold));
 
-            // Set initial state based on alreadySavedSubjects
             if (alreadySavedSubjects.contains(subject)) {
                 chip.setChecked(true);
-                chip.setChipBackgroundColorResource(R.color.blueGradientEnd); // Selected color
-                chip.setTextColor(ContextCompat.getColor(this, R.color.white)); // Selected text color
-                tempSelectedSubjects.add(subject); // Add to tempSelectedSubjects if already saved
+                chip.setChipBackgroundColorResource(R.color.blueGradientEnd);
+                chip.setTextColor(ContextCompat.getColor(this, R.color.white));
+                tempSelectedSubjects.add(subject);
             } else {
                 chip.setChecked(false);
-                chip.setChipBackgroundColorResource(R.color.light_blue); // Unselected color
-                chip.setTextColor(ContextCompat.getColor(this, R.color.blueGradientEnd)); // Unselected text color
+                chip.setChipBackgroundColorResource(R.color.light_blue);
+                chip.setTextColor(ContextCompat.getColor(this, R.color.blueGradientEnd));
             }
 
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     chip.setChipBackgroundColorResource(R.color.blueGradientEnd);
                     chip.setTextColor(ContextCompat.getColor(this, R.color.white));
-                    tempSelectedSubjects.add(subject); // Add to temp selections
+                    tempSelectedSubjects.add(subject);
                 } else {
                     chip.setChipBackgroundColorResource(R.color.light_blue);
                     chip.setTextColor(ContextCompat.getColor(this, R.color.blueGradientEnd));
-                    tempSelectedSubjects.remove(subject); // Remove from temp selections
+                    tempSelectedSubjects.remove(subject);
                 }
                 updateSelectionCount();
             });
 
+            FlexboxLayout.LayoutParams layoutParams = new FlexboxLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+
+            // Add spacing between chips
+            if (i % 2 == 0 && i > 0) { // For the second chip in each potential row
+                layoutParams.setMarginStart(chipSpacing);
+            } else if (i % 2 != 0) { // For the first chip in each potential row (after the first)
+                if (i > 0) {
+                    layoutParams.setMarginStart(leftMargin);
+                } else {
+                    layoutParams.setMarginStart(leftMargin); // Apply to the very first chip
+                }
+            } else if (i == 0) {
+                layoutParams.setMarginStart(leftMargin); // Apply to the very first chip
+            }
+
+            // Add vertical spacing between rows (after the first item in a row)
+            if (i >= 2) {
+                layoutParams.topMargin = rowSpacing;
+            }
+
+            chip.setLayoutParams(layoutParams);
             subjectContainer.addView(chip);
         }
-        updateSelectionCount(); // Update count after initial chip creation
+        updateSelectionCount();
     }
 
     /**

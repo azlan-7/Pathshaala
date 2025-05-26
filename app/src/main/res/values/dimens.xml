@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="subject_left_margin">24dp</dimen>
+    <dimen name="chip_spacing">16dp</dimen>
+    <dimen name="row_spacing">16dp</dimen>
+</resources>
