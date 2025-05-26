@@ -204,23 +204,23 @@ public class TeachersAddSubject extends AppCompatActivity {
             // Set initial state based on alreadySavedSubjects
             if (alreadySavedSubjects.contains(subject)) {
                 chip.setChecked(true);
-                chip.setChipBackgroundColorResource(R.color.blue); // Selected color
+                chip.setChipBackgroundColorResource(R.color.blueGradientEnd); // Selected color
                 chip.setTextColor(ContextCompat.getColor(this, R.color.white)); // Selected text color
                 tempSelectedSubjects.add(subject); // Add to tempSelectedSubjects if already saved
             } else {
                 chip.setChecked(false);
                 chip.setChipBackgroundColorResource(R.color.light_blue); // Unselected color
-                chip.setTextColor(ContextCompat.getColor(this, R.color.blue)); // Unselected text color
+                chip.setTextColor(ContextCompat.getColor(this, R.color.blueGradientEnd)); // Unselected text color
             }
 
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
-                    chip.setChipBackgroundColorResource(R.color.blue);
+                    chip.setChipBackgroundColorResource(R.color.blueGradientEnd);
                     chip.setTextColor(ContextCompat.getColor(this, R.color.white));
                     tempSelectedSubjects.add(subject); // Add to temp selections
                 } else {
                     chip.setChipBackgroundColorResource(R.color.light_blue);
-                    chip.setTextColor(ContextCompat.getColor(this, R.color.blue));
+                    chip.setTextColor(ContextCompat.getColor(this, R.color.blueGradientEnd));
                     tempSelectedSubjects.remove(subject); // Remove from temp selections
                 }
                 updateSelectionCount();
