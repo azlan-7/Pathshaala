@@ -149,29 +149,43 @@ public class TeachersInfoSubSection extends AppCompatActivity {
 
 
 
-        // Retrieve data from Intent
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("ABOUT_YOURSELF")) {
-            String aboutYourself = intent.getStringExtra("ABOUT_YOURSELF");
-            Log.d("TeachersInfoSubSection", "Received About: " + aboutYourself);
-            aboutText.setText(aboutYourself);
-        } else {
-            // If Intent data is missing, fallback to SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-            String savedAbout = sharedPreferences.getString("ABOUT_YOURSELF", "No info available");
-            aboutText.setText(savedAbout);
-        }
-
-
-
         fetchUserDetailsFromDB();
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String phoneNumber = sharedPreferences.getString("phoneNumber", "");
         int userId = sharedPreferences.getInt("USER_ID", -1);
 
+        Log.d("TeachersInfoSubSection", "Fetching user details for phone number: " + phoneNumber + " and UserId: " + userId);
 
-//
+        // Fill about from DB
+
+        if (phoneNumber != null) {
+            // Call UserDetailsSelect to retrieve the user's details
+            DatabaseHelper.UserDetailsSelect(
+                    TeachersInfoSubSection.this,
+                    "4", // You might need a specific QryStatus for this
+                    phoneNumber,
+                    new DatabaseHelper.UserResultListener() {
+                        @Override
+                        public void onQueryResult(List<UserDetailsClass> userList) {
+                            if (userList != null && !userList.isEmpty()) {
+                                UserDetailsClass currentUser = userList.get(0); // Assuming only one user will be returned
+                                Log.d("TeachersInfoSubSection", "Retrieved user from DB: Name - " + currentUser.getName() + ", Mobile - " + currentUser.getMobileNo() + ", UserId - " + currentUser.getUserId());
+                                String aboutYourself = currentUser.getAboutUs();
+                                Log.d("TeachersInfoSubSection", "Retrieved About from DB: " + aboutYourself);
+                                aboutText.setText(aboutYourself != null ? aboutYourself : "No info available");
+                            } else {
+                                Log.d("TeachersInfoSubSection", "User data not found in DB");
+                                aboutText.setText("No info available");
+                            }
+                        }
+                    }
+            );
+        } else {
+            Log.e("TeachersInfoSubSection", "Logged-in user's mobile number not found.");
+            aboutText.setText("Error loading info.");
+        }
+
         Log.d("TeachersInfoSubSection","phoneNumber: " + phoneNumber);
 
         if (phoneNumber == null) phoneNumber = sharedPreferences.getString("phoneNumber", "N/A");
@@ -182,7 +196,6 @@ public class TeachersInfoSubSection extends AppCompatActivity {
 
         {
             Log.e(TAG, "⚠️ Self Referral Code Not Found! Fetching from DB...");
-//
 //            Log.d("TeachersInfoSubSection", "📌 First Name: " + firstName);
 //            Log.d("TeachersInfoSubSection", "📌 Last Name: " + lastName);
 

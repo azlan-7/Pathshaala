@@ -3,6 +3,7 @@ package com.example.loginpage;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,11 +14,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
+import com.example.loginpage.models.UserDetailsClass;
+
+import java.util.List;
+
 public class AboutTeacher extends AppCompatActivity {
 
     private EditText etAbout;
     private TextView charCount;
     private static final int MAX_CHAR = 150; // Max character limit
+    private String userId;
+    private String userContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +36,18 @@ public class AboutTeacher extends AppCompatActivity {
         etAbout = findViewById(R.id.editTextText22);
         charCount = findViewById(R.id.textView55);
         Button btnSave = findViewById(R.id.button20);
+
+        // Retrieve data passed from TeachersInfoSubSection
+        Intent intent = getIntent();
+        if (intent != null) {
+            userId = intent.getStringExtra("USER_ID");
+            userContact = intent.getStringExtra("USER_CONTACT");
+            Log.d("AboutTeacher", "Retrieved USER_ID: " + userId + " | USER_CONTACT: " + userContact);
+        } else {
+            Log.d("AboutTeacher", "No data received from Intent.");
+            userId = null;
+            userContact = null;
+        }
 
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -66,15 +86,41 @@ public class AboutTeacher extends AppCompatActivity {
             editor.putString("ABOUT_YOURSELF", aboutText);
             editor.apply();
 
-            Intent intent = new Intent(AboutTeacher.this, TeachersInfo.class);
-            intent.putExtra("ABOUT_YOURSELF", aboutText);
-            startActivity(intent);
-            finish(); // Close AboutTeacher
+            UserDetailsClass currentUser = new UserDetailsClass();
+            // **Use the retrieved userId and userContact**
+            currentUser.setUserId(userId);
+            currentUser.setMobileNo(userContact); // Assuming you need this for your update logic
+
+            // **Important:** You'll still need to ensure other necessary fields for the update
+            // are also populated in 'currentUser'. For example, if your update logic
+            // relies on other user details, you need to retrieve or have them available.
+
+            currentUser.setAboutUs(aboutText);
+            currentUser.setStateId(0); // Initialize or retrieve the actual value
+            currentUser.setCityId(0);   // Initialize or retrieve the actual value
+            // ... set other fields if needed for the update ...
+
+            DatabaseHelper.UserDetailsInsert(
+                    AboutTeacher.this,
+                    "1",
+                    currentUser,
+                    new DatabaseHelper.UserResultListener() {
+                        @Override
+                        public void onQueryResult(List<UserDetailsClass> userList) {
+                            // Handle the result
+                            if (userList != null && !userList.isEmpty()) {
+                                Log.d("AboutTeacher", "User details updated successfully.");
+                            } else {
+                                Log.d("AboutTeacher", "About us text saved successfully.");
+                            }
+
+                            Intent intent = new Intent(AboutTeacher.this, TeachersInfoSubSection.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+            );
         });
-
-
-
-
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

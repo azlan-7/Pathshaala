@@ -49,9 +49,9 @@
 
     <EditText
         android:id="@+id/editTextText22"
-        android:layout_width="293dp"
-        android:layout_height="148dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="287dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="36dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"

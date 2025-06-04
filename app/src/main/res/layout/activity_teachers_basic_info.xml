@@ -87,10 +87,42 @@
         app:srcCompat="@drawable/detailonboardingbottom" />
 
     <EditText
+        android:id="@+id/editTextText22"
+        android:layout_width="344dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:gravity="top|start"
+        android:hint="Tell us about yourself"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteCity" />
+
+    <TextView
+        android:id="@+id/textView55"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/100"
+        android:textColor="#1674AE"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/editTextText22"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintStart_toStartOf="@+id/editTextText22"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText22" />
+
+    <EditText
         android:id="@+id/editTextText9"
         android:layout_width="344dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -98,7 +130,7 @@
         android:inputType="textCapWords"
         android:textColorHint="#1674AE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.462"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup" />
 
@@ -187,13 +219,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoCompleteCity" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextText22" />
 
     <ImageView
         android:id="@+id/imageView50"
         android:layout_width="97dp"
         android:layout_height="85dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView50"
@@ -203,7 +235,7 @@
         android:id="@+id/textView50"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="28dp"
         android:fontFamily="@font/work_sans_bold"
         android:text="Teacher's Info"
         android:textColor="#0F4D73"
@@ -247,5 +279,6 @@
         app:layout_constraintHorizontal_bias="0.307"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.941"
         app:srcCompat="@drawable/arrow_back_24dp_0f4d73_fill0_wght400_grad0_opsz24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

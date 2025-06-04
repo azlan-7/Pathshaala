@@ -233,7 +233,8 @@ public class StudentsDashboard extends AppCompatActivity {
     private void loadUserName() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String firstName = sharedPreferences.getString("FIRST_NAME", "User"); // Default "User"
-        final String text = "Welcome Back, " + firstName + "\uD83D\uDC4B ";
+//        final String text = "Welcome Back, " + firstName + "\uD83D\uDC4B ";
+        final String text = "Welcome Back " +  "\uD83D\uDC4B ";
         welcomeText.setText("");
 
         Handler handler = new Handler(); // Single handler instance
@@ -247,7 +248,7 @@ public class StudentsDashboard extends AppCompatActivity {
                     char chr = text.charAt(i);
                     welcomeText.append(String.valueOf(chr));
                     i++;
-                    handler.postDelayed(this, 150); // Delay between each letter
+                    handler.postDelayed(this,150); // Delay between each letter
                 }
             }
         };
@@ -369,7 +370,7 @@ public class StudentsDashboard extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mainTextHandler.postDelayed(this::loadUserName, 100);
+        mainTextHandler.postDelayed(this::loadUserName, 10000);
         loadProfilePicture();
         // loadUserName(); // Ensure name updates when returning to this activity
         loadUnreadNotificationCount();

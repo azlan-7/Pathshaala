@@ -311,7 +311,7 @@ public class TeachersDashboardNew extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String firstName = sharedPreferences.getString("FIRST_NAME", "User"); // Default "User"
 //        final String text = "Welcome Back, " + firstName + "\uD83D\uDC4B ";
-        final String text = "Welcome Back, " +  "\uD83D\uDC4B ";
+        final String text = "Welcome Back " +  "\uD83D\uDC4B ";
         welcomeText.setText("");
 
         Handler handler = new Handler(); // Single handler instance

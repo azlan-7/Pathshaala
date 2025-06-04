@@ -24,6 +24,7 @@ public class UserDetailsClass {
 
     private Integer cityId;
     private String pinCode;
+    private String aboutUs;
 
     // Default Constructor
     public UserDetailsClass() {
@@ -33,7 +34,7 @@ public class UserDetailsClass {
     public UserDetailsClass(String username, String password, String userType, String name, String lastName,
                             String dateOfBirth, String signUpType, String countryCode, String mobileNo,
                             String emailId, String securityKey, String selfReferralCode, String custReferralCode,
-                            String latitude, String longitude, String userImageName, Integer stateId, Integer cityId, String pinCode) {
+                            String latitude, String longitude, String userImageName, Integer stateId, Integer cityId, String pinCode,String aboutUs) {
         this.UserId = UserId;
         this.username = username;
         this.password = password;
@@ -54,6 +55,7 @@ public class UserDetailsClass {
         this.stateId = stateId;
         this.cityId = cityId;
         this.pinCode = pinCode;
+        this.aboutUs = aboutUs;
     }
 
     // Getters and Setters
@@ -126,4 +128,7 @@ public class UserDetailsClass {
 
     public String getPinCode(){ return pinCode; }
     public void setPinCode(String pinCode) { this.pinCode = pinCode; }
+
+    public String getAboutUs(){ return aboutUs; }
+    public void setAboutUs(String aboutUs) { this.aboutUs = aboutUs; }
 }

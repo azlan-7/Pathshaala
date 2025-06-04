@@ -234,86 +234,139 @@ public class DatabaseHelper {
             }
         }.execute();
     }
-
-    public static void UserDetailsInsert(Context context, String QryStatus, UserDetailsClass user, UserResultListener listener) {
-        new AsyncTask<Void, Void, String>() {
+    public static void UserDetailsInsert(Context context, final String QryStatus, final UserDetailsClass user11, final UserResultListener listener) {
+    //public static void UserDetailsInsert(Context context, String QryStatus, UserDetailsClass user11, UserResultListener listener) {
+        new AsyncTask<Void, Void, DatabaseOperationResult>() { // Use a custom class for the result
             @Override
-            protected String doInBackground(Void... voids) {
+            protected DatabaseOperationResult doInBackground(Void... voids) {
                 String messageOutput = "Operation failed"; // Default message
+                List<UserDetailsClass> resultList = new ArrayList<>(); // Initialize result list
                 try {
                     Log.d("DatabaseHelper", "Calling function ResultSet rs 00 QryStatus = " + QryStatus);
                     Connection connection = getConnection();
-                    Log.d("DatabaseHelper", "Calling function ResultSet rs 1 : " + connection);
+                    Log.d("DatabaseHelper", "Calling function ResultSet rs 1 : " + QryStatus);
+                    Log.d("DatabaseHelper","User value: " + user11);
+                    Log.d("DatabaseHelper","User value: " + user11.getUserId());
+                    Log.d("DatabaseHelper","User value: " + user11.getUsername());
+                    Log.d("DatabaseHelper","User value: 123232 " + user11.getAboutUs());
+
+
 
                     if (connection != null) {
-                        String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+                        String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
                         CallableStatement stmt = connection.prepareCall(query);
 
-                        Log.d("DatabaseHelper", "Executing stored procedure for user lookup with Value 3144  : " + user.getMobileNo());
-
-                        // Set stored procedure input parameters
+                        // Set stored procedure input parameters (as before)
                         stmt.setString(1, QryStatus);
-                        stmt.setString(2, "0");
-                        stmt.setString(3, user.getUsername());
-                        stmt.setString(4, user.getPassword());
-                        stmt.setString(5, user.getName());
-                        Log.d("DatabaseHelper", "Name of the User 12: " + user.getName());
-                        stmt.setString(6, user.getLastName());
-                        stmt.setString(7, user.getDateOfBirth());
-                        Log.d("DatabaseHelper", "Date of birth of the user: " + user.getDateOfBirth());
-                        stmt.setString(8, user.getUserType());
+                        stmt.setString(2, user11.getUserId());
+                        stmt.setString(3, user11.getUsername());
+                        stmt.setString(4, user11.getPassword());
+                        stmt.setString(5, user11.getName());
+                        stmt.setString(6, user11.getLastName());
+                        stmt.setString(7, user11.getDateOfBirth());
+                        stmt.setString(8, user11.getUserType());
                         stmt.setString(9, ""); // signuptype
-                        stmt.setString(10, user.getCountryCode());
-                        stmt.setString(11, user.getMobileNo());
-                        stmt.setString(12, user.getEmailId());
-                        stmt.setString(13, user.getSecurityKey());
-                        Log.d("DatabaseHelper", "Email Id of the user 14: " + user.getEmailId());
-                        stmt.setString(14, user.getSelfReferralCode()); //selfreferralcode
+                        stmt.setString(10, user11.getCountryCode());
+                        stmt.setString(11, user11.getMobileNo());
+                        stmt.setString(12, user11.getEmailId());
+                        stmt.setString(13, user11.getSecurityKey());
+                        stmt.setString(14, user11.getSelfReferralCode()); //selfreferralcode
                         stmt.setString(15, ""); // custReferralCode
                         stmt.setString(16, ""); // loginStatus
-                        stmt.setString(17, user.getLatitude());
-                        stmt.setString(18, user.getLongitude());
-                        stmt.setString(19, user.getUserImageName());
-                        stmt.setInt(20,user.getStateId());
-                        stmt.setInt(21,user.getCityId());
-                        stmt.setString(22,user.getPinCode());
+                        stmt.setString(17, user11.getLatitude());
+                        stmt.setString(18, user11.getLongitude());
+                        stmt.setString(19, user11.getUserImageName());
+                        stmt.setString(20, user11.getAboutUs());
+                        stmt.setInt(21, user11.getStateId());
+                        stmt.setInt(22, user11.getCityId());
+                        stmt.setString(23, user11.getPinCode());
 
-                        Log.d("DatabaseHelper", "Executing stored procedure for user lookup with Value of mobile no.  : " + user.getMobileNo());
-                        stmt.registerOutParameter(23, Types.VARCHAR); // @selfreferralcodeOutput
-                        stmt.registerOutParameter(24, Types.VARCHAR); // @messageOutput
+                        stmt.registerOutParameter(24, Types.VARCHAR); // @selfreferralcodeOutput
+                        stmt.registerOutParameter(25, Types.VARCHAR); // @messageOutput
+
+                        Log.d("DatabaseHelper","SelfReferrralCode: " + user11.getSelfReferralCode() + " for UserId: " + user11.getUserId());
 
                         // Execute stored procedure
                         stmt.execute();
-                        Log.d("DatabaseHelper", "Executing the code block after registerOutParameter 2234 " );
 
                         // Retrieve OUT parameter value
-                        String selfReferralCodeOutput = stmt.getString(23);
-                        messageOutput = stmt.getString(24); // Get the message from the stored procedure
+                        String selfReferralCodeOutput = stmt.getString(24);
+                        messageOutput = stmt.getString(25); // Get the message from the stored procedure
+
 
                         Log.d("DatabaseHelper", "Self Referral Code Output: " + selfReferralCodeOutput);
-                        Log.d("DatabaseHelper", "Message output: 144 " + messageOutput);
+                        Log.d("DatabaseHelper", "Message output: " + messageOutput);
 
+                        // If it's an update, fetch the updated user details
+                        if (QryStatus.equals("2")) {
+                            String selectQuery = "SELECT userid, Name, LastName, DateofBirth, UserType, mobileno, emailid, SecurityKey, aboutus, selfreferralcode, latitude, longitude, userimagename, StateId, CityId, PinCode FROM UserDetails WHERE UserId = ?";
+                            PreparedStatement selectStmt = connection.prepareStatement(selectQuery);
+                            selectStmt.setString(1, user11.getUserId());
+                            ResultSet rs = selectStmt.executeQuery();
+                            if (rs.next()) {
+                                UserDetailsClass updatedUser = new UserDetailsClass();
+                                updatedUser.setUserId(rs.getString("userid"));
+                                updatedUser.setName(rs.getString("Name"));
+                                updatedUser.setLastName(rs.getString("LastName"));
+                                updatedUser.setDateOfBirth(rs.getString("DateofBirth"));
+                                updatedUser.setUserType(rs.getString("UserType"));
+                                updatedUser.setMobileNo(rs.getString("mobileno"));
+                                updatedUser.setEmailId(rs.getString("emailid"));
+                                updatedUser.setSecurityKey(rs.getString("SecurityKey"));
+                                updatedUser.setAboutUs(rs.getString("aboutus"));
+                                updatedUser.setSelfReferralCode(rs.getString("selfreferralcode"));
+                                updatedUser.setLatitude(rs.getString("latitude"));
+                                updatedUser.setLongitude(rs.getString("longitude"));
+                                updatedUser.setUserImageName(rs.getString("userimagename"));
+                                updatedUser.setStateId(rs.getInt("StateId"));
+                                updatedUser.setCityId(rs.getInt("CityId"));
+                                updatedUser.setPinCode(rs.getString("PinCode"));
+                                resultList.add(updatedUser);
+                            }
+                            rs.close();
+                            selectStmt.close();
+                        }
                         stmt.close();
                         connection.close();
                     }
                 } catch (SQLException e) {
                     Log.e("DatabaseHelper", "SQL Error fetching user by insert: " + e.getMessage());
+                    messageOutput = "SQL Error: " + e.getMessage(); // Update message on error
                 }
-                return messageOutput;
+                return new DatabaseOperationResult(resultList, messageOutput); // Return both list and message
             }
 
             @Override
-            protected void onPostExecute(String messageOutput) {
-                Log.d("DatabaseHelper", "onPostExecute called with messageOutput: " + messageOutput);
+            protected void onPostExecute(DatabaseOperationResult result) {
+                Log.d("DatabaseHelper", "onPostExecute called with messageOutput: " + result.getMessage());
 
                 // Show Toast with the messageOutput
-                Toast.makeText(context, messageOutput, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, result.getMessage(), Toast.LENGTH_SHORT).show();
 
-                // Notify listener
-                listener.onQueryResult(new ArrayList<>()); // Assuming no user list is returned here
+                // Notify listener with the result list
+                listener.onQueryResult(result.getUserList());
             }
         }.execute();
     }
+
+    private static class DatabaseOperationResult {
+        private final List<UserDetailsClass> userList;
+        private final String message;
+
+        public DatabaseOperationResult(List<UserDetailsClass> userList, String message) {
+            this.userList = userList;
+            this.message = message;
+        }
+
+        public List<UserDetailsClass> getUserList() {
+            return userList;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+    // Helper class to hold both the user list and the message
 
     public static void UserDetailsSelect(Context context, String QryStatus, String phoneNumber, UserResultListener listener) {
         new AsyncTask<Void, Void, List<UserDetailsClass>>() {
@@ -321,96 +374,75 @@ public class DatabaseHelper {
             protected List<UserDetailsClass> doInBackground(Void... voids) {
                 List<UserDetailsClass> userList = new ArrayList<>();
                 try {
-                    Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserDetailsSelect.4455.."+phoneNumber);
+                    Log.d("DatabaseHelper", "🛠️ Connecting to DB for UserDetailsSelect.4455.." + phoneNumber);
 
                     Connection con = getConnection();
 
                     if (con != null) {
-                        String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
-                        PreparedStatement stmt = con.prepareStatement(query);
-                        Log.d("DatabaseHelper", "📌 Executing query for phone: Query  " + query);
+                        String query = "{call sp_UserDetailsInsertUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+                        PreparedStatement stmt = con.prepareStatement(query); // Keep as PreparedStatement
 
                         stmt.setString(1, QryStatus);
                         stmt.setInt(2, 0);
                         stmt.setString(3, "");
                         stmt.setString(4, "");
                         stmt.setString(5, "");
-                        stmt.setString(6, ""); //lastName
-                        stmt.setString(7, null); //dob
+                        stmt.setString(6, "");
+                        stmt.setString(7, null);
                         stmt.setString(8, "");
                         stmt.setString(9, "");
                         stmt.setString(10, "");
-                        stmt.setString(11, phoneNumber);  // ✅ Phone number
+                        stmt.setString(11, phoneNumber); // Set the phone number for the WHERE clause
                         stmt.setString(12, "");
                         stmt.setString(13, "");
-                        Log.d("DatabaseHelper", "📌 Executing query for phone: " + phoneNumber);
                         stmt.setString(14, "");
                         stmt.setString(15, "");
                         stmt.setString(16, "");
                         stmt.setString(17, "");
                         stmt.setString(18, "");
-                        stmt.setString(19, ""); // userImageName
-                        stmt.setInt(20, 0);
+                        stmt.setString(19, "");
+                        stmt.setString(20, ""); // Keep this as empty for now, it's an input parameter
                         stmt.setInt(21, 0);
-                        stmt.setString(22, "");
+                        stmt.setInt(22, 0);
                         stmt.setString(23, "");
                         stmt.setString(24, "");
-
+                        stmt.setString(25, "");
 
                         ResultSet rs = stmt.executeQuery();
 
-                        Log.d("DatabaseHelper", "📌 Executing query for phone:  " + phoneNumber);
-                        Log.d("DatabaseHelper", "📌 Query Result Size: " + userList.size());
-
-                        if (!rs.isBeforeFirst()) { // ✅ No data found
-                            Log.d("DatabaseHelper", "⚠️ No user data found in DB!");
-                        }
-
                         while (rs.next()) {
-                            Log.d("DatabaseHelper", "Retrieved row from database: " + rs.toString());
-                            ResultSetMetaData rsmd = rs.getMetaData();
-                            int columnCount = rsmd.getColumnCount();
-                            for (int i = 1; i <= columnCount; i++) {
-                                Log.d("DatabaseHelper", "Column: " + rsmd.getColumnName(i) + " -> " + rs.getString(i));
-                            }
-
-                            String userIdString = rs.getString("UserId");
-                            Log.d("DatabaseHelper", "✅ UserId Retrieved: " + userIdString);
-
                             UserDetailsClass user = new UserDetailsClass();
-                            user.setLastName(rs.getString("LastName"));
                             user.setUserId(rs.getString("UserId"));
                             user.setName(rs.getString("Name"));
-                            user.setEmailId(rs.getString("emailId"));
+                            user.setLastName(rs.getString("LastName"));
+                            user.setDateOfBirth(rs.getString("DateofBirth"));
+                            user.setUserType(rs.getString("UserType"));
                             user.setMobileNo(rs.getString("mobileno"));
+                            user.setEmailId(rs.getString("emailid"));
+                            user.setSecurityKey(rs.getString("SecurityKey"));
                             user.setSelfReferralCode(rs.getString("selfreferralcode"));
-                            user.setUserType(rs.getString("usertype"));
+                            user.setLatitude(rs.getString("latitude"));
+                            user.setLongitude(rs.getString("longitude"));
                             user.setUserImageName(rs.getString("UserImageName"));
-                            user.setDateOfBirth(rs.getString("DateofBirth")); // Retrieve Date of Birth
+                            user.setAboutUs(rs.getString("aboutus")); // Retrieve aboutus
                             user.setStateId(rs.getInt("StateId"));
                             user.setCityId(rs.getInt("CityId"));
                             user.setPinCode(rs.getString("PinCode"));
                             userList.add(user);
-
-                            Log.d("DatabaseHelper", "✅ User Retrieved: " + user.getUserType() + " (ID: " + user.getUserId() + ")");
                         }
 
                         rs.close();
                         stmt.close();
                         con.close();
-                    } else {
-                        Log.e("DatabaseHelper", "❌ DB connection failed!");
                     }
                 } catch (SQLException e) {
-                    Log.e("DatabaseHelper",  "❌ SQL Error: " + e.getMessage());
+                    Log.e("DatabaseHelper", "SQL Error: " + e.getMessage());
                 }
                 return userList;
             }
 
             @Override
             protected void onPostExecute(List<UserDetailsClass> userList) {
-                Log.d("DatabaseHelper", "📌 onPostExecute called! Users found: " + userList.size());
-
                 listener.onQueryResult(userList);
             }
         }.execute();
