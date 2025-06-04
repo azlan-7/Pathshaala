@@ -11,7 +11,7 @@
         android:id="@+id/genderRadioGroup"
         android:layout_width="280dp"
         android:layout_height="41dp"
-        android:layout_marginTop="216dp"
+        android:layout_marginTop="188dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
         android:id="@+id/editTextFirstName"
         android:layout_width="344dp"
         android:layout_height="45dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -56,7 +56,7 @@
         android:inputType="textCapWords"
         android:textColorHint="#1674AE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup" />
 
@@ -64,7 +64,7 @@
         android:id="@+id/editTextLastName"
         android:layout_width="344dp"
         android:layout_height="45dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -72,7 +72,7 @@
         android:inputType="text"
         android:textColorHint="#1674AE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextFirstName" />
 
@@ -80,7 +80,7 @@
         android:id="@+id/editTextPhone"
         android:layout_width="344dp"
         android:layout_height="45dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:enabled="true"
@@ -89,7 +89,7 @@
         android:inputType="phone"
         android:textColorHint="#1674AE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
 
@@ -97,7 +97,7 @@
         android:id="@+id/editTextEmail"
         android:layout_width="344dp"
         android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -105,7 +105,7 @@
         android:inputType="text"
         android:textColorHint="#1674AE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
 
@@ -113,7 +113,7 @@
         android:id="@+id/editTextDOB"
         android:layout_width="344dp"
         android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/cornered_rectangle"
         android:drawableRight="@drawable/calendaricon"
         android:ems="10"
@@ -123,7 +123,7 @@
         android:inputType="date"
         android:textColorHint="#1674AE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
@@ -131,7 +131,7 @@
         android:id="@+id/autoCompleteCity1"
         android:layout_width="344dp"
         android:layout_height="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/cornered_rectangle"
         android:clickable="true"
         android:drawableEnd="@drawable/dropdownicon"
@@ -145,7 +145,7 @@
         android:textColor="#000000"
         android:textColorHint="#1674AE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDOB" />
 
@@ -160,8 +160,9 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoCompleteCity1" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextAbout" />
 
     <ImageView
         android:id="@+id/imageViewProfile"
@@ -177,7 +178,7 @@
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/work_sans_bold"
         android:text="Student's Info"
         android:textColor="#0F4D73"
@@ -230,5 +231,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/detailonboardingtop" />
+
+
+    <EditText
+        android:id="@+id/editTextTextAbout"
+        android:layout_width="347dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/cornered_rectangle"
+        android:ems="10"
+        android:fontFamily="@font/work_sans_light"
+        android:gravity="top|start"
+        android:hint="Tell us about yourself"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:textColorHint="#1674AE"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteCity1" />
+
+    <TextView
+        android:id="@+id/textView55Counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/100"
+        android:textColor="#1674AE"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.914"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextAbout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

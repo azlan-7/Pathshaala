@@ -184,7 +184,6 @@ public class StudentsInfo extends AppCompatActivity {
                     .into(profileImage);
         }
 
-        tvAboutYourself.setText(aboutYourself);
         tvContact.setText(contactNumber);
 
         String firstName = sharedPreferences.getString("FIRST_NAME", "N/A");
@@ -513,6 +512,15 @@ public class StudentsInfo extends AppCompatActivity {
                     tvFullName.setText(user.getName() + " " + user.getLastName());
                     tvContact.setText(user.getMobileNo());
                     tvEmail.setText(user.getEmailId());
+
+                    // --- THIS IS THE KEY PART FOR ABOUT YOURSELF ---
+                    tvAboutYourself.setText(user.getAboutUs() != null && !user.getAboutUs().isEmpty()
+                            ? user.getAboutUs()
+                            : "Tell us about yourself..."); // Default text if aboutUs is null or empty
+
+                    // Update Unique ID
+                    uniqueIdTextView.setText(String.format("[%s]",
+                            user.getSelfReferralCode() != null ? user.getSelfReferralCode() : "N/A"));
 
                     String imageName = user.getUserImageName();
                     if (imageName != null && !imageName.isEmpty()) {
