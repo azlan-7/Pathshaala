@@ -106,13 +106,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/countLinerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                app:layout_constraintTop_toBottomOf="@id/textViewHello"> <!-- Ensure total weight is 2 -->
+                android:weightSum="3"
+                app:layout_constraintTop_toBottomOf="@id/textViewHello"> <!-- Ensure total weight is 3 for three cards -->
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewTotalStudents"
@@ -131,7 +132,7 @@
                         android:fontFamily="@font/work_sans_bold"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="@string/course_enrollments_n1075"
+                        android:text="Demo Class Enrollments 2"
                         android:textColor="#4B77D1"
                         android:textSize="15sp" />
                 </androidx.cardview.widget.CardView>
@@ -141,6 +142,7 @@
                     android:layout_width="0dp"
                     android:layout_height="90dp"
                     android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_weight="1"
                     android:paddingBottom="16dp"
                     app:cardBackgroundColor="#EECECD"
@@ -153,13 +155,35 @@
                         android:fontFamily="@font/work_sans_bold"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="@string/live_students_n75"
+                        android:text="New Enrollments 1"
                         android:textColor="#D16D6A"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
+                <!-- New CardView added here -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewNewCard"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="16dp"
+                    app:cardBackgroundColor="#D0F0C0"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="6dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/work_sans_bold"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="Total Students \n3"
+                    android:textColor="#6AAB4B"
+                    android:textSize="15sp" />
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
 
             <!-- Statistical Graphs and Charts -->
             <androidx.cardview.widget.CardView
