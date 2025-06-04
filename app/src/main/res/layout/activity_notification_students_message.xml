@@ -22,13 +22,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.822" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextText30" />
 
     <EditText
         android:id="@+id/editTextText30"
-        android:layout_width="243dp"
-        android:layout_height="140dp"
+        android:layout_width="259dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -40,15 +40,15 @@
         android:scrollbars="vertical"
         android:textColorHint="#1674AE"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/button39"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextText31" />
 
     <EditText
         android:id="@+id/editTextText31"
-        android:layout_width="232dp"
-        android:layout_height="52dp"
+        android:layout_width="260dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="300dp"
         android:background="@drawable/cornered_rectangle"
         android:ems="10"
         android:fontFamily="@font/work_sans_light"
@@ -60,24 +60,76 @@
         android:scrollbars="vertical"
         android:textColorHint="#1674AE"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextText30"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.875" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/textView87"
-        android:layout_width="232dp"
-        android:layout_height="50dp"
+        android:layout_width="82dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="116dp"
         android:fontFamily="@font/work_sans_bold"
-        android:text="Send Message"
+        android:text="Notify Teacher"
         android:textColor="#0F4D73"
         android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteSubject"
+        android:layout_width="256dp"
+        android:layout_height="41dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:hint="@string/subject"
+        android:inputType="none"
+        android:padding="10dp"
+        android:textColorHint="#1674AE"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/autoCompleteGrade"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteGrade"
+        android:layout_width="261dp"
+        android:layout_height="44dp"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/cornered_rectangle"
+        android:drawableEnd="@drawable/dropdownicon"
+        android:hint="@string/grade"
+        android:inputType="none"
+        android:padding="10dp"
+        android:textColorHint="#1674AE"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/editTextText31"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageView114"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.578" />
+        app:srcCompat="@drawable/detailonboardingtop" />
+
+    <ImageView
+        android:id="@+id/imageView139"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/detailonboardingbottom" />
 </androidx.constraintlayout.widget.ConstraintLayout>

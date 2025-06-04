@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
@@ -10,58 +11,140 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans_bold"
+        android:text="Notification Title"
+        android:textColor="#0F4D73"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#0F4D73"
-        android:text="Notification Title" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/notificationMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/work_sans_bold"
-        android:textSize="16sp"
+        android:text="Notification Message"
         android:textColor="#0F4D73"
-        android:text="Notification Message" />
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationTitle" />
 
     <TextView
         android:id="@+id/notificationSubject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/work_sans"
-        android:textSize="16sp"
-        android:textColor="#0F4D73"
         android:text="Subject: "
-        android:layout_marginTop="8dp" />
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationMessage" />
 
     <TextView
         android:id="@+id/notificationDays"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/work_sans"
-        android:textSize="16sp"
-        android:textColor="#0F4D73"
         android:text="Days: "
-        android:layout_marginTop="4dp" />
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationSubject" />
 
     <TextView
         android:id="@+id/notificationTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/work_sans"
-        android:textSize="16sp"
-        android:textColor="#0F4D73"
         android:text="Time: "
-        android:layout_marginTop="4dp" />
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationDays" />
 
     <TextView
         android:id="@+id/notificationGrade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/work_sans"
-        android:textSize="16sp"
-        android:textColor="#0F4D73"
         android:text="Grade: "
-        android:layout_marginTop="4dp" />
+        android:textColor="#0F4D73"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationTime" />
 
-</LinearLayout>
+    <!-- Time Table Button -->
+
+    <!-- Notification Button -->
+    <LinearLayout
+        android:id="@+id/linearLayoutTimeTable"
+        android:layout_width="98dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="84dp"
+        android:background="@drawable/cornered_button"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationGrade">
+        <!-- Placed below the last TextView, notificationGrade -->
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/profile_icon_no_bg" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tvTimeTableButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/work_sans_bold"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="0dp"
+            android:text="Profile"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutNotification"
+        android:layout_width="98dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/cornered_button"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayoutTimeTable"
+        app:layout_constraintTop_toTopOf="@+id/linearLayoutTimeTable">
+        <!-- Aligned top with the Time Table button for consistent vertical positioning -->
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/reply_24dp_ffffff_fill0_wght400_grad0_opsz24" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tvNotificationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/work_sans_bold"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="0dp"
+            android:text="Reply"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
