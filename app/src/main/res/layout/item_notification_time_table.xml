@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="2dp">
 
     <TextView
         android:id="@+id/notificationTitle"
@@ -80,51 +82,22 @@
     <!-- Time Table Button -->
 
     <!-- Notification Button -->
-    <LinearLayout
-        android:id="@+id/linearLayoutTimeTable"
-        android:layout_width="98dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="84dp"
-        android:background="@drawable/cornered_button"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notificationGrade">
-        <!-- Placed below the last TextView, notificationGrade -->
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="4dp"
-            android:src="@drawable/profile_icon_no_bg" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tvTimeTableButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/work_sans_bold"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            android:padding="0dp"
-            android:text="Profile"
-            android:textColor="@color/white"
-            android:textSize="9sp" />
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutNotification"
         android:layout_width="98dp"
         android:layout_height="46dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/cornered_button"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="12dp"
         app:layout_constraintEnd_toStartOf="@+id/linearLayoutTimeTable"
-        app:layout_constraintTop_toTopOf="@+id/linearLayoutTimeTable">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationGrade">
         <!-- Aligned top with the Time Table button for consistent vertical positioning -->
 
         <ImageView
@@ -143,6 +116,40 @@
             android:minHeight="48dp"
             android:padding="0dp"
             android:text="Reply"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutTimeTable"
+        android:layout_width="109dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/cornered_button"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationGrade">
+        <!-- Aligned top with the Time Table button for consistent vertical positioning -->
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/calendar_month_24dp_ffffff_fill0_wght400_grad0_opsz24" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tvTimetable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/work_sans_bold"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="0dp"
+            android:text="TimeTable"
             android:textColor="@color/white"
             android:textSize="9sp" />
     </LinearLayout>

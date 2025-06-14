@@ -64,18 +64,18 @@
 
         <!-- Notification Button -->
 
+
         <LinearLayout
             android:id="@+id/linearLayoutTimeTable"
             android:layout_width="98dp"
             android:layout_height="46dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="148dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/cornered_button"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvMessage">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutReply">
             <!-- Note: Changed original 'tvLocation' constraint to 'tvMessage' for logical placement
                        within this notification item's existing elements. -->
 
@@ -100,53 +100,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayoutNotification"
+            android:id="@+id/linearLayoutReply"
             android:layout_width="98dp"
             android:layout_height="46dp"
-            android:layout_marginEnd="12dp"
             android:background="@drawable/cornered_button"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.818"
-            app:layout_constraintStart_toEndOf="@+id/linearLayoutTimeTable"
-            app:layout_constraintTop_toTopOf="@+id/linearLayoutTimeTable">
-            <!-- Aligned top with the Time Table button for consistent vertical positioning -->
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="4dp"
-                android:src="@drawable/profile_icon_no_bg" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/tvNotificationButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/work_sans_bold"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
-                android:padding="0dp"
-                android:text="Profile"
-                android:textColor="@color/white"
-                android:textSize="9sp" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/linearLayoutReply"
-            android:layout_width="98dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="28dp"
-            android:background="@drawable/cornered_button"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="12dp"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayoutTimeTable"
-            app:layout_constraintTop_toBottomOf="@+id/tvMessage">
+            app:layout_constraintTop_toTopOf="parent">
             <!-- Aligned top with the Time Table button for consistent vertical positioning -->
 
             <ImageView

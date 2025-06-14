@@ -185,4 +185,3 @@ public class SearchStudentsDashboard extends AppCompatActivity implements Filter
         });
     }
 }
-

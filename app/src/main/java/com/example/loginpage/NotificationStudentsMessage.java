@@ -1,9 +1,13 @@
 package com.example.loginpage;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,7 +21,10 @@ import com.example.loginpage.models.UserDetailsClass;
 
 import com.example.loginpage.MySqliteDatabase.DatabaseHelper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NotificationStudentsMessage extends AppCompatActivity implements DatabaseHelper.UserResultListener {
 
@@ -28,6 +35,10 @@ public class NotificationStudentsMessage extends AppCompatActivity implements Da
     private String receiverPhoneNumber;
     private int receiverUserId;
     private String receiverFirstName;
+    private AutoCompleteTextView subjectDropdown;
+    private AutoCompleteTextView gradeDropdown;
+    Map<String, String> gradeMap = new HashMap<>();
+    Map<String, String> subjectMap = new HashMap<>();
 
 
     @Override
@@ -39,6 +50,9 @@ public class NotificationStudentsMessage extends AppCompatActivity implements Da
         sendButton = findViewById(R.id.button39);
         messageNotification = findViewById(R.id.editTextText30);
         messageTitle = findViewById(R.id.editTextText31);
+        subjectDropdown = findViewById(R.id.autoCompleteSubject);
+        gradeDropdown = findViewById(R.id.autoCompleteGrade);
+
 
         Intent intent = getIntent();
         receiverPhoneNumber = intent.getStringExtra("USER_PHONE");
@@ -67,6 +81,14 @@ public class NotificationStudentsMessage extends AppCompatActivity implements Da
 
         sendButton.setOnClickListener(v -> sendMessage());
 
+        gradeDropdown.setOnClickListener(v -> gradeDropdown.showDropDown());
+        subjectDropdown.setOnClickListener(v -> subjectDropdown.showDropDown());
+
+        String selectedSubject = subjectDropdown.getText().toString();
+        String selectedGrade = gradeDropdown.getText().toString();
+
+        loadGrades();
+        loadSubjects();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -130,5 +152,57 @@ public class NotificationStudentsMessage extends AppCompatActivity implements Da
         } else {
             Toast.makeText(this, "Failed to send message.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    private void loadGrades() {
+        String query = "SELECT GradeID, GradeName FROM Grades WHERE active = 'true' ORDER BY GradeName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No grades found!");
+                Toast.makeText(this, "No Grades Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> grades = new ArrayList<>();
+            gradeMap.clear();
+
+            for (Map<String, String> row : result) {
+                grades.add(row.get("GradeName"));
+                gradeMap.put(row.get("GradeName"), row.get("GradeID"));
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, grades);
+            gradeDropdown.setAdapter(adapter); // Use gradeDropdown here
+        });
+    }
+
+    private void loadSubjects() {
+        String query = "SELECT SubjectID, SubjectName FROM Subject WHERE active = 'true' ORDER BY SubjectName";
+        Log.d(TAG, "Executing query: " + query);
+
+        DatabaseHelper.loadDataFromDatabase(this, query, result -> {
+            if (result == null || result.isEmpty()) {
+                Log.e(TAG, "No subjects found in the database.");
+                Toast.makeText(this, "No Subjects Found!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            List<String> subjects = new ArrayList<>();
+            subjectMap.clear();
+
+            for (Map<String, String> row : result) {
+                String id = row.get("SubjectID");
+                String name = row.get("SubjectName");
+                Log.d(TAG, "Subject Retrieved - ID: " + id + ", Name: " + name);
+                subjects.add(name);
+                subjectMap.put(name, id);
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, subjects);
+            subjectDropdown.setAdapter(adapter);
+        });
     }
 }

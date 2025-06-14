@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Notifications"
+        android:text="Messages"
         android:fontFamily="@font/work_sans_bold"
         android:textColor="#0F4D73"
         android:textSize="20sp"
