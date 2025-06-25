@@ -34,372 +34,465 @@
         tools:targetApi="31">
         <activity
             android:name=".RepeatTimeTable"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TimeTableInsert"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ShowTimeTableTwo"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CalendarActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".GradesStudentView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".GradesStudentAdd"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ShowTimeTableNewViewTeacher"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".NotificationTeachersMessage"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".NotificationStudentsMessage"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ProfilePageStudent"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ProfilePageTeacher"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentsGrade"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentsParentInfoView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ShowTimeTableNewView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ShowTimeTableNew"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".NotificationStudents"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
-        <activity
-            android:name=".ShowTimeTable"
-            android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
+<!--        <activity-->
+<!--            android:name=".ShowTimeTable"-->
+<!--            android:exported="true"-->
+<!--            android:theme="@style/Theme.MyApp.FullScreenLight"-->
+<!--            android:screenOrientation="portrait"/>-->
         <activity
             android:name=".NotificationTeachers"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SampleLiveZegoStudent"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SampleGoLiveZegoStudent"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SampleLiveZego"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SampleGoLiveZego"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersInfoSubSection"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".DashboardSideNav"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ChatActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".PaymentGatewayDemo"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentsAcademicDetailsView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".StudentsAcademicDetails"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".WhatsAppScreen"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AwardsViewer"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CertificateViewer"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".YearDropDown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AwardsDropDown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ProfessionDropDown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".DesignationDropDown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".WorkExperienceDropdown"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SubjectGradeTopic"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CourseSelectionSample"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SelectEducationActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".RegisterActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SelectCityActivity"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersDashboardNew"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SearchStudentsDashboard"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentsDashboard"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ViewExtracurriculars"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AddExtracurriculars"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SearchTeachersDashboard"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersDashboard"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentsParentInfo"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AcademicDetailsAdd"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Extracurriculars"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CommunicationPreferences"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".LearningPreferences"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".QRCode"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SubjectExpertiseNewOne"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentsBasicInfo"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AboutStudent"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".GradesTaughtView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".GradesTaught"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentParentDetails"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentDetails"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeacherOrStudent"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AddPromotionalMedia"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CertificationsAdd"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CertificationsView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AddAwards"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Awards"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".WorkExperienceView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".WorkExperience"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersEducationView"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SubjectExpertiseNewEdit"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SubjectExpertiseNew"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AboutTeacherDialog"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".AboutTeacher"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachingPhilosophy"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StudentsInfo"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersInfo"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ShowUniqueID"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".UserOnboardingRadio"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ProfessionalDetails"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersEducation"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SubjectExpertise"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersAddSubject"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersAddress"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TeachersBasicInfo"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".UserOnboarding"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Welcome"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SuccessActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".OTPmobile"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".GoogleLogin"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".OutlookLogin"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".FacebookLogin"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -409,11 +502,13 @@
         <activity
             android:name=".NextLoginPage"
             android:exported="true"
-            android:theme="@style/Theme.MyApp.FullScreenLight" />
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApp.FullScreenLight">
+            android:theme="@style/Theme.MyApp.FullScreenLight"
+            android:screenOrientation="portrait">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
